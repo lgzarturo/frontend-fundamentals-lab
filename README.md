@@ -47,6 +47,7 @@ El objetivo no es solo construir la app, sino **aprender profundamente los funda
 ### Roadmap de aprendizaje
 
 1. [Fundamentos de HTML, CSS y JavaScript](/roadmap/fundaments-html-css-javascript.md)
+   1. [Entendiendo la estructura básica de un documento HTML](/docs/index-documentacion.md)
 
 ---
 

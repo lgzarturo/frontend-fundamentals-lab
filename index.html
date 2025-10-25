@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aprende desarrollo web frontend con JavaScript puro, HTML semántico y CSS moderno. Proyecto educativo open source con ejemplos prácticos y guías paso a paso.">
+    <title>Frontend Fundamentals Lab - Aprende JavaScript, HTML y CSS desde cero</title>
+
+    <!-- Meta robots -->
+    <meta name="robots" content="index, follow">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="msapplication-TileColor" content="#1a1a1a">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/images/favicon/site.webmanifest">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://frontend-fundamentals-lab.netlify.app/">
+
+    <!-- Alternate Languages -->
+    <link rel="alternate" hreflang="es" href="https://frontend-fundamentals-lab.netlify.app/">
+    <link rel="alternate" hreflang="en" href="https://frontend-fundamentals-lab.netlify.app/en/">
+    <link rel="alternate" hreflang="x-default" href="https://frontend-fundamentals-lab.netlify.app/">
+    
+    <!-- Keywords -->
+    <meta name="keywords" content="productividad, rutina diaria, gestión del tiempo, hábitos, eficiencia, organización personal">
+    
+    <!-- SEO meta -->
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+    <meta name="revisit-after" content="7 days">
+    <meta name="language" content="Spanish">
+    <meta name="topic" content="Productividad y gestión del tiempo">
+    <meta name="audience" content="All">
+    <meta name="coverage" content="Worldwide">
+    <meta name="author" content="Arturo López">
+    <meta name="creator" content="Arturo López">
+    <meta name="designer" content="Arturo López">
+    <meta name="publisher" content="Arturo López">
+    <meta name="copyright" content="&copy; 2025 Arturo López">   
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Productividad XP: Tu rutina diaria">
+    <meta property="og:description" content="Mejora tu productividad diaria con nuestra guía práctica.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://frontend-fundamentals-lab.netlify.app/">
+    <meta property="og:image" content="https://frontend-fundamentals-lab.netlify.app/assets/images/web-works-with-html-css-javascript.webp">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Frontend Fundamentals Lab - Aprende desarrollo web con JavaScript puro">
+    <meta property="og:site_name" content="Frontend Fundamentals Lab">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:locale:alternate" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Productividad XP: Tu rutina diaria">
+    <meta name="twitter:description" content="Mejora tu productividad diaria con nuestra guía práctica.">
+    <meta name="twitter:image" content="https://frontend-fundamentals-lab.netlify.app/assets/images/web-works-with-html-css-javascript.webp">
+    <meta name="twitter:image:alt" content="Frontend Fundamentals Lab">
+    <meta name="twitter:site" content="@arturolgdev">
+    <meta name="twitter:creator" content="@arturolgdev">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Frontend Fundamentals Lab",
+      "url": "https://frontend-fundamentals-lab.netlify.app/",
+      "description": "Proyecto educativo open source para aprender desarrollo web frontend con JavaScript puro, HTML semántico y CSS moderno",
+      "inLanguage": "es-ES",
+      "author": {
+        "@type": "Person",
+        "name": "Arturo López",
+        "url": "https://www.lgzarturo.com",
+        "sameAs": [
+          "https://twitter.com/arturolgdev",
+          "https://github.com/lgzarturo"
+        ]
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Frontend Fundamentals Lab",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://frontend-fundamentals-lab.netlify.app/assets/images/favicon/apple-touch-icon.png"
+        }
+      }
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Frontend Fundamentals Lab",
+      "description": "Curso práctico de desarrollo web frontend con JavaScript puro, HTML y CSS",
+      "provider": {
+        "@type": "Person",
+        "name": "Arturo López"
+      },
+      "educationalLevel": "Beginner to Intermediate",
+      "inLanguage": "es-ES",
+      "learningResourceType": "Hands-on Project",
+      "teaches": [
+        "JavaScript Vanilla",
+        "HTML Semántico",
+        "CSS Moderno",
+        "DOM Manipulation",
+        "SPA Development"
+      ]
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://frontend-fundamentals-lab.netlify.app/"
+      }]
+    }
+    </script>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <!-- Estilos CSS -->
+    <style>
+        /* Reset CSS básico */
+        *, *::before, *::after, html {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos básicos */
+        body {
+            font-family: "Open Sans", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 18px;                        
+        }
+
+        h1 {
+            font-family: "Nova Square", sans-serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        a:focus {
+            outline: 2px solid #1a73e8;
+            outline-offset: 2px;
+        }
+
+        a:active {
+            color: #0c47a1;
+        }
+
+        a:visited {
+            color: #551a8b;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+
+    <!-- Script JS -->
+    <script>
+        console.log('Hola Mundo, Frontend Fundamentals Lab!');
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Hola Mundo, Frontend Fundamentals Lab!</h1>
+    </header>
+    <main>
+        <p>Bienvenido a tu primer proyecto de Frontend.</p>
+        
+        <p>
+            <img 
+                srcset="/assets/images/web-works-with-html-css-javascript-mobile.webp 480w, /assets/images/web-works-with-html-css-javascript-tablet.webp 1200w" 
+                sizes="(max-width: 600px) 480px, 1200px" src="/assets/images/web-works-with-html-css-javascript.webp" 
+                alt="Web Works with HTML, CSS, and JavaScript - How to Build Modern Websites"
+                loading="lazy" 
+                itemprop="image" />
+        </p>
+
+        <a href="https://www.arthurolg.com/article/mi-plan-de-accion-mi-framework-definitivo" target="_blank" rel="noopener noreferrer">
+            Mi Plan de Acción: <em>Frontend Fundamentals Lab</em>
+        </a>
+    </main>
+    <footer>
+        <p>
+            <a href="https://www.lgzarturo.com" target="_blank" rel="noopener noreferrer">Arturo López</a>
+            &copy; 2025 <strong>Frontend Fundamentals Lab</strong>
+        </p>
+    </footer>
+</body>
+</html>
