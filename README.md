@@ -1,8 +1,10 @@
 # Frontend Fundamentals Lab
 
-En este repositorio documentaré mi proceso de aprendizaje y práctica para dominar los fundamentos del desarrollo frontend.  
+[![Netlify Deploy](https://img.shields.io/badge/Netlify-Deploy-%2300ad9f?logo=netlify)](https://frontend-fundamentals-lab.netlify.app/) [![Live Demo](https://img.shields.io/badge/Live%20Demo-https%3A%2F%2Ffrontend--fundamentals--lab.netlify.app%2F-orange)](https://frontend-fundamentals-lab.netlify.app/)
 
-Cada módulo y proyecto está diseñado para entender cómo funciona la web desde su base: estructura (HTML), presentación (CSS) y comportamiento (JavaScript).  
+En este repositorio documentaré mi proceso de aprendizaje y práctica para dominar los fundamentos del desarrollo frontend.
+
+Cada módulo y proyecto está diseñado para entender cómo funciona la web desde su base: estructura (HTML), presentación (CSS) y comportamiento (JavaScript).
 
 El enfoque no es acumular frameworks, sino dominar los principios que hacen posible cualquier tecnología moderna del frontend.
 
