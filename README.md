@@ -42,6 +42,14 @@ El objetivo no es solo construir la app, sino **aprender profundamente los funda
 
 ---
 
+## Tabla de contenidos
+
+### Roadmap de aprendizaje
+
+1. [Fundamentos de HTML, CSS y JavaScript](/roadmap/fundaments-html-css-javascript.md)
+
+---
+
 ## 📂 Estructura general
 
 > El objetivo es mantener una estructura simple y modular para facilitar el aprendizaje y la navegación del código. Aplicar buenas prácticas desde el inicio.
