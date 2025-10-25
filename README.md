@@ -29,7 +29,7 @@ A través de cada entrega se busca:
 
 ## 🧩 Proyecto principal: Productivity Toolbox SPA
 
-Aplicación web de una sola página construida con **HTML**, **Tailwind CSS 4** y **JavaScript puro**, orientada a la productividad personal.  
+Aplicación web de una sola página construida con **HTML**, **Tailwind CSS v3** y **JavaScript puro**, orientada a la productividad personal.  
 Incluye un gestor de presupuesto, tareas, notas en markdown y seguimiento de hábitos, con almacenamiento en `localStorage`.
 
 **Características clave:**
@@ -95,7 +95,7 @@ frontend-fundamentals-lab/
 Cada bloque de trabajo se centra en un concepto clave del frontend:
 
 1. **HTML semántico y accesible.**  
-2. **CSS moderno, mobile first y Tailwind CSS.**  
+2. **CSS moderno, mobile first y Tailwind CSS v3.**  
 3. **DOM y eventos.**  
 4. **Gestión de estado y almacenamiento local.**  
 5. **Diseño de interfaces y microinteracciones.**  
