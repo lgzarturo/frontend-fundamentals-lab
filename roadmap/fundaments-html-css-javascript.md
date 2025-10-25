@@ -1,4 +1,4 @@
-# Roadmap: App SPA CRUD en JavaScript puro + Tailwind CSS 3
+# Roadmap: App SPA CRUD en JavaScript puro + Tailwind CSS v3
 
 **Objetivo principal:**
 
@@ -18,7 +18,7 @@ Duración sugerida: 14 días. Cada bloque combina objetivo técnico y práctica 
 
 * Objetivo técnico
 
-  * Estructura del proyecto y archivos base: `index.html`, `styles.css` (Tailwind v4 CDN o build), `app.js`, `data.js` (seed y utilidades), `utils/` y `components/` según convenga.
+  * Estructura del proyecto y archivos base: `index.html`, `styles.css` (Tailwind v3 CDN o build), `app.js`, `data.js` (seed y utilidades), `utils/` y `components/` según convenga.
   * Configurar dark mode por defecto con posibilidad de toggle.
 
 * Fundamentos a practicar
