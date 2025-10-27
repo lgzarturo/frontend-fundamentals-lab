@@ -1,6 +1,6 @@
 # Frontend Fundamentals Lab
 
-[![Netlify Deploy](https://img.shields.io/badge/Netlify-Deploy-%2300ad9f?logo=netlify)](https://frontend-fundamentals-lab.netlify.app/) [![Live Demo](https://img.shields.io/badge/Live%20Demo-https%3A%2F%2Ffrontend--fundamentals--lab.netlify.app%2F-orange)](https://frontend-fundamentals-lab.netlify.app/)
+[![Netlify Deploy](https://img.shields.io/badge/Netlify-Deploy-%2300ad9f?logo=netlify)](https://task-manager.lgzarturo.com/) [![Live Demo](https://img.shields.io/badge/Live%20Demo-https%3A%2F%2Ffrontend--fundamentals--lab.netlify.app%2F-orange)](https://task-manager.lgzarturo.com/)
 
 En este repositorio documentaré mi proceso de aprendizaje y práctica para dominar los fundamentos del desarrollo frontend.
 
