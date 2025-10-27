@@ -136,12 +136,11 @@
     }
     </script>
     
-    <!-- Preconnect for performance -->
+    <!-- Preconnect y Preload para performance de fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-
-    <!-- Fonts -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
     <!-- Estilos CSS -->
@@ -199,7 +198,6 @@
     <!-- Script JS -->
     <script>
         console.log('Hola Mundo, Frontend Fundamentals Lab!');
-
         // Evento personalizado para Google Analytics 4 vía Tag Manager
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('a').forEach(function(link) {
@@ -225,7 +223,7 @@
     -->
 
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script async>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
@@ -248,7 +246,7 @@
                 srcset="/assets/images/web-works-with-html-css-javascript-mobile.webp 480w, /assets/images/web-works-with-html-css-javascript-tablet.webp 1200w" 
                 sizes="(max-width: 600px) 480px, 1200px" src="/assets/images/web-works-with-html-css-javascript.webp" 
                 alt="Web Works with HTML, CSS, and JavaScript - How to Build Modern Websites"
-                loading="lazy" 
+                fetchpriority="high" 
                 itemprop="image" />
         </p>
 
