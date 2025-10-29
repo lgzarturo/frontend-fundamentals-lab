@@ -51,6 +51,7 @@ El objetivo no es solo construir la app, sino **aprender profundamente los funda
 1. [Fundamentos de HTML, CSS y JavaScript](/roadmap/fundaments-html-css-javascript.md)
    1. [Entendiendo la estructura básica de un documento HTML](/docs/index-documentacion.md)
    2. [Configuración inicial de Google Tag Manager](/docs/tag-manager.md)
+2. [Integración y organización del diseño con TailwindCSS](/docs/tailwind-css.md)
 
 ---
 
