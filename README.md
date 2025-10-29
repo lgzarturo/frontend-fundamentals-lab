@@ -2,7 +2,6 @@
 
 [![Netlify Deploy](https://img.shields.io/badge/Netlify-Deploy-%2300ad9f?logo=netlify)](https://task-manager.lgzarturo.com/) ![Website](https://img.shields.io/website?url=https%3A%2F%2Ftask-manager.lgzarturo.com%2F) ![GitHub Release](https://img.shields.io/github/v/release/lgzarturo/frontend-fundamentals-lab)
 
-
 En este repositorio documentaré mi proceso de aprendizaje y práctica para dominar los fundamentos del desarrollo frontend.
 
 Cada módulo y proyecto está diseñado para entender cómo funciona la web desde su base: estructura (HTML), presentación (CSS) y comportamiento (JavaScript).
