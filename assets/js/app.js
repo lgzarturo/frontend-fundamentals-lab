@@ -17,10 +17,20 @@ tailwind.config = {
     }
 };
 
+/**
+ * Genera un ID único simple
+ * @returns {string} El ID único generado
+ */
 function generateId() {
+    // Genera un ID único simple
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
+/**
+ * Formatea una fecha en un string legible AAAA-MM-DD
+ * @param {*} date La fecha a formatear
+ * @returns {string} La fecha formateada
+ */
 function formatDate(date) {
     if (typeof date === 'string') return date;
     const d = new Date(date);
@@ -30,6 +40,11 @@ function formatDate(date) {
     return `${year}-${month}-${day}`;
 }
 
+/**
+ * Escapa caracteres HTML especiales en un string
+ * @param {*} text El texto a escapar
+ * @returns {string} El texto escapado
+ */
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
@@ -40,17 +55,28 @@ const today = new Date();
 const todayStr = formatDate(today);
 let currentScreen = 'home';
 
+/**
+ * Renderiza la pantalla de inicio con las tareas MIT
+ */
 function home() {
+    // Filtrar y ordenar las tareas MIT (Most Important Tasks)
     const mits = app.tasks
-        .filter(t => !t.done && (t.priority === 'high' || t.dueDate === todayStr))
+        // Solo tareas no completadas y de alta prioridad o con fecha de hoy
+        .filter(t => !t.done && (t.priority === 'high' || t.dueDate === todayStr)) 
+        // Ordenar por prioridad (alta primero)
         .sort((a, b) => {
             if (a.priority === 'high' && b.priority !== 'high') return -1;
             if (b.priority === 'high' && a.priority !== 'high') return 1;
             return 0;
         })
+        // Limitar a las 3 tareas más importantes
         .slice(0, 3);
     console.log('Tareas MIT para hoy:', mits);
 
+    // Generar el HTML para la lista de MITs
+    // TODO: Mejorar el diseño visual de las tareas MIT
+    //  - No es muy optimo tener tanto HTML en JS
+    //  - Considerar usar plantillas o frameworks en el futuro
     const mitsHtml = mits.length > 0 ? mits.map(task => `
         <div class="flex items-start gap-3 p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
             <button onclick="app.toggleTask('${task.id}')" 
@@ -70,12 +96,13 @@ function home() {
         </div>
     `).join('') : '<div class="text-gray-500 dark:text-gray-400 text-center py-8">No tasks for today. Create some MITs! 🎯</div>';
     
+    // Insertar el HTML generado en el contenedor correspondiente
     document.getElementById('home-mits-list').innerHTML = mitsHtml;
 }
 
 function render() {
-    // Aquí iría la lógica para renderizar la interfaz según el estado actual
     console.log('Renderizando la pantalla:', currentScreen);
+    // Lógica de renderizado según la pantalla actual
     switch (currentScreen) {
         case 'home':
             console.log('Tareas actuales:', app.tasks);
