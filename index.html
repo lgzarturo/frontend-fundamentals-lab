@@ -142,6 +142,28 @@
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        xp: {
+                            primary: '#00ff88',
+                            secondary: '#0099ff',
+                            danger: '#ff0055',
+                            warning: '#ffaa00',
+                            dark: '#0a0e1a',
+                            darker: '#05070f',
+                            card: '#131829',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
     <!-- Estilos CSS -->
     <style>
@@ -154,39 +176,17 @@
 
         /* Estilos básicos */
         body {
-            font-family: "Open Sans", sans-serif;
+            font-family: "Open Sans", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             font-weight: 400;
             font-style: normal;
             font-size: 18px;                        
         }
 
         h1 {
-            font-family: "Nova Square", sans-serif;
+            font-family: "Nova Square", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             font-weight: 700;
             font-size: 2.5rem;
             margin-bottom: 1rem;
-        }
-
-        a {
-            color: #1a73e8;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        a:focus {
-            outline: 2px solid #1a73e8;
-            outline-offset: 2px;
-        }
-
-        a:active {
-            color: #0c47a1;
-        }
-
-        a:visited {
-            color: #551a8b;
         }
 
         img {
@@ -230,35 +230,107 @@
     })(window,document,'script','dataLayer','GTM-N9PXJX8V');</script>
     <!-- End Google Tag Manager -->
 </head>
-<body>
+<body class="bg-gray-50 dark:bg-xp-darker text-gray-900 dark:text-gray-100 transition-colors duration-300">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N9PXJX8V"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    <header>
-        <h1>Hola Mundo, Frontend Fundamentals Lab!</h1>
-    </header>
-    <main>
-        <p>Bienvenido a tu primer proyecto de Frontend.</p>
+
+    <!-- Begin: navigation mobile -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-xp-card border-t-2 border-gray-200 dark:border-xp-primary/20 z-50 md:hidden">
+        <div class="flex justify-around items-center h-16">
+           <button onclick="app.navigateTo('home')" class="nav-btn flex flex-col items-center justify-center flex-1 h-full" data-screen="home">
+                <span class="text-2xl">🏠</span>
+                <span class="text-xs mt-1">Home</span>
+            </button>
+            <button onclick="app.navigateTo('budgets')" class="nav-btn flex flex-col items-center justify-center flex-1 h-full" data-screen="budgets">
+                <span class="text-2xl">💰</span>
+                <span class="text-xs mt-1">Budget</span>
+            </button>
+            <button onclick="app.navigateTo('tasks')" class="nav-btn flex flex-col items-center justify-center flex-1 h-full" data-screen="tasks">
+                <span class="text-2xl">✓</span>
+                <span class="text-xs mt-1">Tasks</span>
+            </button>
+            <button onclick="app.navigateTo('notes')" class="nav-btn flex flex-col items-center justify-center flex-1 h-full" data-screen="notes">
+                <span class="text-2xl">📝</span>
+                <span class="text-xs mt-1">Notes</span>
+            </button>
+            <button onclick="app.navigateTo('habits')" class="nav-btn flex flex-col items-center justify-center flex-1 h-full" data-screen="habits">
+                <span class="text-2xl">🎯</span>
+                <span class="text-xs mt-1">Habits</span>
+            </button> 
+        </div>
+    </nav>
+    <!-- End: navigation mobile -->
+
+    <!-- Begin: sidebar desktop -->
+    <aside class="hidden md:block fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-xp-card border-r-2 border-gray-200 dark:border-xp-primary/20 z-40">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold text-xp-primary flex items-center gap-2">
+                <span>⚡</span> Productivity XP
+            </h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Level up your life</p>
+        </div>
+        <nav class="px-3">
+            <button onclick="app.navigateTo('home')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 dark:hover:bg-xp-darker transition-colors" data-screen="home">
+                <span class="text-xl mr-3">🏠</span> Dashboard
+            </button>
+            <button onclick="app.navigateTo('budgets')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 dark:hover:bg-xp-darker transition-colors" data-screen="budgets">
+                <span class="text-xl mr-3">💰</span> Budget Manager
+            </button>
+            <button onclick="app.navigateTo('tasks')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 dark:hover:bg-xp-darker transition-colors" data-screen="tasks">
+                <span class="text-xl mr-3">✓</span> Tasks & Checklist
+            </button>
+            <button onclick="app.navigateTo('notes')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 dark:hover:bg-xp-darker transition-colors" data-screen="notes">
+                <span class="text-xl mr-3">📝</span> Markdown Notes
+            </button>
+            <button onclick="app.navigateTo('habits')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 dark:hover:bg-xp-darker transition-colors" data-screen="habits">
+                <span class="text-xl mr-3">🎯</span> Habit Tracker
+            </button>
+            <div class="border-t border-gray-200 dark:border-gray-700 my-4"></div>
+            <button onclick="app.navigateTo('settings')" class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-xp-darker transition-colors" data-screen="settings">
+                <span class="text-xl mr-3">⚙️</span> Settings
+            </button>
+        </nav>
+    </aside>
+    <!-- End: sidebar desktop -->
+    
+    <!-- Begin: main content -->
+    <main class="pb-20 md:pb-6 md:ml-64">
+        <h1 class="py-6 border border-gray-200 border-b-1 text-2xl">Productivity XP - Level Up Your Life</h1>
         
-        <p>
+        <p class="my-6">
             <img 
                 srcset="/assets/images/web-works-with-html-css-javascript-mobile.webp 480w, /assets/images/web-works-with-html-css-javascript-tablet.webp 1200w" 
                 sizes="(max-width: 600px) 480px, 1200px" src="/assets/images/web-works-with-html-css-javascript.webp" 
                 alt="Web Works with HTML, CSS, and JavaScript - How to Build Modern Websites"
                 fetchpriority="high" 
+                class="w-full h-auto rounded-lg shadow-lg cover"
                 itemprop="image" />
         </p>
 
-        <a href="https://www.arthurolg.com/article/mi-plan-de-accion-mi-framework-definitivo" target="_blank" rel="noopener noreferrer">
-            Mi Plan de Acción: <em>Frontend Fundamentals Lab</em>
-        </a>
+        <p class="py-6">
+            <a href="https://www.arthurolg.com/article/mi-plan-de-accion-mi-framework-definitivo" target="_blank" rel="noopener noreferrer">
+                Action plan: <em>Frontend Fundamentals Lab</em>
+            </a>
+        </p>
+        
     </main>
-    <footer>
+    <!-- End: main content -->
+    <!-- Begin: footer -->
+    <footer class="py-20 md:py-6 md:ml-64 bg-xp-card text-white dark:bg-xp-darker">
         <p>
-            <a href="https://www.lgzarturo.com" target="_blank" rel="noopener noreferrer">Arturo López</a>
+            <a href="https://www.lgzarturo.com" target="_blank" rel="noopener noreferrer" class="text-xp-primary hover:text-xp-secondary hover:underline">Arturo López</a>
             &copy; 2025 <strong>Frontend Fundamentals Lab</strong>
         </p>
     </footer>
+    <!-- End: footer -->
+    <script>
+        const app = {
+            navigateTo: function(screen) {
+                console.log('Navegando a la pantalla:', screen);                
+            }
+        };
+    </script>
 </body>
 </html>
