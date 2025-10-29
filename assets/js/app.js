@@ -23,9 +23,19 @@ const app = {
     }
 };
 
-// If load web site load the analytics events
-
 window.addEventListener('load', () => {
+    // Modo oscuro basado en la preferencia del usuario o del sistema
+    document.documentElement.classList.toggle("dark",
+        localStorage.theme === "dark" ||
+            (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
+    );
+    // Whenever the user explicitly chooses light mode
+    localStorage.theme = "light";
+    // Whenever the user explicitly chooses dark mode
+    localStorage.theme = "dark";
+    // Whenever the user explicitly chooses to respect the OS preference
+    localStorage.removeItem("theme");
+
     console.log('Página cargada. Iniciando seguimiento de analíticas...');
     // Evento personalizado para Google Analytics 4 vía Tag Manager
     document.addEventListener('DOMContentLoaded', function() {
