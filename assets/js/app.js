@@ -37,6 +37,12 @@ let currentScreen = 'home';
 function render() {
     // Aquí iría la lógica para renderizar la interfaz según el estado actual
     console.log('Renderizando la pantalla:', currentScreen);
+    switch (currentScreen) {
+        case 'home':
+            console.log('Tareas actuales:', app.tasks);
+            break;
+        // Otros casos para diferentes pantallas
+    }
 }
 
 const app = {
