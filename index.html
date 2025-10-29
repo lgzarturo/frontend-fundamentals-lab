@@ -11,6 +11,7 @@
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 
     <!-- Theme Color -->
+    <!-- 'theme-color' no soportado por Firefox, Opera. Chrome y Edge sí lo usan. -->
     <meta name="theme-color" content="#1a1a1a">
     <meta name="msapplication-TileColor" content="#1a1a1a">
     
@@ -140,8 +141,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
-    <link href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap&display=swap" rel="stylesheet">
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -239,17 +240,22 @@
             <h1 class="text-3xl md:text-4xl font-extrabold text-xp-primary mb-6 tracking-tight drop-shadow-lg">
                 Productivity XP <span class="block text-base font-normal text-gray-500 dark:text-gray-400 mt-2">Level Up Your Life</span>
             </h1>
+            <!-- 'imagesrcset' y 'imagesizes' solo soportados en Safari iOS >= 17.2 y Chrome. Fallback: usar srcset/sizes en <img> -->
+            <link rel="preload" as="image" href="/assets/images/web-works-with-html-css-javascript.webp">
             <div class="relative flex justify-center items-center mb-8">
-                <img 
-                    srcset="/assets/images/web-works-with-html-css-javascript-mobile.webp 480w, /assets/images/web-works-with-html-css-javascript-tablet.webp 1200w" 
-                    sizes="(max-width: 600px) 480px, 1200px" src="/assets/images/web-works-with-html-css-javascript.webp" 
-                    alt="Web Works with HTML, CSS, and JavaScript - How to Build Modern Websites"
-                    fetchpriority="high" 
-                    class="w-full max-w-xl h-auto rounded-2xl shadow-2xl border-4 border-xp-primary/20 bg-white dark:bg-xp-card object-cover"
-                    itemprop="image" />
+                <!-- 'fetchpriority' solo soportado en Chrome y Safari iOS >= 17.2. Fallback: ignorado en otros navegadores. -->
+             <!-- 'fetchpriority' solo soportado en Chrome y Safari iOS >= 17.2. Fallback: ignorado en otros navegadores. -->
+             <img src="/assets/images/web-works-with-html-css-javascript.webp"
+                 srcset="/assets/images/web-works-with-html-css-javascript-mobile.avif 480w, /assets/images/web-works-with-html-css-javascript-tablet.avif 1200w, /assets/images/web-works-with-html-css-javascript-mobile.webp 480w, /assets/images/web-works-with-html-css-javascript-tablet.webp 1200w, /assets/images/web-works-with-html-css-javascript.webp 1200w"
+                 sizes="(max-width: 600px) 480px, 1200px"
+                 width="1200" height="630"
+                 alt="Frontend Fundamentals Lab - Aprende desarrollo web con JavaScript puro"
+                 class="w-full max-w-xl h-auto rounded-2xl shadow-2xl border-4 border-xp-primary/20 bg-white dark:bg-xp-card object-cover"
+                 itemprop="image"
+                 fetchpriority="high">
             </div>
-            <a href="https://www.arthurolg.com/article/mi-plan-de-accion-mi-framework-definitivo" target="_blank" rel="noopener noreferrer"
-                class="inline-block px-6 py-3 bg-xp-primary text-white font-semibold rounded-lg shadow-md hover:bg-xp-secondary transition-colors duration-200 text-lg pixel-corners">
+            <a href="https://www.arthurolg.com/article/mi-plan-de-accion-mi-framework-definitivo" target="_blank" rel="noopener noreferrer" role="button"
+                class="inline-block px-6 py-3 bg-xp-primary text-white font-semibold rounded-lg shadow-md hover:bg-xp-secondary transition-colors duration-200 text-lg pixel-corners focus:outline-none focus:ring-2 focus:ring-xp-secondary focus:ring-offset-2 min-h-[44px] min-w-[44px]">
                 🚀 Action plan: <em>Frontend Fundamentals Lab</em>
             </a>
         </section>
