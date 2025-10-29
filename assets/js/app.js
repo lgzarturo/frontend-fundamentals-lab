@@ -4,7 +4,7 @@ tailwind.config = {
         extend: {
             colors: {
                 xp: {
-                    primary: '#00ff88',
+                    primary: '#0acc71ff',
                     secondary: '#0099ff',
                     danger: '#ff0055',
                     warning: '#ffaa00',
