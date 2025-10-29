@@ -35,7 +35,23 @@ img {
     );
 }
 
-/* Touch-friendly tap targets */
+/* Concepto de screen para manejar cada opción de forma independiente */
+
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Asegurando que los elementos interactivos sean lo suficientemente grandes */
 button, a, input, select {
     min-height: 44px;
     min-width: 44px;

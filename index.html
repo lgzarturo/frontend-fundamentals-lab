@@ -199,23 +199,23 @@
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Level up your life</p>
         </div>
         <nav class="px-3">
-            <button onclick="app.navigateTo('home')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker transition-colors" data-screen="home">
+            <button onclick="app.navigateTo('home')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="home">
                 <span class="text-xl mr-3">🏠</span> Dashboard
             </button>
-            <button onclick="app.navigateTo('budgets')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker transition-colors" data-screen="budgets">
+            <button onclick="app.navigateTo('budgets')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="budgets">
                 <span class="text-xl mr-3">💰</span> Budget Manager
             </button>
-            <button onclick="app.navigateTo('tasks')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker transition-colors" data-screen="tasks">
+            <button onclick="app.navigateTo('tasks')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="tasks">
                 <span class="text-xl mr-3">✓</span> Tasks & Checklist
             </button>
-            <button onclick="app.navigateTo('notes')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker transition-colors" data-screen="notes">
+            <button onclick="app.navigateTo('notes')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="notes">
                 <span class="text-xl mr-3">📝</span> Markdown Notes
             </button>
-            <button onclick="app.navigateTo('habits')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker transition-colors" data-screen="habits">
+            <button onclick="app.navigateTo('habits')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="habits">
                 <span class="text-xl mr-3">🎯</span> Habit Tracker
             </button>
             <div class="border-t border-gray-200 dark:border-gray-700 my-4"></div>
-            <button onclick="app.navigateTo('settings')" class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker transition-colors" data-screen="settings">
+            <button onclick="app.navigateTo('settings')" class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="settings">
                 <span class="text-xl mr-3">⚙️</span> Settings
             </button>
         </nav>
@@ -234,6 +234,31 @@
             </button>
         </div>
         <!-- End: top bar (mobile) -->
+
+        <!-- Begin: Dashboard screen -->
+        <div id="home-screen" class="screen active">
+            <div class="max-w-7xl mx-auto p-4 md:p-6">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold mb-4">Welcome back, Developer! 🎮</h2>
+                    <p class="text-gray-500 dark:text-gray-400">Welcome to your productivity dashboard! Here you can manage your tasks, budgets, notes, and habits all in one place.</p>
+                </div>
+                <!-- Begin: navigation quick access -->
+                <!-- Contenido para el menu -->
+                <!-- End: navigation quick access -->
+
+                <!-- Begin: Today's MITs -->
+                <div class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20 mb-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <span>⭐</span> Today's MITs (Most Important Tasks)
+                    </h3>
+                    <div id="home-mits-list" class="space-y-3">
+                        <!-- Las tareas mas importantes se van a mostrar aquí -->
+                    </div>
+                </div>
+                <!-- End: Today's MITs -->
+            </div>
+        </div>
+        <!-- End: Dashboard screen -->
         
     </main>
     <!-- End: main content -->
