@@ -34,6 +34,12 @@ Duración sugerida: 14 días. Cada bloque combina objetivo técnico y práctica 
 
 ### Días 3 a 4 — Estado, DOM y manipulación básica
 
+> En el día 3 me enfoque también a optimizar la carga inicial y performance, aplicando algunas de las optimizaciones aprendidas en Lighthouse.
+> Aplicar el modo oscuro por defecto y optimizar la carga inicial con preloads y font-display=swap.
+> [Documentación de Tailwind sobre dark mode](https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually)
+> Optimizar la imagen LCP y asegurar que el CSS no bloquee el render.
+> [Documento sobre optimización inicial Lighthouse](../docs/optimizacion-lighthouse.md)
+
 * Objetivo técnico
 
   * Implementar patrón simple de estado en memoria y renderizado DOM manual.
