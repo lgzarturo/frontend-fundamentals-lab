@@ -144,83 +144,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        xp: {
-                            primary: '#00ff88',
-                            secondary: '#0099ff',
-                            danger: '#ff0055',
-                            warning: '#ffaa00',
-                            dark: '#0a0e1a',
-                            darker: '#05070f',
-                            card: '#131829',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
 
     <!-- Estilos CSS -->
-    <style>
-        /* Reset CSS básico */
-        *, *::before, *::after, html {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Estilos básicos */
-        body {
-            font-family: "Open Sans", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            font-weight: 400;
-            font-style: normal;
-            font-size: 18px;                        
-        }
-
-        h1 {
-            font-family: "Nova Square", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            font-weight: 700;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
-
-    <!-- Script JS -->
-    <script>
-        console.log('Hola Mundo, Frontend Fundamentals Lab!');
-        // Evento personalizado para Google Analytics 4 vía Tag Manager
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('a').forEach(function(link) {
-                link.addEventListener('click', function(e) {
-                    if (window.dataLayer) {
-                        window.dataLayer.push({
-                            event: 'click_link',
-                            link_url: link.href,
-                            link_content: link.textContent.trim()
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-
-    <!--
-        Para medir los clics en enlaces con Google Analytics 4:
-        1. Este script envía un evento 'click_link' al dataLayer cada vez que se hace clic en un enlace.
-        2. En Google Tag Manager, crea una nueva etiqueta de GA4 tipo "Evento" y configúrala para escuchar el evento 'click_link'.
-        3. Mapea las variables 'link_url' y 'link_content' como parámetros personalizados en el evento de GA4.
-        4. Así podrás ver en Analytics el número de clics y detalles de cada enlace.
-    -->
+    <link rel="stylesheet" href="/assets/css/styles.css">
 
     <!-- Google Tag Manager -->
     <script async>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -297,6 +223,16 @@
     
     <!-- Begin: main content -->
     <main class="pb-20 md:pb-6 md:ml-64">
+        <!-- Begin: top bar (mobile) -->
+        <div class="md:hidden bg-white dark:bg-xp-card border-b-2 border-gray-200 dark:border-xp-primary/20 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+            <h1 class="text-xl font-bold text-xp-primary flex items-center gap-2">
+                <span>⚡</span> Productivity XP
+            </h1>
+            <button onclick="app.navigateTo('settings')" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-xp-darker">
+                <span class="text-xl">⚙️</span>
+            </button>
+        </div>
+        <!-- End: top bar (mobile) -->
         <h1 class="py-6 border border-gray-200 border-b-1 text-2xl">Productivity XP - Level Up Your Life</h1>
         
         <p class="my-6">
@@ -325,12 +261,7 @@
         </p>
     </footer>
     <!-- End: footer -->
-    <script>
-        const app = {
-            navigateTo: function(screen) {
-                console.log('Navegando a la pantalla:', screen);                
-            }
-        };
-    </script>
+    
+    <script src="/assets/js/app.js" defer></script>
 </body>
 </html>
