@@ -24,3 +24,19 @@ img {
     max-width: 100%;
     height: auto;
 }
+
+.pixel-corners {
+    clip-path: polygon(
+        0 4px, 4px 4px, 4px 0,
+        calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
+        100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px),
+        calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px),
+        0 calc(100% - 4px)
+    );
+}
+
+/* Touch-friendly tap targets */
+button, a, input, select {
+    min-height: 44px;
+    min-width: 44px;
+}
