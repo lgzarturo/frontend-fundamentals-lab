@@ -68,7 +68,14 @@ function launchConfetti() {
   canvas.style.top = "0"
   canvas.style.left = "0"
   canvas.style.pointerEvents = "none"
+  canvas.style.opacity = "0"
+  canvas.style.transition = "opacity 0.6s"
+  canvas.style.zIndex = "9999"
   document.body.appendChild(canvas)
+  // Fade-in al cargar
+  setTimeout(() => {
+    canvas.style.opacity = "1"
+  }, 10)
 
   const particles = []
   const colors = [
@@ -82,22 +89,33 @@ function launchConfetti() {
     "#ff00ff",
     "#00ffff"
   ]
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 220; i++) {
+    // Rectángulos: ancho y alto aleatorio
+    const rectW = Math.random() * 12 + 8
+    const rectH = Math.random() * 4 + 2
+    // Ángulo de disparo (explosión 360°)
+    const angle = Math.random() * Math.PI * 2
+    // Velocidad inicial (más explosiva)
+    const speed = Math.random() * 8 + 6
     particles.push({
       x: width / 2,
       y: height / 2,
-      size: Math.random() * 5 + 2,
+      w: rectW,
+      h: rectH,
       color: colors[Math.floor(Math.random() * colors.length)],
-      speedX: (Math.random() - 0.5) * 10,
-      speedY: Math.random() * 10 - 5,
+      speedX: Math.cos(angle) * speed,
+      speedY: Math.sin(angle) * speed,
+      amplitude: Math.random() * 40 + 20,
+      freq: Math.random() * 0.04 + 0.02,
       rotation: Math.random() * 360,
-      rotationSpeed: (Math.random() - 0.5) * 10,
-      gravity: 0.05
+      rotationSpeed: (Math.random() - 0.5) * 6,
+      gravity: 0.12,
+      swayPhase: Math.random() * Math.PI * 2
     })
   }
 
   let time = 0
-  const duration = 200
+  const duration = 300
 
   /**
    * Función de animación del confeti
@@ -107,7 +125,8 @@ function launchConfetti() {
   function animate() {
     context.clearRect(0, 0, width, height)
     particles.forEach((p) => {
-      p.x += p.speedX
+      // Movimiento explosivo y parabólico
+      p.x += p.speedX + Math.sin(time * p.freq + p.swayPhase) * 0.8
       p.y += p.speedY
       p.speedY += p.gravity
       p.rotation += p.rotationSpeed
@@ -116,14 +135,19 @@ function launchConfetti() {
       context.translate(p.x, p.y)
       context.rotate((p.rotation * Math.PI) / 180)
       context.fillStyle = p.color
-      context.fillRect(-p.size / 2, -p.size / 2, p.size, p.size)
+      // Rectángulo (no cuadrado)
+      context.fillRect(-p.w / 2, -p.h / 2, p.w, p.h)
       context.restore()
     })
     time++
     if (time < duration) {
       requestAnimationFrame(animate)
     } else {
-      document.body.removeChild(canvas)
+      // Fade-out antes de remover
+      canvas.style.opacity = "0"
+      setTimeout(() => {
+        if (canvas.parentNode) document.body.removeChild(canvas)
+      }, 600)
     }
   }
 
