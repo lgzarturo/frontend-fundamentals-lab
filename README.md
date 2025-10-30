@@ -14,12 +14,12 @@ El enfoque no es acumular frameworks, sino dominar los principios que hacen posi
 
 ## 🚀 Objetivo
 
-Construir una base sólida de conocimiento aplicando los fundamentos directamente en proyectos funcionales.  
+Construir una base sólida de conocimiento aplicando los fundamentos directamente en proyectos funcionales.
 A través de cada entrega se busca:
 
-- Aprender *cómo* y *por qué* funcionan las cosas en el navegador.  
-- Escribir código claro, mantenible y semántico.  
-- Practicar buenas prácticas de UX/UI con un enfoque mobile-first.  
+- Aprender _cómo_ y _por qué_ funcionan las cosas en el navegador.
+- Escribir código claro, mantenible y semántico.
+- Practicar buenas prácticas de UX/UI con un enfoque mobile-first.
 - Reforzar conceptos de manipulación del DOM, eventos, estado, asincronía y persistencia local.
 - Se irán recomendando lecturas y recursos adicionales para profundizar en cada tema.
 
@@ -29,16 +29,16 @@ A través de cada entrega se busca:
 
 ## 🧩 Proyecto principal: Productivity Toolbox SPA
 
-Aplicación web de una sola página construida con **HTML**, **Tailwind CSS v3** y **JavaScript puro**, orientada a la productividad personal.  
+Aplicación web de una sola página construida con **HTML**, **Tailwind CSS v3** y **JavaScript puro**, orientada a la productividad personal.
 Incluye un gestor de presupuesto, tareas, notas en markdown y seguimiento de hábitos, con almacenamiento en `localStorage`.
 
 **Características clave:**
 
-- Modo oscuro por defecto.  
-- Totalmente responsive y usable sin conexión.  
-- Persistencia local y exportación/importación de datos en JSON.  
-- Microinteracciones sutiles inspiradas en videojuegos.  
-- Accesibilidad y experiencia fluida en móvil.  
+- Modo oscuro por defecto.
+- Totalmente responsive y usable sin conexión.
+- Persistencia local y exportación/importación de datos en JSON.
+- Microinteracciones sutiles inspiradas en videojuegos.
+- Accesibilidad y experiencia fluida en móvil.
 
 El objetivo no es solo construir la app, sino **aprender profundamente los fundamentos del frontend a través de su desarrollo**.
 
@@ -52,6 +52,7 @@ El objetivo no es solo construir la app, sino **aprender profundamente los funda
    1. [Entendiendo la estructura básica de un documento HTML](/docs/index-documentacion.md)
    2. [Configuración inicial de Google Tag Manager](/docs/tag-manager.md)
 2. [Integración y organización del diseño con TailwindCSS](/docs/tailwind-css.md)
+3. [Fundamentos de JavaScript y manipulación del DOM - _Crear un contador de visitas_](/docs/fundamentos-javascript.md)
 
 ---
 
@@ -96,11 +97,11 @@ frontend-fundamentals-lab/
 
 Cada bloque de trabajo se centra en un concepto clave del frontend:
 
-1. **HTML semántico y accesible.**  
-2. **CSS moderno, mobile first y Tailwind CSS v3.**  
-3. **DOM y eventos.**  
-4. **Gestión de estado y almacenamiento local.**  
-5. **Diseño de interfaces y microinteracciones.**  
+1. **HTML semántico y accesible.**
+2. **CSS moderno, mobile first y Tailwind CSS v3.**
+3. **DOM y eventos.**
+4. **Gestión de estado y almacenamiento local.**
+5. **Diseño de interfaces y microinteracciones.**
 6. **Arquitectura modular con JavaScript puro.**
 
 La meta es entender la esencia de cada tecnología antes de usar frameworks como React, Vue o Svelte.
@@ -111,11 +112,11 @@ La meta es entender la esencia de cada tecnología antes de usar frameworks como
 
 No requiere entorno de desarrollo ni servidor:
 
-1. Clona el repositorio:  
+1. Clona el repositorio:
 
    ```bash
    git clone https://github.com/lgzarturo/frontend-fundamentals-lab.git
-    ```
+   ```
 
 2. Abre el archivo index.html en tu navegador.
 
