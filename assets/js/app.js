@@ -488,9 +488,9 @@ const app = {
   visitCounter: function () {
     store.loadCounter()
     document.getElementById("hit-counter").textContent = visitCount
-    launchConfetti()
     if (visitCount % 10 === 0) {
       // Lanzar confeti cada 10 visitas
+      launchConfetti()
     }
   }
 }
