@@ -54,12 +54,152 @@ function escapeHtml(text) {
   return div.innerHTML
 }
 
+/**
+ * Lanza una animación de confeti en la pantalla
+ */
+function launchConfetti() {
+  const width = window.innerWidth
+  const height = window.innerHeight
+  const canvas = document.createElement("canvas")
+  const context = canvas.getContext("2d")
+  canvas.width = width
+  canvas.height = height
+  canvas.style.position = "fixed"
+  canvas.style.top = "0"
+  canvas.style.left = "0"
+  canvas.style.pointerEvents = "none"
+  canvas.style.opacity = "0"
+  canvas.style.transition = "opacity 0.6s"
+  canvas.style.zIndex = "9999"
+  document.body.appendChild(canvas)
+  // Fade-in al cargar
+  setTimeout(() => {
+    canvas.style.opacity = "1"
+  }, 10)
+
+  const particles = []
+  const colors = [
+    "#0acc71",
+    "#0099ff",
+    "#ff0055",
+    "#ffaa00",
+    "#ffffff",
+    "#888888",
+    "#4526b6ff",
+    "#ff00ff",
+    "#00ffff"
+  ]
+  const shapes = ["rect", "ellipse", "diamond", "triangle"]
+  for (let i = 0; i < 300; i++) {
+    // Spread explosivo: ángulo y velocidad
+    const angle = Math.random() * Math.PI * 5
+    const speed = Math.random() * 8 + 2
+    // Figuras aleatorias
+    const shape = shapes[Math.floor(Math.random() * shapes.length)]
+    const w = Math.random() * 12 + 8
+    const h = Math.random() * 4 + 2
+    // Desplazamiento inicial aleatorio para evitar círculo denso
+    const radius = Math.random() * 18 // dispersión inicial (px)
+    const offsetX = Math.cos(angle) * radius
+    const offsetY = Math.sin(angle) * radius
+    particles.push({
+      x: width / 2 + offsetX,
+      y: height / 2 + offsetY,
+      w,
+      h,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speedX: Math.cos(angle) * speed,
+      speedY: Math.sin(angle) * speed,
+      amplitude: Math.random() * 40 + 20,
+      freq: Math.random() * 0.04 + 0.06,
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 6,
+      gravity: 0.12,
+      swayPhase: Math.random() * Math.PI * 2,
+      shape,
+      reachedPeak: false
+    })
+  }
+
+  let time = 0
+  const duration = 300
+
+  /**
+   * Función de animación del confeti
+   * Actualiza la posición y el estado de cada partícula
+   * @return {void}
+   */
+  function animate() {
+    context.clearRect(0, 0, width, height)
+    particles.forEach((p) => {
+      // Spread explosivo, parabólico y balanceo
+      // Detectar el pico (cuando la velocidad vertical cambia de negativa a positiva)
+      if (!p.reachedPeak && p.speedY > 0) {
+        p.reachedPeak = true
+      }
+      // Movimiento horizontal y vertical
+      if (p.reachedPeak) {
+        p.x += p.speedX + Math.sin(time * p.freq + p.swayPhase) * 0.8
+      } else {
+        p.x += p.speedX
+      }
+      p.y += p.speedY
+      p.speedY += p.gravity
+      p.rotation += p.rotationSpeed
+
+      context.save()
+      context.translate(p.x, p.y)
+      context.rotate((p.rotation * Math.PI) / 180)
+      context.fillStyle = p.color
+      // Dibuja la figura correspondiente
+      if (p.shape === "rect") {
+        context.fillRect(-p.w / 2, -p.h / 2, p.w, p.h)
+      } else if (p.shape === "ellipse") {
+        context.beginPath()
+        context.ellipse(0, 0, p.w / 2, p.h / 2, 0, 0, 2 * Math.PI)
+        context.fill()
+      } else if (p.shape === "diamond") {
+        context.beginPath()
+        context.moveTo(0, -p.h / 2)
+        context.lineTo(p.w / 2, 0)
+        context.lineTo(0, p.h / 2)
+        context.lineTo(-p.w / 2, 0)
+        context.closePath()
+        context.fill()
+      } else if (p.shape === "triangle") {
+        context.beginPath()
+        context.moveTo(0, -p.h / 2)
+        context.lineTo(p.w / 2, p.h / 2)
+        context.lineTo(-p.w / 2, p.h / 2)
+        context.closePath()
+        context.fill()
+      }
+      context.restore()
+    })
+    time++
+    if (time < duration) {
+      requestAnimationFrame(animate)
+    } else {
+      // Fade-out antes de remover
+      canvas.style.opacity = "0"
+      setTimeout(() => {
+        if (canvas.parentNode) document.body.removeChild(canvas)
+      }, 600)
+    }
+  }
+
+  animate()
+}
+
 /** Fecha actual y formato string */
 const today = new Date()
 const todayStr = formatDate(today)
 
 /** Pantalla actual */
 let currentScreen = "home"
+
+/** Visitas */
+let visitCount = 0
 
 /** Espacio de nombres para el localStorage */
 const localStorageNamespace = "app_habits_v1"
@@ -155,22 +295,63 @@ function render() {
  * @type {object}
  */
 const store = {
-  /** Inicializa el almacenamiento con datos de ejemplo si no existen */
-  init: function () {
-    if (!localStorage.getItem(localStorageNamespace)) {
+  /**
+   * Inicializa el almacenamiento con datos de ejemplo si no existen
+   * @param {string} namespace Espacio de nombres para el localStorage
+   * */
+  init: function (namespace) {
+    if (!localStorage.getItem(namespace)) {
       this.save(this.dummyTasks)
     }
   },
-  /** Guarda las tareas en el localStorage */
-  save: function (tasks) {
-    localStorage.setItem(localStorageNamespace, JSON.stringify(tasks))
-  },
-  /** Carga las tareas desde el localStorage */
-  load: function () {
-    const tasks = localStorage.getItem(localStorageNamespace)
-    if (tasks) {
-      app.tasks = JSON.parse(tasks)
+  /**
+   * Guarda datos en el localStorage
+   * @param {any} data Datos a guardar
+   * @param {string} namespace Espacio de nombres para el localStorage
+   * */
+  save: function (data, namespace) {
+    if (data instanceof Array === true) {
+      localStorage.setItem(namespace, JSON.stringify(data))
+      return
     }
+    try {
+      const dataNumber = Number(data)
+      localStorage.setItem(namespace, dataNumber)
+    } catch (e) {
+      console.error("Error saving data to localStorage:", e)
+    }
+    return
+  },
+  /**
+   * Carga las tareas desde el localStorage
+   * @param {string} namespace Espacio de nombres para el localStorage
+   * @param {string} typeData Tipo de dato a cargar: "array" o "number"
+   * */
+  load: function (namespace, typeData = "array") {
+    const data = localStorage.getItem(namespace)
+    switch (typeData) {
+      case "number":
+        try {
+          const dataNumber = Number(data)
+          console.log("Es un número válido:", dataNumber)
+          visitCount = dataNumber
+        } catch (e) {
+          console.error("Error loading numeric data from localStorage:", e)
+        }
+        break
+      case "array":
+      default:
+        if (data) {
+          app.tasks = JSON.parse(data)
+        }
+        break
+    }
+    return
+  },
+  loadCounter: function () {
+    store.load("visit_counter", "number")
+    visitCount += 1
+    store.save(visitCount, "visit_counter")
   },
   /**
    * Datos con tareas de ejemplo
@@ -247,11 +428,9 @@ const app = {
   /** Inicializa la app y navega a la pantalla principal */
   init: function () {
     // Al ejecutar por primera vez se deben de crear los datos iniciales.
-    store.init()
-
-    // Cargar los datos del localStorage.
-    store.load()
-
+    store.init(localStorageNamespace)
+    store.load(localStorageNamespace, "array")
+    app.visitCounter()
     this.navigateTo("home")
   },
   /**
@@ -305,6 +484,14 @@ const app = {
   toggleTask: function (taskId) {
     console.log("Toggling task with ID:", taskId)
     alert("No se ha implementado esta función")
+  },
+  visitCounter: function () {
+    store.loadCounter()
+    document.getElementById("hit-counter").textContent = visitCount
+    if (visitCount % 10 === 0) {
+      // Lanzar confeti cada 10 visitas
+      launchConfetti()
+    }
   }
 }
 
