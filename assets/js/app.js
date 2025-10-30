@@ -54,12 +54,91 @@ function escapeHtml(text) {
   return div.innerHTML
 }
 
+/**
+ * Lanza una animación de confeti en la pantalla
+ */
+function launchConfetti() {
+  const width = window.innerWidth
+  const height = window.innerHeight
+  const canvas = document.createElement("canvas")
+  const context = canvas.getContext("2d")
+  canvas.width = width
+  canvas.height = height
+  canvas.style.position = "fixed"
+  canvas.style.top = "0"
+  canvas.style.left = "0"
+  canvas.style.pointerEvents = "none"
+  document.body.appendChild(canvas)
+
+  const particles = []
+  const colors = [
+    "#0acc71",
+    "#0099ff",
+    "#ff0055",
+    "#ffaa00",
+    "#ffffff",
+    "#888888",
+    "#000000",
+    "#ff00ff",
+    "#00ffff"
+  ]
+  for (let i = 0; i < 100; i++) {
+    particles.push({
+      x: width / 2,
+      y: height / 2,
+      size: Math.random() * 5 + 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speedX: (Math.random() - 0.5) * 10,
+      speedY: Math.random() * 10 - 5,
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 10,
+      gravity: 0.05
+    })
+  }
+
+  let time = 0
+  const duration = 200
+
+  /**
+   * Función de animación del confeti
+   * Actualiza la posición y el estado de cada partícula
+   * @return {void}
+   */
+  function animate() {
+    context.clearRect(0, 0, width, height)
+    particles.forEach((p) => {
+      p.x += p.speedX
+      p.y += p.speedY
+      p.speedY += p.gravity
+      p.rotation += p.rotationSpeed
+
+      context.save()
+      context.translate(p.x, p.y)
+      context.rotate((p.rotation * Math.PI) / 180)
+      context.fillStyle = p.color
+      context.fillRect(-p.size / 2, -p.size / 2, p.size, p.size)
+      context.restore()
+    })
+    time++
+    if (time < duration) {
+      requestAnimationFrame(animate)
+    } else {
+      document.body.removeChild(canvas)
+    }
+  }
+
+  animate()
+}
+
 /** Fecha actual y formato string */
 const today = new Date()
 const todayStr = formatDate(today)
 
 /** Pantalla actual */
 let currentScreen = "home"
+
+/** Visitas */
+let visitCount = 0
 
 /** Espacio de nombres para el localStorage */
 const localStorageNamespace = "app_habits_v1"
@@ -155,22 +234,63 @@ function render() {
  * @type {object}
  */
 const store = {
-  /** Inicializa el almacenamiento con datos de ejemplo si no existen */
-  init: function () {
-    if (!localStorage.getItem(localStorageNamespace)) {
+  /**
+   * Inicializa el almacenamiento con datos de ejemplo si no existen
+   * @param {string} namespace Espacio de nombres para el localStorage
+   * */
+  init: function (namespace) {
+    if (!localStorage.getItem(namespace)) {
       this.save(this.dummyTasks)
     }
   },
-  /** Guarda las tareas en el localStorage */
-  save: function (tasks) {
-    localStorage.setItem(localStorageNamespace, JSON.stringify(tasks))
-  },
-  /** Carga las tareas desde el localStorage */
-  load: function () {
-    const tasks = localStorage.getItem(localStorageNamespace)
-    if (tasks) {
-      app.tasks = JSON.parse(tasks)
+  /**
+   * Guarda datos en el localStorage
+   * @param {any} data Datos a guardar
+   * @param {string} namespace Espacio de nombres para el localStorage
+   * */
+  save: function (data, namespace) {
+    if (data instanceof Array === true) {
+      localStorage.setItem(namespace, JSON.stringify(data))
+      return
     }
+    try {
+      const dataNumber = Number(data)
+      localStorage.setItem(namespace, dataNumber)
+    } catch (e) {
+      console.error("Error saving data to localStorage:", e)
+    }
+    return
+  },
+  /**
+   * Carga las tareas desde el localStorage
+   * @param {string} namespace Espacio de nombres para el localStorage
+   * @param {string} typeData Tipo de dato a cargar: "array" o "number"
+   * */
+  load: function (namespace, typeData = "array") {
+    const data = localStorage.getItem(namespace)
+    switch (typeData) {
+      case "number":
+        try {
+          const dataNumber = Number(data)
+          console.log("Es un número válido:", dataNumber)
+          visitCount = dataNumber
+        } catch (e) {
+          console.error("Error loading numeric data from localStorage:", e)
+        }
+        break
+      case "array":
+      default:
+        if (data) {
+          app.tasks = JSON.parse(data)
+        }
+        break
+    }
+    return
+  },
+  loadCounter: function () {
+    store.load("visit_counter", "number")
+    visitCount += 1
+    store.save(visitCount, "visit_counter")
   },
   /**
    * Datos con tareas de ejemplo
@@ -247,11 +367,9 @@ const app = {
   /** Inicializa la app y navega a la pantalla principal */
   init: function () {
     // Al ejecutar por primera vez se deben de crear los datos iniciales.
-    store.init()
-
-    // Cargar los datos del localStorage.
-    store.load()
-
+    store.init(localStorageNamespace)
+    store.load(localStorageNamespace, "array")
+    app.visitCounter()
     this.navigateTo("home")
   },
   /**
@@ -305,6 +423,13 @@ const app = {
   toggleTask: function (taskId) {
     console.log("Toggling task with ID:", taskId)
     alert("No se ha implementado esta función")
+  },
+  visitCounter: function () {
+    store.loadCounter()
+    document.getElementById("hit-counter").textContent = visitCount
+    if (visitCount % 10 === 0) {
+      launchConfetti()
+    }
   }
 }
 
