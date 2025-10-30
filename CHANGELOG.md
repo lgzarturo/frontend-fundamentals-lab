@@ -2,8 +2,14 @@
 
 ## Historial de cambios
 
-### [Unreleased]
+### v0.0.5
 
+- refactor: reorganizar la gestión del almacenamiento local y simplificar la inicialización de la aplicación
+- refactor: inicializar datos en localStorage
+- feat: agregar estado inicial de la aplicación y datos de ejemplo para tareas
+- chore: agregar comentarios TODO para continuar
+- feat: mostrar un mensaje de alerta
+- docs: cambios aplicados en commits
 - feat: documentando las mejores prácticas de StandardJS y ECMAScript moderno
 
 ### v0.0.4
