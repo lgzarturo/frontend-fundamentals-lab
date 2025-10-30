@@ -151,76 +151,27 @@ function render() {
 }
 
 /**
- * Objeto principal de la aplicación
+ * Objeto para gestionar el almacenamiento local (localStorage)
  * @type {object}
  */
-const app = {
-  /** Inicializa la app y navega a la pantalla principal */
+const store = {
+  /** Inicializa el almacenamiento con datos de ejemplo si no existen */
   init: function () {
-    // Al ejecutar por primera vez se deben de crear los datos iniciales en el localStorage.
     if (!localStorage.getItem(localStorageNamespace)) {
-      localStorage.setItem(
-        localStorageNamespace,
-        JSON.stringify(this.dummyTasks)
-      )
+      this.save(this.dummyTasks)
     }
-
-    // Cargar los datos del localStorage si existen en la propiedad `this.tasks`.
+  },
+  /** Guarda las tareas en el localStorage */
+  save: function (tasks) {
+    localStorage.setItem(localStorageNamespace, JSON.stringify(tasks))
+  },
+  /** Carga las tareas desde el localStorage */
+  load: function () {
     const tasks = localStorage.getItem(localStorageNamespace)
     if (tasks) {
-      this.tasks = JSON.parse(tasks)
+      app.tasks = JSON.parse(tasks)
     }
-
-    this.navigateTo("home")
   },
-  /**
-   * Navega a la pantalla indicada y actualiza el estado visual
-   * @param {string} screen Pantalla destino
-   */
-  navigateTo: function (screen) {
-    console.log("Navegando a la pantalla:", screen)
-    currentScreen = screen
-    document
-      .querySelectorAll(".screen")
-      .forEach((s) => s.classList.remove("active"))
-    const screenEl = document.getElementById(`${screen}-screen`)
-    if (screenEl) screenEl.classList.add("active")
-    document.querySelectorAll(".nav-btn").forEach((btn) => {
-      if (btn.dataset.screen === screen) {
-        btn.classList.add(
-          "bg-xp-primary",
-          "text-xp-darker",
-          "dark:bg-xp-primary",
-          "dark:text-xp-darker"
-        )
-        btn.classList.remove(
-          "bg-gray-200",
-          "dark:bg-xp-card",
-          "text-gray-700",
-          "dark:text-gray-300"
-        )
-      } else {
-        btn.classList.remove(
-          "bg-xp-primary",
-          "text-xp-darker",
-          "dark:bg-xp-primary",
-          "dark:text-xp-darker"
-        )
-        btn.classList.add(
-          "bg-gray-200",
-          "dark:bg-xp-card",
-          "text-gray-700",
-          "dark:text-gray-300"
-        )
-      }
-    })
-    render()
-  },
-  /**
-   * Estado inicial de la aplicación
-   * @type {Array<object>}
-   */
-  tasks: [],
   /**
    * Datos con tareas de ejemplo
    * @type {Array<object>}
@@ -285,7 +236,72 @@ const app = {
       done: false,
       order: 5
     }
-  ],
+  ]
+}
+
+/**
+ * Objeto principal de la aplicación
+ * @type {object}
+ */
+const app = {
+  /** Inicializa la app y navega a la pantalla principal */
+  init: function () {
+    // Al ejecutar por primera vez se deben de crear los datos iniciales.
+    store.init()
+
+    // Cargar los datos del localStorage.
+    store.load()
+
+    this.navigateTo("home")
+  },
+  /**
+   * Navega a la pantalla indicada y actualiza el estado visual
+   * @param {string} screen Pantalla destino
+   */
+  navigateTo: function (screen) {
+    console.log("Navegando a la pantalla:", screen)
+    currentScreen = screen
+    document
+      .querySelectorAll(".screen")
+      .forEach((s) => s.classList.remove("active"))
+    const screenEl = document.getElementById(`${screen}-screen`)
+    if (screenEl) screenEl.classList.add("active")
+    document.querySelectorAll(".nav-btn").forEach((btn) => {
+      if (btn.dataset.screen === screen) {
+        btn.classList.add(
+          "bg-xp-primary",
+          "text-xp-darker",
+          "dark:bg-xp-primary",
+          "dark:text-xp-darker"
+        )
+        btn.classList.remove(
+          "bg-gray-200",
+          "dark:bg-xp-card",
+          "text-gray-700",
+          "dark:text-gray-300"
+        )
+      } else {
+        btn.classList.remove(
+          "bg-xp-primary",
+          "text-xp-darker",
+          "dark:bg-xp-primary",
+          "dark:text-xp-darker"
+        )
+        btn.classList.add(
+          "bg-gray-200",
+          "dark:bg-xp-card",
+          "text-gray-700",
+          "dark:text-gray-300"
+        )
+      }
+    })
+    render()
+  },
+  /**
+   * Estado inicial de la aplicación
+   * @type {Array<object>}
+   */
+  tasks: [],
   toggleTask: function (taskId) {
     console.log("Toggling task with ID:", taskId)
     alert("No se ha implementado esta función")
