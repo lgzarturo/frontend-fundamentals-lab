@@ -61,6 +61,9 @@ const todayStr = formatDate(today)
 /** Pantalla actual */
 let currentScreen = "home"
 
+/** Espacio de nombres para el localStorage */
+const localStorageNamespace = "app_habits_v1"
+
 /**
  * Renderiza la pantalla de inicio con las tareas MIT (Most Important Tasks)
  * Filtra, ordena y muestra las 3 tareas más importantes no completadas
@@ -154,11 +157,20 @@ function render() {
 const app = {
   /** Inicializa la app y navega a la pantalla principal */
   init: function () {
-    // TODO: Al ejecutar por primera vez se deben de crear los datos iniciales en el localStorage.
+    // Al ejecutar por primera vez se deben de crear los datos iniciales en el localStorage.
+    if (!localStorage.getItem(localStorageNamespace)) {
+      localStorage.setItem(
+        localStorageNamespace,
+        JSON.stringify(this.dummyTasks)
+      )
+    }
 
-    // TODO: Luego cargar los datos del localStorage si existen en la propiedad this.tasks.
+    // Cargar los datos del localStorage si existen en la propiedad `this.tasks`.
+    const tasks = localStorage.getItem(localStorageNamespace)
+    if (tasks) {
+      this.tasks = JSON.parse(tasks)
+    }
 
-    // TODO: No se debe modificar el resto de la lógica.
     this.navigateTo("home")
   },
   /**
