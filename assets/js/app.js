@@ -154,6 +154,11 @@ function render() {
 const app = {
   /** Inicializa la app y navega a la pantalla principal */
   init: function () {
+    // TODO: Al ejecutar por primera vez se deben de crear los datos iniciales en el localStorage.
+
+    // TODO: Luego cargar los datos del localStorage si existen en la propiedad this.tasks.
+
+    // TODO: No se debe modificar el resto de la lógica.
     this.navigateTo("home")
   },
   /**
