@@ -266,6 +266,7 @@ const app = {
   ],
   toggleTask: function (taskId) {
     console.log("Toggling task with ID:", taskId)
+    alert("No se ha implementado esta función")
   }
 }
 
