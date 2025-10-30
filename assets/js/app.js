@@ -205,10 +205,15 @@ const app = {
     render()
   },
   /**
-   * Estado inicial de la aplicación con tareas de ejemplo
+   * Estado inicial de la aplicación
    * @type {Array<object>}
    */
-  tasks: [
+  tasks: [],
+  /**
+   * Datos con tareas de ejemplo
+   * @type {Array<object>}
+   */
+  dummyTasks: [
     {
       id: generateId(),
       title: "Define 3 MITs for today",
