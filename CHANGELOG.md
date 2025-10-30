@@ -4,9 +4,7 @@
 
 ### [Unreleased]
 
-- Mejoras en la documentación y consistencia de estilo StandardJS y ECMAScript moderno.
-- Configuración base para `.editorconfig`, ESLint y Prettier.
-- Migración de código JS a ES2015+ y JSDoc.
+- feat: documentando las mejores prácticas de StandardJS y ECMAScript moderno
 
 ### v0.0.4
 
