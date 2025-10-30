@@ -1,268 +1,407 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Aprende desarrollo web frontend con JavaScript puro, HTML semántico y CSS moderno. Proyecto educativo open source con ejemplos prácticos y guías paso a paso.">
-    <title>Frontend Fundamentals Lab - Aprende JavaScript, HTML y CSS desde cero</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Aprende desarrollo web frontend con JavaScript puro, HTML semántico y CSS moderno. Proyecto educativo open source con ejemplos prácticos y guías paso a paso."
+    />
+    <title>
+      Frontend Fundamentals Lab - Aprende JavaScript, HTML y CSS desde cero
+    </title>
 
     <!-- Meta robots -->
-    <meta name="robots" content="index, follow">
-    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="googlebot"
+      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+    />
 
     <!-- Theme Color -->
     <!-- 'theme-color' no soportado por Firefox, Opera. Chrome y Edge sí lo usan. -->
-    <meta name="theme-color" content="#1a1a1a">
-    <meta name="msapplication-TileColor" content="#1a1a1a">
-    
+    <meta name="theme-color" content="#1a1a1a" />
+    <meta name="msapplication-TileColor" content="#1a1a1a" />
+
     <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="/assets/images/favicon/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/assets/images/favicon/site.webmanifest">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/assets/images/favicon/favicon.ico"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/images/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/images/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/images/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/assets/images/favicon/site.webmanifest" />
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://task-manager.lgzarturo.com/">
+    <link rel="canonical" href="https://task-manager.lgzarturo.com/" />
 
     <!-- Alternate Languages -->
-    <link rel="alternate" hreflang="es" href="https://task-manager.lgzarturo.com/">
-    <link rel="alternate" hreflang="en" href="https://task-manager.lgzarturo.com/en/index.html">
-    <link rel="alternate" hreflang="x-default" href="https://task-manager.lgzarturo.com/">
-    
+    <link
+      rel="alternate"
+      hreflang="es"
+      href="https://task-manager.lgzarturo.com/"
+    />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href="https://task-manager.lgzarturo.com/en/index.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://task-manager.lgzarturo.com/"
+    />
+
     <!-- Keywords -->
-    <meta name="keywords" content="productividad, rutina diaria, gestión del tiempo, hábitos, eficiencia, organización personal, JavaScript, HTML5, CSS3, desarrollo web, frontend, programación, tutorial, curso gratis, vanilla JavaScript, DOM, responsive design">
-    
+    <meta
+      name="keywords"
+      content="productividad, rutina diaria, gestión del tiempo, hábitos, eficiencia, organización personal, JavaScript, HTML5, CSS3, desarrollo web, frontend, programación, tutorial, curso gratis, vanilla JavaScript, DOM, responsive design"
+    />
+
     <!-- SEO meta -->
-    <meta name="distribution" content="global">
-    <meta name="rating" content="general">
-    <meta name="revisit-after" content="7 days">
-    <meta name="language" content="Spanish">
-    <meta name="topic" content="Productividad y gestión del tiempo">
-    <meta name="audience" content="All">
-    <meta name="coverage" content="Worldwide">
-    <meta name="author" content="Arturo López">
-    <meta name="creator" content="Arturo López">
-    <meta name="designer" content="Arturo López">
-    <meta name="publisher" content="Arturo López">
-    <meta name="copyright" content="&copy; 2025 Arturo López">   
-    <meta name="generator" content="HTML5">
+    <meta name="distribution" content="global" />
+    <meta name="rating" content="general" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="language" content="Spanish" />
+    <meta name="topic" content="Productividad y gestión del tiempo" />
+    <meta name="audience" content="All" />
+    <meta name="coverage" content="Worldwide" />
+    <meta name="author" content="Arturo López" />
+    <meta name="creator" content="Arturo López" />
+    <meta name="designer" content="Arturo López" />
+    <meta name="publisher" content="Arturo López" />
+    <meta name="copyright" content="&copy; 2025 Arturo López" />
+    <meta name="generator" content="HTML5" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Productividad XP: Tu rutina diaria">
-    <meta property="og:description" content="Mejora tu productividad diaria con nuestra guía práctica.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://task-manager.lgzarturo.com/">
-    <meta property="og:image" content="https://task-manager.lgzarturo.com/assets/images/web-works-with-html-css-javascript.webp">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Frontend Fundamentals Lab - Aprende desarrollo web con JavaScript puro">
-    <meta property="og:site_name" content="Frontend Fundamentals Lab">
-    <meta property="og:locale" content="es_ES">
-    <meta property="og:locale:alternate" content="en_US">
+    <meta property="og:title" content="Productividad XP: Tu rutina diaria" />
+    <meta
+      property="og:description"
+      content="Mejora tu productividad diaria con nuestra guía práctica."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://task-manager.lgzarturo.com/" />
+    <meta
+      property="og:image"
+      content="https://task-manager.lgzarturo.com/assets/images/web-works-with-html-css-javascript.webp"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Frontend Fundamentals Lab - Aprende desarrollo web con JavaScript puro"
+    />
+    <meta property="og:site_name" content="Frontend Fundamentals Lab" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:locale:alternate" content="en_US" />
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Productividad XP: Tu rutina diaria">
-    <meta name="twitter:description" content="Mejora tu productividad diaria con nuestra guía práctica.">
-    <meta name="twitter:image" content="https://task-manager.lgzarturo.com/assets/images/web-works-with-html-css-javascript.webp">
-    <meta name="twitter:image:alt" content="Frontend Fundamentals Lab">
-    <meta name="twitter:site" content="@arturolgdev">
-    <meta name="twitter:creator" content="@arturolgdev">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Productividad XP: Tu rutina diaria" />
+    <meta
+      name="twitter:description"
+      content="Mejora tu productividad diaria con nuestra guía práctica."
+    />
+    <meta
+      name="twitter:image"
+      content="https://task-manager.lgzarturo.com/assets/images/web-works-with-html-css-javascript.webp"
+    />
+    <meta name="twitter:image:alt" content="Frontend Fundamentals Lab" />
+    <meta name="twitter:site" content="@arturolgdev" />
+    <meta name="twitter:creator" content="@arturolgdev" />
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Frontend Fundamentals Lab",
-      "url": "https://task-manager.lgzarturo.com/",
-      "description": "Proyecto educativo open source para aprender desarrollo web frontend con JavaScript puro, HTML semántico y CSS moderno",
-      "inLanguage": "es-ES",
-      "author": {
-        "@type": "Person",
-        "name": "Arturo López",
-        "url": "https://www.lgzarturo.com",
-        "sameAs": [
-          "https://twitter.com/arturolgdev",
-          "https://github.com/lgzarturo"
-        ]
-      },
-      "publisher": {
-        "@type": "Organization",
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
         "name": "Frontend Fundamentals Lab",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://task-manager.lgzarturo.com/assets/images/favicon/apple-touch-icon.png"
+        "url": "https://task-manager.lgzarturo.com/",
+        "description": "Proyecto educativo open source para aprender desarrollo web frontend con JavaScript puro, HTML semántico y CSS moderno",
+        "inLanguage": "es-ES",
+        "author": {
+          "@type": "Person",
+          "name": "Arturo López",
+          "url": "https://www.lgzarturo.com",
+          "sameAs": [
+            "https://twitter.com/arturolgdev",
+            "https://github.com/lgzarturo"
+          ]
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Frontend Fundamentals Lab",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://task-manager.lgzarturo.com/assets/images/favicon/apple-touch-icon.png"
+          }
         }
       }
-    }
     </script>
-    
+
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Course",
-      "name": "Frontend Fundamentals Lab",
-      "description": "Curso práctico de desarrollo web frontend con JavaScript puro, HTML y CSS",
-      "provider": {
-        "@type": "Person",
-        "name": "Arturo López"
-      },
-      "educationalLevel": "Beginner to Intermediate",
-      "inLanguage": "es-ES",
-      "learningResourceType": "Hands-on Project",
-      "teaches": [
-        "JavaScript Vanilla",
-        "HTML5 Semántico",
-        "CSS3 Moderno",
-        "DOM Manipulation",
-        "Responsive Design",
-        "Web Performance",
-        "Accesibilidad Web"
-      ]
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": "Frontend Fundamentals Lab",
+        "description": "Curso práctico de desarrollo web frontend con JavaScript puro, HTML y CSS",
+        "provider": {
+          "@type": "Person",
+          "name": "Arturo López"
+        },
+        "educationalLevel": "Beginner to Intermediate",
+        "inLanguage": "es-ES",
+        "learningResourceType": "Hands-on Project",
+        "teaches": [
+          "JavaScript Vanilla",
+          "HTML5 Semántico",
+          "CSS3 Moderno",
+          "DOM Manipulation",
+          "Responsive Design",
+          "Web Performance",
+          "Accesibilidad Web"
+        ]
+      }
     </script>
-    
+
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [{
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Inicio",
-        "item": "https://task-manager.lgzarturo.com/"
-      }]
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://task-manager.lgzarturo.com/"
+          }
+        ]
+      }
     </script>
-    
+
     <!-- Preconnect y Preload para performance de fuentes -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap&display=swap">
-    <link href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap&display=swap"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap&display=swap"
+      rel="stylesheet"
+    />
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Estilos CSS -->
-    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/styles.css" />
 
     <!-- Google Tag Manager -->
-    <script async>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-N9PXJX8V');</script>
+    <script async>
+      ;(function (w, d, s, l, i) {
+        w[l] = w[l] || []
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" })
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : ""
+        j.async = true
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl
+        f.parentNode.insertBefore(j, f)
+      })(window, document, "script", "dataLayer", "GTM-N9PXJX8V")
+    </script>
     <!-- End Google Tag Manager -->
-</head>
-<body class="bg-gray-50 dark:bg-xp-darker text-gray-900 dark:text-gray-100 transition-colors duration-300">
+  </head>
+  <body
+    class="bg-gray-50 dark:bg-xp-darker text-gray-900 dark:text-gray-100 transition-colors duration-300"
+  >
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N9PXJX8V"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-N9PXJX8V"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <!-- Begin: navigation mobile -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-xp-card border-t-2 border-gray-200 dark:border-xp-primary/20 z-50 md:hidden">
-        <div class="flex justify-around items-center h-16">
-           <button onclick="app.navigateTo('home')" class="nav-btn flex flex-col items-center justify-center flex-1 h-full" data-screen="home">
-                <span class="text-2xl">🏠</span>
-                <span class="text-xs mt-1">Home</span>
-            </button>
-            <button onclick="app.navigateTo('budgets')" class="nav-btn flex flex-col items-center justify-center flex-1 h-full" data-screen="budgets">
-                <span class="text-2xl">💰</span>
-                <span class="text-xs mt-1">Budget</span>
-            </button>
-            <button onclick="app.navigateTo('tasks')" class="nav-btn flex flex-col items-center justify-center flex-1 h-full" data-screen="tasks">
-                <span class="text-2xl">✓</span>
-                <span class="text-xs mt-1">Tasks</span>
-            </button>
-            <button onclick="app.navigateTo('notes')" class="nav-btn flex flex-col items-center justify-center flex-1 h-full" data-screen="notes">
-                <span class="text-2xl">📝</span>
-                <span class="text-xs mt-1">Notes</span>
-            </button>
-            <button onclick="app.navigateTo('habits')" class="nav-btn flex flex-col items-center justify-center flex-1 h-full" data-screen="habits">
-                <span class="text-2xl">🎯</span>
-                <span class="text-xs mt-1">Habits</span>
-            </button> 
-        </div>
+    <nav
+      class="fixed bottom-0 left-0 right-0 bg-white dark:bg-xp-card border-t-2 border-gray-200 dark:border-xp-primary/20 z-50 md:hidden"
+    >
+      <div class="flex justify-around items-center h-16">
+        <button
+          onclick="app.navigateTo('home')"
+          class="nav-btn flex flex-col items-center justify-center flex-1 h-full"
+          data-screen="home"
+        >
+          <span class="text-2xl">🏠</span>
+          <span class="text-xs mt-1">Home</span>
+        </button>
+        <button
+          onclick="app.navigateTo('budgets')"
+          class="nav-btn flex flex-col items-center justify-center flex-1 h-full"
+          data-screen="budgets"
+        >
+          <span class="text-2xl">💰</span>
+          <span class="text-xs mt-1">Budget</span>
+        </button>
+        <button
+          onclick="app.navigateTo('tasks')"
+          class="nav-btn flex flex-col items-center justify-center flex-1 h-full"
+          data-screen="tasks"
+        >
+          <span class="text-2xl">✓</span>
+          <span class="text-xs mt-1">Tasks</span>
+        </button>
+        <button
+          onclick="app.navigateTo('notes')"
+          class="nav-btn flex flex-col items-center justify-center flex-1 h-full"
+          data-screen="notes"
+        >
+          <span class="text-2xl">📝</span>
+          <span class="text-xs mt-1">Notes</span>
+        </button>
+        <button
+          onclick="app.navigateTo('habits')"
+          class="nav-btn flex flex-col items-center justify-center flex-1 h-full"
+          data-screen="habits"
+        >
+          <span class="text-2xl">🎯</span>
+          <span class="text-xs mt-1">Habits</span>
+        </button>
+      </div>
     </nav>
     <!-- End: navigation mobile -->
 
     <!-- Begin: sidebar desktop -->
-    <aside class="hidden md:block fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-xp-card border-r-2 border-gray-200 dark:border-xp-primary/20 z-40">
-        <div class="p-6">
-            <h1 class="text-2xl font-bold text-xp-primary flex items-center gap-2">
-                <span>⚡</span> Productivity XP
-            </h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Level up your life</p>
-        </div>
-        <nav class="px-3">
-            <button onclick="app.navigateTo('home')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="home">
-                <span class="text-xl mr-3">🏠</span> Dashboard
-            </button>
-            <button onclick="app.navigateTo('budgets')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="budgets">
-                <span class="text-xl mr-3">💰</span> Budget Manager
-            </button>
-            <button onclick="app.navigateTo('tasks')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="tasks">
-                <span class="text-xl mr-3">✓</span> Tasks & Checklist
-            </button>
-            <button onclick="app.navigateTo('notes')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="notes">
-                <span class="text-xl mr-3">📝</span> Markdown Notes
-            </button>
-            <button onclick="app.navigateTo('habits')" class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="habits">
-                <span class="text-xl mr-3">🎯</span> Habit Tracker
-            </button>
-            <div class="border-t border-gray-200 dark:border-gray-700 my-4"></div>
-            <button onclick="app.navigateTo('settings')" class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors" data-screen="settings">
-                <span class="text-xl mr-3">⚙️</span> Settings
-            </button>
-        </nav>
+    <aside
+      class="hidden md:block fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-xp-card border-r-2 border-gray-200 dark:border-xp-primary/20 z-40"
+    >
+      <div class="p-6">
+        <h1 class="text-2xl font-bold text-xp-primary flex items-center gap-2">
+          <span>⚡</span> Productivity XP
+        </h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Level up your life
+        </p>
+      </div>
+      <nav class="px-3">
+        <button
+          onclick="app.navigateTo('home')"
+          class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
+          data-screen="home"
+        >
+          <span class="text-xl mr-3">🏠</span> Dashboard
+        </button>
+        <button
+          onclick="app.navigateTo('budgets')"
+          class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
+          data-screen="budgets"
+        >
+          <span class="text-xl mr-3">💰</span> Budget Manager
+        </button>
+        <button
+          onclick="app.navigateTo('tasks')"
+          class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
+          data-screen="tasks"
+        >
+          <span class="text-xl mr-3">✓</span> Tasks & Checklist
+        </button>
+        <button
+          onclick="app.navigateTo('notes')"
+          class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
+          data-screen="notes"
+        >
+          <span class="text-xl mr-3">📝</span> Markdown Notes
+        </button>
+        <button
+          onclick="app.navigateTo('habits')"
+          class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
+          data-screen="habits"
+        >
+          <span class="text-xl mr-3">🎯</span> Habit Tracker
+        </button>
+        <div class="border-t border-gray-200 dark:border-gray-700 my-4"></div>
+        <button
+          onclick="app.navigateTo('settings')"
+          class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
+          data-screen="settings"
+        >
+          <span class="text-xl mr-3">⚙️</span> Settings
+        </button>
+      </nav>
     </aside>
     <!-- End: sidebar desktop -->
-    
+
     <!-- Begin: main content -->
     <main class="pb-20 md:pb-6 md:ml-64">
-        <!-- Begin: top bar (mobile) -->
-        <div class="md:hidden bg-white dark:bg-xp-card border-b-2 border-gray-200 dark:border-xp-primary/20 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
-            <h1 class="text-xl font-bold text-xp-primary flex items-center gap-2">
-                <span>⚡</span> Productivity XP
-            </h1>
-            <button onclick="app.navigateTo('settings')" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-xp-darker">
-                <span class="text-xl">⚙️</span>
-            </button>
-        </div>
-        <!-- End: top bar (mobile) -->
+      <!-- Begin: top bar (mobile) -->
+      <div
+        class="md:hidden bg-white dark:bg-xp-card border-b-2 border-gray-200 dark:border-xp-primary/20 px-4 py-3 flex items-center justify-between sticky top-0 z-30"
+      >
+        <h1 class="text-xl font-bold text-xp-primary flex items-center gap-2">
+          <span>⚡</span> Productivity XP
+        </h1>
+        <button
+          onclick="app.navigateTo('settings')"
+          class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-xp-darker"
+        >
+          <span class="text-xl">⚙️</span>
+        </button>
+      </div>
+      <!-- End: top bar (mobile) -->
 
-        <!-- Begin: Dashboard screen -->
-        <div id="home-screen" class="screen active">
-            <div class="max-w-7xl mx-auto p-4 md:p-6">
-                <div class="mb-6">
-                    <h2 class="text-3xl font-bold mb-4">Welcome back, Developer! 🎮</h2>
-                    <p class="text-gray-500 dark:text-gray-400">Welcome to your productivity dashboard! Here you can manage your tasks, budgets, notes, and habits all in one place.</p>
-                </div>
-                <!-- Begin: navigation quick access -->
-                <!-- Contenido para el menu -->
-                <!-- End: navigation quick access -->
+      <!-- Begin: Dashboard screen -->
+      <div id="home-screen" class="screen active">
+        <div class="max-w-7xl mx-auto p-4 md:p-6">
+          <div class="mb-6">
+            <h2 class="text-3xl font-bold mb-4">Welcome back, Developer! 🎮</h2>
+            <p class="text-gray-500 dark:text-gray-400">
+              Welcome to your productivity dashboard! Here you can manage your
+              tasks, budgets, notes, and habits all in one place.
+            </p>
+          </div>
+          <!-- Begin: navigation quick access -->
+          <!-- Contenido para el menu -->
+          <!-- End: navigation quick access -->
 
-                <!-- Begin: Today's MITs -->
-                <div class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20 mb-6">
-                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <span>⭐</span> Today's MITs (Most Important Tasks)
-                    </h3>
-                    <div id="home-mits-list" class="space-y-3">
-                        <!-- Las tareas mas importantes se van a mostrar aquí -->
-                    </div>
-                </div>
-                <!-- End: Today's MITs -->
+          <!-- Begin: Today's MITs -->
+          <div
+            class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20 mb-6"
+          >
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <span>⭐</span> Today's MITs (Most Important Tasks)
+            </h3>
+            <div id="home-mits-list" class="space-y-3">
+              <!-- Las tareas mas importantes se van a mostrar aquí -->
             </div>
+          </div>
+          <!-- End: Today's MITs -->
         </div>
-        <!-- End: Dashboard screen -->
-        
+      </div>
+      <!-- End: Dashboard screen -->
     </main>
     <!-- End: main content -->
-    
+
     <script src="/assets/js/app.js" defer></script>
-</body>
+  </body>
 </html>
