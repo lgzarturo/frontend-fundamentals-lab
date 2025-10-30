@@ -1,0 +1,41 @@
+{
+  // Formateador y acciones al guardar
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+
+  // Formato y estilo de texto
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.rulers": [80],
+
+  // Archivo-asociaciones
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // ESLint validación adicional
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  // Prettier configuraciones
+  "prettier.singleQuote": false,
+  "prettier.printWidth": 80,
+  "prettier.semi": false,
+  "prettier.trailingComma": "none",
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": false,
+
+  // Otras opciones útiles
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true
+}

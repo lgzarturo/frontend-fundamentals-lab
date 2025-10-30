@@ -1,0 +1,17 @@
+{
+  // Plantilla ESLint para StandardJS, lista para activar si se requiere
+  // No requiere Node ni dependencias, solo para referencia
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["standard"],
+  "rules": {
+    "indent": ["error", 2],
+    "quotes": ["error", "double"],
+    "max-len": ["error", { "code": 80 }],
+    "semi": ["error", "never"],
+    "comma-dangle": ["error", "never"]
+  }
+}
