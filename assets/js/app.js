@@ -85,32 +85,39 @@ function launchConfetti() {
     "#ffaa00",
     "#ffffff",
     "#888888",
-    "#000000",
+    "#4526b6ff",
     "#ff00ff",
     "#00ffff"
   ]
-  for (let i = 0; i < 220; i++) {
-    // Rectángulos: ancho y alto aleatorio
-    const rectW = Math.random() * 12 + 8
-    const rectH = Math.random() * 4 + 2
-    // Ángulo de disparo (explosión 360°)
-    const angle = Math.random() * Math.PI * 2
-    // Velocidad inicial (más explosiva)
-    const speed = Math.random() * 8 + 6
+  const shapes = ["rect", "ellipse", "diamond", "triangle"]
+  for (let i = 0; i < 300; i++) {
+    // Spread explosivo: ángulo y velocidad
+    const angle = Math.random() * Math.PI * 5
+    const speed = Math.random() * 8 + 2
+    // Figuras aleatorias
+    const shape = shapes[Math.floor(Math.random() * shapes.length)]
+    const w = Math.random() * 12 + 8
+    const h = Math.random() * 4 + 2
+    // Desplazamiento inicial aleatorio para evitar círculo denso
+    const radius = Math.random() * 18 // dispersión inicial (px)
+    const offsetX = Math.cos(angle) * radius
+    const offsetY = Math.sin(angle) * radius
     particles.push({
-      x: width / 2,
-      y: height / 2,
-      w: rectW,
-      h: rectH,
+      x: width / 2 + offsetX,
+      y: height / 2 + offsetY,
+      w,
+      h,
       color: colors[Math.floor(Math.random() * colors.length)],
       speedX: Math.cos(angle) * speed,
       speedY: Math.sin(angle) * speed,
       amplitude: Math.random() * 40 + 20,
-      freq: Math.random() * 0.04 + 0.02,
+      freq: Math.random() * 0.04 + 0.06,
       rotation: Math.random() * 360,
       rotationSpeed: (Math.random() - 0.5) * 6,
       gravity: 0.12,
-      swayPhase: Math.random() * Math.PI * 2
+      swayPhase: Math.random() * Math.PI * 2,
+      shape,
+      reachedPeak: false
     })
   }
 
@@ -125,8 +132,17 @@ function launchConfetti() {
   function animate() {
     context.clearRect(0, 0, width, height)
     particles.forEach((p) => {
-      // Movimiento explosivo y parabólico
-      p.x += p.speedX + Math.sin(time * p.freq + p.swayPhase) * 0.8
+      // Spread explosivo, parabólico y balanceo
+      // Detectar el pico (cuando la velocidad vertical cambia de negativa a positiva)
+      if (!p.reachedPeak && p.speedY > 0) {
+        p.reachedPeak = true
+      }
+      // Movimiento horizontal y vertical
+      if (p.reachedPeak) {
+        p.x += p.speedX + Math.sin(time * p.freq + p.swayPhase) * 0.8
+      } else {
+        p.x += p.speedX
+      }
       p.y += p.speedY
       p.speedY += p.gravity
       p.rotation += p.rotationSpeed
@@ -135,8 +151,29 @@ function launchConfetti() {
       context.translate(p.x, p.y)
       context.rotate((p.rotation * Math.PI) / 180)
       context.fillStyle = p.color
-      // Rectángulo (no cuadrado)
-      context.fillRect(-p.w / 2, -p.h / 2, p.w, p.h)
+      // Dibuja la figura correspondiente
+      if (p.shape === "rect") {
+        context.fillRect(-p.w / 2, -p.h / 2, p.w, p.h)
+      } else if (p.shape === "ellipse") {
+        context.beginPath()
+        context.ellipse(0, 0, p.w / 2, p.h / 2, 0, 0, 2 * Math.PI)
+        context.fill()
+      } else if (p.shape === "diamond") {
+        context.beginPath()
+        context.moveTo(0, -p.h / 2)
+        context.lineTo(p.w / 2, 0)
+        context.lineTo(0, p.h / 2)
+        context.lineTo(-p.w / 2, 0)
+        context.closePath()
+        context.fill()
+      } else if (p.shape === "triangle") {
+        context.beginPath()
+        context.moveTo(0, -p.h / 2)
+        context.lineTo(p.w / 2, p.h / 2)
+        context.lineTo(-p.w / 2, p.h / 2)
+        context.closePath()
+        context.fill()
+      }
       context.restore()
     })
     time++
@@ -451,8 +488,9 @@ const app = {
   visitCounter: function () {
     store.loadCounter()
     document.getElementById("hit-counter").textContent = visitCount
+    launchConfetti()
     if (visitCount % 10 === 0) {
-      launchConfetti()
+      // Lanzar confeti cada 10 visitas
     }
   }
 }
