@@ -388,7 +388,62 @@
             </p>
           </div>
           <!-- Begin: navigation quick access -->
-          <!-- Contenido para el menu -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div
+              class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20"
+            >
+              <div class="text-2xl mb-2">🎯</div>
+              <div
+                class="text-2xl font-bold text-xp-primary"
+                id="home-habits-streak"
+              >
+                0
+              </div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                Day Streak
+              </div>
+            </div>
+            <div
+              class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20"
+            >
+              <div class="text-2xl mb-2">✓</div>
+              <div
+                class="text-2xl font-bold text-xp-secondary"
+                id="home-tasks-done"
+              >
+                0/0
+              </div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                Tasks Done
+              </div>
+            </div>
+            <div
+              class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20"
+            >
+              <div class="text-2xl mb-2">💰</div>
+              <div
+                class="text-2xl font-bold text-xp-warning"
+                id="home-budget-remaining"
+              >
+                $0
+              </div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                Remaining
+              </div>
+            </div>
+            <div
+              class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20"
+            >
+              <div class="text-2xl mb-2">📝</div>
+              <div
+                class="text-2xl font-bold text-purple-500"
+                id="home-notes-count"
+              >
+                0
+              </div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">Notes</div>
+            </div>
+          </div>
           <!-- End: navigation quick access -->
 
           <!-- Begin: Today's MITs -->
@@ -403,11 +458,363 @@
             </div>
           </div>
           <!-- End: Today's MITs -->
+
+          <!-- Habit Progress Today -->
+          <div
+            class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20 mb-6"
+          >
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <span>🎯</span> Today's Habits
+            </h3>
+            <div id="home-habits-list" class="space-y-2">
+              <!-- Habits will be rendered here -->
+            </div>
+          </div>
+          <!-- End: Habit Progress Today -->
+
+          <!-- Begin: Recent Activity -->
+          <div
+            class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20"
+          >
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <span>📊</span> Recent Activity
+            </h3>
+            <div id="home-recent-activity" class="space-y-3">
+              <!-- Recent activity will be rendered here -->
+            </div>
+          </div>
+          <!-- End: Recent Activity -->
         </div>
       </div>
       <!-- End: Dashboard screen -->
+
+      <!-- Begin: Budget screen -->
+      <div id="budgets-screen" class="screen">
+        <div class="max-w-7xl mx-auto p-4 md:p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-3xl font-bold flex items-center gap-2">
+              <span>💰</span> Budget Manager
+            </h2>
+            <button
+              onclick="app.showCreateBudgetModal()"
+              class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
+            >
+              + New Budget
+            </button>
+          </div>
+
+          <!-- Budget Overview -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div
+              class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-xp-primary/20"
+            >
+              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                Total Budget
+              </div>
+              <div class="text-3xl font-bold text-xp-primary" id="budget-total">
+                $0
+              </div>
+            </div>
+            <div
+              class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-xp-danger/20"
+            >
+              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                Total Spent
+              </div>
+              <div class="text-3xl font-bold text-xp-danger" id="budget-spent">
+                $0
+              </div>
+            </div>
+            <div
+              class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-xp-secondary/20"
+            >
+              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                Remaining
+              </div>
+              <div
+                class="text-3xl font-bold text-xp-secondary"
+                id="budget-remaining"
+              >
+                $0
+              </div>
+            </div>
+          </div>
+
+          <!-- Budgets List -->
+          <div id="budgets-list" class="space-y-4">
+            <!-- Budget cards will be rendered here -->
+          </div>
+        </div>
+      </div>
+      <!-- End: Budget screen -->
+
+      <!-- Begin: Tasks screen -->
+      <div id="tasks-screen" class="screen">
+        <div class="max-w-7xl mx-auto p-4 md:p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-3xl font-bold flex items-center gap-2">
+              <span>✓</span> Tasks & Checklist
+            </h2>
+            <button
+              onclick="app.showToast('Aún no esta implementado', 'error');"
+              class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
+            >
+              + New Task
+            </button>
+          </div>
+
+          <!-- Filter Tabs -->
+          <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <button
+              class="task-filter-btn px-4 py-2 rounded-lg bg-xp-primary text-xp-darker font-semibold whitespace-nowrap"
+              data-filter="all"
+            >
+              All Tasks
+            </button>
+            <button
+              class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
+              data-filter="today"
+            >
+              Today
+            </button>
+            <button
+              class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
+              data-filter="high"
+            >
+              High Priority
+            </button>
+            <button
+              class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
+              data-filter="completed"
+            >
+              Completed
+            </button>
+          </div>
+
+          <!-- Tasks List -->
+          <div id="tasks-list" class="space-y-3">
+            <!-- Task items will be rendered here -->
+          </div>
+        </div>
+      </div>
+      <!-- End: Tasks screen -->
+
+      <!-- Begin: Notes screen -->
+      <div id="notes-screen" class="screen">
+        <div class="max-w-7xl mx-auto p-4 md:p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-3xl font-bold flex items-center gap-2">
+              <span>📝</span> Markdown Notes
+            </h2>
+            <button
+              onclick="app.showToast('Aún no esta implementado', 'error');"
+              class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
+            >
+              + New Note
+            </button>
+          </div>
+
+          <!-- Search Bar -->
+          <div class="mb-6">
+            <input
+              type="text"
+              id="notes-search"
+              placeholder="🔍 Search notes..."
+              class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-card focus:outline-none focus:border-xp-primary"
+            />
+          </div>
+
+          <!-- Notes Grid -->
+          <div
+            id="notes-list"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            <!-- Note cards will be rendered here -->
+          </div>
+        </div>
+      </div>
+      <!-- End: Notes screen -->
+
+      <!-- Begin: Habits screen -->
+      <div id="habits-screen" class="screen">
+        <div class="max-w-7xl mx-auto p-4 md:p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-3xl font-bold flex items-center gap-2">
+              <span>🎯</span> Habit Tracker
+            </h2>
+            <button
+              onclick="app.showToast('Aún no esta implementado', 'error');"
+              class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
+            >
+              + Add Habit
+            </button>
+          </div>
+
+          <!-- Current Streak Info -->
+          <div
+            class="bg-gradient-to-r from-xp-primary/20 to-xp-secondary/20 rounded-xl p-6 mb-6 border-2 border-xp-primary/30"
+          >
+            <div class="flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Current Streak
+                </div>
+                <div class="text-4xl font-bold" id="habits-current-streak">
+                  0 days 🔥
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Completion Rate
+                </div>
+                <div
+                  class="text-2xl font-bold text-xp-primary"
+                  id="habits-completion-rate"
+                >
+                  0%
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Habits List -->
+          <div id="habits-list" class="space-y-4">
+            <!-- Habit cards will be rendered here -->
+          </div>
+        </div>
+      </div>
+      <!-- End: Habits screen -->
+
+      <!-- Begin: Settings screen -->
+      <div id="settings-screen" class="screen">
+        <div class="max-w-4xl mx-auto p-4 md:p-6">
+          <h2 class="text-3xl font-bold mb-6 flex items-center gap-2">
+            <span>⚙️</span> Settings
+          </h2>
+
+          <!-- Theme Toggle -->
+          <div
+            class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20 mb-4"
+          >
+            <h3 class="text-xl font-bold mb-4">Appearance</h3>
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-semibold">Dark Mode</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                  Toggle between light and dark theme
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Management -->
+          <div
+            class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20 mb-4"
+          >
+            <h3 class="text-xl font-bold mb-4">Data Management</h3>
+            <div class="space-y-3">
+              <button
+                onclick="app.showToast('Aún no esta implementado', 'error');"
+                class="w-full text-left px-4 py-3 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded-lg transition-colors"
+              >
+                <div class="font-semibold">📥 Export Data</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                  Download all your data as JSON
+                </div>
+              </button>
+              <button
+                onclick="app.showToast('Aún no esta implementado', 'error');"
+                class="w-full text-left px-4 py-3 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg transition-colors"
+              >
+                <div class="font-semibold">📤 Import Data</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                  Upload previously exported data
+                </div>
+              </button>
+              <button
+                onclick="app.showToast('Aún no esta implementado', 'error');"
+                class="w-full text-left px-4 py-3 bg-xp-warning/20 hover:bg-xp-warning/30 rounded-lg transition-colors"
+              >
+                <div class="font-semibold">🔄 Reset to Demo Data</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                  Restore sample data (will overwrite current data)
+                </div>
+              </button>
+              <button
+                onclick="app.showUndoToast('Aún no esta implementado', () => {alert('Deshacer acción')});"
+                class="w-full text-left px-4 py-3 bg-xp-danger/20 hover:bg-xp-danger/30 rounded-lg transition-colors"
+              >
+                <div class="font-semibold">🗑️ Clear All Data</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                  Delete all stored data (cannot be undone)
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- About -->
+          <div
+            class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20"
+          >
+            <h3 class="text-xl font-bold mb-2">About Productivity XP</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+              A gamified productivity suite designed for developers and
+              creators. Track your habits, manage budgets, organize tasks, and
+              write notes - all with an XP-inspired aesthetic.
+            </p>
+            <div class="text-sm text-gray-500 dark:text-gray-500">
+              Version 0.0.1 | Built with ❤️ and ☕ by
+              <a
+                href="https://www.lgzarturo.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xp-primary hover:underline"
+                >Arturo López</a
+              >.
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End: Settings screen -->
     </main>
     <!-- End: main content -->
+
+    <!-- Begin: Modal Backdrop -->
+    <div
+      id="modal-backdrop"
+      class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      onclick="app.closeModal()"
+    >
+      <div
+        id="modal-content"
+        class="bg-white dark:bg-xp-card rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        onclick="event.stopPropagation()"
+      >
+        <!-- Modal content will be injected here -->
+      </div>
+    </div>
+    <!-- End: Modal Backdrop -->
+
+    <!-- Begin: Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2">
+      <!-- Toast messages will appear here -->
+    </div>
+    <!-- End: Toast Container -->
+
+    <!-- Begin: Undo Toast -->
+    <div
+      id="undo-toast"
+      class="hidden fixed bottom-24 md:bottom-8 left-1/2 transform -translate-x-1/2 bg-xp-card border-2 border-xp-primary px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-4"
+    >
+      <span id="undo-message"></span>
+      <button
+        onclick="app.performUndo()"
+        class="bg-xp-primary text-xp-darker px-4 py-1 rounded font-semibold"
+      >
+        Undo
+      </button>
+    </div>
+    <!-- End: Undo Toast -->
 
     <script src="/assets/js/app.js" defer></script>
   </body>
