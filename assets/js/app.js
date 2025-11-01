@@ -276,6 +276,10 @@ function home() {
   document.getElementById("home-mits-list").innerHTML = mitsHtml
 }
 
+function budgets() {
+  console.log("Renderizando la pantalla de presupuestos")
+}
+
 /**
  * Renderiza la pantalla actual según el estado
  */
@@ -283,8 +287,10 @@ function render() {
   console.log("Renderizando la pantalla:", currentScreen)
   switch (currentScreen) {
     case "home":
-      console.log("Tareas actuales:", app.tasks)
       home()
+      break
+    case "budgets":
+      budgets()
       break
     // Otros casos para diferentes pantallas
   }
@@ -483,8 +489,12 @@ const app = {
   tasks: [],
   toggleTask: function (taskId) {
     console.log("Toggling task with ID:", taskId)
-    alert("No se ha implementado esta función")
+    this.showToast("Función no implementada", "error")
   },
+  /**
+   * Cuenta de visitas y lanzamiento de confeti cada 10 visitas
+   * @return {void}
+   */
   visitCounter: function () {
     store.loadCounter()
     document.getElementById("hit-counter").textContent = visitCount
@@ -492,6 +502,119 @@ const app = {
       // Lanzar confeti cada 10 visitas
       launchConfetti()
     }
+  },
+  /**
+   * Muestra el modal para crear un nuevo presupuesto
+   * @return {void}
+   */
+  showCreateBudgetModal() {
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Create New Budget</h3>
+                <form onsubmit="app.showToast('Aún no esta implementado', 'error'); app.closeModal(); return false;">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Budget Name</label>
+                            <input type="text" name="name" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="e.g., Monthly Personal Budget">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Currency</label>
+                            <select name="currency"
+                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Create Budget
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  /**
+   * Muestra el modal con el contenido especificado
+   * @param {*} contentHtml
+   */
+  showModal: function (contentHtml) {
+    const backdrop = document.getElementById("modal-backdrop")
+    const modalContent = document.getElementById("modal-content")
+    modalContent.innerHTML = contentHtml
+    backdrop.classList.remove("hidden")
+  },
+  /**
+   * Cierra el modal actual
+   */
+  closeModal: function () {
+    const backdrop = document.getElementById("modal-backdrop")
+    backdrop.classList.add("hidden")
+  },
+  /**
+   * Muestra un mensaje emergente (toast)
+   * @param {*} message - Mensaje a mostrar
+   * @param {*} type - Tipo de mensaje: "info", "success", "error"
+   */
+  showToast: function (message, type = "info") {
+    const toast = document.createElement("div")
+    toast.className = `toast px-6 py-3 rounded-lg shadow-lg text-white ${
+      type === "success"
+        ? "bg-xp-primary text-xp-darker"
+        : type === "error"
+        ? "bg-xp-danger"
+        : "bg-xp-secondary"
+    }`
+    toast.textContent = message
+
+    const container = document.getElementById("toast-container")
+    container.appendChild(toast)
+
+    setTimeout(() => {
+      toast.style.opacity = "0"
+      setTimeout(() => toast.remove(), 300)
+    }, 3000)
+  },
+  /**
+   * Muestra un mensaje emergente (toast) con opción de deshacer
+   * @param {*} message - Mensaje a mostrar
+   * @param {*} undoCallback - Función a ejecutar al deshacer
+   */
+  showUndoToast: function (message, undoCallback) {
+    const undoToast = document.getElementById("undo-toast")
+    const undoMessage = document.getElementById("undo-message")
+
+    undoMessage.textContent = message
+    undoToast.classList.remove("hidden")
+
+    this.undoCallback = undoCallback
+
+    setTimeout(() => {
+      undoToast.classList.add("hidden")
+      this.undoCallback = null
+    }, 5000)
+  },
+  /**
+   * Ejecuta la acción de deshacer
+   * @return {void}
+   */
+  performUndo: function () {
+    if (this.undoCallback) {
+      this.undoCallback()
+      this.undoCallback = null
+    }
+    document.getElementById("undo-toast").classList.add("hidden")
   }
 }
 
