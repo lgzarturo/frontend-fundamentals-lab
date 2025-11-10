@@ -53,6 +53,7 @@ El objetivo no es solo construir la app, sino **aprender profundamente los funda
    2. [Configuración inicial de Google Tag Manager](/docs/tag-manager.md)
 2. [Integración y organización del diseño con TailwindCSS](/docs/tailwind-css.md)
 3. [Fundamentos de JavaScript y manipulación del DOM - _Crear un contador de visitas_](/docs/fundamentos-javascript.md)
+4. [Guia de estudio fullstack JavaScript/TypeScript](/docs/guia-fullstack-javascript.md)
 
 ---
 
