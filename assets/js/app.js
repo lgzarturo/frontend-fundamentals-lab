@@ -550,6 +550,15 @@ function createHabitFromTemplate(templateIndex) {
 
   app.habits.push(habit)
   store.save(app.habits, "habits")
+  // Google Analytics event
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: "habit_create_template",
+      habit_id: habit.id,
+      habit_title: habit.title,
+      template_index: templateIndex
+    })
+  }
   app.closeModal()
   app.showToast("Habit added! 🎯", "success")
   habits()
@@ -575,6 +584,14 @@ function createCustomHabit(e) {
 
   app.habits.push(habit)
   store.save(app.habits, "habits")
+  // Google Analytics event
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: "habit_create_custom",
+      habit_id: habit.id,
+      habit_title: habit.title
+    })
+  }
   app.closeModal()
   app.showToast("Custom habit created! 🎯", "success")
   habits()
@@ -697,6 +714,14 @@ function deleteHabit(habitId) {
     const deleted = app.habits.splice(index, 1)[0]
     store.save(app.habits, "habits")
     habits()
+    // Google Analytics event
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: "habit_delete",
+        habit_id: habitId,
+        habit_title: deleted.title
+      })
+    }
     app.showUndoToast(`Deleted "${deleted.title}"`, () => {
       app.habits.splice(index, 0, deleted)
       store.save(app.habits, "habits")
@@ -738,6 +763,16 @@ function toggleHabit(habitId) {
     wasDone ? "Habit unchecked" : "Habit completed! +10 XP 🎉",
     "success"
   )
+
+  // Google Analytics event
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: "habit_toggle",
+      habit_id: habitId,
+      habit_title: habit.title,
+      status: habit.dailyRecords[todayStr] ? "completed" : "unchecked"
+    })
+  }
 
   const totalHabits = app.habits.length
   const completedHabitsToday = app.habits.filter(
