@@ -246,6 +246,11 @@ const localStorageNamespace = "app_habits_v1"
  * Filtra, ordena y muestra las 3 tareas más importantes no completadas
  */
 function home() {
+  const todayStr = formatDate(new Date())
+  const maxStreak = Math.max(...store.habits.map((h) => h.streak || 0), 0)
+
+  document.getElementById("home-habits-streak").textContent = maxStreak
+
   const mits = app.tasks
     .filter((t) => !t.done && (t.priority === "high" || t.dueDate === todayStr))
     .sort((a, b) => {
@@ -311,6 +316,46 @@ function home() {
       : '<div class="text-gray-500 dark:text-gray-400 text-center py-8">No tasks for today. Create some MITs! 🎯</div>'
   // Insertar el HTML generado en el contenedor correspondiente
   document.getElementById("home-mits-list").innerHTML = mitsHtml
+
+  // Renderizar los hábitos en el inicio
+  const habitsHtml = store.habits
+    .map((habit) => {
+      const isDone = habit.dailyRecords[todayStr]
+      return `
+                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                    <div class="flex items-center gap-3 flex-1">
+                        <button onclick="toggleHabit('${habit.id}')"
+                                class="w-8 h-8 rounded-full border-2 ${
+                                  isDone
+                                    ? "bg-xp-primary border-xp-primary"
+                                    : "border-gray-400"
+                                } flex items-center justify-center hover:scale-110 transition-transform">
+                            ${
+                              isDone
+                                ? '<span class="text-xp-darker text-lg">✓</span>'
+                                : ""
+                            }
+                        </button>
+                        <div>
+                            <div class="font-semibold">${escapeHtml(
+                              habit.title
+                            )}</div>
+                            <div class="text-xs text-gray-600 dark:text-gray-400">🔥 ${
+                              habit.streak
+                            } day streak</div>
+                        </div>
+                    </div>
+                    ${
+                      isDone
+                        ? '<span class="text-xp-primary font-bold">+10 XP</span>'
+                        : ""
+                    }
+                </div>
+            `
+    })
+    .join("")
+
+  document.getElementById("home-habits-list").innerHTML = habitsHtml
 }
 
 /**
@@ -438,6 +483,10 @@ function habits() {
     '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No habits yet. Add habits to start tracking! 🎯</div>'
 }
 
+/**
+ * Crea un hábito a partir de una plantilla predefinida
+ * @param {*} templateIndex Índice de la plantilla a usar
+ */
 function createHabitFromTemplate(templateIndex) {
   const templates = [
     {
@@ -511,6 +560,10 @@ function createHabitFromTemplate(templateIndex) {
   habits()
 }
 
+/**
+ * Crea un hábito personalizado a partir de un formulario
+ * @param {*} e Evento del formulario
+ */
 function createCustomHabit(e) {
   e.preventDefault()
   const formData = new FormData(e.target)
@@ -532,6 +585,9 @@ function createCustomHabit(e) {
   habits()
 }
 
+/**
+ * Muestra el modal para agregar un nuevo hábito
+ */
 function showHabitTemplatesModal() {
   const templates = [
     {
@@ -687,6 +743,20 @@ function toggleHabit(habitId) {
     wasDone ? "Habit unchecked" : "Habit completed! +10 XP 🎉",
     "success"
   )
+
+  const totalHabits = store.habits.length
+  const completedHabitsToday = store.habits.filter(
+    (h) => h.dailyRecords[todayStr]
+  ).length
+
+  console.log(
+    `Habits completed today: ${completedHabitsToday} / ${totalHabits}`
+  )
+
+  if (totalHabits === completedHabitsToday && totalHabits > 0) {
+    launchConfetti()
+  }
+
   habits()
   if (currentScreen === "home") home()
 }
