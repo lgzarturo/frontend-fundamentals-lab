@@ -238,16 +238,13 @@ let currentScreen = "home"
 /** Visitas */
 let visitCount = 0
 
-/** Espacio de nombres para el localStorage */
-const localStorageNamespace = "app_habits_v1"
-
 /**
  * Renderiza la pantalla de inicio con las tareas MIT (Most Important Tasks)
  * Filtra, ordena y muestra las 3 tareas más importantes no completadas
  */
 function home() {
   const todayStr = formatDate(new Date())
-  const maxStreak = Math.max(...store.habits.map((h) => h.streak || 0), 0)
+  const maxStreak = Math.max(...app.habits.map((h) => h.streak || 0), 0)
 
   document.getElementById("home-habits-streak").textContent = maxStreak
 
@@ -259,9 +256,7 @@ function home() {
       return 0
     })
     .slice(0, 3)
-  console.log("Tareas MIT para hoy:", mits)
-  // Generar el HTML para la lista de MITs
-  // TODO: Mejorar el diseño visual de las tareas MIT
+
   const mitsHtml =
     mits.length > 0
       ? mits
@@ -314,11 +309,11 @@ function home() {
           )
           .join("")
       : '<div class="text-gray-500 dark:text-gray-400 text-center py-8">No tasks for today. Create some MITs! 🎯</div>'
-  // Insertar el HTML generado en el contenedor correspondiente
+
   document.getElementById("home-mits-list").innerHTML = mitsHtml
 
   // Renderizar los hábitos en el inicio
-  const habitsHtml = store.habits
+  const habitsHtml = app.habits
     .map((habit) => {
       const isDone = habit.dailyRecords[todayStr]
       return `
@@ -370,13 +365,13 @@ function budgets() {
  */
 function habits() {
   const todayStr = formatDate(new Date())
-  const totalHabits = store.habits.length
-  const completedToday = store.habits.filter(
+  const totalHabits = app.habits.length
+  const completedToday = app.habits.filter(
     (h) => h.dailyRecords[todayStr]
   ).length
   const completionRate =
     totalHabits > 0 ? ((completedToday / totalHabits) * 100).toFixed(0) : 0
-  const maxStreak = Math.max(...store.habits.map((h) => h.streak || 0), 0)
+  const maxStreak = Math.max(...app.habits.map((h) => h.streak || 0), 0)
 
   document.getElementById(
     "habits-current-streak"
@@ -385,7 +380,7 @@ function habits() {
     "habits-completion-rate"
   ).textContent = `${completionRate}%`
 
-  const habitsHtml = store.habits
+  const habitsHtml = app.habits
     .map((habit) => {
       const isDoneToday = habit.dailyRecords[todayStr]
       const last7Days = getLast7Days()
@@ -553,8 +548,8 @@ function createHabitFromTemplate(templateIndex) {
     color: template.color
   }
 
-  store.habits.push(habit)
-  store.save(store.habits, "habits")
+  app.habits.push(habit)
+  store.save(app.habits, "habits")
   app.closeModal()
   app.showToast("Habit added! 🎯", "success")
   habits()
@@ -578,8 +573,8 @@ function createCustomHabit(e) {
     color: "#00ff88"
   }
 
-  store.habits.push(habit)
-  store.save(store.habits, "habits")
+  app.habits.push(habit)
+  store.save(app.habits, "habits")
   app.closeModal()
   app.showToast("Custom habit created! 🎯", "success")
   habits()
@@ -697,14 +692,14 @@ function showHabitTemplatesModal() {
  * @param {*} habitId ID del hábito a eliminar
  */
 function deleteHabit(habitId) {
-  const index = store.habits.findIndex((h) => h.id === habitId)
+  const index = app.habits.findIndex((h) => h.id === habitId)
   if (index !== -1) {
-    const deleted = store.habits.splice(index, 1)[0]
-    store.save(store.habits, "habits")
+    const deleted = app.habits.splice(index, 1)[0]
+    store.save(app.habits, "habits")
     habits()
     app.showUndoToast(`Deleted "${deleted.title}"`, () => {
-      store.habits.splice(index, 0, deleted)
-      store.save(store.habits, "habits")
+      app.habits.splice(index, 0, deleted)
+      store.save(app.habits, "habits")
       habits()
     })
   }
@@ -716,7 +711,7 @@ function deleteHabit(habitId) {
  * @returns
  */
 function toggleHabit(habitId) {
-  const habit = store.habits.find((h) => h.id === habitId)
+  const habit = app.habits.find((h) => h.id === habitId)
   if (!habit) return
 
   const todayStr = formatDate(new Date())
@@ -738,14 +733,14 @@ function toggleHabit(habitId) {
     habit.streak = Math.max(0, habit.streak - 1)
   }
 
-  store.save(store.habits, "habits")
+  store.save(app.habits, "habits")
   app.showToast(
     wasDone ? "Habit unchecked" : "Habit completed! +10 XP 🎉",
     "success"
   )
 
-  const totalHabits = store.habits.length
-  const completedHabitsToday = store.habits.filter(
+  const totalHabits = app.habits.length
+  const completedHabitsToday = app.habits.filter(
     (h) => h.dailyRecords[todayStr]
   ).length
 
@@ -789,9 +784,12 @@ const store = {
    * Inicializa el almacenamiento con datos de ejemplo si no existen
    * @param {string} namespace Espacio de nombres para el localStorage
    * */
-  init: function (namespace) {
-    if (!localStorage.getItem(namespace)) {
-      this.save(this.dummyTasks)
+  init: function () {
+    if (!localStorage.getItem("tasks")) {
+      this.save(this.dummyTasks, "tasks")
+    }
+    if (!localStorage.getItem("habits")) {
+      this.save(this.dummyHabits, "habits")
     }
   },
   /**
@@ -832,12 +830,25 @@ const store = {
       case "array":
       default:
         if (data) {
-          app.tasks = JSON.parse(data)
+          // Asignar los datos cargados a la aplicación según el espacio de nombres
+          switch (namespace) {
+            case "tasks":
+              app.tasks = JSON.parse(data)
+              break
+            case "habits":
+              app.habits = JSON.parse(data)
+              break
+            default:
+              console.warn(`Unknown namespace "${namespace}" for loading data.`)
+          }
         }
         break
     }
     return
   },
+  /**
+   * Carga y actualiza el contador de visitas
+   */
   loadCounter: function () {
     store.load("visit_counter", "number")
     visitCount += 1
@@ -908,7 +919,11 @@ const store = {
       order: 5
     }
   ],
-  habits: [
+  /**
+   * Datos con hábitos de ejemplo
+   * @type {Array<object>}
+   */
+  dummyHabits: [
     {
       id: generateId(),
       title: "🌅 Wake without snooze",
@@ -1010,8 +1025,9 @@ const app = {
   /** Inicializa la app y navega a la pantalla principal */
   init: function () {
     // Al ejecutar por primera vez se deben de crear los datos iniciales.
-    store.init(localStorageNamespace)
-    store.load(localStorageNamespace, "array")
+    store.init()
+    store.load("tasks", "array")
+    store.load("habits", "array")
     app.visitCounter()
     this.navigateTo("home")
   },
@@ -1067,6 +1083,7 @@ const app = {
     console.log("Toggling task with ID:", taskId)
     this.showToast("Función no implementada", "error")
   },
+  habits: [],
   /**
    * Cuenta de visitas y lanzamiento de confeti cada 10 visitas
    * @return {void}
