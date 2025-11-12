@@ -643,7 +643,7 @@
               <span>🎯</span> Habit Tracker
             </h2>
             <button
-              onclick="app.showToast('Aún no esta implementado', 'error');"
+              onclick="showHabitTemplatesModal();"
               class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
             >
               + Add Habit
@@ -817,5 +817,19 @@
     <!-- End: Undo Toast -->
 
     <script src="/assets/js/app.js" defer></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then(function (registration) {
+              console.log("ServiceWorker registrado:", registration)
+            })
+            .catch(function (error) {
+              console.log("ServiceWorker error:", error)
+            })
+        })
+      }
+    </script>
   </body>
 </html>
