@@ -2,6 +2,28 @@
 
 ## Historial de cambios
 
+### v0.0.8
+
+- feat: agregar funcionalidad de PWA y eventos GA4
+- feat: actualizar la gestión de hábitos para usar el espacio de nombres 'app' en lugar de 'store'
+- feat: agregar nuevos hábitos
+- feat: agregar funcionalidad para la pantalla de hábitos
+- docs: agregar sección de características de Productivity XP al README
+- feat: agregar guía de estudio fullstack JavaScript/TypeScript al repositorio
+
+### v0.0.7
+
+- feat: avances con la UI, funcionalidad de modal y toast
+
+### v0.0.6
+
+- feat: lanzar confeti cada 10 visitas en el contador
+- feat: mejorar la animación de confeti y actualizar el contador de visitas
+- feat: mejorar la animación de confeti
+- feat: agregar contador de visitas y animación de confeti
+- feat: agregar contador de visitas [skip ci]
+- feat: actualizar el changelog con los cambios de la versión 0.0.5
+
 ### v0.0.5
 
 - refactor: reorganizar la gestión del almacenamiento local y simplificar la inicialización de la aplicación
