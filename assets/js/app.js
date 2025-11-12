@@ -30,6 +30,43 @@ function generateId() {
 }
 
 /**
+ * Genera registros de éxito/fracaso para los últimos días
+ * @param {number} days - Número de días hacia atrás para generar registros
+ * @param {number} successRate - Tasa de éxito (0 a 1)
+ * @returns {object} Objeto con fechas como claves y resultados booleanos como valores
+ */
+function generatePastRecords(days, successRate) {
+  const records = {}
+  const today = new Date()
+
+  for (let i = 0; i < days; i++) {
+    const date = new Date(today)
+    date.setDate(date.getDate() - i)
+    const dateStr = formatDate(date)
+    records[dateStr] = Math.random() < successRate
+  }
+
+  return records
+}
+
+/**
+ * Obtiene los últimos 7 días en formato AAAA-MM-DD
+ * @returns {string[]} Array con las fechas de los últimos 7 días
+ */
+function getLast7Days() {
+  const days = []
+  const today = new Date()
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(today)
+    date.setDate(date.getDate() - i)
+    days.push(formatDate(date))
+  }
+
+  return days
+}
+
+/**
  * Formatea una fecha en formato AAAA-MM-DD
  * @param {Date|string} date Fecha a formatear
  * @returns {string} Fecha formateada
@@ -276,8 +313,382 @@ function home() {
   document.getElementById("home-mits-list").innerHTML = mitsHtml
 }
 
+/**
+ * Renderiza la pantalla de presupuestos
+ */
 function budgets() {
   console.log("Renderizando la pantalla de presupuestos")
+}
+
+/**
+ * Renderiza la pantalla de hábitos
+ */
+function habits() {
+  const todayStr = formatDate(new Date())
+  const totalHabits = store.habits.length
+  const completedToday = store.habits.filter(
+    (h) => h.dailyRecords[todayStr]
+  ).length
+  const completionRate =
+    totalHabits > 0 ? ((completedToday / totalHabits) * 100).toFixed(0) : 0
+  const maxStreak = Math.max(...store.habits.map((h) => h.streak || 0), 0)
+
+  document.getElementById(
+    "habits-current-streak"
+  ).textContent = `${maxStreak} days 🔥`
+  document.getElementById(
+    "habits-completion-rate"
+  ).textContent = `${completionRate}%`
+
+  const habitsHtml = store.habits
+    .map((habit) => {
+      const isDoneToday = habit.dailyRecords[todayStr]
+      const last7Days = getLast7Days()
+
+      return `
+                <div class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h4 class="text-lg font-bold mb-1">${escapeHtml(
+                              habit.title
+                            )}</h4>
+                            ${
+                              habit.description
+                                ? `<p class="text-sm text-gray-600 dark:text-gray-400">${escapeHtml(
+                                    habit.description
+                                  )}</p>`
+                                : ""
+                            }
+                        </div>
+                        <button onclick="deleteHabit('${habit.id}')"
+                                class="px-3 py-1 text-xs bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
+                            Delete
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-4 mb-4">
+                        <button onclick="toggleHabit('${habit.id}')"
+                                class="flex items-center gap-3 px-6 py-3 rounded-lg ${
+                                  isDoneToday
+                                    ? "bg-xp-primary text-xp-darker"
+                                    : "bg-gray-200 dark:bg-xp-darker text-gray-700 dark:text-gray-300"
+                                } hover:opacity-80 transition-all font-semibold">
+                            ${
+                              isDoneToday
+                                ? "✓ Completed Today"
+                                : "○ Mark Complete"
+                            }
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">🔥</span>
+                            <div>
+                                <div class="text-xs text-gray-600 dark:text-gray-400">Streak</div>
+                                <div class="font-bold text-lg">${
+                                  habit.streak
+                                } days</div>
+                            </div>
+                        </div>
+                        ${
+                          isDoneToday
+                            ? '<div class="ml-auto text-xp-primary font-bold animate-bounce-subtle">+10 XP</div>'
+                            : ""
+                        }
+                    </div>
+
+                    <div class="flex gap-2">
+                        ${last7Days
+                          .map((date) => {
+                            const done = habit.dailyRecords[date]
+                            const isToday = date === todayStr
+                            return `
+                                <div class="flex-1 h-12 rounded-lg ${
+                                  done
+                                    ? "bg-xp-primary"
+                                    : "bg-gray-200 dark:bg-xp-darker"
+                                } ${
+                              isToday ? "ring-2 ring-xp-secondary" : ""
+                            } flex items-center justify-center">
+                                    ${
+                                      done
+                                        ? '<span class="text-xp-darker text-xl">✓</span>'
+                                        : ""
+                                    }
+                                </div>
+                            `
+                          })
+                          .join("")}
+                    </div>
+                    <div class="flex justify-between mt-2 text-xs text-gray-600 dark:text-gray-400">
+                        ${last7Days
+                          .map((date) => {
+                            const d = new Date(date)
+                            return `<div class="flex-1 text-center">${d
+                              .toLocaleDateString("en-US", { weekday: "short" })
+                              .substr(0, 1)}</div>`
+                          })
+                          .join("")}
+                    </div>
+                </div>
+            `
+    })
+    .join("")
+
+  document.getElementById("habits-list").innerHTML =
+    habitsHtml ||
+    '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No habits yet. Add habits to start tracking! 🎯</div>'
+}
+
+function createHabitFromTemplate(templateIndex) {
+  const templates = [
+    {
+      title: "🌅 Wake without snooze",
+      description: "Wake up at target time without hitting snooze",
+      color: "#00ff88"
+    },
+    {
+      title: "💧 Hydrate (500ml water)",
+      description: "Drink 500ml water with lemon immediately after waking",
+      color: "#0099ff"
+    },
+    {
+      title: "🧘 Stoic meditation (10 min)",
+      description: "Morning meditation and journaling",
+      color: "#9333ea"
+    },
+    {
+      title: "🏃 Mobility routine",
+      description: "15-20 minutes of stretching and calisthenics",
+      color: "#f59e0b"
+    },
+    {
+      title: "⭐ Define 3 MITs",
+      description: "Plan the 3 most important tasks during breakfast",
+      color: "#00ff88"
+    },
+    {
+      title: "🎯 Complete first deep work block",
+      description: "60-minute focused work session",
+      color: "#ef4444"
+    },
+    {
+      title: "📚 Learning block (30-45 min)",
+      description: "Dedicated time for learning new skills",
+      color: "#8b5cf6"
+    },
+    {
+      title: "📝 End of day review",
+      description: "Review accomplishments and plan tomorrow",
+      color: "#10b981"
+    },
+    {
+      title: "🌙 Digital sunset (6 PM)",
+      description: "Disconnect from screens by 6 PM",
+      color: "#f97316"
+    },
+    {
+      title: "😴 Sleep prep by 9 PM",
+      description: "Begin sleep routine, target sleep by 11 PM",
+      color: "#06b6d4"
+    }
+  ]
+
+  const template = templates[templateIndex]
+
+  const habit = {
+    id: generateId(),
+    title: template.title,
+    description: template.description,
+    schedule: "daily",
+    dailyRecords: {},
+    streak: 0,
+    color: template.color
+  }
+
+  store.habits.push(habit)
+  store.save(store.habits, "habits")
+  app.closeModal()
+  app.showToast("Habit added! 🎯", "success")
+  habits()
+}
+
+function createCustomHabit(e) {
+  e.preventDefault()
+  const formData = new FormData(e.target)
+
+  const habit = {
+    id: generateId(),
+    title: formData.get("title"),
+    description: formData.get("description") || "",
+    schedule: "daily",
+    dailyRecords: {},
+    streak: 0,
+    color: "#00ff88"
+  }
+
+  store.habits.push(habit)
+  store.save(store.habits, "habits")
+  app.closeModal()
+  app.showToast("Custom habit created! 🎯", "success")
+  habits()
+}
+
+function showHabitTemplatesModal() {
+  const templates = [
+    {
+      title: "🌅 Wake without snooze",
+      description: "Wake up at target time without hitting snooze"
+    },
+    {
+      title: "💧 Hydrate (500ml water)",
+      description: "Drink 500ml water with lemon immediately after waking"
+    },
+    {
+      title: "🧘 Stoic meditation (10 min)",
+      description: "Morning meditation and journaling"
+    },
+    {
+      title: "🏃 Mobility routine",
+      description: "15-20 minutes of stretching and calisthenics"
+    },
+    {
+      title: "⭐ Define 3 MITs",
+      description: "Plan the 3 most important tasks during breakfast"
+    },
+    {
+      title: "🎯 Complete first deep work block",
+      description: "60-minute focused work session"
+    },
+    {
+      title: "📚 Learning block (30-45 min)",
+      description: "Dedicated time for learning new skills"
+    },
+    {
+      title: "📝 End of day review",
+      description: "Review accomplishments and plan tomorrow"
+    },
+    {
+      title: "🌙 Digital sunset (6 PM)",
+      description: "Disconnect from screens by 6 PM"
+    },
+    {
+      title: "😴 Sleep prep by 9 PM",
+      description: "Begin sleep routine, target sleep by 11 PM"
+    }
+  ]
+
+  const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Add Habit</h3>
+
+                <div class="mb-6">
+                    <h4 class="font-semibold mb-3">Programmer Routine Templates</h4>
+                    <div class="space-y-2 max-h-96 overflow-y-auto">
+                        ${templates
+                          .map(
+                            (template, idx) => `
+                            <button onclick="createHabitFromTemplate(${idx})"
+                                    class="w-full text-left p-4 bg-gray-50 dark:bg-xp-darker rounded-lg hover:bg-xp-primary/10 transition-colors">
+                                <div class="font-semibold">${escapeHtml(
+                                  template.title
+                                )}</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">${escapeHtml(
+                                  template.description
+                                )}</div>
+                            </button>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                    <h4 class="font-semibold mb-3">Or create custom habit</h4>
+                    <form onsubmit="createCustomHabit(event)">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Title *</label>
+                                <input type="text" name="title" required
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                       placeholder="e.g., Morning run">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Description</label>
+                                <input type="text" name="description"
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                       placeholder="Brief description...">
+                            </div>
+                        </div>
+                        <div class="flex gap-3 mt-6">
+                            <button type="button" onclick="app.closeModal()"
+                                    class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                                Create Habit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `
+
+  app.showModal(modalContent)
+}
+
+/**
+ * Elimina un hábito por su ID
+ * @param {*} habitId ID del hábito a eliminar
+ */
+function deleteHabit(habitId) {
+  const index = store.habits.findIndex((h) => h.id === habitId)
+  if (index !== -1) {
+    const deleted = store.habits.splice(index, 1)[0]
+    store.save(store.habits, "habits")
+    habits()
+    app.showUndoToast(`Deleted "${deleted.title}"`, () => {
+      store.habits.splice(index, 0, deleted)
+      store.save(store.habits, "habits")
+      habits()
+    })
+  }
+}
+
+/**
+ * Alterna el estado de un hábito para hoy
+ * @param {*} habitId ID del hábito a alternar
+ * @returns
+ */
+function toggleHabit(habitId) {
+  const habit = store.habits.find((h) => h.id === habitId)
+  if (!habit) return
+
+  const todayStr = formatDate(new Date())
+  const wasDone = habit.dailyRecords[todayStr]
+
+  habit.dailyRecords[todayStr] = !wasDone
+
+  if (!wasDone) {
+    const yesterday = new Date()
+    yesterday.setDate(yesterday.getDate() - 1)
+    const yesterdayStr = formatDate(yesterday)
+
+    if (habit.dailyRecords[yesterdayStr] || habit.streak === 0) {
+      habit.streak = (habit.streak || 0) + 1
+    } else {
+      habit.streak = 1
+    }
+  } else {
+    habit.streak = Math.max(0, habit.streak - 1)
+  }
+
+  store.save(store.habits, "habits")
+  app.showToast(
+    wasDone ? "Habit unchecked" : "Habit completed! +10 XP 🎉",
+    "success"
+  )
+  habits()
+  if (currentScreen === "home") home()
 }
 
 /**
@@ -291,6 +702,9 @@ function render() {
       break
     case "budgets":
       budgets()
+      break
+    case "habits":
+      habits()
       break
     // Otros casos para diferentes pantallas
   }
@@ -422,6 +836,98 @@ const store = {
       subtasks: [],
       done: false,
       order: 5
+    }
+  ],
+  habits: [
+    {
+      id: generateId(),
+      title: "🌅 Wake without snooze",
+      description: "Wake up at target time without hitting snooze",
+      schedule: "daily",
+      dailyRecords: generatePastRecords(7, 0.8),
+      streak: 5,
+      color: "#00ff88"
+    },
+    {
+      id: generateId(),
+      title: "💧 Hydrate (500ml water)",
+      description: "Drink 500ml water with lemon immediately after waking",
+      schedule: "daily",
+      dailyRecords: generatePastRecords(7, 0.9),
+      streak: 7,
+      color: "#0099ff"
+    },
+    {
+      id: generateId(),
+      title: "🧘 Stoic meditation (10 min)",
+      description: "Morning meditation and journaling",
+      schedule: "daily",
+      dailyRecords: generatePastRecords(7, 0.7),
+      streak: 3,
+      color: "#9333ea"
+    },
+    {
+      id: generateId(),
+      title: "🏃 Mobility routine",
+      description: "15-20 minutes of stretching and calisthenics",
+      schedule: "daily",
+      dailyRecords: generatePastRecords(7, 0.6),
+      streak: 2,
+      color: "#f59e0b"
+    },
+    {
+      id: generateId(),
+      title: "⭐ Define 3 MITs",
+      description: "Plan the 3 most important tasks during breakfast",
+      schedule: "daily",
+      dailyRecords: generatePastRecords(7, 0.85),
+      streak: 6,
+      color: "#00ff88"
+    },
+    {
+      id: generateId(),
+      title: "🎯 Complete first deep work block",
+      description: "60-minute focused work session starting at 9:00",
+      schedule: "daily",
+      dailyRecords: generatePastRecords(7, 0.75),
+      streak: 4,
+      color: "#ef4444"
+    },
+    {
+      id: generateId(),
+      title: "📚 Learning block (30-45 min)",
+      description: "Dedicated time for learning new skills",
+      schedule: "daily",
+      dailyRecords: generatePastRecords(7, 0.8),
+      streak: 5,
+      color: "#8b5cf6"
+    },
+    {
+      id: generateId(),
+      title: "📝 End of day review",
+      description: "Review accomplishments and plan tomorrow",
+      schedule: "daily",
+      dailyRecords: generatePastRecords(7, 0.7),
+      streak: 3,
+      color: "#10b981"
+    },
+    {
+      id: generateId(),
+      title: "🌙 Digital sunset (6 PM)",
+      description: "Disconnect from screens by 6 PM",
+      schedule: "daily",
+      dailyRecords: generatePastRecords(7, 0.5),
+      streak: 1,
+      color: "#f97316"
+    },
+    {
+      id: generateId(),
+      title: "😴 Sleep prep by 9 PM",
+      description: "Begin sleep routine, target sleep by 11 PM",
+      schedule: "daily",
+      dailyRecords: generatePastRecords(7, 0.6),
+      streak: 2,
+      color: "#06b6d4"
     }
   ]
 }
