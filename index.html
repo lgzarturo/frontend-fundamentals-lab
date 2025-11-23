@@ -556,7 +556,7 @@
               <span>✓</span> Tasks & Checklist
             </h2>
             <button
-              onclick="app.showToast('Aún no esta implementado', 'error');"
+              onclick="showCreateTaskModal()"
               class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
             >
               + New Task
@@ -566,24 +566,28 @@
           <!-- Filter Tabs -->
           <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
             <button
+              onclick="filterTasks('all')"
               class="task-filter-btn px-4 py-2 rounded-lg bg-xp-primary text-xp-darker font-semibold whitespace-nowrap"
               data-filter="all"
             >
               All Tasks
             </button>
             <button
+              onclick="filterTasks('today')"
               class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
               data-filter="today"
             >
               Today
             </button>
             <button
+              onclick="filterTasks('high')"
               class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
               data-filter="high"
             >
               High Priority
             </button>
             <button
+              onclick="filterTasks('completed')"
               class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
               data-filter="completed"
             >

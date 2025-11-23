@@ -22,8 +22,11 @@ tailwind.config = {
 }
 
 /**
- * Genera un ID único simple
- * @returns {string} ID único generado
+ * Genera un identificador único basado en la fecha actual y un valor aleatorio.
+ * Útil para asignar IDs a los elementos.
+ * @returns {string} ID único generado.
+ * @example
+ * const id = generateId(); // "kz7v1w8xg2"
  */
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2)
@@ -360,6 +363,470 @@ function budgets() {
   console.log("Renderizando la pantalla de presupuestos")
 }
 
+// Controlador de filtro actual
+let currentFilter = "all"
+
+/**
+ * Renderiza la lista de tareas con filtros y ordenamiento
+ */
+function tasks() {
+  let tasks = app.tasks
+  const todayStr = formatDate(new Date())
+
+  // Aplicar filtros
+  switch (currentFilter) {
+    case "today":
+      tasks = tasks.filter((t) => t.dueDate === todayStr && !t.done)
+      break
+    case "high":
+      tasks = tasks.filter((t) => t.priority === "high" && !t.done)
+      break
+    case "completed":
+      tasks = tasks.filter((t) => t.done)
+      break
+  }
+
+  // Ordenar por orden y prioridad
+  tasks.sort((a, b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1
+    if (a.priority === "high" && b.priority !== "high") return -1
+    if (b.priority === "high" && a.priority !== "high") return 1
+    return a.order - b.order
+  })
+
+  // Renderizar tareas
+  const tasksHtml = tasks
+    .map(
+      (task, index) => `
+            <div class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20 task-item"
+                 data-task-id="${task.id}" draggable="true"
+                 ondragstart="handleDragStart(event)"
+                 ondragover="handleDragOver(event)"
+                 ondrop="handleDrop(event)"
+                 ondragend="handleDragEnd(event)">
+                <div class="flex items-start gap-3">
+                    <button onclick="app.toggleTask('${task.id}')"
+                            class="mt-1 w-6 h-6 rounded border-2 border-xp-primary flex items-center justify-center flex-shrink-0 hover:bg-xp-primary/20 transition-colors">
+                        ${
+                          task.done
+                            ? '<span class="text-xp-primary text-lg">✓</span>'
+                            : ""
+                        }
+                    </button>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex-1">
+                                <div class="font-bold text-lg ${
+                                  task.done ? "line-through opacity-60" : ""
+                                }">${escapeHtml(task.title)}</div>
+                                ${
+                                  task.description
+                                    ? `<div class="text-sm text-gray-600 dark:text-gray-400 mt-1 ${
+                                        task.done
+                                          ? "line-through opacity-60"
+                                          : ""
+                                      }">${escapeHtml(task.description)}</div>`
+                                    : ""
+                                }
+                            </div>
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                ${
+                                  task.priority === "high"
+                                    ? '<span class="text-xp-danger text-xl" title="High Priority">⚡</span>'
+                                    : ""
+                                }
+                                ${
+                                  task.dueDate === todayStr
+                                    ? '<span class="text-xp-warning text-xl" title="Due Today">📅</span>'
+                                    : ""
+                                }
+                            </div>
+                        </div>
+
+                        ${
+                          task.subtasks && task.subtasks.length > 0
+                            ? `
+                            <div class="mt-3 space-y-2 pl-2 border-l-2 border-gray-200 dark:border-gray-700">
+                                ${task.subtasks
+                                  .map(
+                                    (subtask) => `
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="app.toggleSubtask('${
+                                          task.id
+                                        }', '${subtask.id}')"
+                                                class="w-4 h-4 rounded border border-gray-400 flex items-center justify-center hover:border-xp-primary transition-colors">
+                                            ${
+                                              subtask.done
+                                                ? '<span class="text-xp-primary text-xs">✓</span>'
+                                                : ""
+                                            }
+                                        </button>
+                                        <span class="text-sm ${
+                                          subtask.done
+                                            ? "line-through opacity-60"
+                                            : ""
+                                        }">${escapeHtml(subtask.text)}</span>
+                                    </div>
+                                `
+                                  )
+                                  .join("")}
+                            </div>
+                        `
+                            : ""
+                        }
+
+                        <div class="flex items-center justify-between mt-3 flex-wrap gap-2">
+                            <div class="flex gap-2 flex-wrap">
+                                ${task.tags
+                                  .map(
+                                    (tag) =>
+                                      `<span class="text-xs px-2 py-1 bg-xp-primary/20 text-xp-primary rounded">${tag}</span>`
+                                  )
+                                  .join("")}
+                                ${
+                                  task.dueDate
+                                    ? `<span class="text-xs px-2 py-1 bg-gray-200 dark:bg-xp-darker text-gray-700 dark:text-gray-300 rounded">Due: ${task.dueDate}</span>`
+                                    : ""
+                                }
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="showEditTaskModal('${
+                                  task.id
+                                }')"
+                                        class="text-sm px-3 py-1 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded transition-colors">
+                                    Edit
+                                </button>
+                                <button onclick="deleteTask('${task.id}')"
+                                        class="text-sm px-3 py-1 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded transition-colors">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+    )
+    .join("")
+
+  document.getElementById("tasks-list").innerHTML =
+    tasksHtml ||
+    '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No tasks found. Create your first task! ✓</div>'
+}
+
+/**
+ * Funcionalidad de filtrado de tareas
+ * @param {string} filter Filtro seleccionado: "all", "today", "high", "completed"
+ */
+function filterTasks(filter) {
+  currentFilter = filter
+
+  // Actualizar estilos de botones de filtro
+  document.querySelectorAll(".task-filter-btn").forEach((btn) => {
+    if (btn.dataset.filter === filter) {
+      btn.classList.add("bg-xp-primary", "text-xp-darker")
+      btn.classList.remove(
+        "bg-gray-200",
+        "dark:bg-xp-card",
+        "text-gray-700",
+        "dark:text-gray-300"
+      )
+    } else {
+      btn.classList.remove("bg-xp-primary", "text-xp-darker")
+      btn.classList.add(
+        "bg-gray-200",
+        "dark:bg-xp-card",
+        "text-gray-700",
+        "dark:text-gray-300"
+      )
+    }
+  })
+
+  tasks()
+}
+
+/**
+ * Muestra el modal para crear una nueva tarea
+ */
+function showCreateTaskModal() {
+  const todayStr = formatDate(new Date())
+
+  // Contenido del modal para crear una nueva tarea
+  const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Create New Task</h3>
+                <form onsubmit="createTask(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <input type="text" name="title" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="e.g., Complete feature implementation">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <textarea name="description" rows="3"
+                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                      placeholder="Task details..."></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Due Date</label>
+                                <input type="date" name="dueDate" value="${todayStr}"
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Priority</label>
+                                <select name="priority"
+                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <input type="text" name="tags"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="coding, important, review">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Create Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+  app.showModal(modalContent)
+}
+
+/**
+ * Agrega una nueva tarea basada en los datos del formulario
+ * @param {Event} e Evento del formulario
+ */
+function createTask(e) {
+  e.preventDefault()
+  const formData = new FormData(e.target)
+
+  // Crear el objeto de tarea
+  const task = {
+    id: generateId(),
+    title: formData.get("title"),
+    description: formData.get("description") || "",
+    dueDate: formData.get("dueDate") || "",
+    priority: formData.get("priority"),
+    tags: formData.get("tags")
+      ? formData
+          .get("tags")
+          .split(",")
+          .map((t) => t.trim())
+          .filter((t) => t)
+      : [],
+    subtasks: [],
+    done: false,
+    order: app.tasks.length + 1
+  }
+
+  app.tasks.push(task)
+  store.save(app.tasks, "tasks")
+  app.closeModal()
+  app.showToast("Task created! 📝", "success")
+  tasks()
+  if (this.currentScreen === "home") home()
+}
+
+/**
+ * Muestra el modal para editar una tarea existente
+ * @param {string} taskId ID de la tarea a editar
+ * @returns
+ */
+function showEditTaskModal(taskId) {
+  const task = app.tasks.find((t) => t.id === taskId)
+  if (!task) return
+
+  // Contenido del modal para editar la tarea
+  const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Edit Task</h3>
+                <form onsubmit="updateTask(event, '${taskId}')">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <input type="text" name="title" required value="${escapeHtml(
+                              task.title
+                            )}"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <textarea name="description" rows="3"
+                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">${escapeHtml(
+                                        task.description
+                                      )}</textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Due Date</label>
+                                <input type="date" name="dueDate" value="${
+                                  task.dueDate
+                                }"
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Priority</label>
+                                <select name="priority"
+                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                    <option value="low" ${
+                                      task.priority === "low" ? "selected" : ""
+                                    }>Low</option>
+                                    <option value="medium" ${
+                                      task.priority === "medium"
+                                        ? "selected"
+                                        : ""
+                                    }>Medium</option>
+                                    <option value="high" ${
+                                      task.priority === "high" ? "selected" : ""
+                                    }>High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <input type="text" name="tags" value="${task.tags.join(
+                              ", "
+                            )}"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Subtasks</label>
+                            <div id="subtasks-list" class="space-y-2 mb-2">
+                                ${task.subtasks
+                                  .map(
+                                    (st, idx) => `
+                                    <div class="flex gap-2">
+                                        <input type="text" value="${escapeHtml(
+                                          st.text
+                                        )}"
+                                               data-subtask-id="${st.id}"
+                                               class="subtask-input flex-1 px-3 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                        <button type="button" onclick="this.parentElement.remove()"
+                                                class="px-3 py-2 bg-xp-danger/20 text-xp-danger rounded-lg hover:bg-xp-danger/30">✕</button>
+                                    </div>
+                                `
+                                  )
+                                  .join("")}
+                            </div>
+                            <button type="button" onclick="addSubtaskInput()"
+                                    class="text-sm px-3 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30">
+                                + Add Subtask
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Update Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+  app.showModal(modalContent)
+}
+
+/**
+ * Agrega un nuevo campo de entrada para subtareas en el formulario de edición de tareas
+ */
+function addSubtaskInput() {
+  const list = document.getElementById("subtasks-list")
+  const div = document.createElement("div")
+  div.className = "flex gap-2"
+  // Agregar el nuevo campo de entrada para la subtarea
+  div.innerHTML = `
+            <input type="text" placeholder="Subtask..."
+                   class="subtask-input flex-1 px-3 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+            <button type="button" onclick="this.parentElement.remove()"
+                    class="px-3 py-2 bg-xp-danger/20 text-xp-danger rounded-lg hover:bg-xp-danger/30">✕</button>
+        `
+  list.appendChild(div)
+}
+
+/**
+ * Función para actualizar una tarea existente
+ * @param {Event} e Evento del formulario
+ * @param {string} taskId ID de la tarea a actualizar
+ */
+function updateTask(e, taskId) {
+  e.preventDefault()
+  const formData = new FormData(e.target)
+  const task = app.tasks.find((t) => t.id === taskId)
+
+  if (task) {
+    // Actualizar campos de la tarea
+    task.title = formData.get("title")
+    task.description = formData.get("description") || ""
+    task.dueDate = formData.get("dueDate") || ""
+    task.priority = formData.get("priority")
+    task.tags = formData.get("tags")
+      ? formData
+          .get("tags")
+          .split(",")
+          .map((t) => t.trim())
+          .filter((t) => t)
+      : []
+
+    // Actualizar subtareas
+    const subtaskInputs = document.querySelectorAll(".subtask-input")
+    task.subtasks = Array.from(subtaskInputs)
+      .map((input) => ({
+        id: input.dataset.subtaskId || this.generateId(),
+        text: input.value,
+        done:
+          task.subtasks.find((st) => st.id === input.dataset.subtaskId)?.done ||
+          false
+      }))
+      .filter((st) => st.text.trim())
+
+    store.save(app.tasks, "tasks")
+    app.closeModal()
+    app.showToast("Task updated! ✓", "success")
+    tasks()
+  }
+}
+
+/**
+ * Función para eliminar una tarea por su ID
+ * @param {string} taskId ID de la tarea a eliminar
+ */
+function deleteTask(taskId) {
+  const index = app.tasks.findIndex((t) => t.id === taskId)
+  if (index !== -1) {
+    const deleted = app.tasks.splice(index, 1)[0]
+    store.save(app.tasks, "tasks")
+    tasks()
+    // Mostrar opción de deshacer
+    app.showUndoToast(`Deleted "${deleted.title}"`, () => {
+      app.tasks.splice(index, 0, deleted)
+      store.save(app.tasks, "tasks")
+      tasks()
+    })
+  }
+}
+
 /**
  * Renderiza la pantalla de hábitos
  */
@@ -480,7 +947,7 @@ function habits() {
 
 /**
  * Crea un hábito a partir de una plantilla predefinida
- * @param {*} templateIndex Índice de la plantilla a usar
+ * @param {number} templateIndex Índice de la plantilla a usar
  */
 function createHabitFromTemplate(templateIndex) {
   const templates = [
@@ -566,7 +1033,7 @@ function createHabitFromTemplate(templateIndex) {
 
 /**
  * Crea un hábito personalizado a partir de un formulario
- * @param {*} e Evento del formulario
+ * @param {Event} e Evento del formulario
  */
 function createCustomHabit(e) {
   e.preventDefault()
@@ -706,7 +1173,7 @@ function showHabitTemplatesModal() {
 
 /**
  * Elimina un hábito por su ID
- * @param {*} habitId ID del hábito a eliminar
+ * @param {string} habitId ID del hábito a eliminar
  */
 function deleteHabit(habitId) {
   const index = app.habits.findIndex((h) => h.id === habitId)
@@ -732,7 +1199,7 @@ function deleteHabit(habitId) {
 
 /**
  * Alterna el estado de un hábito para hoy
- * @param {*} habitId ID del hábito a alternar
+ * @param {string} habitId ID del hábito a alternar
  * @returns
  */
 function toggleHabit(habitId) {
@@ -803,6 +1270,9 @@ function render() {
     case "budgets":
       budgets()
       break
+    case "tasks":
+      tasks()
+      break
     case "habits":
       habits()
       break
@@ -811,8 +1281,49 @@ function render() {
 }
 
 /**
+ * Representa una subtarea de una tarea.
+ * @typedef {Object} Subtask
+ * @property {string} id - Identificador único de la subtarea.
+ * @property {string} text - Texto descriptivo de la subtarea.
+ * @property {boolean} done - Estado de completado.
+ */
+
+/**
+ * Representa una tarea.
+ * @typedef {Object} Task
+ * @property {string} id - Identificador único de la tarea.
+ * @property {string} title - Título de la tarea.
+ * @property {string} description - Descripción de la tarea.
+ * @property {string} dueDate - Fecha de vencimiento (AAAA-MM-DD).
+ * @property {string} priority - Prioridad ("low", "medium", "high").
+ * @property {string[]} tags - Etiquetas asociadas.
+ * @property {Subtask[]} subtasks - Lista de subtareas.
+ * @property {boolean} done - Estado de completado.
+ * @property {number} order - Orden de la tarea.
+ */
+
+/**
+ * Representa un hábito.
+ * @typedef {Object} Habit
+ * @property {string} id - Identificador único del hábito.
+ * @property {string} title - Título del hábito.
+ * @property {string} description - Descripción del hábito.
+ * @property {string} schedule - Frecuencia ("daily", etc.).
+ * @property {Object.<string, boolean>} dailyRecords - Registro de días completados.
+ * @property {number} streak - Racha actual de días completados.
+ * @property {string} color - Color asociado al hábito.
+ */
+
+/**
  * Objeto para gestionar el almacenamiento local (localStorage)
  * @type {object}
+ * @namespace
+ * @method init Inicializa el almacenamiento con datos de ejemplo si no existen
+ * @method save Guarda datos en el localStorage
+ * @method load Carga datos desde el localStorage
+ * @method loadCounter Carga y actualiza el contador de visitas
+ * @property {Array<Task>} dummyTasks Datos con tareas de ejemplo
+ * @property {Array<Habit>} dummyHabits Datos con hábitos de ejemplo
  */
 const store = {
   /**
@@ -1053,8 +1564,20 @@ const store = {
 }
 
 /**
- * Objeto principal de la aplicación
+ * Objeto principal de la aplicación.
+ * Gestiona la navegación, el estado y las operaciones principales.
  * @type {object}
+ * @namespace
+ * @property {Task[]} tasks - Lista de tareas.
+ * @property {Habit[]} habits - Lista de hábitos.
+ * @method init Inicializa la aplicación.
+ * @method navigateTo Cambia la pantalla actual.
+ * @method toggleTask Alterna el estado de una tarea.
+ * @method showModal Muestra un modal con contenido HTML.
+ * @method closeModal Cierra el modal actual.
+ * @method showToast Muestra un mensaje emergente.
+ * @method showUndoToast Muestra un toast con opción de deshacer.
+ * @method performUndo Ejecuta la acción de deshacer.
  */
 const app = {
   /** Inicializa la app y navega a la pantalla principal */
@@ -1115,8 +1638,27 @@ const app = {
    */
   tasks: [],
   toggleTask: function (taskId) {
-    console.log("Toggling task with ID:", taskId)
-    this.showToast("Función no implementada", "error")
+    const task = app.tasks.find((t) => t.id === taskId)
+    if (task) {
+      task.done = !task.done
+      store.save(app.tasks, "tasks")
+      app.showToast(
+        task.done ? "Task completed! +15 XP 🎉" : "Task reopened",
+        "success"
+      )
+      render()
+    }
+  },
+  toggleSubtask(taskId, subtaskId) {
+    const task = app.tasks.find((t) => t.id === taskId)
+    if (task && task.subtasks) {
+      const subtask = task.subtasks.find((st) => st.id === subtaskId)
+      if (subtask) {
+        subtask.done = !subtask.done
+        store.save(app.tasks, "tasks")
+        tasks()
+      }
+    }
   },
   habits: [],
   /**
@@ -1171,11 +1713,11 @@ const app = {
             </div>
         `
 
-    this.showModal(modalContent)
+    app.showModal(modalContent)
   },
   /**
    * Muestra el modal con el contenido especificado
-   * @param {*} contentHtml
+   * @param {string} contentHtml
    */
   showModal: function (contentHtml) {
     const backdrop = document.getElementById("modal-backdrop")
@@ -1192,8 +1734,8 @@ const app = {
   },
   /**
    * Muestra un mensaje emergente (toast)
-   * @param {*} message - Mensaje a mostrar
-   * @param {*} type - Tipo de mensaje: "info", "success", "error"
+   * @param {string} message - Mensaje a mostrar
+   * @param {string} type - Tipo de mensaje: "info", "success", "error"
    */
   showToast: function (message, type = "info") {
     const toast = document.createElement("div")
@@ -1216,8 +1758,8 @@ const app = {
   },
   /**
    * Muestra un mensaje emergente (toast) con opción de deshacer
-   * @param {*} message - Mensaje a mostrar
-   * @param {*} undoCallback - Función a ejecutar al deshacer
+   * @param {string} message - Mensaje a mostrar
+   * @param {Function} undoCallback - Función a ejecutar al deshacer
    */
   showUndoToast: function (message, undoCallback) {
     const undoToast = document.getElementById("undo-toast")

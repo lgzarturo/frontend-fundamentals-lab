@@ -57,6 +57,7 @@ El objetivo no es solo construir la app, sino **aprender profundamente los funda
 5. [Características de Productivity XP - La app principal](/docs/caracteristicas-productivity-xp.md)
 6. [Acciones y lógica de la app - _Gestión de hábitos_](/docs/javascript-actions-app.md)
    1. [Explicación del código en app.js](/docs/codigo-app_js.md)
+   2. [Ideas y mejoras futuras](/docs/ideas.md)
 
 ---
 
