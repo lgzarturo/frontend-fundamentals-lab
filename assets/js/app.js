@@ -24,9 +24,9 @@ tailwind.config = {
 /**
  * Genera un identificador único basado en la fecha actual y un valor aleatorio.
  * Útil para asignar IDs a los elementos.
- * @returns {string} ID único generado.
+ * @returns {string} - ID único generado.
  * @example
- * const id = generateId(); // "kz7v1w8xg2"
+ * const id = generateId(); // "kz7v1w8xg2"+
  */
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2)
@@ -34,9 +34,12 @@ function generateId() {
 
 /**
  * Genera registros de éxito/fracaso para los últimos días
+ * Se toma una tasa de éxito para determinar la probabilidad de éxito en cada día
  * @param {number} days - Número de días hacia atrás para generar registros
  * @param {number} successRate - Tasa de éxito (0 a 1)
  * @returns {object} Objeto con fechas como claves y resultados booleanos como valores
+ * @example
+ * const records = generatePastRecords(30, 0.7); // { "2023-09-01": true, "2023-09-02": false, ... }
  */
 function generatePastRecords(days, successRate) {
   const records = {}
@@ -54,7 +57,7 @@ function generatePastRecords(days, successRate) {
 
 /**
  * Obtiene los últimos 7 días en formato AAAA-MM-DD
- * @returns {string[]} Array con las fechas de los últimos 7 días
+ * @returns {string[]} - Array con las fechas de los últimos 7 días
  */
 function getLast7Days() {
   const days = []
@@ -71,8 +74,8 @@ function getLast7Days() {
 
 /**
  * Formatea una fecha en formato AAAA-MM-DD
- * @param {Date|string} date Fecha a formatear
- * @returns {string} Fecha formateada
+ * @param {Date|string} date - Fecha a formatear
+ * @returns {string} - Fecha formateada
  */
 function formatDate(date) {
   if (typeof date === "string") return date
@@ -85,8 +88,8 @@ function formatDate(date) {
 
 /**
  * Escapa caracteres HTML especiales en un string
- * @param {string} text Texto a escapar
- * @returns {string} Texto escapado
+ * @param {string} text - Texto a escapar
+ * @returns {string} - Texto escapado
  */
 function escapeHtml(text) {
   const div = document.createElement("div")
@@ -96,6 +99,7 @@ function escapeHtml(text) {
 
 /**
  * Lanza una animación de confeti en la pantalla
+ * @returns {void}
  */
 function launchConfetti() {
   const width = window.innerWidth
@@ -244,6 +248,7 @@ let visitCount = 0
 /**
  * Renderiza la pantalla de inicio con las tareas MIT (Most Important Tasks)
  * Filtra, ordena y muestra las 3 tareas más importantes no completadas
+ * @returns {void}
  */
 function home() {
   const todayStr = formatDate(new Date())
@@ -358,6 +363,7 @@ function home() {
 
 /**
  * Renderiza la pantalla de presupuestos
+ * @returns {void}
  */
 function budgets() {
   const totalBudget = app.budgets.reduce(
@@ -467,6 +473,7 @@ let currentFilter = "all"
 
 /**
  * Renderiza la lista de tareas con filtros y ordenamiento
+ * @returns {void}
  */
 function tasks() {
   let tasks = app.tasks
@@ -615,7 +622,8 @@ function tasks() {
 
 /**
  * Funcionalidad de filtrado de tareas
- * @param {string} filter Filtro seleccionado: "all", "today", "high", "completed"
+ * @param {string} filter - Filtro seleccionado: "all", "today", "high", "completed"
+ * @returns {void}
  */
 function filterTasks(filter) {
   currentFilter = filter
@@ -646,6 +654,7 @@ function filterTasks(filter) {
 
 /**
  * Muestra el modal para crear una nueva tarea
+ * @returns {void}
  */
 function showCreateTaskModal() {
   const todayStr = formatDate(new Date())
@@ -710,11 +719,12 @@ function showCreateTaskModal() {
 
 /**
  * Agrega una nueva tarea basada en los datos del formulario
- * @param {Event} e Evento del formulario
+ * @param {Event} event - Evento del formulario
+ * @returns {void}
  */
-function createTask(e) {
-  e.preventDefault()
-  const formData = new FormData(e.target)
+function createTask(event) {
+  event.preventDefault()
+  const formData = new FormData(event.target)
 
   // Crear el objeto de tarea
   const task = {
@@ -745,8 +755,8 @@ function createTask(e) {
 
 /**
  * Muestra el modal para editar una tarea existente
- * @param {string} taskId ID de la tarea a editar
- * @returns
+ * @param {string} taskId - ID de la tarea a editar
+ * @returns {void}
  */
 function showEditTaskModal(taskId) {
   const task = app.tasks.find((t) => t.id === taskId)
@@ -849,6 +859,7 @@ function showEditTaskModal(taskId) {
 
 /**
  * Agrega un nuevo campo de entrada para subtareas en el formulario de edición de tareas
+ * @return {void}
  */
 function addSubtaskInput() {
   const list = document.getElementById("subtasks-list")
@@ -866,12 +877,18 @@ function addSubtaskInput() {
 
 /**
  * Función para actualizar una tarea existente
- * @param {Event} e Evento del formulario
- * @param {string} taskId ID de la tarea a actualizar
+ *
+ * Esta función recupera los datos del formulario (título, descripción, etc.),
+ * los aplica a la tarea correspondiente identificada por `taskId`,
+ * guarda los cambios en el almacenamiento local y actualiza la interfaz.
+ *
+ * @param {Event} event - El evento `submit` del formulario HTML.
+ * @param {string} taskId - El identificador único de la tarea a actualizar.
+ * @return {void}
  */
-function updateTask(e, taskId) {
-  e.preventDefault()
-  const formData = new FormData(e.target)
+function updateTask(event, taskId) {
+  event.preventDefault()
+  const formData = new FormData(event.target)
   const task = app.tasks.find((t) => t.id === taskId)
 
   if (task) {
@@ -909,7 +926,8 @@ function updateTask(e, taskId) {
 
 /**
  * Función para eliminar una tarea por su ID
- * @param {string} taskId ID de la tarea a eliminar
+ * @param {string} taskId - ID de la tarea a eliminar
+ * @return {void}
  */
 function deleteTask(taskId) {
   const index = app.tasks.findIndex((t) => t.id === taskId)
@@ -928,6 +946,7 @@ function deleteTask(taskId) {
 
 /**
  * Renderiza la pantalla de hábitos
+ * @returns {void}
  */
 function habits() {
   const todayStr = formatDate(new Date())
@@ -1046,7 +1065,8 @@ function habits() {
 
 /**
  * Crea un hábito a partir de una plantilla predefinida
- * @param {number} templateIndex Índice de la plantilla a usar
+ * @param {number} templateIndex - Índice de la plantilla a usar
+ * @returns {void}
  */
 function createHabitFromTemplate(templateIndex) {
   const templates = [
@@ -1132,11 +1152,12 @@ function createHabitFromTemplate(templateIndex) {
 
 /**
  * Crea un hábito personalizado a partir de un formulario
- * @param {Event} e Evento del formulario
+ * @param {Event} event - Evento del formulario
+ * @returns {void}
  */
-function createCustomHabit(e) {
-  e.preventDefault()
-  const formData = new FormData(e.target)
+function createCustomHabit(event) {
+  event.preventDefault()
+  const formData = new FormData(event.target)
 
   const habit = {
     id: generateId(),
@@ -1165,6 +1186,7 @@ function createCustomHabit(e) {
 
 /**
  * Muestra el modal para agregar un nuevo hábito
+ * @returns {void}
  */
 function showHabitTemplatesModal() {
   const templates = [
@@ -1272,7 +1294,8 @@ function showHabitTemplatesModal() {
 
 /**
  * Elimina un hábito por su ID
- * @param {string} habitId ID del hábito a eliminar
+ * @param {string} habitId - ID del hábito a eliminar
+ * @returns {void}
  */
 function deleteHabit(habitId) {
   const index = app.habits.findIndex((h) => h.id === habitId)
@@ -1298,8 +1321,8 @@ function deleteHabit(habitId) {
 
 /**
  * Alterna el estado de un hábito para hoy
- * @param {string} habitId ID del hábito a alternar
- * @returns
+ * @param {string} habitId - ID del hábito a alternar
+ * @returns {void}
  */
 function toggleHabit(habitId) {
   const habit = app.habits.find((h) => h.id === habitId)
@@ -1359,6 +1382,7 @@ function toggleHabit(habitId) {
 
 /**
  * Renderiza la pantalla actual según el estado
+ * @returns {void}
  */
 function render() {
   console.log("Renderizando la pantalla:", currentScreen)
@@ -1414,19 +1438,10 @@ function render() {
  */
 
 /**
- * Representa el budget del usuario.
- * @typedef {Object} Budget
- * @property {string} id - Identificador único del budget.
- * @property {string} name - Nombre del budget.
- * @property {number} currency - Moneda del budget.
- * @property {ItemBudget[]} items - Lista de items del budget.
- * @property {Transaction[]} transactions - Lista de transacciones del budget.
- */
-
-/**
  * Representa un ítem dentro de un budget.
  * @typedef {Object} ItemBudget
  * @property {string} id - Identificador único del ítem.
+ * @property {string} [itemId] - Identificador del ítem asociado (opcional).
  * @property {string} title - Nombre del ítem.
  * @property {number} amount - Monto asignado al ítem.
  * @property {string} date - Fecha de creación del ítem (AAAA-MM-DD).
@@ -1444,20 +1459,32 @@ function render() {
  */
 
 /**
+ * Representa el budget del usuario.
+ * @typedef {Object} Budget
+ * @property {string} id - Identificador único del budget.
+ * @property {string} name - Nombre del budget.
+ * @property {string} currency - Moneda del budget.
+ * @property {ItemBudget[]} items - Lista de items del budget.
+ * @property {Transaction[]} transactions - Lista de transacciones del budget.
+ */
+
+/**
  * Objeto para gestionar el almacenamiento local (localStorage)
  * @type {object}
  * @namespace
- * @method init Inicializa el almacenamiento con datos de ejemplo si no existen
- * @method save Guarda datos en el localStorage
- * @method load Carga datos desde el localStorage
- * @method loadCounter Carga y actualiza el contador de visitas
- * @property {Array<Task>} dummyTasks Datos con tareas de ejemplo
- * @property {Array<Habit>} dummyHabits Datos con hábitos de ejemplo
+ * @method init - Inicializa el almacenamiento con datos de ejemplo si no existen
+ * @method save - Guarda datos en el localStorage
+ * @method load - Carga datos desde el localStorage
+ * @method loadCounter - Carga y actualiza el contador de visitas
+ * @property {Array<Task>} dummyTasks - Datos con tareas de ejemplo
+ * @property {Array<Habit>} dummyHabits - Datos con hábitos de ejemplo
+ * @property {Array<Budget>} dummyBudget - Datos con budgets de ejemplo
  */
 const store = {
   /**
    * Inicializa el almacenamiento con datos de ejemplo si no existen
-   * @param {string} namespace Espacio de nombres para el localStorage
+   * @param {string} namespace - Espacio de nombres para el localStorage
+   * @returns {void}
    * */
   init: function () {
     if (!localStorage.getItem("tasks")) {
@@ -1472,8 +1499,9 @@ const store = {
   },
   /**
    * Guarda datos en el localStorage
-   * @param {any} data Datos a guardar
-   * @param {string} namespace Espacio de nombres para el localStorage
+   * @param {any} data - Datos a guardar
+   * @param {string} namespace - Espacio de nombres para el localStorage
+   * @returns {void}
    * */
   save: function (data, namespace) {
     if (data instanceof Array === true) {
@@ -1490,8 +1518,9 @@ const store = {
   },
   /**
    * Carga las tareas desde el localStorage
-   * @param {string} namespace Espacio de nombres para el localStorage
-   * @param {string} typeData Tipo de dato a cargar: "array" o "number"
+   * @param {string} namespace - Espacio de nombres para el localStorage
+   * @param {string} typeData - Tipo de dato a cargar: "array" o "number"
+   * @returns {void}
    * */
   load: function (namespace, typeData = "array") {
     const data = localStorage.getItem(namespace)
@@ -1499,7 +1528,6 @@ const store = {
       case "number":
         try {
           const dataNumber = Number(data)
-          console.log("Es un número válido:", dataNumber)
           visitCount = dataNumber
         } catch (e) {
           console.error("Error loading numeric data from localStorage:", e)
@@ -1529,6 +1557,7 @@ const store = {
   },
   /**
    * Carga y actualiza el contador de visitas
+   * @returns {void}
    */
   loadCounter: function () {
     store.load("visit_counter", "number")
@@ -1760,32 +1789,47 @@ const store = {
  * Gestiona la navegación, el estado y las operaciones principales.
  * @type {object}
  * @namespace
+ * @method init - Inicializa la aplicación.
+ * @method navigateTo - Cambia la pantalla actual.
  * @property {Task[]} tasks - Lista de tareas.
+ * @method toggleTask - Alterna el estado de una tarea.
+ * @method toggleSubtask - Alterna el estado de una subtarea.
  * @property {Habit[]} habits - Lista de hábitos.
+ * @method visitCounter - Cuenta las visitas y lanza confeti cada 10 visitas.
  * @property {Budget[]} budgets - Lista de presupuestos.
- * @method init Inicializa la aplicación.
- * @method navigateTo Cambia la pantalla actual.
- * @method toggleTask Alterna el estado de una tarea.
- * @method showModal Muestra un modal con contenido HTML.
- * @method closeModal Cierra el modal actual.
- * @method showToast Muestra un mensaje emergente.
- * @method showUndoToast Muestra un toast con opción de deshacer.
- * @method performUndo Ejecuta la acción de deshacer.
+ * @method showCreateBudgetModal - Muestra el modal para crear un nuevo presupuesto.
+ * @method showAddTransactionModal - Muestra el modal para agregar una nueva transacción.
+ * @method addTransaction - Agrega una nueva transacción a un presupuesto.
+ * @method showBudgetDetails - Muestra los detalles de un presupuesto.
+ * @method showAddBudgetItemModal - Muestra el modal para agregar un nuevo ítem al presupuesto.
+ * @method addBudgetItem - Agrega un nuevo ítem al presupuesto.
+ * @method deleteBudget - Elimina un presupuesto por su ID.
+ * @method deleteBudgetItem - Elimina un ítem del presupuesto.
+ * @method createBudget - Crea un nuevo presupuesto a partir de un formulario.
+ * @method showModal - Muestra un modal con contenido HTML.
+ * @method closeModal - Cierra el modal actual.
+ * @method showToast - Muestra un mensaje emergente.
+ * @method showUndoToast - Muestra un toast con opción de deshacer.
+ * @method performUndo - Ejecuta la acción de deshacer.
  */
 const app = {
-  /** Inicializa la app y navega a la pantalla principal */
+  /**
+   * Inicializa la app y navega a la pantalla principal
+   * @returns {void}
+   */
   init: function () {
     // Al ejecutar por primera vez se deben de crear los datos iniciales.
     store.init()
     store.load("tasks", "array")
     store.load("habits", "array")
     store.load("budgets", "array")
-    app.visitCounter()
+    this.visitCounter()
     this.navigateTo("home")
   },
   /**
    * Navega a la pantalla indicada y actualiza el estado visual
-   * @param {string} screen Pantalla destino
+   * @param {string} screen - Pantalla destino
+   * @returns {void}
    */
   navigateTo: function (screen) {
     console.log("Navegando a la pantalla:", screen)
@@ -1831,6 +1875,11 @@ const app = {
    * @type {Array<Task>}
    */
   tasks: [],
+  /**
+   * Alterna el estado de una tarea
+   * @param {string} taskId - ID de la tarea a alternar
+   * @returns {void}
+   */
   toggleTask: function (taskId) {
     const task = app.tasks.find((t) => t.id === taskId)
     if (task) {
@@ -1843,6 +1892,12 @@ const app = {
       render()
     }
   },
+  /**
+   * Alterna el estado de una subtarea
+   * @param {string} taskId - ID de la tarea
+   * @param {string} subtaskId - ID de la subtarea a alternar
+   * @returns {void}
+   */
   toggleSubtask(taskId, subtaskId) {
     const task = app.tasks.find((t) => t.id === taskId)
     if (task && task.subtasks) {
@@ -1861,7 +1916,7 @@ const app = {
   habits: [],
   /**
    * Cuenta de visitas y lanzamiento de confeti cada 10 visitas
-   * @return {void}
+   * @returns {void}
    */
   visitCounter: function () {
     store.loadCounter()
@@ -1878,7 +1933,7 @@ const app = {
   budgets: [],
   /**
    * Muestra el modal para crear un nuevo presupuesto
-   * @return {void}
+   * @returns {void}
    */
   showCreateBudgetModal() {
     const modalContent = `
@@ -1920,7 +1975,8 @@ const app = {
   },
   /**
    * Crea un nuevo presupuesto a partir del formulario
-   * @param {*} event Evento del formulario
+   * @param {*} event - Evento del formulario
+   * @returns {void}
    */
   createBudget(event) {
     event.preventDefault()
@@ -1942,7 +1998,8 @@ const app = {
   },
   /**
    * Muestra el modal para agregar una nueva transacción
-   * @param {number} budgetId ID del presupuesto al que se agrega la transacción
+   * @param {number} budgetId - ID del presupuesto al que se agrega la transacción
+   * @returns {void}
    */
   showAddTransactionModal(budgetId) {
     const modalContent = `
@@ -1981,8 +2038,9 @@ const app = {
   },
   /**
    * Agrega una nueva transacción al presupuesto
-   * @param {*} event Evento del formulario
-   * @param {number} budgetId ID del presupuesto al que se agrega la transacción
+   * @param {*} event - Evento del formulario
+   * @param {number} budgetId - ID del presupuesto al que se agrega la transacción
+   * @returns {void}
    */
   addTransaction(event, budgetId) {
     event.preventDefault()
@@ -2008,7 +2066,8 @@ const app = {
   },
   /**
    * Muestra los detalles de un presupuesto
-   * @param {number} budgetId ID del presupuesto
+   * @param {number} budgetId - ID del presupuesto
+   * @returns {void}
    */
   showBudgetDetails(budgetId) {
     console.log("Mostrar detalles del presupuesto:", budgetId)
@@ -2115,7 +2174,8 @@ const app = {
   },
   /**
    * Muestra el modal para agregar un nuevo ítem al presupuesto
-   * @param {number} budgetId ID del presupuesto
+   * @param {number} budgetId - ID del presupuesto
+   * @returns {void}
    */
   showAddBudgetItemModal(budgetId) {
     const modalContent = `
@@ -2160,8 +2220,9 @@ const app = {
   },
   /**
    * Agrega un nuevo ítem al presupuesto
-   * @param {*} event Evento del formulario
-   * @param {number} budgetId ID del presupuesto
+   * @param {*} event - Evento del formulario
+   * @param {number} budgetId - ID del presupuesto
+   * @returns {void}
    */
   addBudgetItem(event, budgetId) {
     event.preventDefault()
@@ -2186,7 +2247,8 @@ const app = {
   },
   /**
    * Elimina un presupuesto
-   * @param {number} budgetId ID del presupuesto
+   * @param {number} budgetId - ID del presupuesto
+   * @returns {void}
    */
   deleteBudget(budgetId) {
     if (
@@ -2206,8 +2268,9 @@ const app = {
   },
   /**
    * Elimina un ítem de un presupuesto
-   * @param {number} budgetId ID del presupuesto
-   * @param {number} itemId ID del ítem
+   * @param {number} budgetId - ID del presupuesto
+   * @param {number} itemId - ID del ítem
+   * @returns {void}
    */
   deleteBudgetItem(budgetId, itemId) {
     const budget = app.budgets.find((b) => b.id === budgetId)
@@ -2229,7 +2292,8 @@ const app = {
   },
   /**
    * Muestra el modal con el contenido especificado
-   * @param {string} contentHtml
+   * @param {string} contentHtml - Contenido HTML del modal
+   * @returns {void}
    */
   showModal: function (contentHtml) {
     const backdrop = document.getElementById("modal-backdrop")
@@ -2239,6 +2303,7 @@ const app = {
   },
   /**
    * Cierra el modal actual
+   * @returns {void}
    */
   closeModal: function () {
     const backdrop = document.getElementById("modal-backdrop")
@@ -2248,6 +2313,7 @@ const app = {
    * Muestra un mensaje emergente (toast)
    * @param {string} message - Mensaje a mostrar
    * @param {string} type - Tipo de mensaje: "info", "success", "error"
+   * @returns {void}
    */
   showToast: function (message, type = "info") {
     const toast = document.createElement("div")
@@ -2272,6 +2338,7 @@ const app = {
    * Muestra un mensaje emergente (toast) con opción de deshacer
    * @param {string} message - Mensaje a mostrar
    * @param {Function} undoCallback - Función a ejecutar al deshacer
+   * @returns {void}
    */
   showUndoToast: function (message, undoCallback) {
     const undoToast = document.getElementById("undo-toast")
@@ -2289,7 +2356,7 @@ const app = {
   },
   /**
    * Ejecuta la acción de deshacer
-   * @return {void}
+   * @returns {void}
    */
   performUndo: function () {
     if (this.undoCallback) {
@@ -2302,6 +2369,7 @@ const app = {
 
 /**
  * Inicializa la app, modo oscuro y seguimiento de analíticas
+ * @event window load - Se ejecuta cuando la página ha cargado completamente
  */
 window.addEventListener("load", () => {
   app.init()
