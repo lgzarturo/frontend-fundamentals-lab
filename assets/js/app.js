@@ -360,7 +360,106 @@ function home() {
  * Renderiza la pantalla de presupuestos
  */
 function budgets() {
-  console.log("Renderizando la pantalla de presupuestos")
+  const totalBudget = app.budgets.reduce(
+    (sum, b) => sum + b.items.reduce((s, i) => s + i.amount, 0),
+    0
+  )
+  const totalSpent = app.budgets.reduce(
+    (sum, b) =>
+      sum + b.transactions.reduce((s, t) => s + Math.abs(t.amount), 0),
+    0
+  )
+  const remaining = totalBudget - totalSpent
+
+  document.getElementById("budget-total").textContent = `$${totalBudget.toFixed(
+    2
+  )}`
+  document.getElementById("budget-spent").textContent = `$${totalSpent.toFixed(
+    2
+  )}`
+  document.getElementById(
+    "budget-remaining"
+  ).textContent = `$${remaining.toFixed(2)}`
+
+  console.log("presupuestos", app.budgets)
+
+  const budgetsHtml = app.budgets
+    .map((budget) => {
+      const budgetTotal = budget.items.reduce(
+        (sum, item) => sum + item.amount,
+        0
+      )
+      const budgetSpent = budget.transactions.reduce(
+        (sum, t) => sum + Math.abs(t.amount),
+        0
+      )
+      const budgetRemaining = budgetTotal - budgetSpent
+      const percentage = budgetTotal > 0 ? (budgetSpent / budgetTotal) * 100 : 0
+
+      return `
+                <div class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold">${escapeHtml(
+                          budget.name
+                        )}</h3>
+                        <div class="flex gap-2">
+                            <button onclick="app.showBudgetDetails('${
+                              budget.id
+                            }')"
+                                    class="px-4 py-2 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded-lg transition-colors">
+                                View Details
+                            </button>
+                            <button onclick="app.showAddTransactionModal('${
+                              budget.id
+                            }')"
+                                    class="px-4 py-2 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker rounded-lg transition-colors">
+                                + Transaction
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Budget</div>
+                            <div class="text-lg font-bold">$${budgetTotal.toFixed(
+                              2
+                            )}</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Spent</div>
+                            <div class="text-lg font-bold text-xp-danger">$${budgetSpent.toFixed(
+                              2
+                            )}</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Remaining</div>
+                            <div class="text-lg font-bold text-xp-primary">$${budgetRemaining.toFixed(
+                              2
+                            )}</div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-4 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden">
+                        <div class="xp-bar-fill absolute top-0 left-0 h-full ${
+                          percentage > 90
+                            ? "bg-xp-danger"
+                            : percentage > 70
+                            ? "bg-xp-warning"
+                            : "bg-xp-primary"
+                        }"
+                             style="width: ${Math.min(percentage, 100)}%"></div>
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-2 text-right">${percentage.toFixed(
+                      1
+                    )}% used</div>
+                </div>
+            `
+    })
+    .join("")
+
+  document.getElementById("budgets-list").innerHTML =
+    budgetsHtml ||
+    '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No budgets yet. Create your first budget to get started! 💰</div>'
 }
 
 // Controlador de filtro actual
@@ -1367,8 +1466,8 @@ const store = {
     if (!localStorage.getItem("habits")) {
       this.save(this.dummyHabits, "habits")
     }
-    if (!localStorage.getItem("budget")) {
-      this.save(this.dummyBudget, "budget")
+    if (!localStorage.getItem("budgets")) {
+      this.save(this.dummyBudget, "budgets")
     }
   },
   /**
@@ -1417,6 +1516,9 @@ const store = {
             case "habits":
               app.habits = JSON.parse(data)
               break
+            case "budgets":
+              app.budgets = JSON.parse(data)
+              break
             default:
               console.warn(`Unknown namespace "${namespace}" for loading data.`)
           }
@@ -1435,7 +1537,7 @@ const store = {
   },
   /**
    * Datos con tareas de ejemplo
-   * @type {Array<object>}
+   * @type {Array<Task>}
    */
   dummyTasks: [
     {
@@ -1500,7 +1602,7 @@ const store = {
   ],
   /**
    * Datos con hábitos de ejemplo
-   * @type {Array<object>}
+   * @type {Array<Habit>}
    */
   dummyHabits: [
     {
@@ -1596,7 +1698,7 @@ const store = {
   ],
   /**
    * Datos con presupuestos de ejemplo
-   * @type {Array<object>}
+   * @type {Array<Budget>}
    */
   dummyBudget: [
     {
@@ -1660,6 +1762,7 @@ const store = {
  * @namespace
  * @property {Task[]} tasks - Lista de tareas.
  * @property {Habit[]} habits - Lista de hábitos.
+ * @property {Budget[]} budgets - Lista de presupuestos.
  * @method init Inicializa la aplicación.
  * @method navigateTo Cambia la pantalla actual.
  * @method toggleTask Alterna el estado de una tarea.
@@ -1676,6 +1779,7 @@ const app = {
     store.init()
     store.load("tasks", "array")
     store.load("habits", "array")
+    store.load("budgets", "array")
     app.visitCounter()
     this.navigateTo("home")
   },
@@ -1724,7 +1828,7 @@ const app = {
   },
   /**
    * Estado inicial de la aplicación
-   * @type {Array<object>}
+   * @type {Array<Task>}
    */
   tasks: [],
   toggleTask: function (taskId) {
@@ -1750,6 +1854,10 @@ const app = {
       }
     }
   },
+  /**
+   * Estado inicial de los hábitos
+   * @type {Array<Habit>}
+   */
   habits: [],
   /**
    * Cuenta de visitas y lanzamiento de confeti cada 10 visitas
@@ -1764,6 +1872,11 @@ const app = {
     }
   },
   /**
+   * Estado inicial de los presupuestos
+   * @type {Array<Budget>}
+   */
+  budgets: [],
+  /**
    * Muestra el modal para crear un nuevo presupuesto
    * @return {void}
    */
@@ -1771,7 +1884,7 @@ const app = {
     const modalContent = `
             <div class="p-6">
                 <h3 class="text-2xl font-bold mb-4">Create New Budget</h3>
-                <form onsubmit="app.showToast('Aún no esta implementado', 'error'); app.closeModal(); return false;">
+                <form onsubmit="app.createBudget(event)">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-semibold mb-2">Budget Name</label>
@@ -1804,6 +1917,229 @@ const app = {
         `
 
     app.showModal(modalContent)
+  },
+  createBudget(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+
+    const budget = {
+      id: generateId(),
+      name: formData.get("name"),
+      currency: formData.get("currency"),
+      items: [],
+      transactions: []
+    }
+
+    app.budgets.push(budget)
+    store.save(app.budgets, "budgets")
+    this.closeModal()
+    this.showToast("Budget created successfully! 💰", "success")
+    budgets()
+  },
+  showAddTransactionModal(budgetId) {
+    console.log(
+      "Mostrar modal para agregar transacción al presupuesto:",
+      budgetId
+    )
+  },
+  showBudgetDetails(budgetId) {
+    console.log("Mostrar detalles del presupuesto:", budgetId)
+    const budget = app.budgets.find((b) => b.id === budgetId)
+    if (!budget) return
+
+    const modalContent = `
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-2xl font-bold">${escapeHtml(
+                      budget.name
+                    )}</h3>
+                    <button onclick="app.deleteBudget('${budgetId}')"
+                            class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
+                        Delete
+                    </button>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="font-bold mb-3 flex items-center justify-between">
+                        <span>Budget Items</span>
+                        <button onclick="app.showAddBudgetItemModal('${budgetId}')"
+                                class="text-sm px-3 py-1 bg-xp-primary text-xp-darker rounded-lg">
+                            + Add Item
+                        </button>
+                    </h4>
+                    <div class="space-y-2">
+                        ${budget.items
+                          .map(
+                            (item) => `
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                                <div>
+                                    <div class="font-semibold">${escapeHtml(
+                                      item.title
+                                    )}</div>
+                                    ${
+                                      item.notes
+                                        ? `<div class="text-sm text-gray-600 dark:text-gray-400">${escapeHtml(
+                                            item.notes
+                                          )}</div>`
+                                        : ""
+                                    }
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-xp-primary">$${item.amount.toFixed(
+                                      2
+                                    )}</div>
+                                    <button onclick="app.deleteBudgetItem('${budgetId}', '${
+                              item.id
+                            }')"
+                                            class="text-xs text-xp-danger hover:underline">Delete</button>
+                                </div>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                        ${
+                          budget.items.length === 0
+                            ? '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No items yet</div>'
+                            : ""
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-3">Transactions</h4>
+                    <div class="space-y-2 max-h-64 overflow-y-auto">
+                        ${budget.transactions
+                          .map(
+                            (t) => `
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                                <div>
+                                    <div class="font-semibold">${escapeHtml(
+                                      t.description
+                                    )}</div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">${
+                                      t.date
+                                    }</div>
+                                </div>
+                                <div class="font-bold ${
+                                  t.amount < 0
+                                    ? "text-xp-danger"
+                                    : "text-xp-primary"
+                                }">
+                                    ${t.amount < 0 ? "-" : "+"}$${Math.abs(
+                              t.amount
+                            ).toFixed(2)}
+                                </div>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                        ${
+                          budget.transactions.length === 0
+                            ? '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No transactions yet</div>'
+                            : ""
+                        }
+                    </div>
+                </div>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  showAddBudgetItemModal(budgetId) {
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Add Budget Item</h3>
+                <form onsubmit="app.addBudgetItem(event, '${budgetId}')">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Category/Title</label>
+                            <input type="text" name="title" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="e.g., Groceries">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Amount</label>
+                            <input type="number" step="0.01" name="amount" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="0.00">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Notes (optional)</label>
+                            <textarea name="notes" rows="2"
+                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                      placeholder="Additional notes..."></textarea>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.showBudgetDetails('${budgetId}')"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Back
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Add Item
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  addBudgetItem(event, budgetId) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const budget = app.budgets.find((b) => b.id === budgetId)
+
+    if (budget) {
+      const item = {
+        id: generateId(),
+        title: formData.get("title"),
+        amount: parseFloat(formData.get("amount")),
+        date: formatDate(new Date()),
+        notes: formData.get("notes") || ""
+      }
+
+      budget.items.push(item)
+      store.save(app.budgets, "budgets")
+      this.showToast("Budget item added! 📝", "success")
+      this.showBudgetDetails(budgetId)
+      budgets()
+    }
+  },
+  deleteBudget(budgetId) {
+    if (
+      confirm(
+        "Are you sure you want to delete this budget? This action cannot be undone."
+      )
+    ) {
+      const index = app.budgets.findIndex((b) => b.id === budgetId)
+      if (index !== -1) {
+        app.budgets.splice(index, 1)
+        store.save(app.budgets, "budgets")
+        this.closeModal()
+        this.showToast("Budget deleted", "success")
+        budgets()
+      }
+    }
+  },
+  deleteBudgetItem(budgetId, itemId) {
+    const budget = app.budgets.find((b) => b.id === budgetId)
+    if (budget) {
+      const index = budget.items.findIndex((i) => i.id === itemId)
+      if (index !== -1) {
+        const deleted = budget.items.splice(index, 1)[0]
+        store.save(app.budgets, "budgets")
+        this.showUndoToast(`Deleted ${deleted.title}`, () => {
+          budget.items.splice(index, 0, deleted)
+          store.save(app.budgets, "budgets")
+          this.showBudgetDetails(budgetId)
+          budgets()
+        })
+        this.showBudgetDetails(budgetId)
+        budgets()
+      }
+    }
   },
   /**
    * Muestra el modal con el contenido especificado
