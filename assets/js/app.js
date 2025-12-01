@@ -1367,6 +1367,9 @@ const store = {
     if (!localStorage.getItem("habits")) {
       this.save(this.dummyHabits, "habits")
     }
+    if (!localStorage.getItem("budget")) {
+      this.save(this.dummyBudget, "budget")
+    }
   },
   /**
    * Guarda datos en el localStorage
@@ -1595,7 +1598,7 @@ const store = {
    * Datos con presupuestos de ejemplo
    * @type {Array<object>}
    */
-  dummyBudgets: [
+  dummyBudget: [
     {
       id: generateId(),
       name: "Monthly Personal Budget",
