@@ -1315,6 +1315,36 @@ function render() {
  */
 
 /**
+ * Representa el budget del usuario.
+ * @typedef {Object} Budget
+ * @property {string} id - Identificador único del budget.
+ * @property {string} name - Nombre del budget.
+ * @property {number} currency - Moneda del budget.
+ * @property {ItemBudget[]} items - Lista de items del budget.
+ * @property {Transaction[]} transactions - Lista de transacciones del budget.
+ */
+
+/**
+ * Representa un ítem dentro de un budget.
+ * @typedef {Object} ItemBudget
+ * @property {string} id - Identificador único del ítem.
+ * @property {string} title - Nombre del ítem.
+ * @property {number} amount - Monto asignado al ítem.
+ * @property {string} date - Fecha de creación del ítem (AAAA-MM-DD).
+ * @property {string} notes - Notas adicionales del ítem.
+ */
+
+/**
+ * Representa una transacción financiera.
+ * @typedef {Object} Transaction
+ * @property {string} id - Identificador único de la transacción.
+ * @property {string} itemId - Identificador del ítem asociado.
+ * @property {number} amount - Monto de la transacción.
+ * @property {string} description - Descripción de la transacción.
+ * @property {string} date - Fecha de la transacción (AAAA-MM-DD).
+ */
+
+/**
  * Objeto para gestionar el almacenamiento local (localStorage)
  * @type {object}
  * @namespace
@@ -1559,6 +1589,63 @@ const store = {
       dailyRecords: generatePastRecords(7, 0.6),
       streak: 2,
       color: "#06b6d4"
+    }
+  ],
+  /**
+   * Datos con presupuestos de ejemplo
+   * @type {Array<object>}
+   */
+  dummyBudgets: [
+    {
+      id: generateId(),
+      name: "Monthly Personal Budget",
+      currency: "USD",
+      items: [
+        {
+          id: generateId(),
+          title: "Groceries",
+          amount: 500,
+          date: todayStr,
+          notes: "Weekly shopping"
+        },
+        {
+          id: generateId(),
+          title: "Tech & Software",
+          amount: 200,
+          date: todayStr,
+          notes: "Subscriptions and tools"
+        },
+        {
+          id: generateId(),
+          title: "Learning",
+          amount: 100,
+          date: todayStr,
+          notes: "Books and courses"
+        },
+        {
+          id: generateId(),
+          title: "Entertainment",
+          amount: 150,
+          date: todayStr,
+          notes: "Games and movies"
+        }
+      ],
+      transactions: [
+        {
+          id: generateId(),
+          itemId: null,
+          amount: -45,
+          description: "Weekly groceries",
+          date: todayStr
+        },
+        {
+          id: generateId(),
+          itemId: null,
+          amount: -15,
+          description: "GitHub Pro subscription",
+          date: todayStr
+        }
+      ]
     }
   ]
 }
