@@ -1937,10 +1937,61 @@ const app = {
     budgets()
   },
   showAddTransactionModal(budgetId) {
-    console.log(
-      "Mostrar modal para agregar transacción al presupuesto:",
-      budgetId
-    )
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Add Transaction</h3>
+                <form onsubmit="app.addTransaction(event, '${budgetId}')">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <input type="text" name="description" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="e.g., Weekly groceries">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Amount (negative for expenses)</label>
+                            <input type="number" step="0.01" name="amount" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="-50.00">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Add Transaction
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  addTransaction(e, budgetId) {
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    const budget = app.budgets.find((b) => b.id === budgetId)
+
+    if (budget) {
+      const transaction = {
+        id: generateId(),
+        itemId: null,
+        amount: parseFloat(formData.get("amount")),
+        description: formData.get("description"),
+        date: formatDate(new Date())
+      }
+
+      budget.transactions.push(transaction)
+      store.save(app.budgets, "budgets")
+      this.closeModal()
+      this.showToast("Transaction added! 💸", "success")
+      budgets()
+      if (this.currentScreen === "home") home()
+    }
   },
   showBudgetDetails(budgetId) {
     console.log("Mostrar detalles del presupuesto:", budgetId)
