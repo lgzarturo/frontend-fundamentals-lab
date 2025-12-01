@@ -1918,6 +1918,10 @@ const app = {
 
     app.showModal(modalContent)
   },
+  /**
+   * Crea un nuevo presupuesto a partir del formulario
+   * @param {*} event Evento del formulario
+   */
   createBudget(event) {
     event.preventDefault()
     const formData = new FormData(event.target)
@@ -1936,6 +1940,10 @@ const app = {
     this.showToast("Budget created successfully! 💰", "success")
     budgets()
   },
+  /**
+   * Muestra el modal para agregar una nueva transacción
+   * @param {number} budgetId ID del presupuesto al que se agrega la transacción
+   */
   showAddTransactionModal(budgetId) {
     const modalContent = `
             <div class="p-6">
@@ -1971,9 +1979,14 @@ const app = {
 
     this.showModal(modalContent)
   },
-  addTransaction(e, budgetId) {
-    e.preventDefault()
-    const formData = new FormData(e.target)
+  /**
+   * Agrega una nueva transacción al presupuesto
+   * @param {*} event Evento del formulario
+   * @param {number} budgetId ID del presupuesto al que se agrega la transacción
+   */
+  addTransaction(event, budgetId) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
     const budget = app.budgets.find((b) => b.id === budgetId)
 
     if (budget) {
@@ -1993,6 +2006,10 @@ const app = {
       if (this.currentScreen === "home") home()
     }
   },
+  /**
+   * Muestra los detalles de un presupuesto
+   * @param {number} budgetId ID del presupuesto
+   */
   showBudgetDetails(budgetId) {
     console.log("Mostrar detalles del presupuesto:", budgetId)
     const budget = app.budgets.find((b) => b.id === budgetId)
@@ -2096,6 +2113,10 @@ const app = {
 
     this.showModal(modalContent)
   },
+  /**
+   * Muestra el modal para agregar un nuevo ítem al presupuesto
+   * @param {number} budgetId ID del presupuesto
+   */
   showAddBudgetItemModal(budgetId) {
     const modalContent = `
             <div class="p-6">
@@ -2137,6 +2158,11 @@ const app = {
 
     this.showModal(modalContent)
   },
+  /**
+   * Agrega un nuevo ítem al presupuesto
+   * @param {*} event Evento del formulario
+   * @param {number} budgetId ID del presupuesto
+   */
   addBudgetItem(event, budgetId) {
     event.preventDefault()
     const formData = new FormData(event.target)
@@ -2158,6 +2184,10 @@ const app = {
       budgets()
     }
   },
+  /**
+   * Elimina un presupuesto
+   * @param {number} budgetId ID del presupuesto
+   */
   deleteBudget(budgetId) {
     if (
       confirm(
@@ -2174,6 +2204,11 @@ const app = {
       }
     }
   },
+  /**
+   * Elimina un ítem de un presupuesto
+   * @param {number} budgetId ID del presupuesto
+   * @param {number} itemId ID del ítem
+   */
   deleteBudgetItem(budgetId, itemId) {
     const budget = app.budgets.find((b) => b.id === budgetId)
     if (budget) {
