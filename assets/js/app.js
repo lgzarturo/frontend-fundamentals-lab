@@ -24,9 +24,9 @@ tailwind.config = {
 /**
  * Genera un identificador único basado en la fecha actual y un valor aleatorio.
  * Útil para asignar IDs a los elementos.
- * @returns {string} ID único generado.
+ * @returns {string} - ID único generado.
  * @example
- * const id = generateId(); // "kz7v1w8xg2"
+ * const id = generateId(); // "kz7v1w8xg2"+
  */
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2)
@@ -34,9 +34,12 @@ function generateId() {
 
 /**
  * Genera registros de éxito/fracaso para los últimos días
+ * Se toma una tasa de éxito para determinar la probabilidad de éxito en cada día
  * @param {number} days - Número de días hacia atrás para generar registros
  * @param {number} successRate - Tasa de éxito (0 a 1)
  * @returns {object} Objeto con fechas como claves y resultados booleanos como valores
+ * @example
+ * const records = generatePastRecords(30, 0.7); // { "2023-09-01": true, "2023-09-02": false, ... }
  */
 function generatePastRecords(days, successRate) {
   const records = {}
@@ -54,7 +57,7 @@ function generatePastRecords(days, successRate) {
 
 /**
  * Obtiene los últimos 7 días en formato AAAA-MM-DD
- * @returns {string[]} Array con las fechas de los últimos 7 días
+ * @returns {string[]} - Array con las fechas de los últimos 7 días
  */
 function getLast7Days() {
   const days = []
@@ -71,8 +74,8 @@ function getLast7Days() {
 
 /**
  * Formatea una fecha en formato AAAA-MM-DD
- * @param {Date|string} date Fecha a formatear
- * @returns {string} Fecha formateada
+ * @param {Date|string} date - Fecha a formatear
+ * @returns {string} - Fecha formateada
  */
 function formatDate(date) {
   if (typeof date === "string") return date
@@ -85,8 +88,8 @@ function formatDate(date) {
 
 /**
  * Escapa caracteres HTML especiales en un string
- * @param {string} text Texto a escapar
- * @returns {string} Texto escapado
+ * @param {string} text - Texto a escapar
+ * @returns {string} - Texto escapado
  */
 function escapeHtml(text) {
   const div = document.createElement("div")
@@ -96,6 +99,7 @@ function escapeHtml(text) {
 
 /**
  * Lanza una animación de confeti en la pantalla
+ * @returns {void}
  */
 function launchConfetti() {
   const width = window.innerWidth
@@ -244,6 +248,7 @@ let visitCount = 0
 /**
  * Renderiza la pantalla de inicio con las tareas MIT (Most Important Tasks)
  * Filtra, ordena y muestra las 3 tareas más importantes no completadas
+ * @returns {void}
  */
 function home() {
   const todayStr = formatDate(new Date())
@@ -358,9 +363,109 @@ function home() {
 
 /**
  * Renderiza la pantalla de presupuestos
+ * @returns {void}
  */
 function budgets() {
-  console.log("Renderizando la pantalla de presupuestos")
+  const totalBudget = app.budgets.reduce(
+    (sum, b) => sum + b.items.reduce((s, i) => s + i.amount, 0),
+    0
+  )
+  const totalSpent = app.budgets.reduce(
+    (sum, b) =>
+      sum + b.transactions.reduce((s, t) => s + Math.abs(t.amount), 0),
+    0
+  )
+  const remaining = totalBudget - totalSpent
+
+  document.getElementById("budget-total").textContent = `$${totalBudget.toFixed(
+    2
+  )}`
+  document.getElementById("budget-spent").textContent = `$${totalSpent.toFixed(
+    2
+  )}`
+  document.getElementById(
+    "budget-remaining"
+  ).textContent = `$${remaining.toFixed(2)}`
+
+  console.log("presupuestos", app.budgets)
+
+  const budgetsHtml = app.budgets
+    .map((budget) => {
+      const budgetTotal = budget.items.reduce(
+        (sum, item) => sum + item.amount,
+        0
+      )
+      const budgetSpent = budget.transactions.reduce(
+        (sum, t) => sum + Math.abs(t.amount),
+        0
+      )
+      const budgetRemaining = budgetTotal - budgetSpent
+      const percentage = budgetTotal > 0 ? (budgetSpent / budgetTotal) * 100 : 0
+
+      return `
+                <div class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold">${escapeHtml(
+                          budget.name
+                        )}</h3>
+                        <div class="flex gap-2">
+                            <button onclick="app.showBudgetDetails('${
+                              budget.id
+                            }')"
+                                    class="px-4 py-2 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded-lg transition-colors">
+                                View Details
+                            </button>
+                            <button onclick="app.showAddTransactionModal('${
+                              budget.id
+                            }')"
+                                    class="px-4 py-2 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker rounded-lg transition-colors">
+                                + Transaction
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Budget</div>
+                            <div class="text-lg font-bold">$${budgetTotal.toFixed(
+                              2
+                            )}</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Spent</div>
+                            <div class="text-lg font-bold text-xp-danger">$${budgetSpent.toFixed(
+                              2
+                            )}</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Remaining</div>
+                            <div class="text-lg font-bold text-xp-primary">$${budgetRemaining.toFixed(
+                              2
+                            )}</div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-4 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden">
+                        <div class="xp-bar-fill absolute top-0 left-0 h-full ${
+                          percentage > 90
+                            ? "bg-xp-danger"
+                            : percentage > 70
+                            ? "bg-xp-warning"
+                            : "bg-xp-primary"
+                        }"
+                             style="width: ${Math.min(percentage, 100)}%"></div>
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-2 text-right">${percentage.toFixed(
+                      1
+                    )}% used</div>
+                </div>
+            `
+    })
+    .join("")
+
+  document.getElementById("budgets-list").innerHTML =
+    budgetsHtml ||
+    '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No budgets yet. Create your first budget to get started! 💰</div>'
 }
 
 // Controlador de filtro actual
@@ -368,6 +473,7 @@ let currentFilter = "all"
 
 /**
  * Renderiza la lista de tareas con filtros y ordenamiento
+ * @returns {void}
  */
 function tasks() {
   let tasks = app.tasks
@@ -516,7 +622,8 @@ function tasks() {
 
 /**
  * Funcionalidad de filtrado de tareas
- * @param {string} filter Filtro seleccionado: "all", "today", "high", "completed"
+ * @param {string} filter - Filtro seleccionado: "all", "today", "high", "completed"
+ * @returns {void}
  */
 function filterTasks(filter) {
   currentFilter = filter
@@ -547,6 +654,7 @@ function filterTasks(filter) {
 
 /**
  * Muestra el modal para crear una nueva tarea
+ * @returns {void}
  */
 function showCreateTaskModal() {
   const todayStr = formatDate(new Date())
@@ -611,11 +719,12 @@ function showCreateTaskModal() {
 
 /**
  * Agrega una nueva tarea basada en los datos del formulario
- * @param {Event} e Evento del formulario
+ * @param {Event} event - Evento del formulario
+ * @returns {void}
  */
-function createTask(e) {
-  e.preventDefault()
-  const formData = new FormData(e.target)
+function createTask(event) {
+  event.preventDefault()
+  const formData = new FormData(event.target)
 
   // Crear el objeto de tarea
   const task = {
@@ -646,8 +755,8 @@ function createTask(e) {
 
 /**
  * Muestra el modal para editar una tarea existente
- * @param {string} taskId ID de la tarea a editar
- * @returns
+ * @param {string} taskId - ID de la tarea a editar
+ * @returns {void}
  */
 function showEditTaskModal(taskId) {
   const task = app.tasks.find((t) => t.id === taskId)
@@ -750,6 +859,7 @@ function showEditTaskModal(taskId) {
 
 /**
  * Agrega un nuevo campo de entrada para subtareas en el formulario de edición de tareas
+ * @return {void}
  */
 function addSubtaskInput() {
   const list = document.getElementById("subtasks-list")
@@ -767,12 +877,18 @@ function addSubtaskInput() {
 
 /**
  * Función para actualizar una tarea existente
- * @param {Event} e Evento del formulario
- * @param {string} taskId ID de la tarea a actualizar
+ *
+ * Esta función recupera los datos del formulario (título, descripción, etc.),
+ * los aplica a la tarea correspondiente identificada por `taskId`,
+ * guarda los cambios en el almacenamiento local y actualiza la interfaz.
+ *
+ * @param {Event} event - El evento `submit` del formulario HTML.
+ * @param {string} taskId - El identificador único de la tarea a actualizar.
+ * @return {void}
  */
-function updateTask(e, taskId) {
-  e.preventDefault()
-  const formData = new FormData(e.target)
+function updateTask(event, taskId) {
+  event.preventDefault()
+  const formData = new FormData(event.target)
   const task = app.tasks.find((t) => t.id === taskId)
 
   if (task) {
@@ -810,7 +926,8 @@ function updateTask(e, taskId) {
 
 /**
  * Función para eliminar una tarea por su ID
- * @param {string} taskId ID de la tarea a eliminar
+ * @param {string} taskId - ID de la tarea a eliminar
+ * @return {void}
  */
 function deleteTask(taskId) {
   const index = app.tasks.findIndex((t) => t.id === taskId)
@@ -829,6 +946,7 @@ function deleteTask(taskId) {
 
 /**
  * Renderiza la pantalla de hábitos
+ * @returns {void}
  */
 function habits() {
   const todayStr = formatDate(new Date())
@@ -947,7 +1065,8 @@ function habits() {
 
 /**
  * Crea un hábito a partir de una plantilla predefinida
- * @param {number} templateIndex Índice de la plantilla a usar
+ * @param {number} templateIndex - Índice de la plantilla a usar
+ * @returns {void}
  */
 function createHabitFromTemplate(templateIndex) {
   const templates = [
@@ -1033,11 +1152,12 @@ function createHabitFromTemplate(templateIndex) {
 
 /**
  * Crea un hábito personalizado a partir de un formulario
- * @param {Event} e Evento del formulario
+ * @param {Event} event - Evento del formulario
+ * @returns {void}
  */
-function createCustomHabit(e) {
-  e.preventDefault()
-  const formData = new FormData(e.target)
+function createCustomHabit(event) {
+  event.preventDefault()
+  const formData = new FormData(event.target)
 
   const habit = {
     id: generateId(),
@@ -1066,6 +1186,7 @@ function createCustomHabit(e) {
 
 /**
  * Muestra el modal para agregar un nuevo hábito
+ * @returns {void}
  */
 function showHabitTemplatesModal() {
   const templates = [
@@ -1173,7 +1294,8 @@ function showHabitTemplatesModal() {
 
 /**
  * Elimina un hábito por su ID
- * @param {string} habitId ID del hábito a eliminar
+ * @param {string} habitId - ID del hábito a eliminar
+ * @returns {void}
  */
 function deleteHabit(habitId) {
   const index = app.habits.findIndex((h) => h.id === habitId)
@@ -1199,8 +1321,8 @@ function deleteHabit(habitId) {
 
 /**
  * Alterna el estado de un hábito para hoy
- * @param {string} habitId ID del hábito a alternar
- * @returns
+ * @param {string} habitId - ID del hábito a alternar
+ * @returns {void}
  */
 function toggleHabit(habitId) {
   const habit = app.habits.find((h) => h.id === habitId)
@@ -1260,6 +1382,7 @@ function toggleHabit(habitId) {
 
 /**
  * Renderiza la pantalla actual según el estado
+ * @returns {void}
  */
 function render() {
   console.log("Renderizando la pantalla:", currentScreen)
@@ -1315,20 +1438,53 @@ function render() {
  */
 
 /**
+ * Representa un ítem dentro de un budget.
+ * @typedef {Object} ItemBudget
+ * @property {string} id - Identificador único del ítem.
+ * @property {string} [itemId] - Identificador del ítem asociado (opcional).
+ * @property {string} title - Nombre del ítem.
+ * @property {number} amount - Monto asignado al ítem.
+ * @property {string} date - Fecha de creación del ítem (AAAA-MM-DD).
+ * @property {string} notes - Notas adicionales del ítem.
+ */
+
+/**
+ * Representa una transacción financiera.
+ * @typedef {Object} Transaction
+ * @property {string} id - Identificador único de la transacción.
+ * @property {string} itemId - Identificador del ítem asociado.
+ * @property {number} amount - Monto de la transacción.
+ * @property {string} description - Descripción de la transacción.
+ * @property {string} date - Fecha de la transacción (AAAA-MM-DD).
+ */
+
+/**
+ * Representa el budget del usuario.
+ * @typedef {Object} Budget
+ * @property {string} id - Identificador único del budget.
+ * @property {string} name - Nombre del budget.
+ * @property {string} currency - Moneda del budget.
+ * @property {ItemBudget[]} items - Lista de items del budget.
+ * @property {Transaction[]} transactions - Lista de transacciones del budget.
+ */
+
+/**
  * Objeto para gestionar el almacenamiento local (localStorage)
  * @type {object}
  * @namespace
- * @method init Inicializa el almacenamiento con datos de ejemplo si no existen
- * @method save Guarda datos en el localStorage
- * @method load Carga datos desde el localStorage
- * @method loadCounter Carga y actualiza el contador de visitas
- * @property {Array<Task>} dummyTasks Datos con tareas de ejemplo
- * @property {Array<Habit>} dummyHabits Datos con hábitos de ejemplo
+ * @method init - Inicializa el almacenamiento con datos de ejemplo si no existen
+ * @method save - Guarda datos en el localStorage
+ * @method load - Carga datos desde el localStorage
+ * @method loadCounter - Carga y actualiza el contador de visitas
+ * @property {Array<Task>} dummyTasks - Datos con tareas de ejemplo
+ * @property {Array<Habit>} dummyHabits - Datos con hábitos de ejemplo
+ * @property {Array<Budget>} dummyBudget - Datos con budgets de ejemplo
  */
 const store = {
   /**
    * Inicializa el almacenamiento con datos de ejemplo si no existen
-   * @param {string} namespace Espacio de nombres para el localStorage
+   * @param {string} namespace - Espacio de nombres para el localStorage
+   * @returns {void}
    * */
   init: function () {
     if (!localStorage.getItem("tasks")) {
@@ -1337,11 +1493,15 @@ const store = {
     if (!localStorage.getItem("habits")) {
       this.save(this.dummyHabits, "habits")
     }
+    if (!localStorage.getItem("budgets")) {
+      this.save(this.dummyBudget, "budgets")
+    }
   },
   /**
    * Guarda datos en el localStorage
-   * @param {any} data Datos a guardar
-   * @param {string} namespace Espacio de nombres para el localStorage
+   * @param {any} data - Datos a guardar
+   * @param {string} namespace - Espacio de nombres para el localStorage
+   * @returns {void}
    * */
   save: function (data, namespace) {
     if (data instanceof Array === true) {
@@ -1358,8 +1518,9 @@ const store = {
   },
   /**
    * Carga las tareas desde el localStorage
-   * @param {string} namespace Espacio de nombres para el localStorage
-   * @param {string} typeData Tipo de dato a cargar: "array" o "number"
+   * @param {string} namespace - Espacio de nombres para el localStorage
+   * @param {string} typeData - Tipo de dato a cargar: "array" o "number"
+   * @returns {void}
    * */
   load: function (namespace, typeData = "array") {
     const data = localStorage.getItem(namespace)
@@ -1367,7 +1528,6 @@ const store = {
       case "number":
         try {
           const dataNumber = Number(data)
-          console.log("Es un número válido:", dataNumber)
           visitCount = dataNumber
         } catch (e) {
           console.error("Error loading numeric data from localStorage:", e)
@@ -1384,6 +1544,9 @@ const store = {
             case "habits":
               app.habits = JSON.parse(data)
               break
+            case "budgets":
+              app.budgets = JSON.parse(data)
+              break
             default:
               console.warn(`Unknown namespace "${namespace}" for loading data.`)
           }
@@ -1394,6 +1557,7 @@ const store = {
   },
   /**
    * Carga y actualiza el contador de visitas
+   * @returns {void}
    */
   loadCounter: function () {
     store.load("visit_counter", "number")
@@ -1402,7 +1566,7 @@ const store = {
   },
   /**
    * Datos con tareas de ejemplo
-   * @type {Array<object>}
+   * @type {Array<Task>}
    */
   dummyTasks: [
     {
@@ -1467,7 +1631,7 @@ const store = {
   ],
   /**
    * Datos con hábitos de ejemplo
-   * @type {Array<object>}
+   * @type {Array<Habit>}
    */
   dummyHabits: [
     {
@@ -1560,6 +1724,63 @@ const store = {
       streak: 2,
       color: "#06b6d4"
     }
+  ],
+  /**
+   * Datos con presupuestos de ejemplo
+   * @type {Array<Budget>}
+   */
+  dummyBudget: [
+    {
+      id: generateId(),
+      name: "Monthly Personal Budget",
+      currency: "USD",
+      items: [
+        {
+          id: generateId(),
+          title: "Groceries",
+          amount: 500,
+          date: todayStr,
+          notes: "Weekly shopping"
+        },
+        {
+          id: generateId(),
+          title: "Tech & Software",
+          amount: 200,
+          date: todayStr,
+          notes: "Subscriptions and tools"
+        },
+        {
+          id: generateId(),
+          title: "Learning",
+          amount: 100,
+          date: todayStr,
+          notes: "Books and courses"
+        },
+        {
+          id: generateId(),
+          title: "Entertainment",
+          amount: 150,
+          date: todayStr,
+          notes: "Games and movies"
+        }
+      ],
+      transactions: [
+        {
+          id: generateId(),
+          itemId: null,
+          amount: -45,
+          description: "Weekly groceries",
+          date: todayStr
+        },
+        {
+          id: generateId(),
+          itemId: null,
+          amount: -15,
+          description: "GitHub Pro subscription",
+          date: todayStr
+        }
+      ]
+    }
   ]
 }
 
@@ -1568,30 +1789,47 @@ const store = {
  * Gestiona la navegación, el estado y las operaciones principales.
  * @type {object}
  * @namespace
+ * @method init - Inicializa la aplicación.
+ * @method navigateTo - Cambia la pantalla actual.
  * @property {Task[]} tasks - Lista de tareas.
+ * @method toggleTask - Alterna el estado de una tarea.
+ * @method toggleSubtask - Alterna el estado de una subtarea.
  * @property {Habit[]} habits - Lista de hábitos.
- * @method init Inicializa la aplicación.
- * @method navigateTo Cambia la pantalla actual.
- * @method toggleTask Alterna el estado de una tarea.
- * @method showModal Muestra un modal con contenido HTML.
- * @method closeModal Cierra el modal actual.
- * @method showToast Muestra un mensaje emergente.
- * @method showUndoToast Muestra un toast con opción de deshacer.
- * @method performUndo Ejecuta la acción de deshacer.
+ * @method visitCounter - Cuenta las visitas y lanza confeti cada 10 visitas.
+ * @property {Budget[]} budgets - Lista de presupuestos.
+ * @method showCreateBudgetModal - Muestra el modal para crear un nuevo presupuesto.
+ * @method showAddTransactionModal - Muestra el modal para agregar una nueva transacción.
+ * @method addTransaction - Agrega una nueva transacción a un presupuesto.
+ * @method showBudgetDetails - Muestra los detalles de un presupuesto.
+ * @method showAddBudgetItemModal - Muestra el modal para agregar un nuevo ítem al presupuesto.
+ * @method addBudgetItem - Agrega un nuevo ítem al presupuesto.
+ * @method deleteBudget - Elimina un presupuesto por su ID.
+ * @method deleteBudgetItem - Elimina un ítem del presupuesto.
+ * @method createBudget - Crea un nuevo presupuesto a partir de un formulario.
+ * @method showModal - Muestra un modal con contenido HTML.
+ * @method closeModal - Cierra el modal actual.
+ * @method showToast - Muestra un mensaje emergente.
+ * @method showUndoToast - Muestra un toast con opción de deshacer.
+ * @method performUndo - Ejecuta la acción de deshacer.
  */
 const app = {
-  /** Inicializa la app y navega a la pantalla principal */
+  /**
+   * Inicializa la app y navega a la pantalla principal
+   * @returns {void}
+   */
   init: function () {
     // Al ejecutar por primera vez se deben de crear los datos iniciales.
     store.init()
     store.load("tasks", "array")
     store.load("habits", "array")
-    app.visitCounter()
+    store.load("budgets", "array")
+    this.visitCounter()
     this.navigateTo("home")
   },
   /**
    * Navega a la pantalla indicada y actualiza el estado visual
-   * @param {string} screen Pantalla destino
+   * @param {string} screen - Pantalla destino
+   * @returns {void}
    */
   navigateTo: function (screen) {
     console.log("Navegando a la pantalla:", screen)
@@ -1634,9 +1872,14 @@ const app = {
   },
   /**
    * Estado inicial de la aplicación
-   * @type {Array<object>}
+   * @type {Array<Task>}
    */
   tasks: [],
+  /**
+   * Alterna el estado de una tarea
+   * @param {string} taskId - ID de la tarea a alternar
+   * @returns {void}
+   */
   toggleTask: function (taskId) {
     const task = app.tasks.find((t) => t.id === taskId)
     if (task) {
@@ -1649,6 +1892,12 @@ const app = {
       render()
     }
   },
+  /**
+   * Alterna el estado de una subtarea
+   * @param {string} taskId - ID de la tarea
+   * @param {string} subtaskId - ID de la subtarea a alternar
+   * @returns {void}
+   */
   toggleSubtask(taskId, subtaskId) {
     const task = app.tasks.find((t) => t.id === taskId)
     if (task && task.subtasks) {
@@ -1660,10 +1909,14 @@ const app = {
       }
     }
   },
+  /**
+   * Estado inicial de los hábitos
+   * @type {Array<Habit>}
+   */
   habits: [],
   /**
    * Cuenta de visitas y lanzamiento de confeti cada 10 visitas
-   * @return {void}
+   * @returns {void}
    */
   visitCounter: function () {
     store.loadCounter()
@@ -1674,14 +1927,19 @@ const app = {
     }
   },
   /**
+   * Estado inicial de los presupuestos
+   * @type {Array<Budget>}
+   */
+  budgets: [],
+  /**
    * Muestra el modal para crear un nuevo presupuesto
-   * @return {void}
+   * @returns {void}
    */
   showCreateBudgetModal() {
     const modalContent = `
             <div class="p-6">
                 <h3 class="text-2xl font-bold mb-4">Create New Budget</h3>
-                <form onsubmit="app.showToast('Aún no esta implementado', 'error'); app.closeModal(); return false;">
+                <form onsubmit="app.createBudget(event)">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-semibold mb-2">Budget Name</label>
@@ -1716,8 +1974,326 @@ const app = {
     app.showModal(modalContent)
   },
   /**
+   * Crea un nuevo presupuesto a partir del formulario
+   * @param {*} event - Evento del formulario
+   * @returns {void}
+   */
+  createBudget(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+
+    const budget = {
+      id: generateId(),
+      name: formData.get("name"),
+      currency: formData.get("currency"),
+      items: [],
+      transactions: []
+    }
+
+    app.budgets.push(budget)
+    store.save(app.budgets, "budgets")
+    this.closeModal()
+    this.showToast("Budget created successfully! 💰", "success")
+    budgets()
+  },
+  /**
+   * Muestra el modal para agregar una nueva transacción
+   * @param {number} budgetId - ID del presupuesto al que se agrega la transacción
+   * @returns {void}
+   */
+  showAddTransactionModal(budgetId) {
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Add Transaction</h3>
+                <form onsubmit="app.addTransaction(event, '${budgetId}')">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <input type="text" name="description" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="e.g., Weekly groceries">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Amount (negative for expenses)</label>
+                            <input type="number" step="0.01" name="amount" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="-50.00">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Add Transaction
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  /**
+   * Agrega una nueva transacción al presupuesto
+   * @param {*} event - Evento del formulario
+   * @param {number} budgetId - ID del presupuesto al que se agrega la transacción
+   * @returns {void}
+   */
+  addTransaction(event, budgetId) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const budget = app.budgets.find((b) => b.id === budgetId)
+
+    if (budget) {
+      const transaction = {
+        id: generateId(),
+        itemId: null,
+        amount: parseFloat(formData.get("amount")),
+        description: formData.get("description"),
+        date: formatDate(new Date())
+      }
+
+      budget.transactions.push(transaction)
+      store.save(app.budgets, "budgets")
+      this.closeModal()
+      this.showToast("Transaction added! 💸", "success")
+      budgets()
+      if (this.currentScreen === "home") home()
+    }
+  },
+  /**
+   * Muestra los detalles de un presupuesto
+   * @param {number} budgetId - ID del presupuesto
+   * @returns {void}
+   */
+  showBudgetDetails(budgetId) {
+    console.log("Mostrar detalles del presupuesto:", budgetId)
+    const budget = app.budgets.find((b) => b.id === budgetId)
+    if (!budget) return
+
+    const modalContent = `
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-2xl font-bold">${escapeHtml(
+                      budget.name
+                    )}</h3>
+                    <button onclick="app.deleteBudget('${budgetId}')"
+                            class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
+                        Delete
+                    </button>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="font-bold mb-3 flex items-center justify-between">
+                        <span>Budget Items</span>
+                        <button onclick="app.showAddBudgetItemModal('${budgetId}')"
+                                class="text-sm px-3 py-1 bg-xp-primary text-xp-darker rounded-lg">
+                            + Add Item
+                        </button>
+                    </h4>
+                    <div class="space-y-2">
+                        ${budget.items
+                          .map(
+                            (item) => `
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                                <div>
+                                    <div class="font-semibold">${escapeHtml(
+                                      item.title
+                                    )}</div>
+                                    ${
+                                      item.notes
+                                        ? `<div class="text-sm text-gray-600 dark:text-gray-400">${escapeHtml(
+                                            item.notes
+                                          )}</div>`
+                                        : ""
+                                    }
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-xp-primary">$${item.amount.toFixed(
+                                      2
+                                    )}</div>
+                                    <button onclick="app.deleteBudgetItem('${budgetId}', '${
+                              item.id
+                            }')"
+                                            class="text-xs text-xp-danger hover:underline">Delete</button>
+                                </div>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                        ${
+                          budget.items.length === 0
+                            ? '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No items yet</div>'
+                            : ""
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-3">Transactions</h4>
+                    <div class="space-y-2 max-h-64 overflow-y-auto">
+                        ${budget.transactions
+                          .map(
+                            (t) => `
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                                <div>
+                                    <div class="font-semibold">${escapeHtml(
+                                      t.description
+                                    )}</div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">${
+                                      t.date
+                                    }</div>
+                                </div>
+                                <div class="font-bold ${
+                                  t.amount < 0
+                                    ? "text-xp-danger"
+                                    : "text-xp-primary"
+                                }">
+                                    ${t.amount < 0 ? "-" : "+"}$${Math.abs(
+                              t.amount
+                            ).toFixed(2)}
+                                </div>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                        ${
+                          budget.transactions.length === 0
+                            ? '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No transactions yet</div>'
+                            : ""
+                        }
+                    </div>
+                </div>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  /**
+   * Muestra el modal para agregar un nuevo ítem al presupuesto
+   * @param {number} budgetId - ID del presupuesto
+   * @returns {void}
+   */
+  showAddBudgetItemModal(budgetId) {
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Add Budget Item</h3>
+                <form onsubmit="app.addBudgetItem(event, '${budgetId}')">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Category/Title</label>
+                            <input type="text" name="title" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="e.g., Groceries">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Amount</label>
+                            <input type="number" step="0.01" name="amount" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="0.00">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Notes (optional)</label>
+                            <textarea name="notes" rows="2"
+                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                      placeholder="Additional notes..."></textarea>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.showBudgetDetails('${budgetId}')"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Back
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Add Item
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  /**
+   * Agrega un nuevo ítem al presupuesto
+   * @param {*} event - Evento del formulario
+   * @param {number} budgetId - ID del presupuesto
+   * @returns {void}
+   */
+  addBudgetItem(event, budgetId) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const budget = app.budgets.find((b) => b.id === budgetId)
+
+    if (budget) {
+      const item = {
+        id: generateId(),
+        title: formData.get("title"),
+        amount: parseFloat(formData.get("amount")),
+        date: formatDate(new Date()),
+        notes: formData.get("notes") || ""
+      }
+
+      budget.items.push(item)
+      store.save(app.budgets, "budgets")
+      this.showToast("Budget item added! 📝", "success")
+      this.showBudgetDetails(budgetId)
+      budgets()
+    }
+  },
+  /**
+   * Elimina un presupuesto
+   * @param {number} budgetId - ID del presupuesto
+   * @returns {void}
+   */
+  deleteBudget(budgetId) {
+    if (
+      confirm(
+        "Are you sure you want to delete this budget? This action cannot be undone."
+      )
+    ) {
+      const index = app.budgets.findIndex((b) => b.id === budgetId)
+      if (index !== -1) {
+        app.budgets.splice(index, 1)
+        store.save(app.budgets, "budgets")
+        this.closeModal()
+        this.showToast("Budget deleted", "success")
+        budgets()
+      }
+    }
+  },
+  /**
+   * Elimina un ítem de un presupuesto
+   * @param {number} budgetId - ID del presupuesto
+   * @param {number} itemId - ID del ítem
+   * @returns {void}
+   */
+  deleteBudgetItem(budgetId, itemId) {
+    const budget = app.budgets.find((b) => b.id === budgetId)
+    if (budget) {
+      const index = budget.items.findIndex((i) => i.id === itemId)
+      if (index !== -1) {
+        const deleted = budget.items.splice(index, 1)[0]
+        store.save(app.budgets, "budgets")
+        this.showUndoToast(`Deleted ${deleted.title}`, () => {
+          budget.items.splice(index, 0, deleted)
+          store.save(app.budgets, "budgets")
+          this.showBudgetDetails(budgetId)
+          budgets()
+        })
+        this.showBudgetDetails(budgetId)
+        budgets()
+      }
+    }
+  },
+  /**
    * Muestra el modal con el contenido especificado
-   * @param {string} contentHtml
+   * @param {string} contentHtml - Contenido HTML del modal
+   * @returns {void}
    */
   showModal: function (contentHtml) {
     const backdrop = document.getElementById("modal-backdrop")
@@ -1727,6 +2303,7 @@ const app = {
   },
   /**
    * Cierra el modal actual
+   * @returns {void}
    */
   closeModal: function () {
     const backdrop = document.getElementById("modal-backdrop")
@@ -1736,6 +2313,7 @@ const app = {
    * Muestra un mensaje emergente (toast)
    * @param {string} message - Mensaje a mostrar
    * @param {string} type - Tipo de mensaje: "info", "success", "error"
+   * @returns {void}
    */
   showToast: function (message, type = "info") {
     const toast = document.createElement("div")
@@ -1760,6 +2338,7 @@ const app = {
    * Muestra un mensaje emergente (toast) con opción de deshacer
    * @param {string} message - Mensaje a mostrar
    * @param {Function} undoCallback - Función a ejecutar al deshacer
+   * @returns {void}
    */
   showUndoToast: function (message, undoCallback) {
     const undoToast = document.getElementById("undo-toast")
@@ -1777,7 +2356,7 @@ const app = {
   },
   /**
    * Ejecuta la acción de deshacer
-   * @return {void}
+   * @returns {void}
    */
   performUndo: function () {
     if (this.undoCallback) {
@@ -1790,6 +2369,7 @@ const app = {
 
 /**
  * Inicializa la app, modo oscuro y seguimiento de analíticas
+ * @event window load - Se ejecuta cuando la página ha cargado completamente
  */
 window.addEventListener("load", () => {
   app.init()

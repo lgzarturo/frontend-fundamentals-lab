@@ -58,6 +58,7 @@ El objetivo no es solo construir la app, sino **aprender profundamente los funda
 6. [Acciones y lógica de la app - _Gestión de hábitos_](/docs/javascript-actions-app.md)
    1. [Explicación del código en app.js](/docs/codigo-app_js.md)
    2. [Ideas y mejoras futuras](/docs/ideas.md)
+7. [Estructura y mejoras por implementar](/docs/mejoras-por-implementar.md)
 
 ---
 
@@ -95,6 +96,8 @@ frontend-fundamentals-lab/
 ├── README.md
 └── LICENSE
 ```
+
+> Esto es solo un esquema inicial. La estructura puede evolucionar conforme se agreguen más funcionalidades y módulos al proyecto. Sin embargo, no lo seguí aún ya que el proyecto está en una etapa temprana y no le veo sentido fragmentar el código en muchos archivos aún.
 
 ---
 
