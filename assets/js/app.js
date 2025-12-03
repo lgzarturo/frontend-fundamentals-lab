@@ -87,6 +87,25 @@ function formatDate(date) {
 }
 
 /**
+ * Obtiene una representación de tiempo relativo (hace cuánto tiempo) a partir de una marca de tiempo
+ * @param {number} timestamp - Marca de tiempo en milisegundos
+ * @returns {string} - Representación de tiempo relativo (e.g., "5m ago", "2h ago", "3d ago", "Just now")
+ */
+function getRelativeTime(timestamp) {
+  const now = Date.now()
+  const diff = now - timestamp
+  const minutes = Math.floor(diff / 60000)
+  const hours = Math.floor(diff / 3600000)
+  const days = Math.floor(diff / 86400000)
+
+  if (minutes < 1) return "Just now"
+  if (minutes < 60) return `${minutes}m ago`
+  if (hours < 24) return `${hours}h ago`
+  if (days < 7) return `${days}d ago`
+  return new Date(timestamp).toLocaleDateString()
+}
+
+/**
  * Escapa caracteres HTML especiales en un string
  * @param {string} text - Texto a escapar
  * @returns {string} - Texto escapado
@@ -327,7 +346,7 @@ function home() {
       return `
                 <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
                     <div class="flex items-center gap-3 flex-1">
-                        <button onclick="toggleHabit('${habit.id}')"
+                        <button onclick="app.toggleHabit('${habit.id}')"
                                 class="w-8 h-8 rounded-full border-2 ${
                                   isDone
                                     ? "bg-xp-primary border-xp-primary"
@@ -596,13 +615,13 @@ function tasks() {
                                 }
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="showEditTaskModal('${
+                                <button onclick="app.showEditTaskModal('${
                                   task.id
                                 }')"
                                         class="text-sm px-3 py-1 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded transition-colors">
                                     Edit
                                 </button>
-                                <button onclick="deleteTask('${task.id}')"
+                                <button onclick="app.deleteTask('${task.id}')"
                                         class="text-sm px-3 py-1 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded transition-colors">
                                     Delete
                                 </button>
@@ -618,330 +637,6 @@ function tasks() {
   document.getElementById("tasks-list").innerHTML =
     tasksHtml ||
     '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No tasks found. Create your first task! ✓</div>'
-}
-
-/**
- * Funcionalidad de filtrado de tareas
- * @param {string} filter - Filtro seleccionado: "all", "today", "high", "completed"
- * @returns {void}
- */
-function filterTasks(filter) {
-  currentFilter = filter
-
-  // Actualizar estilos de botones de filtro
-  document.querySelectorAll(".task-filter-btn").forEach((btn) => {
-    if (btn.dataset.filter === filter) {
-      btn.classList.add("bg-xp-primary", "text-xp-darker")
-      btn.classList.remove(
-        "bg-gray-200",
-        "dark:bg-xp-card",
-        "text-gray-700",
-        "dark:text-gray-300"
-      )
-    } else {
-      btn.classList.remove("bg-xp-primary", "text-xp-darker")
-      btn.classList.add(
-        "bg-gray-200",
-        "dark:bg-xp-card",
-        "text-gray-700",
-        "dark:text-gray-300"
-      )
-    }
-  })
-
-  tasks()
-}
-
-/**
- * Muestra el modal para crear una nueva tarea
- * @returns {void}
- */
-function showCreateTaskModal() {
-  const todayStr = formatDate(new Date())
-
-  // Contenido del modal para crear una nueva tarea
-  const modalContent = `
-            <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Create New Task</h3>
-                <form onsubmit="createTask(event)">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
-                            <input type="text" name="title" required
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="e.g., Complete feature implementation">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Description</label>
-                            <textarea name="description" rows="3"
-                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                      placeholder="Task details..."></textarea>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Due Date</label>
-                                <input type="date" name="dueDate" value="${todayStr}"
-                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Priority</label>
-                                <select name="priority"
-                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                                    <option value="low">Low</option>
-                                    <option value="medium" selected>Medium</option>
-                                    <option value="high">High</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
-                            <input type="text" name="tags"
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="coding, important, review">
-                        </div>
-                    </div>
-                    <div class="flex gap-3 mt-6">
-                        <button type="button" onclick="app.closeModal()"
-                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit"
-                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Create Task
-                        </button>
-                    </div>
-                </form>
-            </div>
-        `
-
-  app.showModal(modalContent)
-}
-
-/**
- * Agrega una nueva tarea basada en los datos del formulario
- * @param {Event} event - Evento del formulario
- * @returns {void}
- */
-function createTask(event) {
-  event.preventDefault()
-  const formData = new FormData(event.target)
-
-  // Crear el objeto de tarea
-  const task = {
-    id: generateId(),
-    title: formData.get("title"),
-    description: formData.get("description") || "",
-    dueDate: formData.get("dueDate") || "",
-    priority: formData.get("priority"),
-    tags: formData.get("tags")
-      ? formData
-          .get("tags")
-          .split(",")
-          .map((t) => t.trim())
-          .filter((t) => t)
-      : [],
-    subtasks: [],
-    done: false,
-    order: app.tasks.length + 1
-  }
-
-  app.tasks.push(task)
-  store.save(app.tasks, "tasks")
-  app.closeModal()
-  app.showToast("Task created! 📝", "success")
-  tasks()
-  if (this.currentScreen === "home") home()
-}
-
-/**
- * Muestra el modal para editar una tarea existente
- * @param {string} taskId - ID de la tarea a editar
- * @returns {void}
- */
-function showEditTaskModal(taskId) {
-  const task = app.tasks.find((t) => t.id === taskId)
-  if (!task) return
-
-  // Contenido del modal para editar la tarea
-  const modalContent = `
-            <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Edit Task</h3>
-                <form onsubmit="updateTask(event, '${taskId}')">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
-                            <input type="text" name="title" required value="${escapeHtml(
-                              task.title
-                            )}"
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Description</label>
-                            <textarea name="description" rows="3"
-                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">${escapeHtml(
-                                        task.description
-                                      )}</textarea>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Due Date</label>
-                                <input type="date" name="dueDate" value="${
-                                  task.dueDate
-                                }"
-                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Priority</label>
-                                <select name="priority"
-                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                                    <option value="low" ${
-                                      task.priority === "low" ? "selected" : ""
-                                    }>Low</option>
-                                    <option value="medium" ${
-                                      task.priority === "medium"
-                                        ? "selected"
-                                        : ""
-                                    }>Medium</option>
-                                    <option value="high" ${
-                                      task.priority === "high" ? "selected" : ""
-                                    }>High</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
-                            <input type="text" name="tags" value="${task.tags.join(
-                              ", "
-                            )}"
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Subtasks</label>
-                            <div id="subtasks-list" class="space-y-2 mb-2">
-                                ${task.subtasks
-                                  .map(
-                                    (st, idx) => `
-                                    <div class="flex gap-2">
-                                        <input type="text" value="${escapeHtml(
-                                          st.text
-                                        )}"
-                                               data-subtask-id="${st.id}"
-                                               class="subtask-input flex-1 px-3 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                                        <button type="button" onclick="this.parentElement.remove()"
-                                                class="px-3 py-2 bg-xp-danger/20 text-xp-danger rounded-lg hover:bg-xp-danger/30">✕</button>
-                                    </div>
-                                `
-                                  )
-                                  .join("")}
-                            </div>
-                            <button type="button" onclick="addSubtaskInput()"
-                                    class="text-sm px-3 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30">
-                                + Add Subtask
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 mt-6">
-                        <button type="button" onclick="app.closeModal()"
-                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit"
-                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Update Task
-                        </button>
-                    </div>
-                </form>
-            </div>
-        `
-
-  app.showModal(modalContent)
-}
-
-/**
- * Agrega un nuevo campo de entrada para subtareas en el formulario de edición de tareas
- * @return {void}
- */
-function addSubtaskInput() {
-  const list = document.getElementById("subtasks-list")
-  const div = document.createElement("div")
-  div.className = "flex gap-2"
-  // Agregar el nuevo campo de entrada para la subtarea
-  div.innerHTML = `
-            <input type="text" placeholder="Subtask..."
-                   class="subtask-input flex-1 px-3 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-            <button type="button" onclick="this.parentElement.remove()"
-                    class="px-3 py-2 bg-xp-danger/20 text-xp-danger rounded-lg hover:bg-xp-danger/30">✕</button>
-        `
-  list.appendChild(div)
-}
-
-/**
- * Función para actualizar una tarea existente
- *
- * Esta función recupera los datos del formulario (título, descripción, etc.),
- * los aplica a la tarea correspondiente identificada por `taskId`,
- * guarda los cambios en el almacenamiento local y actualiza la interfaz.
- *
- * @param {Event} event - El evento `submit` del formulario HTML.
- * @param {string} taskId - El identificador único de la tarea a actualizar.
- * @return {void}
- */
-function updateTask(event, taskId) {
-  event.preventDefault()
-  const formData = new FormData(event.target)
-  const task = app.tasks.find((t) => t.id === taskId)
-
-  if (task) {
-    // Actualizar campos de la tarea
-    task.title = formData.get("title")
-    task.description = formData.get("description") || ""
-    task.dueDate = formData.get("dueDate") || ""
-    task.priority = formData.get("priority")
-    task.tags = formData.get("tags")
-      ? formData
-          .get("tags")
-          .split(",")
-          .map((t) => t.trim())
-          .filter((t) => t)
-      : []
-
-    // Actualizar subtareas
-    const subtaskInputs = document.querySelectorAll(".subtask-input")
-    task.subtasks = Array.from(subtaskInputs)
-      .map((input) => ({
-        id: input.dataset.subtaskId || this.generateId(),
-        text: input.value,
-        done:
-          task.subtasks.find((st) => st.id === input.dataset.subtaskId)?.done ||
-          false
-      }))
-      .filter((st) => st.text.trim())
-
-    store.save(app.tasks, "tasks")
-    app.closeModal()
-    app.showToast("Task updated! ✓", "success")
-    tasks()
-  }
-}
-
-/**
- * Función para eliminar una tarea por su ID
- * @param {string} taskId - ID de la tarea a eliminar
- * @return {void}
- */
-function deleteTask(taskId) {
-  const index = app.tasks.findIndex((t) => t.id === taskId)
-  if (index !== -1) {
-    const deleted = app.tasks.splice(index, 1)[0]
-    store.save(app.tasks, "tasks")
-    tasks()
-    // Mostrar opción de deshacer
-    app.showUndoToast(`Deleted "${deleted.title}"`, () => {
-      app.tasks.splice(index, 0, deleted)
-      store.save(app.tasks, "tasks")
-      tasks()
-    })
-  }
 }
 
 /**
@@ -985,14 +680,14 @@ function habits() {
                                 : ""
                             }
                         </div>
-                        <button onclick="deleteHabit('${habit.id}')"
+                        <button onclick="app.deleteHabit('${habit.id}')"
                                 class="px-3 py-1 text-xs bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
                             Delete
                         </button>
                     </div>
 
                     <div class="flex items-center gap-4 mb-4">
-                        <button onclick="toggleHabit('${habit.id}')"
+                        <button onclick="app.toggleHabit('${habit.id}')"
                                 class="flex items-center gap-3 px-6 py-3 rounded-lg ${
                                   isDoneToday
                                     ? "bg-xp-primary text-xp-darker"
@@ -1064,320 +759,44 @@ function habits() {
 }
 
 /**
- * Crea un hábito a partir de una plantilla predefinida
- * @param {number} templateIndex - Índice de la plantilla a usar
+ * Renderiza la pantalla de notas
  * @returns {void}
  */
-function createHabitFromTemplate(templateIndex) {
-  const templates = [
-    {
-      title: "🌅 Wake without snooze",
-      description: "Wake up at target time without hitting snooze",
-      color: "#00ff88"
-    },
-    {
-      title: "💧 Hydrate (500ml water)",
-      description: "Drink 500ml water with lemon immediately after waking",
-      color: "#0099ff"
-    },
-    {
-      title: "🧘 Stoic meditation (10 min)",
-      description: "Morning meditation and journaling",
-      color: "#9333ea"
-    },
-    {
-      title: "🏃 Mobility routine",
-      description: "15-20 minutes of stretching and calisthenics",
-      color: "#f59e0b"
-    },
-    {
-      title: "⭐ Define 3 MITs",
-      description: "Plan the 3 most important tasks during breakfast",
-      color: "#00ff88"
-    },
-    {
-      title: "🎯 Complete first deep work block",
-      description: "60-minute focused work session",
-      color: "#ef4444"
-    },
-    {
-      title: "📚 Learning block (30-45 min)",
-      description: "Dedicated time for learning new skills",
-      color: "#8b5cf6"
-    },
-    {
-      title: "📝 End of day review",
-      description: "Review accomplishments and plan tomorrow",
-      color: "#10b981"
-    },
-    {
-      title: "🌙 Digital sunset (6 PM)",
-      description: "Disconnect from screens by 6 PM",
-      color: "#f97316"
-    },
-    {
-      title: "😴 Sleep prep by 9 PM",
-      description: "Begin sleep routine, target sleep by 11 PM",
-      color: "#06b6d4"
-    }
-  ]
-
-  const template = templates[templateIndex]
-
-  const habit = {
-    id: generateId(),
-    title: template.title,
-    description: template.description,
-    schedule: "daily",
-    dailyRecords: {},
-    streak: 0,
-    color: template.color
-  }
-
-  app.habits.push(habit)
-  store.save(app.habits, "habits")
-  // Google Analytics event
-  if (window.dataLayer) {
-    window.dataLayer.push({
-      event: "habit_create_template",
-      habit_id: habit.id,
-      habit_title: habit.title,
-      template_index: templateIndex
-    })
-  }
-  app.closeModal()
-  app.showToast("Habit added! 🎯", "success")
-  habits()
-}
-
-/**
- * Crea un hábito personalizado a partir de un formulario
- * @param {Event} event - Evento del formulario
- * @returns {void}
- */
-function createCustomHabit(event) {
-  event.preventDefault()
-  const formData = new FormData(event.target)
-
-  const habit = {
-    id: generateId(),
-    title: formData.get("title"),
-    description: formData.get("description") || "",
-    schedule: "daily",
-    dailyRecords: {},
-    streak: 0,
-    color: "#00ff88"
-  }
-
-  app.habits.push(habit)
-  store.save(app.habits, "habits")
-  // Google Analytics event
-  if (window.dataLayer) {
-    window.dataLayer.push({
-      event: "habit_create_custom",
-      habit_id: habit.id,
-      habit_title: habit.title
-    })
-  }
-  app.closeModal()
-  app.showToast("Custom habit created! 🎯", "success")
-  habits()
-}
-
-/**
- * Muestra el modal para agregar un nuevo hábito
- * @returns {void}
- */
-function showHabitTemplatesModal() {
-  const templates = [
-    {
-      title: "🌅 Wake without snooze",
-      description: "Wake up at target time without hitting snooze"
-    },
-    {
-      title: "💧 Hydrate (500ml water)",
-      description: "Drink 500ml water with lemon immediately after waking"
-    },
-    {
-      title: "🧘 Stoic meditation (10 min)",
-      description: "Morning meditation and journaling"
-    },
-    {
-      title: "🏃 Mobility routine",
-      description: "15-20 minutes of stretching and calisthenics"
-    },
-    {
-      title: "⭐ Define 3 MITs",
-      description: "Plan the 3 most important tasks during breakfast"
-    },
-    {
-      title: "🎯 Complete first deep work block",
-      description: "60-minute focused work session"
-    },
-    {
-      title: "📚 Learning block (30-45 min)",
-      description: "Dedicated time for learning new skills"
-    },
-    {
-      title: "📝 End of day review",
-      description: "Review accomplishments and plan tomorrow"
-    },
-    {
-      title: "🌙 Digital sunset (6 PM)",
-      description: "Disconnect from screens by 6 PM"
-    },
-    {
-      title: "😴 Sleep prep by 9 PM",
-      description: "Begin sleep routine, target sleep by 11 PM"
-    }
-  ]
-
-  const modalContent = `
-            <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Add Habit</h3>
-
-                <div class="mb-6">
-                    <h4 class="font-semibold mb-3">Programmer Routine Templates</h4>
-                    <div class="space-y-2 max-h-96 overflow-y-auto">
-                        ${templates
+function notes() {
+  const notesHtml = app.notes
+    .map(
+      (note) => `
+            <div class="bg-white dark:bg-xp-card rounded-xl p-5 border-2 border-gray-200 dark:border-xp-primary/20 hover:border-xp-primary/40 transition-colors cursor-pointer"
+                 onclick="app.showNoteModal('${note.id}')">
+                <h4 class="font-bold text-lg mb-2">${escapeHtml(
+                  note.title
+                )}</h4>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3">
+                    ${escapeHtml(note.bodyMarkdown.substring(0, 100))}${
+        note.bodyMarkdown.length > 100 ? "..." : ""
+      }
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex gap-1 flex-wrap">
+                        ${note.tags
                           .map(
-                            (template, idx) => `
-                            <button onclick="createHabitFromTemplate(${idx})"
-                                    class="w-full text-left p-4 bg-gray-50 dark:bg-xp-darker rounded-lg hover:bg-xp-primary/10 transition-colors">
-                                <div class="font-semibold">${escapeHtml(
-                                  template.title
-                                )}</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400">${escapeHtml(
-                                  template.description
-                                )}</div>
-                            </button>
-                        `
+                            (tag) =>
+                              `<span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-500 rounded">${tag}</span>`
                           )
                           .join("")}
                     </div>
-                </div>
-
-                <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
-                    <h4 class="font-semibold mb-3">Or create custom habit</h4>
-                    <form onsubmit="createCustomHabit(event)">
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Title *</label>
-                                <input type="text" name="title" required
-                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                       placeholder="e.g., Morning run">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Description</label>
-                                <input type="text" name="description"
-                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                       placeholder="Brief description...">
-                            </div>
-                        </div>
-                        <div class="flex gap-3 mt-6">
-                            <button type="button" onclick="app.closeModal()"
-                                    class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                                Cancel
-                            </button>
-                            <button type="submit"
-                                    class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                                Create Habit
-                            </button>
-                        </div>
-                    </form>
+                    <div class="text-xs text-gray-500">${getRelativeTime(
+                      note.updatedAt
+                    )}</div>
                 </div>
             </div>
         `
+    )
+    .join("")
 
-  app.showModal(modalContent)
-}
-
-/**
- * Elimina un hábito por su ID
- * @param {string} habitId - ID del hábito a eliminar
- * @returns {void}
- */
-function deleteHabit(habitId) {
-  const index = app.habits.findIndex((h) => h.id === habitId)
-  if (index !== -1) {
-    const deleted = app.habits.splice(index, 1)[0]
-    store.save(app.habits, "habits")
-    habits()
-    // Google Analytics event
-    if (window.dataLayer) {
-      window.dataLayer.push({
-        event: "habit_delete",
-        habit_id: habitId,
-        habit_title: deleted.title
-      })
-    }
-    app.showUndoToast(`Deleted "${deleted.title}"`, () => {
-      app.habits.splice(index, 0, deleted)
-      store.save(app.habits, "habits")
-      habits()
-    })
-  }
-}
-
-/**
- * Alterna el estado de un hábito para hoy
- * @param {string} habitId - ID del hábito a alternar
- * @returns {void}
- */
-function toggleHabit(habitId) {
-  const habit = app.habits.find((h) => h.id === habitId)
-  if (!habit) return
-
-  const todayStr = formatDate(new Date())
-  const wasDone = habit.dailyRecords[todayStr]
-
-  habit.dailyRecords[todayStr] = !wasDone
-
-  if (!wasDone) {
-    const yesterday = new Date()
-    yesterday.setDate(yesterday.getDate() - 1)
-    const yesterdayStr = formatDate(yesterday)
-
-    if (habit.dailyRecords[yesterdayStr] || habit.streak === 0) {
-      habit.streak = (habit.streak || 0) + 1
-    } else {
-      habit.streak = 1
-    }
-  } else {
-    habit.streak = Math.max(0, habit.streak - 1)
-  }
-
-  store.save(app.habits, "habits")
-  app.showToast(
-    wasDone ? "Habit unchecked" : "Habit completed! +10 XP 🎉",
-    "success"
-  )
-
-  // Google Analytics event
-  if (window.dataLayer) {
-    window.dataLayer.push({
-      event: "habit_toggle",
-      habit_id: habitId,
-      habit_title: habit.title,
-      status: habit.dailyRecords[todayStr] ? "completed" : "unchecked"
-    })
-  }
-
-  const totalHabits = app.habits.length
-  const completedHabitsToday = app.habits.filter(
-    (h) => h.dailyRecords[todayStr]
-  ).length
-
-  console.log(
-    `Habits completed today: ${completedHabitsToday} / ${totalHabits}`
-  )
-
-  if (totalHabits === completedHabitsToday && totalHabits > 0) {
-    launchConfetti()
-  }
-
-  habits()
-  if (currentScreen === "home") home()
+  document.getElementById("notes-list").innerHTML =
+    notesHtml ||
+    '<div class="col-span-full text-center text-gray-500 dark:text-gray-400 py-12">No notes yet. Start writing! 📝</div>'
 }
 
 /**
@@ -1398,6 +817,9 @@ function render() {
       break
     case "habits":
       habits()
+      break
+    case "notes":
+      notes()
       break
     // Otros casos para diferentes pantallas
   }
@@ -1469,6 +891,16 @@ function render() {
  */
 
 /**
+ * Representa una nota del usuario.
+ * @typedef {Object} Note
+ * @property {string} id - Identificador único de la nota.
+ * @property {string} title - Título de la nota.
+ * @property {string} bodyMarkdown - Contenido de la nota en formato Markdown.
+ * @property {string[]} tags - Etiquetas asociadas a la nota.
+ * @property {number} updatedAt - Fecha de última actualización de la nota (AAAA-MM-DD).
+ */
+
+/**
  * Objeto para gestionar el almacenamiento local (localStorage)
  * @type {object}
  * @namespace
@@ -1495,6 +927,9 @@ const store = {
     }
     if (!localStorage.getItem("budgets")) {
       this.save(this.dummyBudget, "budgets")
+    }
+    if (!localStorage.getItem("notes")) {
+      this.save(this.dummyNotes, "notes")
     }
   },
   /**
@@ -1546,6 +981,9 @@ const store = {
               break
             case "budgets":
               app.budgets = JSON.parse(data)
+              break
+            case "notes":
+              app.notes = JSON.parse(data)
               break
             default:
               console.warn(`Unknown namespace "${namespace}" for loading data.`)
@@ -1781,6 +1219,82 @@ const store = {
         }
       ]
     }
+  ],
+  /**
+   * Datos con notas de ejemplo
+   * @type {Array<Note>}
+   */
+  dummyNotes: [
+    {
+      id: generateId(),
+      title: "Daily Programming Tips",
+      bodyMarkdown: `# Daily Programming Tips
+
+## Code Quality
+- Write **clean, readable code** first
+- Optimize only when necessary
+- Use *meaningful variable names*
+
+## Productivity
+- Use the **Pomodoro Technique**
+- Take regular breaks
+- Stay hydrated 💧
+
+## Learning
+\`\`\`javascript
+// Always be learning
+const knowledge = practice + time;
+\`\`\`
+
+### Resources
+- Documentation first
+- Stack Overflow second
+- Experiment always`,
+      tags: ["programming", "tips"],
+      updatedAt: Date.now()
+    },
+    {
+      id: generateId(),
+      title: "Project Ideas",
+      bodyMarkdown: `# Project Ideas 💡
+
+## Web Apps
+- Personal dashboard
+- Habit tracker
+- Budget manager
+
+#
+# Mobile Apps
+- Fitness tracker
+- Reading list app
+
+**Next Steps:**
+1. Research tech stack
+2. Create wireframes
+3. Build MVP`,
+      tags: ["ideas", "projects"],
+      updatedAt: Date.now() - 3600000
+    },
+    {
+      id: generateId(),
+      title: "Stoic Meditation Notes",
+      bodyMarkdown: `# Stoic Philosophy
+
+## Morning Meditation
+*"The obstacle is the way"* - Marcus Aurelius
+
+Focus on what you can control:
+- Your thoughts
+- Your actions
+- Your responses
+
+## Daily Practices
+1. Morning journaling
+2. Evening reflection
+3. Mindful breathing`,
+      tags: ["meditation", "stoic", "philosophy"],
+      updatedAt: Date.now() - 86400000
+    }
   ]
 }
 
@@ -1806,6 +1320,7 @@ const store = {
  * @method deleteBudget - Elimina un presupuesto por su ID.
  * @method deleteBudgetItem - Elimina un ítem del presupuesto.
  * @method createBudget - Crea un nuevo presupuesto a partir de un formulario.
+ * @property {Note[]} notes - Lista de notas.
  * @method showModal - Muestra un modal con contenido HTML.
  * @method closeModal - Cierra el modal actual.
  * @method showToast - Muestra un mensaje emergente.
@@ -1823,6 +1338,7 @@ const app = {
     store.load("tasks", "array")
     store.load("habits", "array")
     store.load("budgets", "array")
+    store.load("notes", "array")
     this.visitCounter()
     this.navigateTo("home")
   },
@@ -1876,6 +1392,323 @@ const app = {
    */
   tasks: [],
   /**
+   * Funcionalidad de filtrado de tareas
+   * @param {string} filter - Filtro seleccionado: "all", "today", "high", "completed"
+   * @returns {void}
+   */
+  filterTasks(filter) {
+    currentFilter = filter
+
+    // Actualizar estilos de botones de filtro
+    document.querySelectorAll(".task-filter-btn").forEach((btn) => {
+      if (btn.dataset.filter === filter) {
+        btn.classList.add("bg-xp-primary", "text-xp-darker")
+        btn.classList.remove(
+          "bg-gray-200",
+          "dark:bg-xp-card",
+          "text-gray-700",
+          "dark:text-gray-300"
+        )
+      } else {
+        btn.classList.remove("bg-xp-primary", "text-xp-darker")
+        btn.classList.add(
+          "bg-gray-200",
+          "dark:bg-xp-card",
+          "text-gray-700",
+          "dark:text-gray-300"
+        )
+      }
+    })
+
+    tasks()
+  },
+  /**
+   * Muestra el modal para crear una nueva tarea
+   * @returns {void}
+   */
+  showCreateTaskModal() {
+    const todayStr = formatDate(new Date())
+
+    // Contenido del modal para crear una nueva tarea
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Create New Task</h3>
+                <form onsubmit="app.createTask(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <input type="text" name="title" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="e.g., Complete feature implementation">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <textarea name="description" rows="3"
+                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                      placeholder="Task details..."></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Due Date</label>
+                                <input type="date" name="dueDate" value="${todayStr}"
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Priority</label>
+                                <select name="priority"
+                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <input type="text" name="tags"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="coding, important, review">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Create Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    app.showModal(modalContent)
+  },
+  /**
+   * Agrega una nueva tarea basada en los datos del formulario
+   * @param {Event} event - Evento del formulario
+   * @returns {void}
+   */
+  createTask(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+
+    // Crear el objeto de tarea
+    const task = {
+      id: generateId(),
+      title: formData.get("title"),
+      description: formData.get("description") || "",
+      dueDate: formData.get("dueDate") || "",
+      priority: formData.get("priority"),
+      tags: formData.get("tags")
+        ? formData
+            .get("tags")
+            .split(",")
+            .map((t) => t.trim())
+            .filter((t) => t)
+        : [],
+      subtasks: [],
+      done: false,
+      order: app.tasks.length + 1
+    }
+
+    app.tasks.push(task)
+    store.save(app.tasks, "tasks")
+    app.closeModal()
+    app.showToast("Task created! 📝", "success")
+    tasks()
+    if (this.currentScreen === "home") home()
+  },
+  /**
+   * Muestra el modal para editar una tarea existente
+   * @param {string} taskId - ID de la tarea a editar
+   * @returns {void}
+   */
+  showEditTaskModal(taskId) {
+    const task = app.tasks.find((t) => t.id === taskId)
+    if (!task) return
+
+    // Contenido del modal para editar la tarea
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Edit Task</h3>
+                <form onsubmit="app.updateTask(event, '${taskId}')">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <input type="text" name="title" required value="${escapeHtml(
+                              task.title
+                            )}"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <textarea name="description" rows="3"
+                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">${escapeHtml(
+                                        task.description
+                                      )}</textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Due Date</label>
+                                <input type="date" name="dueDate" value="${
+                                  task.dueDate
+                                }"
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Priority</label>
+                                <select name="priority"
+                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                    <option value="low" ${
+                                      task.priority === "low" ? "selected" : ""
+                                    }>Low</option>
+                                    <option value="medium" ${
+                                      task.priority === "medium"
+                                        ? "selected"
+                                        : ""
+                                    }>Medium</option>
+                                    <option value="high" ${
+                                      task.priority === "high" ? "selected" : ""
+                                    }>High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <input type="text" name="tags" value="${task.tags.join(
+                              ", "
+                            )}"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Subtasks</label>
+                            <div id="subtasks-list" class="space-y-2 mb-2">
+                                ${task.subtasks
+                                  .map(
+                                    (st, idx) => `
+                                    <div class="flex gap-2">
+                                        <input type="text" value="${escapeHtml(
+                                          st.text
+                                        )}"
+                                               data-subtask-id="${st.id}"
+                                               class="subtask-input flex-1 px-3 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                        <button type="button" onclick="this.parentElement.remove()"
+                                                class="px-3 py-2 bg-xp-danger/20 text-xp-danger rounded-lg hover:bg-xp-danger/30">✕</button>
+                                    </div>
+                                `
+                                  )
+                                  .join("")}
+                            </div>
+                            <button type="button" onclick="app.addSubtaskInput()"
+                                    class="text-sm px-3 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30">
+                                + Add Subtask
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Update Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    app.showModal(modalContent)
+  },
+  /**
+   * Agrega un nuevo campo de entrada para subtareas en el formulario de edición de tareas
+   * @return {void}
+   */
+  addSubtaskInput() {
+    const list = document.getElementById("subtasks-list")
+    const div = document.createElement("div")
+    div.className = "flex gap-2"
+    // Agregar el nuevo campo de entrada para la subtarea
+    div.innerHTML = `
+            <input type="text" placeholder="Subtask..."
+                   class="subtask-input flex-1 px-3 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+            <button type="button" onclick="this.parentElement.remove()"
+                    class="px-3 py-2 bg-xp-danger/20 text-xp-danger rounded-lg hover:bg-xp-danger/30">✕</button>
+        `
+    list.appendChild(div)
+  },
+  /**
+   * Función para actualizar una tarea existente
+   *
+   * Esta función recupera los datos del formulario (título, descripción, etc.),
+   * los aplica a la tarea correspondiente identificada por `taskId`,
+   * guarda los cambios en el almacenamiento local y actualiza la interfaz.
+   *
+   * @param {Event} event - El evento `submit` del formulario HTML.
+   * @param {string} taskId - El identificador único de la tarea a actualizar.
+   * @return {void}
+   */
+  updateTask(event, taskId) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const task = app.tasks.find((t) => t.id === taskId)
+
+    if (task) {
+      // Actualizar campos de la tarea
+      task.title = formData.get("title")
+      task.description = formData.get("description") || ""
+      task.dueDate = formData.get("dueDate") || ""
+      task.priority = formData.get("priority")
+      task.tags = formData.get("tags")
+        ? formData
+            .get("tags")
+            .split(",")
+            .map((t) => t.trim())
+            .filter((t) => t)
+        : []
+
+      // Actualizar subtareas
+      const subtaskInputs = document.querySelectorAll(".subtask-input")
+      task.subtasks = Array.from(subtaskInputs)
+        .map((input) => ({
+          id: input.dataset.subtaskId || generateId(),
+          text: input.value,
+          done:
+            task.subtasks.find((st) => st.id === input.dataset.subtaskId)
+              ?.done || false
+        }))
+        .filter((st) => st.text.trim())
+
+      store.save(app.tasks, "tasks")
+      app.closeModal()
+      app.showToast("Task updated! ✓", "success")
+      tasks()
+    }
+  },
+  /**
+   * Función para eliminar una tarea por su ID
+   * @param {string} taskId - ID de la tarea a eliminar
+   * @return {void}
+   */
+  deleteTask(taskId) {
+    const index = app.tasks.findIndex((t) => t.id === taskId)
+    if (index !== -1) {
+      const deleted = app.tasks.splice(index, 1)[0]
+      store.save(app.tasks, "tasks")
+      tasks()
+      // Mostrar opción de deshacer
+      app.showUndoToast(`Deleted "${deleted.title}"`, () => {
+        app.tasks.splice(index, 0, deleted)
+        store.save(app.tasks, "tasks")
+        tasks()
+      })
+    }
+  },
+  /**
    * Alterna el estado de una tarea
    * @param {string} taskId - ID de la tarea a alternar
    * @returns {void}
@@ -1914,6 +1747,318 @@ const app = {
    * @type {Array<Habit>}
    */
   habits: [],
+  /**
+   * Crea un hábito a partir de una plantilla predefinida
+   * @param {number} templateIndex - Índice de la plantilla a usar
+   * @returns {void}
+   */
+  createHabitFromTemplate(templateIndex) {
+    const templates = [
+      {
+        title: "🌅 Wake without snooze",
+        description: "Wake up at target time without hitting snooze",
+        color: "#00ff88"
+      },
+      {
+        title: "💧 Hydrate (500ml water)",
+        description: "Drink 500ml water with lemon immediately after waking",
+        color: "#0099ff"
+      },
+      {
+        title: "🧘 Stoic meditation (10 min)",
+        description: "Morning meditation and journaling",
+        color: "#9333ea"
+      },
+      {
+        title: "🏃 Mobility routine",
+        description: "15-20 minutes of stretching and calisthenics",
+        color: "#f59e0b"
+      },
+      {
+        title: "⭐ Define 3 MITs",
+        description: "Plan the 3 most important tasks during breakfast",
+        color: "#00ff88"
+      },
+      {
+        title: "🎯 Complete first deep work block",
+        description: "60-minute focused work session",
+        color: "#ef4444"
+      },
+      {
+        title: "📚 Learning block (30-45 min)",
+        description: "Dedicated time for learning new skills",
+        color: "#8b5cf6"
+      },
+      {
+        title: "📝 End of day review",
+        description: "Review accomplishments and plan tomorrow",
+        color: "#10b981"
+      },
+      {
+        title: "🌙 Digital sunset (6 PM)",
+        description: "Disconnect from screens by 6 PM",
+        color: "#f97316"
+      },
+      {
+        title: "😴 Sleep prep by 9 PM",
+        description: "Begin sleep routine, target sleep by 11 PM",
+        color: "#06b6d4"
+      }
+    ]
+
+    const template = templates[templateIndex]
+
+    const habit = {
+      id: generateId(),
+      title: template.title,
+      description: template.description,
+      schedule: "daily",
+      dailyRecords: {},
+      streak: 0,
+      color: template.color
+    }
+
+    app.habits.push(habit)
+    store.save(app.habits, "habits")
+    // Google Analytics event
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: "habit_create_template",
+        habit_id: habit.id,
+        habit_title: habit.title,
+        template_index: templateIndex
+      })
+    }
+    app.closeModal()
+    app.showToast("Habit added! 🎯", "success")
+    habits()
+  },
+  /**
+   * Crea un hábito personalizado a partir de un formulario
+   * @param {Event} event - Evento del formulario
+   * @returns {void}
+   */
+  createCustomHabit(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+
+    const habit = {
+      id: generateId(),
+      title: formData.get("title"),
+      description: formData.get("description") || "",
+      schedule: "daily",
+      dailyRecords: {},
+      streak: 0,
+      color: "#00ff88"
+    }
+
+    app.habits.push(habit)
+    store.save(app.habits, "habits")
+    // Google Analytics event
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: "habit_create_custom",
+        habit_id: habit.id,
+        habit_title: habit.title
+      })
+    }
+    app.closeModal()
+    app.showToast("Custom habit created! 🎯", "success")
+    habits()
+  },
+  /**
+   * Muestra el modal para agregar un nuevo hábito
+   * @returns {void}
+   */
+  showHabitTemplatesModal() {
+    const templates = [
+      {
+        title: "🌅 Wake without snooze",
+        description: "Wake up at target time without hitting snooze"
+      },
+      {
+        title: "💧 Hydrate (500ml water)",
+        description: "Drink 500ml water with lemon immediately after waking"
+      },
+      {
+        title: "🧘 Stoic meditation (10 min)",
+        description: "Morning meditation and journaling"
+      },
+      {
+        title: "🏃 Mobility routine",
+        description: "15-20 minutes of stretching and calisthenics"
+      },
+      {
+        title: "⭐ Define 3 MITs",
+        description: "Plan the 3 most important tasks during breakfast"
+      },
+      {
+        title: "🎯 Complete first deep work block",
+        description: "60-minute focused work session"
+      },
+      {
+        title: "📚 Learning block (30-45 min)",
+        description: "Dedicated time for learning new skills"
+      },
+      {
+        title: "📝 End of day review",
+        description: "Review accomplishments and plan tomorrow"
+      },
+      {
+        title: "🌙 Digital sunset (6 PM)",
+        description: "Disconnect from screens by 6 PM"
+      },
+      {
+        title: "😴 Sleep prep by 9 PM",
+        description: "Begin sleep routine, target sleep by 11 PM"
+      }
+    ]
+
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Add Habit</h3>
+
+                <div class="mb-6">
+                    <h4 class="font-semibold mb-3">Programmer Routine Templates</h4>
+                    <div class="space-y-2 max-h-96 overflow-y-auto">
+                        ${templates
+                          .map(
+                            (template, idx) => `
+                            <button onclick="app.createHabitFromTemplate(${idx})"
+                                    class="w-full text-left p-4 bg-gray-50 dark:bg-xp-darker rounded-lg hover:bg-xp-primary/10 transition-colors">
+                                <div class="font-semibold">${escapeHtml(
+                                  template.title
+                                )}</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">${escapeHtml(
+                                  template.description
+                                )}</div>
+                            </button>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                    <h4 class="font-semibold mb-3">Or create custom habit</h4>
+                    <form onsubmit="app.createCustomHabit(event)">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Title *</label>
+                                <input type="text" name="title" required
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                       placeholder="e.g., Morning run">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Description</label>
+                                <input type="text" name="description"
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                       placeholder="Brief description...">
+                            </div>
+                        </div>
+                        <div class="flex gap-3 mt-6">
+                            <button type="button" onclick="app.closeModal()"
+                                    class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                                Create Habit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `
+
+    app.showModal(modalContent)
+  },
+  /**
+   * Elimina un hábito por su ID
+   * @param {string} habitId - ID del hábito a eliminar
+   * @returns {void}
+   */
+  deleteHabit(habitId) {
+    const index = app.habits.findIndex((h) => h.id === habitId)
+    if (index !== -1) {
+      const deleted = app.habits.splice(index, 1)[0]
+      store.save(app.habits, "habits")
+      habits()
+      // Google Analytics event
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: "habit_delete",
+          habit_id: habitId,
+          habit_title: deleted.title
+        })
+      }
+      app.showUndoToast(`Deleted "${deleted.title}"`, () => {
+        app.habits.splice(index, 0, deleted)
+        store.save(app.habits, "habits")
+        habits()
+      })
+    }
+  },
+  /**
+   * Alterna el estado de un hábito para hoy
+   * @param {string} habitId - ID del hábito a alternar
+   * @returns {void}
+   */
+  toggleHabit(habitId) {
+    const habit = app.habits.find((h) => h.id === habitId)
+    if (!habit) return
+
+    const todayStr = formatDate(new Date())
+    const wasDone = habit.dailyRecords[todayStr]
+
+    habit.dailyRecords[todayStr] = !wasDone
+
+    if (!wasDone) {
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      const yesterdayStr = formatDate(yesterday)
+
+      if (habit.dailyRecords[yesterdayStr] || habit.streak === 0) {
+        habit.streak = (habit.streak || 0) + 1
+      } else {
+        habit.streak = 1
+      }
+    } else {
+      habit.streak = Math.max(0, habit.streak - 1)
+    }
+
+    store.save(app.habits, "habits")
+    app.showToast(
+      wasDone ? "Habit unchecked" : "Habit completed! +10 XP 🎉",
+      "success"
+    )
+
+    // Google Analytics event
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: "habit_toggle",
+        habit_id: habitId,
+        habit_title: habit.title,
+        status: habit.dailyRecords[todayStr] ? "completed" : "unchecked"
+      })
+    }
+
+    const totalHabits = app.habits.length
+    const completedHabitsToday = app.habits.filter(
+      (h) => h.dailyRecords[todayStr]
+    ).length
+
+    console.log(
+      `Habits completed today: ${completedHabitsToday} / ${totalHabits}`
+    )
+
+    if (totalHabits === completedHabitsToday && totalHabits > 0) {
+      launchConfetti()
+    }
+
+    habits()
+    if (currentScreen === "home") home()
+  },
   /**
    * Cuenta de visitas y lanzamiento de confeti cada 10 visitas
    * @returns {void}
@@ -2289,6 +2434,372 @@ const app = {
         budgets()
       }
     }
+  },
+  /**
+   * Estado inicial de las notas
+   * @type {Array<Note>}
+   */
+  notes: [],
+  /**
+   * Busca notas que coincidan con la consulta
+   * @param {string} query - Consulta de búsqueda
+   * @returns {void}
+   */
+  searchNotes(query) {
+    if (!query.trim()) {
+      notes()
+      return
+    }
+
+    // Filtrar notas que coincidan con el título, contenido o etiquetas
+    const filtered = app.notes.filter(
+      (note) =>
+        note.title.toLowerCase().includes(query.toLowerCase()) ||
+        note.bodyMarkdown.toLowerCase().includes(query.toLowerCase()) ||
+        note.tags.some((tag) => tag.toLowerCase().includes(query.toLowerCase()))
+    )
+
+    const notesHtml = filtered
+      .map(
+        (note) => `
+            <div class="bg-white dark:bg-xp-card rounded-xl p-5 border-2 border-gray-200 dark:border-xp-primary/20 hover:border-xp-primary/40 transition-colors cursor-pointer"
+                 onclick="app.showNoteModal('${note.id}')">
+                <h4 class="font-bold text-lg mb-2">${escapeHtml(
+                  note.title
+                )}</h4>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3">
+                    ${escapeHtml(note.bodyMarkdown.substring(0, 100))}${
+          note.bodyMarkdown.length > 100 ? "..." : ""
+        }
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex gap-1 flex-wrap">
+                        ${note.tags
+                          .map(
+                            (tag) =>
+                              `<span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-500 rounded">${tag}</span>`
+                          )
+                          .join("")}
+                    </div>
+                    <div class="text-xs text-gray-500">${getRelativeTime(
+                      note.updatedAt
+                    )}</div>
+                </div>
+            </div>
+        `
+      )
+      .join("")
+
+    document.getElementById("notes-list").innerHTML =
+      notesHtml ||
+      '<div class="col-span-full text-center text-gray-500 dark:text-gray-400 py-12">No notes found</div>'
+  },
+  /**
+   * Muestra el modal para crear una nueva nota
+   * @returns {void}
+   */
+  showCreateNoteModal() {
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Create New Note</h3>
+                <form onsubmit="app.createNote(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <input type="text" name="title" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="Note title...">
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block text-sm font-semibold">Content (Markdown)</label>
+                                <button type="button" onclick="app.toggleNotePreview()" id="preview-toggle-btn"
+                                        class="text-xs px-3 py-1 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30">
+                                    Preview
+                                </button>
+                            </div>
+                            <textarea name="body" id="note-editor" rows="12"
+                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary font-mono text-sm"
+                                      placeholder="# Write your note in markdown..."></textarea>
+                            <div id="note-preview" class="hidden w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker min-h-[300px]">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <input type="text" name="tags"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="ideas, work, personal">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Create Note
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  /**
+   * Crea una nueva nota a partir del formulario
+   * @param {Event} event - Evento del formulario
+   * @returns {void}
+   */
+  createNote(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+
+    const note = {
+      id: generateId(),
+      title: formData.get("title"),
+      bodyMarkdown: formData.get("body") || "",
+      tags: formData.get("tags")
+        ? formData
+            .get("tags")
+            .split(",")
+            .map((t) => t.trim())
+            .filter((t) => t)
+        : [],
+      updatedAt: Date.now()
+    }
+
+    app.notes.push(note)
+    store.save(app.notes, "notes")
+    this.closeModal()
+    this.showToast("Note created! 📝", "success")
+    notes()
+  },
+  /**
+   * Muestra el modal para ver/editar una nota
+   * @param {string} noteId - ID de la nota
+   * @returns {void}
+   */
+  showNoteModal(noteId) {
+    const note = app.notes.find((n) => n.id === noteId)
+    if (!note) return
+
+    const modalContent = `
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-2xl font-bold">View/Edit Note</h3>
+                    <button onclick="app.deleteNote('${noteId}')"
+                            class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
+                        Delete
+                    </button>
+                </div>
+                <form onsubmit="app.updateNote(event, '${noteId}')">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <input type="text" name="title" required value="${escapeHtml(
+                              note.title
+                            )}"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block text-sm font-semibold">Content (Markdown)</label>
+                                <button type="button" onclick="app.toggleNotePreview()" id="preview-toggle-btn"
+                                        class="text-xs px-3 py-1 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30">
+                                    Preview
+                                </button>
+                            </div>
+                            <textarea name="body" id="note-editor" rows="12"
+                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary font-mono text-sm">${escapeHtml(
+                                        note.bodyMarkdown
+                                      )}</textarea>
+                            <div id="note-preview" class="hidden w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker min-h-[300px] overflow-y-auto">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <input type="text" name="tags" value="${note.tags.join(
+                              ", "
+                            )}"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Close
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Update Note
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  /**
+   * Alterna entre el modo editor y vista previa de la nota
+   * @returns {void}
+   */
+  toggleNotePreview() {
+    const editor = document.getElementById("note-editor")
+    const preview = document.getElementById("note-preview")
+    const toggleBtn = document.getElementById("preview-toggle-btn")
+
+    if (editor.classList.contains("hidden")) {
+      // Cambiar al modo editor
+      editor.classList.remove("hidden")
+      preview.classList.add("hidden")
+      toggleBtn.textContent = "Preview"
+    } else {
+      // Cambiar al modo vista previa
+      const markdown = editor.value
+      preview.innerHTML = this.parseMarkdown(markdown)
+      editor.classList.add("hidden")
+      preview.classList.remove("hidden")
+      toggleBtn.textContent = "Edit"
+    }
+  },
+  /**
+   * Actualiza una nota existente
+   * @param {Event} event - Evento del formulario
+   * @param {string} noteId - ID de la nota
+   * @returns {void}
+   */
+  updateNote(event, noteId) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const note = app.notes.find((n) => n.id === noteId)
+    if (note) {
+      note.title = formData.get("title")
+      note.bodyMarkdown = formData.get("body") || ""
+      note.tags = formData.get("tags")
+        ? formData
+            .get("tags")
+            .split(",")
+            .map((t) => t.trim())
+            .filter((t) => t)
+        : []
+      note.updatedAt = Date.now()
+
+      store.save(app.notes, "notes")
+      this.closeModal()
+      this.showToast("Note updated! ✓", "success")
+      notes()
+    }
+  },
+  /**
+   * Elimina una nota
+   * @param {string} noteId - ID de la nota
+   * @returns {void}
+   */
+  deleteNote(noteId) {
+    const index = app.notes.findIndex((n) => n.id === noteId)
+    if (index !== -1) {
+      const deleted = app.notes.splice(index, 1)[0]
+      store.save(app.notes, "notes")
+      this.closeModal()
+      notes()
+      this.showUndoToast(`Deleted "${deleted.title}"`, () => {
+        app.notes.splice(index, 0, deleted)
+        store.save(app.notes, "notes")
+        notes()
+      })
+    }
+  },
+  /**
+   * Parsea markdown básico a HTML
+   * @param {string} markdown - Texto en formato markdown
+   * @returns {string} - Texto convertido a HTML
+   */
+  parseMarkdown(markdown) {
+    let html = markdown
+
+    // Bloques de código (debe ser antes del código en línea)
+    html = html.replace(/```([a-z]*)\n([\s\S]*?)```/g, (match, lang, code) => {
+      return `<pre class="bg-gray-100 dark:bg-xp-darker p-4 rounded-lg my-4 overflow-x-auto"><code class="text-sm font-mono">${escapeHtml(
+        code.trim()
+      )}</code></pre>`
+    })
+
+    // Encabezados
+    html = html.replace(
+      /^### (.*$)/gim,
+      '<h3 class="text-xl font-bold mt-6 mb-3">$1</h3>'
+    )
+    html = html.replace(
+      /^## (.*$)/gim,
+      '<h2 class="text-2xl font-bold mt-6 mb-4">$1</h2>'
+    )
+    html = html.replace(
+      /^# (.*$)/gim,
+      '<h1 class="text-3xl font-bold mt-6 mb-4">$1</h1>'
+    )
+
+    // Negrita
+    html = html.replace(
+      /\*\*(.*?)\*\*/g,
+      '<strong class="font-bold">$1</strong>'
+    )
+
+    // Cursiva
+    html = html.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
+
+    // Código en línea
+    html = html.replace(
+      /`([^`]+)`/g,
+      '<code class="bg-gray-100 dark:bg-xp-darker px-2 py-1 rounded text-sm font-mono text-xp-primary">$1</code>'
+    )
+
+    // Listas desordenadas
+    html = html.replace(/^\- (.*)$/gim, '<li class="ml-6">• $1</li>')
+    html = html.replace(
+      /(<li class="ml-6">[\s\S]*<\/li>)/g,
+      '<ul class="my-3">$1</ul>'
+    )
+
+    // Horizontal rules
+    html = html.replace(/^\s*---\s*$/gim, '<hr class="my-6 border-gray-300"/>')
+
+    // Párrafos
+    html = html
+      .split("\n\n")
+      .map((para) => {
+        if (
+          para.startsWith("<h") ||
+          para.startsWith("<ul") ||
+          para.startsWith("<pre")
+        ) {
+          return para
+        }
+        return `<p class="my-3 leading-relaxed">${para}</p>`
+      })
+      .join("\n")
+
+    // Imágenes
+    html = html.replace(
+      /!\[([^\]]*)\]\((https?:\/\/[^\s)]+\.(?:jpe?g|png|webp|gif))\)/gi,
+      '<img src="$2" alt="$1" class="my-4 rounded-lg max-w-full"/>'
+    )
+
+    // Enlaces
+    html = html.replace(
+      /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" class="text-xp-primary hover:underline" target="_blank" rel="noopener noreferrer">$1</a>'
+    )
+
+    // Espacios múltiples
+    html = html.replace(/ {2,}/g, (match) => "&nbsp;".repeat(match.length))
+
+    // Salto de lineas
+    html = html.replace(/\n/g, "<br>")
+
+    return html
   },
   /**
    * Muestra el modal con el contenido especificado
