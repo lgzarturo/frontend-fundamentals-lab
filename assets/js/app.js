@@ -346,7 +346,7 @@ function home() {
       return `
                 <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
                     <div class="flex items-center gap-3 flex-1">
-                        <button onclick="toggleHabit('${habit.id}')"
+                        <button onclick="app.toggleHabit('${habit.id}')"
                                 class="w-8 h-8 rounded-full border-2 ${
                                   isDone
                                     ? "bg-xp-primary border-xp-primary"
@@ -680,14 +680,14 @@ function habits() {
                                 : ""
                             }
                         </div>
-                        <button onclick="deleteHabit('${habit.id}')"
+                        <button onclick="app.deleteHabit('${habit.id}')"
                                 class="px-3 py-1 text-xs bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
                             Delete
                         </button>
                     </div>
 
                     <div class="flex items-center gap-4 mb-4">
-                        <button onclick="toggleHabit('${habit.id}')"
+                        <button onclick="app.toggleHabit('${habit.id}')"
                                 class="flex items-center gap-3 px-6 py-3 rounded-lg ${
                                   isDoneToday
                                     ? "bg-xp-primary text-xp-darker"
@@ -756,323 +756,6 @@ function habits() {
   document.getElementById("habits-list").innerHTML =
     habitsHtml ||
     '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No habits yet. Add habits to start tracking! 🎯</div>'
-}
-
-/**
- * Crea un hábito a partir de una plantilla predefinida
- * @param {number} templateIndex - Índice de la plantilla a usar
- * @returns {void}
- */
-function createHabitFromTemplate(templateIndex) {
-  const templates = [
-    {
-      title: "🌅 Wake without snooze",
-      description: "Wake up at target time without hitting snooze",
-      color: "#00ff88"
-    },
-    {
-      title: "💧 Hydrate (500ml water)",
-      description: "Drink 500ml water with lemon immediately after waking",
-      color: "#0099ff"
-    },
-    {
-      title: "🧘 Stoic meditation (10 min)",
-      description: "Morning meditation and journaling",
-      color: "#9333ea"
-    },
-    {
-      title: "🏃 Mobility routine",
-      description: "15-20 minutes of stretching and calisthenics",
-      color: "#f59e0b"
-    },
-    {
-      title: "⭐ Define 3 MITs",
-      description: "Plan the 3 most important tasks during breakfast",
-      color: "#00ff88"
-    },
-    {
-      title: "🎯 Complete first deep work block",
-      description: "60-minute focused work session",
-      color: "#ef4444"
-    },
-    {
-      title: "📚 Learning block (30-45 min)",
-      description: "Dedicated time for learning new skills",
-      color: "#8b5cf6"
-    },
-    {
-      title: "📝 End of day review",
-      description: "Review accomplishments and plan tomorrow",
-      color: "#10b981"
-    },
-    {
-      title: "🌙 Digital sunset (6 PM)",
-      description: "Disconnect from screens by 6 PM",
-      color: "#f97316"
-    },
-    {
-      title: "😴 Sleep prep by 9 PM",
-      description: "Begin sleep routine, target sleep by 11 PM",
-      color: "#06b6d4"
-    }
-  ]
-
-  const template = templates[templateIndex]
-
-  const habit = {
-    id: generateId(),
-    title: template.title,
-    description: template.description,
-    schedule: "daily",
-    dailyRecords: {},
-    streak: 0,
-    color: template.color
-  }
-
-  app.habits.push(habit)
-  store.save(app.habits, "habits")
-  // Google Analytics event
-  if (window.dataLayer) {
-    window.dataLayer.push({
-      event: "habit_create_template",
-      habit_id: habit.id,
-      habit_title: habit.title,
-      template_index: templateIndex
-    })
-  }
-  app.closeModal()
-  app.showToast("Habit added! 🎯", "success")
-  habits()
-}
-
-/**
- * Crea un hábito personalizado a partir de un formulario
- * @param {Event} event - Evento del formulario
- * @returns {void}
- */
-function createCustomHabit(event) {
-  event.preventDefault()
-  const formData = new FormData(event.target)
-
-  const habit = {
-    id: generateId(),
-    title: formData.get("title"),
-    description: formData.get("description") || "",
-    schedule: "daily",
-    dailyRecords: {},
-    streak: 0,
-    color: "#00ff88"
-  }
-
-  app.habits.push(habit)
-  store.save(app.habits, "habits")
-  // Google Analytics event
-  if (window.dataLayer) {
-    window.dataLayer.push({
-      event: "habit_create_custom",
-      habit_id: habit.id,
-      habit_title: habit.title
-    })
-  }
-  app.closeModal()
-  app.showToast("Custom habit created! 🎯", "success")
-  habits()
-}
-
-/**
- * Muestra el modal para agregar un nuevo hábito
- * @returns {void}
- */
-function showHabitTemplatesModal() {
-  const templates = [
-    {
-      title: "🌅 Wake without snooze",
-      description: "Wake up at target time without hitting snooze"
-    },
-    {
-      title: "💧 Hydrate (500ml water)",
-      description: "Drink 500ml water with lemon immediately after waking"
-    },
-    {
-      title: "🧘 Stoic meditation (10 min)",
-      description: "Morning meditation and journaling"
-    },
-    {
-      title: "🏃 Mobility routine",
-      description: "15-20 minutes of stretching and calisthenics"
-    },
-    {
-      title: "⭐ Define 3 MITs",
-      description: "Plan the 3 most important tasks during breakfast"
-    },
-    {
-      title: "🎯 Complete first deep work block",
-      description: "60-minute focused work session"
-    },
-    {
-      title: "📚 Learning block (30-45 min)",
-      description: "Dedicated time for learning new skills"
-    },
-    {
-      title: "📝 End of day review",
-      description: "Review accomplishments and plan tomorrow"
-    },
-    {
-      title: "🌙 Digital sunset (6 PM)",
-      description: "Disconnect from screens by 6 PM"
-    },
-    {
-      title: "😴 Sleep prep by 9 PM",
-      description: "Begin sleep routine, target sleep by 11 PM"
-    }
-  ]
-
-  const modalContent = `
-            <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Add Habit</h3>
-
-                <div class="mb-6">
-                    <h4 class="font-semibold mb-3">Programmer Routine Templates</h4>
-                    <div class="space-y-2 max-h-96 overflow-y-auto">
-                        ${templates
-                          .map(
-                            (template, idx) => `
-                            <button onclick="createHabitFromTemplate(${idx})"
-                                    class="w-full text-left p-4 bg-gray-50 dark:bg-xp-darker rounded-lg hover:bg-xp-primary/10 transition-colors">
-                                <div class="font-semibold">${escapeHtml(
-                                  template.title
-                                )}</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400">${escapeHtml(
-                                  template.description
-                                )}</div>
-                            </button>
-                        `
-                          )
-                          .join("")}
-                    </div>
-                </div>
-
-                <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
-                    <h4 class="font-semibold mb-3">Or create custom habit</h4>
-                    <form onsubmit="createCustomHabit(event)">
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Title *</label>
-                                <input type="text" name="title" required
-                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                       placeholder="e.g., Morning run">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Description</label>
-                                <input type="text" name="description"
-                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                       placeholder="Brief description...">
-                            </div>
-                        </div>
-                        <div class="flex gap-3 mt-6">
-                            <button type="button" onclick="app.closeModal()"
-                                    class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                                Cancel
-                            </button>
-                            <button type="submit"
-                                    class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                                Create Habit
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        `
-
-  app.showModal(modalContent)
-}
-
-/**
- * Elimina un hábito por su ID
- * @param {string} habitId - ID del hábito a eliminar
- * @returns {void}
- */
-function deleteHabit(habitId) {
-  const index = app.habits.findIndex((h) => h.id === habitId)
-  if (index !== -1) {
-    const deleted = app.habits.splice(index, 1)[0]
-    store.save(app.habits, "habits")
-    habits()
-    // Google Analytics event
-    if (window.dataLayer) {
-      window.dataLayer.push({
-        event: "habit_delete",
-        habit_id: habitId,
-        habit_title: deleted.title
-      })
-    }
-    app.showUndoToast(`Deleted "${deleted.title}"`, () => {
-      app.habits.splice(index, 0, deleted)
-      store.save(app.habits, "habits")
-      habits()
-    })
-  }
-}
-
-/**
- * Alterna el estado de un hábito para hoy
- * @param {string} habitId - ID del hábito a alternar
- * @returns {void}
- */
-function toggleHabit(habitId) {
-  const habit = app.habits.find((h) => h.id === habitId)
-  if (!habit) return
-
-  const todayStr = formatDate(new Date())
-  const wasDone = habit.dailyRecords[todayStr]
-
-  habit.dailyRecords[todayStr] = !wasDone
-
-  if (!wasDone) {
-    const yesterday = new Date()
-    yesterday.setDate(yesterday.getDate() - 1)
-    const yesterdayStr = formatDate(yesterday)
-
-    if (habit.dailyRecords[yesterdayStr] || habit.streak === 0) {
-      habit.streak = (habit.streak || 0) + 1
-    } else {
-      habit.streak = 1
-    }
-  } else {
-    habit.streak = Math.max(0, habit.streak - 1)
-  }
-
-  store.save(app.habits, "habits")
-  app.showToast(
-    wasDone ? "Habit unchecked" : "Habit completed! +10 XP 🎉",
-    "success"
-  )
-
-  // Google Analytics event
-  if (window.dataLayer) {
-    window.dataLayer.push({
-      event: "habit_toggle",
-      habit_id: habitId,
-      habit_title: habit.title,
-      status: habit.dailyRecords[todayStr] ? "completed" : "unchecked"
-    })
-  }
-
-  const totalHabits = app.habits.length
-  const completedHabitsToday = app.habits.filter(
-    (h) => h.dailyRecords[todayStr]
-  ).length
-
-  console.log(
-    `Habits completed today: ${completedHabitsToday} / ${totalHabits}`
-  )
-
-  if (totalHabits === completedHabitsToday && totalHabits > 0) {
-    launchConfetti()
-  }
-
-  habits()
-  if (currentScreen === "home") home()
 }
 
 /**
@@ -2064,6 +1747,318 @@ const app = {
    * @type {Array<Habit>}
    */
   habits: [],
+  /**
+   * Crea un hábito a partir de una plantilla predefinida
+   * @param {number} templateIndex - Índice de la plantilla a usar
+   * @returns {void}
+   */
+  createHabitFromTemplate(templateIndex) {
+    const templates = [
+      {
+        title: "🌅 Wake without snooze",
+        description: "Wake up at target time without hitting snooze",
+        color: "#00ff88"
+      },
+      {
+        title: "💧 Hydrate (500ml water)",
+        description: "Drink 500ml water with lemon immediately after waking",
+        color: "#0099ff"
+      },
+      {
+        title: "🧘 Stoic meditation (10 min)",
+        description: "Morning meditation and journaling",
+        color: "#9333ea"
+      },
+      {
+        title: "🏃 Mobility routine",
+        description: "15-20 minutes of stretching and calisthenics",
+        color: "#f59e0b"
+      },
+      {
+        title: "⭐ Define 3 MITs",
+        description: "Plan the 3 most important tasks during breakfast",
+        color: "#00ff88"
+      },
+      {
+        title: "🎯 Complete first deep work block",
+        description: "60-minute focused work session",
+        color: "#ef4444"
+      },
+      {
+        title: "📚 Learning block (30-45 min)",
+        description: "Dedicated time for learning new skills",
+        color: "#8b5cf6"
+      },
+      {
+        title: "📝 End of day review",
+        description: "Review accomplishments and plan tomorrow",
+        color: "#10b981"
+      },
+      {
+        title: "🌙 Digital sunset (6 PM)",
+        description: "Disconnect from screens by 6 PM",
+        color: "#f97316"
+      },
+      {
+        title: "😴 Sleep prep by 9 PM",
+        description: "Begin sleep routine, target sleep by 11 PM",
+        color: "#06b6d4"
+      }
+    ]
+
+    const template = templates[templateIndex]
+
+    const habit = {
+      id: generateId(),
+      title: template.title,
+      description: template.description,
+      schedule: "daily",
+      dailyRecords: {},
+      streak: 0,
+      color: template.color
+    }
+
+    app.habits.push(habit)
+    store.save(app.habits, "habits")
+    // Google Analytics event
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: "habit_create_template",
+        habit_id: habit.id,
+        habit_title: habit.title,
+        template_index: templateIndex
+      })
+    }
+    app.closeModal()
+    app.showToast("Habit added! 🎯", "success")
+    habits()
+  },
+  /**
+   * Crea un hábito personalizado a partir de un formulario
+   * @param {Event} event - Evento del formulario
+   * @returns {void}
+   */
+  createCustomHabit(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+
+    const habit = {
+      id: generateId(),
+      title: formData.get("title"),
+      description: formData.get("description") || "",
+      schedule: "daily",
+      dailyRecords: {},
+      streak: 0,
+      color: "#00ff88"
+    }
+
+    app.habits.push(habit)
+    store.save(app.habits, "habits")
+    // Google Analytics event
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: "habit_create_custom",
+        habit_id: habit.id,
+        habit_title: habit.title
+      })
+    }
+    app.closeModal()
+    app.showToast("Custom habit created! 🎯", "success")
+    habits()
+  },
+  /**
+   * Muestra el modal para agregar un nuevo hábito
+   * @returns {void}
+   */
+  showHabitTemplatesModal() {
+    const templates = [
+      {
+        title: "🌅 Wake without snooze",
+        description: "Wake up at target time without hitting snooze"
+      },
+      {
+        title: "💧 Hydrate (500ml water)",
+        description: "Drink 500ml water with lemon immediately after waking"
+      },
+      {
+        title: "🧘 Stoic meditation (10 min)",
+        description: "Morning meditation and journaling"
+      },
+      {
+        title: "🏃 Mobility routine",
+        description: "15-20 minutes of stretching and calisthenics"
+      },
+      {
+        title: "⭐ Define 3 MITs",
+        description: "Plan the 3 most important tasks during breakfast"
+      },
+      {
+        title: "🎯 Complete first deep work block",
+        description: "60-minute focused work session"
+      },
+      {
+        title: "📚 Learning block (30-45 min)",
+        description: "Dedicated time for learning new skills"
+      },
+      {
+        title: "📝 End of day review",
+        description: "Review accomplishments and plan tomorrow"
+      },
+      {
+        title: "🌙 Digital sunset (6 PM)",
+        description: "Disconnect from screens by 6 PM"
+      },
+      {
+        title: "😴 Sleep prep by 9 PM",
+        description: "Begin sleep routine, target sleep by 11 PM"
+      }
+    ]
+
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Add Habit</h3>
+
+                <div class="mb-6">
+                    <h4 class="font-semibold mb-3">Programmer Routine Templates</h4>
+                    <div class="space-y-2 max-h-96 overflow-y-auto">
+                        ${templates
+                          .map(
+                            (template, idx) => `
+                            <button onclick="app.createHabitFromTemplate(${idx})"
+                                    class="w-full text-left p-4 bg-gray-50 dark:bg-xp-darker rounded-lg hover:bg-xp-primary/10 transition-colors">
+                                <div class="font-semibold">${escapeHtml(
+                                  template.title
+                                )}</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">${escapeHtml(
+                                  template.description
+                                )}</div>
+                            </button>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                    <h4 class="font-semibold mb-3">Or create custom habit</h4>
+                    <form onsubmit="app.createCustomHabit(event)">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Title *</label>
+                                <input type="text" name="title" required
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                       placeholder="e.g., Morning run">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Description</label>
+                                <input type="text" name="description"
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                       placeholder="Brief description...">
+                            </div>
+                        </div>
+                        <div class="flex gap-3 mt-6">
+                            <button type="button" onclick="app.closeModal()"
+                                    class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                                Create Habit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `
+
+    app.showModal(modalContent)
+  },
+  /**
+   * Elimina un hábito por su ID
+   * @param {string} habitId - ID del hábito a eliminar
+   * @returns {void}
+   */
+  deleteHabit(habitId) {
+    const index = app.habits.findIndex((h) => h.id === habitId)
+    if (index !== -1) {
+      const deleted = app.habits.splice(index, 1)[0]
+      store.save(app.habits, "habits")
+      habits()
+      // Google Analytics event
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: "habit_delete",
+          habit_id: habitId,
+          habit_title: deleted.title
+        })
+      }
+      app.showUndoToast(`Deleted "${deleted.title}"`, () => {
+        app.habits.splice(index, 0, deleted)
+        store.save(app.habits, "habits")
+        habits()
+      })
+    }
+  },
+  /**
+   * Alterna el estado de un hábito para hoy
+   * @param {string} habitId - ID del hábito a alternar
+   * @returns {void}
+   */
+  toggleHabit(habitId) {
+    const habit = app.habits.find((h) => h.id === habitId)
+    if (!habit) return
+
+    const todayStr = formatDate(new Date())
+    const wasDone = habit.dailyRecords[todayStr]
+
+    habit.dailyRecords[todayStr] = !wasDone
+
+    if (!wasDone) {
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      const yesterdayStr = formatDate(yesterday)
+
+      if (habit.dailyRecords[yesterdayStr] || habit.streak === 0) {
+        habit.streak = (habit.streak || 0) + 1
+      } else {
+        habit.streak = 1
+      }
+    } else {
+      habit.streak = Math.max(0, habit.streak - 1)
+    }
+
+    store.save(app.habits, "habits")
+    app.showToast(
+      wasDone ? "Habit unchecked" : "Habit completed! +10 XP 🎉",
+      "success"
+    )
+
+    // Google Analytics event
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: "habit_toggle",
+        habit_id: habitId,
+        habit_title: habit.title,
+        status: habit.dailyRecords[todayStr] ? "completed" : "unchecked"
+      })
+    }
+
+    const totalHabits = app.habits.length
+    const completedHabitsToday = app.habits.filter(
+      (h) => h.dailyRecords[todayStr]
+    ).length
+
+    console.log(
+      `Habits completed today: ${completedHabitsToday} / ${totalHabits}`
+    )
+
+    if (totalHabits === completedHabitsToday && totalHabits > 0) {
+      launchConfetti()
+    }
+
+    habits()
+    if (currentScreen === "home") home()
+  },
   /**
    * Cuenta de visitas y lanzamiento de confeti cada 10 visitas
    * @returns {void}
