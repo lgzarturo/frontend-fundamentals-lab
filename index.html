@@ -611,7 +611,7 @@
               <span>📝</span> Markdown Notes
             </h2>
             <button
-              onclick="app.showToast('Aún no esta implementado', 'error');"
+              onclick="app.showCreateNoteModal();"
               class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
             >
               + New Note
@@ -624,6 +624,7 @@
               type="text"
               id="notes-search"
               placeholder="🔍 Search notes..."
+              oninput="app.searchNotes(this.value)"
               class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-card focus:outline-none focus:border-xp-primary"
             />
           </div>
@@ -767,7 +768,7 @@
               write notes - all with an XP-inspired aesthetic.
             </p>
             <div class="text-sm text-gray-500 dark:text-gray-500">
-              Version 0.0.8 | Built with ❤️ and ☕ by
+              Version 0.0.11 | Built with ❤️ and ☕ by
               <a
                 href="https://www.lgzarturo.com"
                 target="_blank"
