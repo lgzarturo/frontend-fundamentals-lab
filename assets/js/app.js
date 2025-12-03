@@ -615,13 +615,13 @@ function tasks() {
                                 }
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="showEditTaskModal('${
+                                <button onclick="app.showEditTaskModal('${
                                   task.id
                                 }')"
                                         class="text-sm px-3 py-1 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded transition-colors">
                                     Edit
                                 </button>
-                                <button onclick="deleteTask('${task.id}')"
+                                <button onclick="app.deleteTask('${task.id}')"
                                         class="text-sm px-3 py-1 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded transition-colors">
                                     Delete
                                 </button>
@@ -637,330 +637,6 @@ function tasks() {
   document.getElementById("tasks-list").innerHTML =
     tasksHtml ||
     '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No tasks found. Create your first task! ✓</div>'
-}
-
-/**
- * Funcionalidad de filtrado de tareas
- * @param {string} filter - Filtro seleccionado: "all", "today", "high", "completed"
- * @returns {void}
- */
-function filterTasks(filter) {
-  currentFilter = filter
-
-  // Actualizar estilos de botones de filtro
-  document.querySelectorAll(".task-filter-btn").forEach((btn) => {
-    if (btn.dataset.filter === filter) {
-      btn.classList.add("bg-xp-primary", "text-xp-darker")
-      btn.classList.remove(
-        "bg-gray-200",
-        "dark:bg-xp-card",
-        "text-gray-700",
-        "dark:text-gray-300"
-      )
-    } else {
-      btn.classList.remove("bg-xp-primary", "text-xp-darker")
-      btn.classList.add(
-        "bg-gray-200",
-        "dark:bg-xp-card",
-        "text-gray-700",
-        "dark:text-gray-300"
-      )
-    }
-  })
-
-  tasks()
-}
-
-/**
- * Muestra el modal para crear una nueva tarea
- * @returns {void}
- */
-function showCreateTaskModal() {
-  const todayStr = formatDate(new Date())
-
-  // Contenido del modal para crear una nueva tarea
-  const modalContent = `
-            <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Create New Task</h3>
-                <form onsubmit="createTask(event)">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
-                            <input type="text" name="title" required
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="e.g., Complete feature implementation">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Description</label>
-                            <textarea name="description" rows="3"
-                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                      placeholder="Task details..."></textarea>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Due Date</label>
-                                <input type="date" name="dueDate" value="${todayStr}"
-                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Priority</label>
-                                <select name="priority"
-                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                                    <option value="low">Low</option>
-                                    <option value="medium" selected>Medium</option>
-                                    <option value="high">High</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
-                            <input type="text" name="tags"
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="coding, important, review">
-                        </div>
-                    </div>
-                    <div class="flex gap-3 mt-6">
-                        <button type="button" onclick="app.closeModal()"
-                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit"
-                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Create Task
-                        </button>
-                    </div>
-                </form>
-            </div>
-        `
-
-  app.showModal(modalContent)
-}
-
-/**
- * Agrega una nueva tarea basada en los datos del formulario
- * @param {Event} event - Evento del formulario
- * @returns {void}
- */
-function createTask(event) {
-  event.preventDefault()
-  const formData = new FormData(event.target)
-
-  // Crear el objeto de tarea
-  const task = {
-    id: generateId(),
-    title: formData.get("title"),
-    description: formData.get("description") || "",
-    dueDate: formData.get("dueDate") || "",
-    priority: formData.get("priority"),
-    tags: formData.get("tags")
-      ? formData
-          .get("tags")
-          .split(",")
-          .map((t) => t.trim())
-          .filter((t) => t)
-      : [],
-    subtasks: [],
-    done: false,
-    order: app.tasks.length + 1
-  }
-
-  app.tasks.push(task)
-  store.save(app.tasks, "tasks")
-  app.closeModal()
-  app.showToast("Task created! 📝", "success")
-  tasks()
-  if (this.currentScreen === "home") home()
-}
-
-/**
- * Muestra el modal para editar una tarea existente
- * @param {string} taskId - ID de la tarea a editar
- * @returns {void}
- */
-function showEditTaskModal(taskId) {
-  const task = app.tasks.find((t) => t.id === taskId)
-  if (!task) return
-
-  // Contenido del modal para editar la tarea
-  const modalContent = `
-            <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Edit Task</h3>
-                <form onsubmit="updateTask(event, '${taskId}')">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
-                            <input type="text" name="title" required value="${escapeHtml(
-                              task.title
-                            )}"
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Description</label>
-                            <textarea name="description" rows="3"
-                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">${escapeHtml(
-                                        task.description
-                                      )}</textarea>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Due Date</label>
-                                <input type="date" name="dueDate" value="${
-                                  task.dueDate
-                                }"
-                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Priority</label>
-                                <select name="priority"
-                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                                    <option value="low" ${
-                                      task.priority === "low" ? "selected" : ""
-                                    }>Low</option>
-                                    <option value="medium" ${
-                                      task.priority === "medium"
-                                        ? "selected"
-                                        : ""
-                                    }>Medium</option>
-                                    <option value="high" ${
-                                      task.priority === "high" ? "selected" : ""
-                                    }>High</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
-                            <input type="text" name="tags" value="${task.tags.join(
-                              ", "
-                            )}"
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">Subtasks</label>
-                            <div id="subtasks-list" class="space-y-2 mb-2">
-                                ${task.subtasks
-                                  .map(
-                                    (st, idx) => `
-                                    <div class="flex gap-2">
-                                        <input type="text" value="${escapeHtml(
-                                          st.text
-                                        )}"
-                                               data-subtask-id="${st.id}"
-                                               class="subtask-input flex-1 px-3 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                                        <button type="button" onclick="this.parentElement.remove()"
-                                                class="px-3 py-2 bg-xp-danger/20 text-xp-danger rounded-lg hover:bg-xp-danger/30">✕</button>
-                                    </div>
-                                `
-                                  )
-                                  .join("")}
-                            </div>
-                            <button type="button" onclick="addSubtaskInput()"
-                                    class="text-sm px-3 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30">
-                                + Add Subtask
-                            </button>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 mt-6">
-                        <button type="button" onclick="app.closeModal()"
-                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit"
-                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Update Task
-                        </button>
-                    </div>
-                </form>
-            </div>
-        `
-
-  app.showModal(modalContent)
-}
-
-/**
- * Agrega un nuevo campo de entrada para subtareas en el formulario de edición de tareas
- * @return {void}
- */
-function addSubtaskInput() {
-  const list = document.getElementById("subtasks-list")
-  const div = document.createElement("div")
-  div.className = "flex gap-2"
-  // Agregar el nuevo campo de entrada para la subtarea
-  div.innerHTML = `
-            <input type="text" placeholder="Subtask..."
-                   class="subtask-input flex-1 px-3 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-            <button type="button" onclick="this.parentElement.remove()"
-                    class="px-3 py-2 bg-xp-danger/20 text-xp-danger rounded-lg hover:bg-xp-danger/30">✕</button>
-        `
-  list.appendChild(div)
-}
-
-/**
- * Función para actualizar una tarea existente
- *
- * Esta función recupera los datos del formulario (título, descripción, etc.),
- * los aplica a la tarea correspondiente identificada por `taskId`,
- * guarda los cambios en el almacenamiento local y actualiza la interfaz.
- *
- * @param {Event} event - El evento `submit` del formulario HTML.
- * @param {string} taskId - El identificador único de la tarea a actualizar.
- * @return {void}
- */
-function updateTask(event, taskId) {
-  event.preventDefault()
-  const formData = new FormData(event.target)
-  const task = app.tasks.find((t) => t.id === taskId)
-
-  if (task) {
-    // Actualizar campos de la tarea
-    task.title = formData.get("title")
-    task.description = formData.get("description") || ""
-    task.dueDate = formData.get("dueDate") || ""
-    task.priority = formData.get("priority")
-    task.tags = formData.get("tags")
-      ? formData
-          .get("tags")
-          .split(",")
-          .map((t) => t.trim())
-          .filter((t) => t)
-      : []
-
-    // Actualizar subtareas
-    const subtaskInputs = document.querySelectorAll(".subtask-input")
-    task.subtasks = Array.from(subtaskInputs)
-      .map((input) => ({
-        id: input.dataset.subtaskId || this.generateId(),
-        text: input.value,
-        done:
-          task.subtasks.find((st) => st.id === input.dataset.subtaskId)?.done ||
-          false
-      }))
-      .filter((st) => st.text.trim())
-
-    store.save(app.tasks, "tasks")
-    app.closeModal()
-    app.showToast("Task updated! ✓", "success")
-    tasks()
-  }
-}
-
-/**
- * Función para eliminar una tarea por su ID
- * @param {string} taskId - ID de la tarea a eliminar
- * @return {void}
- */
-function deleteTask(taskId) {
-  const index = app.tasks.findIndex((t) => t.id === taskId)
-  if (index !== -1) {
-    const deleted = app.tasks.splice(index, 1)[0]
-    store.save(app.tasks, "tasks")
-    tasks()
-    // Mostrar opción de deshacer
-    app.showUndoToast(`Deleted "${deleted.title}"`, () => {
-      app.tasks.splice(index, 0, deleted)
-      store.save(app.tasks, "tasks")
-      tasks()
-    })
-  }
 }
 
 /**
@@ -2032,6 +1708,323 @@ const app = {
    * @type {Array<Task>}
    */
   tasks: [],
+  /**
+   * Funcionalidad de filtrado de tareas
+   * @param {string} filter - Filtro seleccionado: "all", "today", "high", "completed"
+   * @returns {void}
+   */
+  filterTasks(filter) {
+    currentFilter = filter
+
+    // Actualizar estilos de botones de filtro
+    document.querySelectorAll(".task-filter-btn").forEach((btn) => {
+      if (btn.dataset.filter === filter) {
+        btn.classList.add("bg-xp-primary", "text-xp-darker")
+        btn.classList.remove(
+          "bg-gray-200",
+          "dark:bg-xp-card",
+          "text-gray-700",
+          "dark:text-gray-300"
+        )
+      } else {
+        btn.classList.remove("bg-xp-primary", "text-xp-darker")
+        btn.classList.add(
+          "bg-gray-200",
+          "dark:bg-xp-card",
+          "text-gray-700",
+          "dark:text-gray-300"
+        )
+      }
+    })
+
+    tasks()
+  },
+  /**
+   * Muestra el modal para crear una nueva tarea
+   * @returns {void}
+   */
+  showCreateTaskModal() {
+    const todayStr = formatDate(new Date())
+
+    // Contenido del modal para crear una nueva tarea
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Create New Task</h3>
+                <form onsubmit="app.createTask(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <input type="text" name="title" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="e.g., Complete feature implementation">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <textarea name="description" rows="3"
+                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                      placeholder="Task details..."></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Due Date</label>
+                                <input type="date" name="dueDate" value="${todayStr}"
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Priority</label>
+                                <select name="priority"
+                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <input type="text" name="tags"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="coding, important, review">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Create Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    app.showModal(modalContent)
+  },
+  /**
+   * Agrega una nueva tarea basada en los datos del formulario
+   * @param {Event} event - Evento del formulario
+   * @returns {void}
+   */
+  createTask(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+
+    // Crear el objeto de tarea
+    const task = {
+      id: generateId(),
+      title: formData.get("title"),
+      description: formData.get("description") || "",
+      dueDate: formData.get("dueDate") || "",
+      priority: formData.get("priority"),
+      tags: formData.get("tags")
+        ? formData
+            .get("tags")
+            .split(",")
+            .map((t) => t.trim())
+            .filter((t) => t)
+        : [],
+      subtasks: [],
+      done: false,
+      order: app.tasks.length + 1
+    }
+
+    app.tasks.push(task)
+    store.save(app.tasks, "tasks")
+    app.closeModal()
+    app.showToast("Task created! 📝", "success")
+    tasks()
+    if (this.currentScreen === "home") home()
+  },
+  /**
+   * Muestra el modal para editar una tarea existente
+   * @param {string} taskId - ID de la tarea a editar
+   * @returns {void}
+   */
+  showEditTaskModal(taskId) {
+    const task = app.tasks.find((t) => t.id === taskId)
+    if (!task) return
+
+    // Contenido del modal para editar la tarea
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Edit Task</h3>
+                <form onsubmit="app.updateTask(event, '${taskId}')">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <input type="text" name="title" required value="${escapeHtml(
+                              task.title
+                            )}"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <textarea name="description" rows="3"
+                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">${escapeHtml(
+                                        task.description
+                                      )}</textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Due Date</label>
+                                <input type="date" name="dueDate" value="${
+                                  task.dueDate
+                                }"
+                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Priority</label>
+                                <select name="priority"
+                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                    <option value="low" ${
+                                      task.priority === "low" ? "selected" : ""
+                                    }>Low</option>
+                                    <option value="medium" ${
+                                      task.priority === "medium"
+                                        ? "selected"
+                                        : ""
+                                    }>Medium</option>
+                                    <option value="high" ${
+                                      task.priority === "high" ? "selected" : ""
+                                    }>High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <input type="text" name="tags" value="${task.tags.join(
+                              ", "
+                            )}"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Subtasks</label>
+                            <div id="subtasks-list" class="space-y-2 mb-2">
+                                ${task.subtasks
+                                  .map(
+                                    (st, idx) => `
+                                    <div class="flex gap-2">
+                                        <input type="text" value="${escapeHtml(
+                                          st.text
+                                        )}"
+                                               data-subtask-id="${st.id}"
+                                               class="subtask-input flex-1 px-3 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                        <button type="button" onclick="this.parentElement.remove()"
+                                                class="px-3 py-2 bg-xp-danger/20 text-xp-danger rounded-lg hover:bg-xp-danger/30">✕</button>
+                                    </div>
+                                `
+                                  )
+                                  .join("")}
+                            </div>
+                            <button type="button" onclick="app.addSubtaskInput()"
+                                    class="text-sm px-3 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30">
+                                + Add Subtask
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="app.closeModal()"
+                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                            Update Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+        `
+
+    app.showModal(modalContent)
+  },
+  /**
+   * Agrega un nuevo campo de entrada para subtareas en el formulario de edición de tareas
+   * @return {void}
+   */
+  addSubtaskInput() {
+    const list = document.getElementById("subtasks-list")
+    const div = document.createElement("div")
+    div.className = "flex gap-2"
+    // Agregar el nuevo campo de entrada para la subtarea
+    div.innerHTML = `
+            <input type="text" placeholder="Subtask..."
+                   class="subtask-input flex-1 px-3 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+            <button type="button" onclick="this.parentElement.remove()"
+                    class="px-3 py-2 bg-xp-danger/20 text-xp-danger rounded-lg hover:bg-xp-danger/30">✕</button>
+        `
+    list.appendChild(div)
+  },
+  /**
+   * Función para actualizar una tarea existente
+   *
+   * Esta función recupera los datos del formulario (título, descripción, etc.),
+   * los aplica a la tarea correspondiente identificada por `taskId`,
+   * guarda los cambios en el almacenamiento local y actualiza la interfaz.
+   *
+   * @param {Event} event - El evento `submit` del formulario HTML.
+   * @param {string} taskId - El identificador único de la tarea a actualizar.
+   * @return {void}
+   */
+  updateTask(event, taskId) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const task = app.tasks.find((t) => t.id === taskId)
+
+    if (task) {
+      // Actualizar campos de la tarea
+      task.title = formData.get("title")
+      task.description = formData.get("description") || ""
+      task.dueDate = formData.get("dueDate") || ""
+      task.priority = formData.get("priority")
+      task.tags = formData.get("tags")
+        ? formData
+            .get("tags")
+            .split(",")
+            .map((t) => t.trim())
+            .filter((t) => t)
+        : []
+
+      // Actualizar subtareas
+      const subtaskInputs = document.querySelectorAll(".subtask-input")
+      task.subtasks = Array.from(subtaskInputs)
+        .map((input) => ({
+          id: input.dataset.subtaskId || generateId(),
+          text: input.value,
+          done:
+            task.subtasks.find((st) => st.id === input.dataset.subtaskId)
+              ?.done || false
+        }))
+        .filter((st) => st.text.trim())
+
+      store.save(app.tasks, "tasks")
+      app.closeModal()
+      app.showToast("Task updated! ✓", "success")
+      tasks()
+    }
+  },
+  /**
+   * Función para eliminar una tarea por su ID
+   * @param {string} taskId - ID de la tarea a eliminar
+   * @return {void}
+   */
+  deleteTask(taskId) {
+    const index = app.tasks.findIndex((t) => t.id === taskId)
+    if (index !== -1) {
+      const deleted = app.tasks.splice(index, 1)[0]
+      store.save(app.tasks, "tasks")
+      tasks()
+      // Mostrar opción de deshacer
+      app.showUndoToast(`Deleted "${deleted.title}"`, () => {
+        app.tasks.splice(index, 0, deleted)
+        store.save(app.tasks, "tasks")
+        tasks()
+      })
+    }
+  },
   /**
    * Alterna el estado de una tarea
    * @param {string} taskId - ID de la tarea a alternar
