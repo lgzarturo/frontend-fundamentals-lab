@@ -1,0 +1,32 @@
+{
+  "app": {
+    "name": "Productividad XP",
+    "tagline": "Mejora tu vida al máximo",
+    "menu": {
+      "home": "Inicio",
+      "tasks": "Tareas",
+      "budgets": "Presupuestos",
+      "notes": "Notas",
+      "habits": "Hábitos",
+      "settings": "Configuración"
+    },
+    "screens": {
+      "home": {
+        "title": "Panel",
+        "welcomeMessage": "¡Bienvenido de nuevo, {{username}}! 🎮",
+        "description": "¡Bienvenido a tu panel de productividad! Aquí puedes gestionar tus tareas, presupuestos, notas y hábitos, todo en un solo lugar.",
+        "hitCounter": "Contador de golpes: {{count}} golpes",
+        "quickAccess": {
+          "dayStreak": "Racha de días",
+          "tasksDone": "Tareas completadas",
+          "remaining": "Restantes",
+          "notes": "Notas"
+        },
+        "mits": {
+          "title": "MITs de hoy (Tareas Más Importantes)",
+          "noMits": "No hay tareas para hoy. ¡Crea algunos MITs! 🎯"
+        }
+      }
+    }
+  }
+}
