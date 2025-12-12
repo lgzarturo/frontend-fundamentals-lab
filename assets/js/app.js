@@ -284,60 +284,54 @@ function home() {
     })
     .slice(0, 3)
 
-  const mitsHtml =
-    mits.length > 0
-      ? mits
-          .map(
-            (task) => `
-            <div class="flex items-start gap-3 p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
-                <button onclick="app.toggleTask('${task.id}')"
-                    class="mt-1 w-6 h-6 rounded border-2 border-xp-primary flex items-center justify-center flex-shrink-0 hover:bg-xp-primary/20 transition-colors">
-                    ${
-                      task.done
-                        ? '<span class="text-xp-primary text-lg">✓</span>'
-                        : ""
-                    }
-                </button>
-                <div class="flex-1 min-w-0">
-                    <div class="font-semibold ${
-                      task.done ? "line-through opacity-60" : ""
-                    }">${escapeHtml(task.title)}</div>
-                    ${
-                      task.description
-                        ? `<div class="text-sm text-gray-600 dark:text-gray-400 mt-1">${escapeHtml(
-                            task.description
-                          )}</div>`
-                        : ""
-                    }
-                    ${
-                      task.tags.length > 0
-                        ? `
-                        <div class="flex gap-1 mt-2 flex-wrap">
-                            ${task.tags
-                              .map(
-                                (tag) =>
-                                  `<span class="text-xs px-2 py-1 bg-xp-primary/20 text-xp-primary rounded">${escapeHtml(
-                                    tag
-                                  )}</span>`
-                              )
-                              .join("")}
-                        </div>
-                    `
-                        : ""
-                    }
-                </div>
-                ${
-                  task.priority === "high"
-                    ? '<span class="text-xp-danger text-xl">⚡</span>'
-                    : ""
-                }
-            </div>
-        `
-          )
-          .join("")
-      : '<div class="text-gray-500 dark:text-gray-400 text-center py-8">No tasks for today. Create some MITs! 🎯</div>'
+  const mitsList = document.getElementById("home-mits-list")
+  mitsList.innerHTML = ""
 
-  document.getElementById("home-mits-list").innerHTML = mitsHtml
+  if (mits.length > 0) {
+    const template = document.getElementById("home-content-template")
+    mits.forEach((task) => {
+      const node = template.content.cloneNode(true)
+      // Submit action
+      const btn = node.querySelector("[data-done-button]")
+      btn.onclick = () => app.toggleTask(task.id)
+      // Título
+      node.querySelector("[data-title]").textContent = task.title
+      // Description
+      node.querySelector("[data-description]").textContent = task.description
+        ? task.description
+        : ""
+      // Tags
+      const tagsContainer = node.querySelector("[data-tags]")
+      tagsContainer.innerHTML = ""
+      if (task.tags.length > 0) {
+        const tagTemplate = document.getElementById("home-component-tag")
+        task.tags.forEach((tag) => {
+          const tagNode = tagTemplate.content.cloneNode(true)
+          tagNode.querySelector("[data-tag-name]").textContent = tag
+          tagsContainer.appendChild(tagNode)
+        })
+      }
+      // Prioridad
+      if (task.priority === "high") {
+        node.querySelector("[data-priority-icon]").textContent = "⚡"
+      }
+      // Estado completado
+      if (task.done) {
+        node.querySelector("data-done-icon").textContent = "✓"
+        node.querySelector("[data-done-button]").classList.add("bg-xp-primary")
+        node
+          .querySelector("[data-title]")
+          .classList.add("line-through", "opacity-60")
+      }
+      mitsList.appendChild(node)
+    })
+  } else {
+    const noContentTemplate = document.getElementById(
+      "home-no-content-template"
+    )
+    const noContentNode = noContentTemplate.content.cloneNode(true)
+    mitsList.appendChild(noContentNode)
+  }
 
   // Renderizar los hábitos en el inicio
   const habitsHtml = app.habits
@@ -405,8 +399,6 @@ function budgets() {
   document.getElementById(
     "budget-remaining"
   ).textContent = `$${remaining.toFixed(2)}`
-
-  console.log("presupuestos", app.budgets)
 
   const budgetsHtml = app.budgets
     .map((budget) => {
@@ -804,7 +796,7 @@ function notes() {
  * @returns {void}
  */
 function render() {
-  console.log("Renderizando la pantalla:", currentScreen)
+  console.debug("Renderizando la pantalla:", currentScreen)
   switch (currentScreen) {
     case "home":
       home()
@@ -1334,6 +1326,7 @@ const app = {
    */
   init: function () {
     // Al ejecutar por primera vez se deben de crear los datos iniciales.
+    this.loadTheme()
     store.init()
     store.load("tasks", "array")
     store.load("habits", "array")
@@ -1342,13 +1335,37 @@ const app = {
     this.visitCounter()
     this.navigateTo("home")
   },
+  loadTheme: function () {
+    //load theme from localStorage
+    console.debug("Cargando en local storage:", localStorage.getItem("theme"))
+    const theme = localStorage.getItem("theme") || "light"
+    console.debug("Cargando tema:", theme)
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark")
+    } else {
+      document.documentElement.classList.remove("dark")
+    }
+    // Set theme-toggle button state
+    const themeToggleBtn = document.getElementById("theme-toggle")
+    themeToggleBtn.checked = theme === "dark"
+    localStorage.setItem("theme", theme)
+    console.debug("Tema cargado:", theme)
+  },
+  toggleTheme: function () {
+    const currentTheme = localStorage.getItem("theme")
+    console.debug("Tema actual:", currentTheme)
+    const newTheme = currentTheme === "dark" ? "light" : "dark"
+    document.documentElement.classList.toggle("dark")
+    localStorage.setItem("theme", newTheme)
+    console.debug("Tema cambiado a:", newTheme)
+  },
   /**
    * Navega a la pantalla indicada y actualiza el estado visual
    * @param {string} screen - Pantalla destino
    * @returns {void}
    */
   navigateTo: function (screen) {
-    console.log("Navegando a la pantalla:", screen)
+    console.debug("Navegando a la pantalla:", screen)
     currentScreen = screen
     document
       .querySelectorAll(".screen")
@@ -2048,7 +2065,7 @@ const app = {
       (h) => h.dailyRecords[todayStr]
     ).length
 
-    console.log(
+    console.debug(
       `Habits completed today: ${completedHabitsToday} / ${totalHabits}`
     )
 
@@ -2215,7 +2232,6 @@ const app = {
    * @returns {void}
    */
   showBudgetDetails(budgetId) {
-    console.log("Mostrar detalles del presupuesto:", budgetId)
     const budget = app.budgets.find((b) => b.id === budgetId)
     if (!budget) return
 
@@ -2878,12 +2894,100 @@ const app = {
   }
 }
 
+const I18n = {
+  currentLanguage: "es", // Idioma por defecto
+  messages: {}, // Almacenará los mensajes cargados
+
+  async init(defaultLang = "es") {
+    // Detectar idioma del navegador si no hay uno guardado
+    const savedLang = localStorage.getItem("userLanguage")
+    this.currentLanguage =
+      savedLang || navigator.language.split("-")[0] || defaultLang
+        ? defaultLang
+        : "en"
+    // Asegurar que el idioma detectado esté disponible
+    if (!["es", "en"].includes(this.currentLanguage)) {
+      this.currentLanguage = defaultLang
+    }
+    console.log(`Idioma seleccionado: ${this.currentLanguage}`)
+    await this.loadMessages(this.currentLanguage)
+    this.applyTranslations() // Aplicar traducciones al HTML inicial
+  },
+
+  async loadMessages(lang) {
+    try {
+      const response = await fetch(`/assets/locales/${lang}.json`)
+      if (!response.ok) {
+        throw new Error(
+          `Error loading messages for ${lang}: ${response.status}`
+        )
+      }
+      this.messages = await response.json()
+    } catch (e) {
+      console.error("Failed to load i18n messages:", e)
+      // Cargar mensajes en el idioma por defecto si falla
+      if (lang !== "es") {
+        // Asumiendo 'es' como fallback
+        const response = await fetch(`/assets/locales/es.json`)
+        this.messages = await response.json()
+      }
+    }
+  },
+
+  setLanguage(lang) {
+    if (["es", "en"].includes(lang)) {
+      this.currentLanguage = lang
+      localStorage.setItem("userLanguage", lang)
+      this.loadMessages(lang).then(() => {
+        this.applyTranslations()
+        // Opcional: Volver a renderizar la pantalla actual si es necesario
+        app.init()
+      })
+    }
+  },
+
+  t(key, params = {}) {
+    // Obtiene el mensaje traducido por clave
+    // Soporta placeholders básicos: {nombre} -> params.nombre
+    let message = key.split(".").reduce((obj, k) => obj?.[k], this.messages)
+    if (message === undefined) {
+      console.warn(`Translation key not found: ${key}`)
+      return key // Devolver la clave si no se encuentra la traducción
+    }
+    if (params && typeof params === "object") {
+      Object.keys(params).forEach((param) => {
+        message = message.replace(new RegExp(`{${param}}`, "g"), params[param])
+      })
+    }
+    return message
+  },
+
+  applyTranslations() {
+    // Aplica traducciones a elementos con data-i18n
+    document.querySelectorAll("[data-i18n]").forEach((element) => {
+      const key = element.getAttribute("data-i18n")
+      const translation = this.t(key)
+      // Soporta data-i18n-attr para traducir atributos como placeholder
+      const attr = element.getAttribute("data-i18n-attr") || "textContent"
+      if (attr === "textContent") {
+        element.textContent = translation
+      } else {
+        element.setAttribute(attr, translation)
+      }
+    })
+    // Actualizar el lang del <html> para SEO y accesibilidad
+    document.getElementById("html-root").lang = this.currentLanguage
+  }
+}
+
 /**
  * Inicializa la app, modo oscuro y seguimiento de analíticas
  * @event window load - Se ejecuta cuando la página ha cargado completamente
  */
 window.addEventListener("load", () => {
-  app.init()
+  I18n.init().then(() => {
+    app.init()
+  })
   // Modo oscuro según preferencia del usuario o sistema
   document.documentElement.classList.toggle(
     "dark",
@@ -2892,10 +2996,7 @@ window.addEventListener("load", () => {
         window.matchMedia("(prefers-color-scheme: dark)").matches)
   )
   // Preferencias de tema (ejemplo, se puede mejorar)
-  localStorage.theme = "light"
-  localStorage.theme = "dark"
-  localStorage.removeItem("theme")
-  console.log("Página cargada. Iniciando seguimiento de analíticas...")
+  console.debug("Página cargada. Iniciando seguimiento de analíticas...")
   // Evento personalizado para Google Analytics 4 vía Tag Manager
   document.addEventListener("DOMContentLoaded", function () {
     // Medición de clics en enlaces para GA4

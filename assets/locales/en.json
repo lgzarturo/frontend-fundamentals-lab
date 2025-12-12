@@ -1,0 +1,32 @@
+{
+  "app": {
+    "name": "Productivity XP",
+    "tagline": "Level up your life",
+    "menu": {
+      "home": "Dashboard",
+      "tasks": "Tasks & Checklist",
+      "budgets": "Budget Manager",
+      "notes": "Markdown Notes",
+      "habits": "Habit Tracker",
+      "settings": "Settings"
+    },
+    "screens": {
+      "home": {
+        "title": "Dashboard",
+        "welcomeMessage": "Welcome back, {{username}}! 🎮",
+        "description": "Welcome to your productivity dashboard! Here you can manage your tasks, budgets, notes, and habits all in one place.",
+        "hitCounter": "Hit Counter: {{count}} hits",
+        "quickAccess": {
+          "dayStreak": "Day Streak",
+          "tasksDone": "Tasks Done",
+          "remaining": "Remaining",
+          "notes": "Notes"
+        },
+        "mits": {
+          "title": "Today's MITs (Most Important Tasks)",
+          "noMits": "No tasks for today. Create some MITs! 🎯"
+        }
+      }
+    }
+  }
+}

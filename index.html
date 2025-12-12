@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" id="html-root">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -298,10 +298,10 @@
     >
       <div class="p-6">
         <h1 class="text-2xl font-bold text-xp-primary flex items-center gap-2">
-          <span>⚡</span> Productivity XP
+          <span>⚡</span> <span data-i18n="app.name">Productivity XP</span>
         </h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Level up your life
+          <span data-i18n="app.tagline">Level up your life</span>
         </p>
       </div>
       <nav class="px-3">
@@ -310,35 +310,40 @@
           class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
           data-screen="home"
         >
-          <span class="text-xl mr-3">🏠</span> Dashboard
+          <span class="text-xl mr-3">🏠</span>
+          <span data-i18n="app.menu.home">Dashboard</span>
         </button>
         <button
           onclick="app.navigateTo('budgets')"
           class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
           data-screen="budgets"
         >
-          <span class="text-xl mr-3">💰</span> Budget Manager
+          <span class="text-xl mr-3">💰</span>
+          <span data-i18n="app.menu.budgets">Budget Manager</span>
         </button>
         <button
           onclick="app.navigateTo('tasks')"
           class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
           data-screen="tasks"
         >
-          <span class="text-xl mr-3">✓</span> Tasks & Checklist
+          <span class="text-xl mr-3">✓</span>
+          <span data-i18n="app.menu.tasks">Tasks & Checklist</span>
         </button>
         <button
           onclick="app.navigateTo('notes')"
           class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
           data-screen="notes"
         >
-          <span class="text-xl mr-3">📝</span> Markdown Notes
+          <span class="text-xl mr-3">📝</span>
+          <span data-i18n="app.menu.notes">Markdown Notes</span>
         </button>
         <button
           onclick="app.navigateTo('habits')"
           class="nav-btn w-full text-left px-4 py-3 rounded-lg mb-2 hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
           data-screen="habits"
         >
-          <span class="text-xl mr-3">🎯</span> Habit Tracker
+          <span class="text-xl mr-3">🎯</span>
+          <span data-i18n="app.menu.habits">Habit Tracker</span>
         </button>
         <div class="border-t border-gray-200 dark:border-gray-700 my-4"></div>
         <button
@@ -346,7 +351,8 @@
           class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 pixel-corners dark:hover:bg-xp-darker dark:hover:text-white transition-colors"
           data-screen="settings"
         >
-          <span class="text-xl mr-3">⚙️</span> Settings
+          <span class="text-xl mr-3">⚙️</span>
+          <span data-i18n="app.menu.settings">Settings</span>
         </button>
       </nav>
     </aside>
@@ -359,7 +365,7 @@
         class="md:hidden bg-white dark:bg-xp-card border-b-2 border-gray-200 dark:border-xp-primary/20 px-4 py-3 flex items-center justify-between sticky top-0 z-30"
       >
         <h1 class="text-xl font-bold text-xp-primary flex items-center gap-2">
-          <span>⚡</span> Productivity XP
+          <span>⚡</span> <span data-i18n="app.name">Productivity XP</span>
         </h1>
         <button
           onclick="app.navigateTo('settings')"
@@ -710,6 +716,38 @@
                 </div>
               </div>
             </div>
+            <div class="mt-4">
+              <label
+                for="theme-toggle"
+                class="inline-flex relative items-center cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  id="theme-toggle"
+                  class="sr-only peer"
+                  onchange="app.toggleTheme()"
+                />
+                <div
+                  class="w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full peer peer-focus:ring-4 peer-focus:ring-xp-primary/30 dark:peer-focus:ring-xp-primary/30 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
+                ></div>
+                <span
+                  class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >Enable Dark Mode</span
+                >
+              </label>
+            </div>
+
+            <h3 class="text-xl font-bold mt-6 mb-4">Language</h3>
+            <div class="mt-4">
+              <select
+                id="language-selector"
+                class="bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2"
+                title="Language/Idioma"
+              >
+                <option value="es">Español (ES)</option>
+                <option value="en">English (EN)</option>
+              </select>
+            </div>
           </div>
 
           <!-- Data Management -->
@@ -821,8 +859,61 @@
     </div>
     <!-- End: Undo Toast -->
 
+    <!-- Template Home -->
+    <template id="home-content-template">
+      <div
+        class="flex items-start gap-3 p-3 bg-gray-50 dark:bg-xp-darker rounded-lg"
+      >
+        <button
+          class="mt-1 w-6 h-6 rounded border-2 border-xp-primary flex items-center justify-center flex-shrink-0 hover:bg-xp-primary/20 transition-colors"
+          data-done-button
+        >
+          <span class="text-xp-primary text-lg" data-done-icon
+            ><!--Done icon--></span
+          >
+        </button>
+        <div class="flex-1 min-w-0">
+          <div class="font-semibold" data-title><!--Title--></div>
+          <div
+            class="text-sm text-gray-600 dark:text-gray-400 mt-1"
+            data-description
+          >
+            <!--Description-->
+          </div>
+          <div class="flex gap-1 mt-2 flex-wrap" data-tags>
+            <!--Tags-->
+          </div>
+        </div>
+        <span class="text-xp-danger text-xl" data-priority-icon
+          ><!--Priority icon--></span
+        >
+      </div>
+    </template>
+    <template id="home-component-tag">
+      <span
+        class="text-xs px-2 py-1 bg-xp-primary/20 text-xp-primary rounded"
+        data-tag-name
+      >
+        <!--Tag Name-->
+      </span>
+    </template>
+    <template id="home-no-content-template">
+      <div class="text-gray-500 dark:text-gray-400 text-center py-8">
+        No tasks for today. Create some MITs! 🎯
+      </div>
+    </template>
+    <!-- End Template Home -->
+
     <script src="/assets/js/app.js" defer></script>
     <script>
+      // Inicializar el selector de idioma
+      document
+        .getElementById("language-selector")
+        .addEventListener("change", function () {
+          console.log("Idioma por cambiar:", this.value)
+          I18n.setLanguage(this.value)
+        })
+
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {
           navigator.serviceWorker
