@@ -806,7 +806,7 @@
               write notes - all with an XP-inspired aesthetic.
             </p>
             <div class="text-sm text-gray-500 dark:text-gray-500">
-              Version 0.0.12 | Built with ❤️ and ☕ by
+              Version 0.0.13 | Built with ❤️ and ☕ by
               <a
                 href="https://www.lgzarturo.com"
                 target="_blank"
@@ -905,27 +905,8 @@
     <!-- End Template Home -->
 
     <script src="/assets/js/app.js" defer></script>
-    <script>
-      // Inicializar el selector de idioma
-      document
-        .getElementById("language-selector")
-        .addEventListener("change", function () {
-          console.log("Idioma por cambiar:", this.value)
-          I18n.setLanguage(this.value)
-        })
-
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function () {
-          navigator.serviceWorker
-            .register("/sw.js")
-            .then(function (registration) {
-              console.log("ServiceWorker registrado:", registration)
-            })
-            .catch(function (error) {
-              console.log("ServiceWorker error:", error)
-            })
-        })
-      }
-    </script>
+    <script src="/assets/js/tailwindcss.js" defer></script>
+    <script src="/assets/js/theme.js" defer></script>
+    <script src="/assets/js/analytics.js" defer></script>
   </body>
 </html>

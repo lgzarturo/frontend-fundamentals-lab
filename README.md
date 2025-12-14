@@ -59,6 +59,7 @@ El objetivo no es solo construir la app, sino **aprender profundamente los funda
    1. [Explicación del código en app.js](/docs/codigo-app_js.md)
    2. [Ideas y mejoras futuras](/docs/ideas.md)
 7. [Estructura y mejoras por implementar](/docs/mejoras-por-implementar.md)
+8. [Implementación de Soporte i18n y Cambio de Tema](/docs/i18n-theme.md)
 
 ---
 

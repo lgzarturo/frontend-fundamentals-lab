@@ -1,27 +1,4 @@
 /**
- * Configuración de TailwindCSS para el tema personalizado XP
- * @type {object}
- */
-tailwind.config = {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        xp: {
-          primary: "#0acc71ff",
-          secondary: "#0099ff",
-          danger: "#ff0055",
-          warning: "#ffaa00",
-          dark: "#0a0e1a",
-          darker: "#05070f",
-          card: "#131829"
-        }
-      }
-    }
-  }
-}
-
-/**
  * Genera un identificador único basado en la fecha actual y un valor aleatorio.
  * Útil para asignar IDs a los elementos.
  * @returns {string} - ID único generado.
@@ -2981,35 +2958,28 @@ const I18n = {
 }
 
 /**
- * Inicializa la app, modo oscuro y seguimiento de analíticas
+ * Inicializa el idioma de la aplicación
  * @event window load - Se ejecuta cuando la página ha cargado completamente
  */
 window.addEventListener("load", () => {
   I18n.init().then(() => {
     app.init()
   })
-  // Modo oscuro según preferencia del usuario o sistema
-  document.documentElement.classList.toggle(
-    "dark",
-    localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-  )
-  // Preferencias de tema (ejemplo, se puede mejorar)
-  console.debug("Página cargada. Iniciando seguimiento de analíticas...")
-  // Evento personalizado para Google Analytics 4 vía Tag Manager
-  document.addEventListener("DOMContentLoaded", function () {
-    // Medición de clics en enlaces para GA4
-    document.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function (e) {
-        if (window.dataLayer) {
-          window.dataLayer.push({
-            event: "click_link",
-            link_url: link.href,
-            link_content: link.textContent.trim()
-          })
-        }
-      })
+  document
+    .getElementById("language-selector")
+    .addEventListener("change", function () {
+      I18n.setLanguage(this.value)
     })
-  })
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then(function (registration) {
+          console.log("ServiceWorker registrado:", registration)
+        })
+        .catch(function (error) {
+          console.log("ServiceWorker error:", error)
+        })
+    })
+  }
 })
