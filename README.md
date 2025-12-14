@@ -156,6 +156,8 @@ Los frameworks cambian, los fundamentos permanecen.
 
 Este proyecto está bajo la licencia Creative Commons Attribution 4.0 International (CC BY 4.0).
 
+---
+
 ## Futuro
 
 Algunos de mis objetivos para seguir avanzando con este proyecto y mi aprendizaje:
@@ -173,3 +175,71 @@ Algunos de mis objetivos para seguir avanzando con este proyecto y mi aprendizaj
 - Investigar sobre metodologías ágiles y aplicarlas en el desarrollo continuo del proyecto.
 - Explorar la posibilidad de convertir la aplicación en una extensión de navegador para facilitar su acceso y uso.
 - Integrar React o Vue para comparar enfoques y beneficios frente a JavaScript puro.
+
+---
+
+## Mejoras por implementar
+
+> El sistema va a cambiar de nombre a "Daily Operating System (DOS) personal" en lugar de "Productivity XP", ya que el objetivo principal era aprender los fundamentos del desarrollo frontend a través de la creación de una aplicación funcional de productividad personal, sin embargo, al profundizar en el proyecto, he decidido enfocar la aplicación hacia un sistema de observabilidad personal para monitorear y mejorar mi energía y bienestar diario.
+
+Aquí algunas ideas clave para mejorar la aplicación y alinearla con este nuevo enfoque:
+
+- Pensar en un dashboard de control para un programador (sobre mí), no un diario emocional.
+- Realizar un cambio de mentalidad del producto, deja de ser una app de "hábitos" o "tareas" como "task manager genérico".
+- El objetivo de detectar qué el flujo de trabajo y qué la mantiene estable, a la vez que sea simple y rápido de usar.
+- Busco tener todo lo necesario a la mano, los módulos ya implementados (tareas, notas, presupuesto, hábitos) pueden seguir existiendo pero con un enfoque diferente.
+
+---
+
+## Flujo diario en la app (UX concreto)
+
+- Al abrir la app por la mañana
+- Pantalla: “Hoy”
+- Muestra:
+  - Timeline vertical del día
+  - Bloques ya creados
+  - Checks rápidos
+
+Feature que de momento NO se deben implementar
+
+- Gamificación
+- Streaks de hábitos detallados
+- Recompensas
+- Frases motivacionales
+- Objetivos vagos
+- ML prematuro
+
+---
+
+## Características clave a implementar
+
+Orden lógico:
+
+1. Template diario fijo
+2. Registro rápido de comida + post-comida
+3. Daily review + estado anímico
+4. Vista semanal correlativa
+5. Export simple (PDF o CSV)
+
+La aplicación debe poder ayudar a responder:
+
+> “¿Qué hice en el día, y cómo me sentí?”
+
+Se va a diseñar todo alrededor de esa pregunta.
+
+Decisiones importantes (no negociables)
+
+- ❌ No ML - Demasiado complejo y puede ser invasivo, además de que no es el objetivo principal.
+- ❌ No campos libres largos - Debe ser medible y rápido, libre de ambigüedades.
+- ❌ No “custom habits” - Solo los bloques predefinidos que yo necesito.
+- ❌ No gamificación - No es un juego, es una herramienta seria para mejorar mi vida.
+- ❌ No notificaciones - Quiero abrir la app cuando yo quiera, no que me interrumpa.
+- ❌ No objetivos vagos - Todo debe ser concreto y medible.
+- ❌ No streaks - No busco crear adicción, sino hábitos saludables.
+- ✅ Bloques fijos - Cada día tiene los mismos bloques para facilitar el registro y tener consistencia.
+- ✅ Checks rápidos - Permitir marcar rápidamente acciones o estados sin necesidad de escribir mucho.
+- ✅ Fotos como evidencia - Permitir adjuntar fotos para tener un registro visual.
+- ✅ Export simple - Poder exportar los datos de manera sencilla para análisis externo.
+- ✅ Enfoque en UX - La experiencia de usuario debe ser fluida, rápida y sin fricciones.
+- ✅ Mobile first - La aplicación debe ser completamente usable desde dispositivos móviles.
+- ✅ Offline first - La aplicación debe funcionar sin conexión a internet, con sincronización cuando sea posible.
