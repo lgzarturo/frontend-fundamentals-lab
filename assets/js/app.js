@@ -442,6 +442,57 @@ function home() {
     .join("")
 
   document.getElementById("home-habits-list").innerHTML = habitsHtml
+
+  // Mostrar la actividad reciente
+  const recentActivity = []
+
+  // Tareas recientes
+  const recentTasks = app.tasks
+    .filter((t) => t.done)
+    .sort((a, b) => b.id.localeCompare(a.id))
+    .slice(0, 2)
+
+  recentTasks.forEach((task) => {
+    recentActivity.push({
+      icon: "✓",
+      text: `Completed: ${task.title}`,
+      time: "Today",
+      color: "text-xp-primary"
+    })
+  })
+
+  // Notas recientes
+  const recentNotes = app.notes
+    .sort((a, b) => b.updatedAt - a.updatedAt)
+    .slice(0, 2)
+
+  recentNotes.forEach((note) => {
+    recentActivity.push({
+      icon: "📝",
+      text: `Updated: ${note.title}`,
+      time: getRelativeTime(note.updatedAt),
+      color: "text-purple-500"
+    })
+  })
+
+  const activityHtml =
+    recentActivity.length > 0
+      ? recentActivity
+          .map(
+            (item) => `
+            <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                <span class="${item.color} text-2xl">${item.icon}</span>
+                <div class="flex-1">
+                    <div class="font-semibold">${item.text}</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">${item.time}</div>
+                </div>
+            </div>
+        `
+          )
+          .join("")
+      : '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No recent activity</div>'
+
+  document.getElementById("home-recent-activity").innerHTML = activityHtml
 }
 
 /**
@@ -2953,6 +3004,150 @@ const app = {
       this.undoCallback = null
     }
     document.getElementById("undo-toast").classList.add("hidden")
+  },
+  /**
+   * Exporta los datos actuales a un archivo JSON descargable
+   * @returns {void}
+   */
+  exportData() {
+    const data = {
+      budgets: this.budgets,
+      tasks: this.tasks,
+      notes: this.notes,
+      habits: this.habits
+    }
+    const dataStr = JSON.stringify(data, null, 2)
+    const dataBlob = new Blob([dataStr], { type: "application/json" })
+    const url = URL.createObjectURL(dataBlob)
+
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `productivity-xp-backup-${Date.now()}.json`
+    link.click()
+
+    URL.revokeObjectURL(url)
+    this.showToast("Data exported successfully! 📥", "success")
+    launchConfetti()
+  },
+  /**
+   * Muestra el modal para importar datos desde un archivo JSON
+   * @returns {void}
+   */
+  showImportModal() {
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Import Data</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    Upload a previously exported JSON file to restore your data. This will replace your current data.
+                </p>
+                <input type="file" id="import-file-input" accept=".json"
+                       class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker mb-4">
+                <div class="flex gap-3">
+                    <button onclick="app.closeModal()"
+                            class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="app.importData()"
+                            class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                        Import
+                    </button>
+                </div>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  /**
+   * Importa datos desde un archivo JSON seleccionado
+   * @returns {void}
+   */
+  importData() {
+    const fileInput = document.getElementById("import-file-input")
+    const file = fileInput.files[0]
+
+    if (!file) {
+      this.showToast("Please select a file", "error")
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target.result)
+
+        if (
+          !imported.budgets ||
+          !imported.tasks ||
+          !imported.notes ||
+          !imported.habits
+        ) {
+          throw new Error("Invalid data format")
+        }
+
+        console.log({ imported })
+
+        this.state = imported
+        store.save(this.state.budgets, "budgets")
+        store.save(this.state.tasks, "tasks")
+        store.save(this.state.notes, "notes")
+        store.save(this.state.habits, "habits")
+        this.closeModal()
+        this.showToast("Data imported successfully! 📤", "success")
+        // TODO: Borrar cache de PWA para recargar los datos
+        launchConfetti()
+        render()
+      } catch (err) {
+        this.showToast("Failed to import data. Invalid file format.", "error")
+        console.error("Import error:", err)
+      }
+    }
+
+    reader.readAsText(file)
+  },
+  /**
+   * Restaura los datos de demostración, reemplazando los datos actuales
+   * @returns {void}
+   */
+  resetToDemo() {
+    if (
+      confirm(
+        "This will replace all your current data with demo data. Are you sure?"
+      )
+    ) {
+      const budgets = store.dummyBudget
+      store.save(budgets, "budgets")
+      const tasks = store.dummyTasks
+      store.save(tasks, "tasks")
+      const notes = store.dummyNotes
+      store.save(notes, "notes")
+      const habits = store.dummyHabits
+      store.save(habits, "habits")
+      this.showToast("Demo data restored! 🔄", "success")
+      // TODO: Borrar cache de PWA para recargar los datos
+      render()
+    }
+  },
+  /**
+   * Elimina todos los datos del usuario de forma permanente
+   * @returns {void}
+   */
+  clearAllData() {
+    if (
+      confirm(
+        "This will permanently delete all your data. This action cannot be undone. Are you sure?"
+      )
+    ) {
+      this.budgets = []
+      store.save(this.budgets, "budgets")
+      this.tasks = []
+      store.save(this.tasks, "tasks")
+      this.notes = []
+      store.save(this.notes, "notes")
+      this.habits = []
+      store.save(this.habits, "habits")
+      this.showToast("All data cleared", "success")
+      render()
+    }
   }
 }
 

@@ -754,7 +754,7 @@
             <h3 class="text-xl font-bold mb-4">Data Management</h3>
             <div class="space-y-3">
               <button
-                onclick="app.showToast('Aún no esta implementado', 'error');"
+                onclick="app.exportData()"
                 class="w-full text-left px-4 py-3 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded-lg transition-colors"
               >
                 <div class="font-semibold">📥 Export Data</div>
@@ -763,7 +763,7 @@
                 </div>
               </button>
               <button
-                onclick="app.showToast('Aún no esta implementado', 'error');"
+                onclick="app.showImportModal()"
                 class="w-full text-left px-4 py-3 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg transition-colors"
               >
                 <div class="font-semibold">📤 Import Data</div>
@@ -772,7 +772,7 @@
                 </div>
               </button>
               <button
-                onclick="app.showToast('Aún no esta implementado', 'error');"
+                onclick="app.resetToDemo()"
                 class="w-full text-left px-4 py-3 bg-xp-warning/20 hover:bg-xp-warning/30 rounded-lg transition-colors"
               >
                 <div class="font-semibold">🔄 Reset to Demo Data</div>
@@ -781,7 +781,7 @@
                 </div>
               </button>
               <button
-                onclick="app.showUndoToast('Aún no esta implementado', () => {alert('Deshacer acción')});"
+                onclick="app.clearAllData()"
                 class="w-full text-left px-4 py-3 bg-xp-danger/20 hover:bg-xp-danger/30 rounded-lg transition-colors"
               >
                 <div class="font-semibold">🗑️ Clear All Data</div>
