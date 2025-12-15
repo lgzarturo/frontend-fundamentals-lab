@@ -1,25 +1,73 @@
 /**
- * Configuración de TailwindCSS para el tema personalizado XP
- * @type {object}
+ * Clase principal de la aplicación DOSApp
  */
-tailwind.config = {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        xp: {
-          primary: "#0acc71ff",
-          secondary: "#0099ff",
-          danger: "#ff0055",
-          warning: "#ffaa00",
-          dark: "#0a0e1a",
-          darker: "#05070f",
-          card: "#131829"
-        }
+class DOSApp {
+  constructor() {
+    // Estado inicial
+    // TODO: El estado inicial de la aplicación depende de donde dejo de usar el usuario la aplicación
+    this.currentScreen = "home"
+    this.currentFilter = "all"
+    this.undoStack = []
+    this.storageKey = "dos-app-data-v1"
+
+    // Datos de la aplicación
+    this.state = {
+      budgets: [],
+      tasks: [],
+      notes: [],
+      habits: [],
+      // TODO: Los settings se deben cargar de la configuración del usuario
+      settings: {
+        theme: "dark",
+        currency: "MXN",
+        firstDayOfWeek: 1,
+        notificationsEnabled: false
       }
     }
+
+    // Inicializa la aplicación
+    this.init()
+  }
+
+  /**
+   * Inicializa la aplicación DOSApp
+   * Función de arranque que configura la aplicación al cargar
+   */
+  init() {
+    console.log("DOSApp initialized")
+    // Paso 1: Cargar datos de la aplicación del localStorage
+    // Paso 2: Inicializar la interfaz de usuario (Theme, idioma, etc.)
+    // Paso 3: Configurar eventos y listeners
+    // Paso 4: Renderizar la pantalla inicial
+    // Paso 5: Configurar auto-guardado periódico
+    this.updateDateTime()
+    setInterval(() => {
+      console.log("Auto-guardado de datos")
+      this.updateDateTime()
+    }, 60000)
+  }
+
+  /**
+   * Actualiza la fecha y hora mostrada en la interfaz de usuario
+   * @returns {void}
+   */
+  updateDateTime() {
+    const now = new Date()
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    }
+    // TODO: Obtener el idioma desde la configuración del usuario
+    const dateStr = now.toLocaleDateString("en-US", options)
+    const dateEl = document.getElementById("current-date")
+    if (dateEl) dateEl.textContent = dateStr
   }
 }
+
+// Instancia global de la aplicación
+const application = new DOSApp()
 
 /**
  * Genera un identificador único basado en la fecha actual y un valor aleatorio.
@@ -275,6 +323,30 @@ function home() {
 
   document.getElementById("home-habits-streak").textContent = maxStreak
 
+  const totalTasks = app.tasks.filter(
+    (t) => !t.done && t.dueDate === todayStr
+  ).length
+  const doneTasks = app.tasks.filter(
+    (t) => t.done && t.dueDate === todayStr
+  ).length
+  document.getElementById(
+    "home-tasks-done"
+  ).textContent = `${doneTasks}/${totalTasks}`
+
+  const totalBudget = app.budgets.reduce(
+    (sum, b) => sum + b.items.reduce((s, i) => s + i.amount, 0),
+    0
+  )
+  const totalSpent = app.budgets.reduce(
+    (sum, b) =>
+      sum + b.transactions.reduce((s, t) => s + Math.abs(t.amount), 0),
+    0
+  )
+  document.getElementById("home-budget-remaining").textContent = `$${(
+    totalBudget - totalSpent
+  ).toFixed(0)}`
+  document.getElementById("home-notes-count").textContent = app.notes.length
+
   const mits = app.tasks
     .filter((t) => !t.done && (t.priority === "high" || t.dueDate === todayStr))
     .sort((a, b) => {
@@ -372,6 +444,57 @@ function home() {
     .join("")
 
   document.getElementById("home-habits-list").innerHTML = habitsHtml
+
+  // Mostrar la actividad reciente
+  const recentActivity = []
+
+  // Tareas recientes
+  const recentTasks = app.tasks
+    .filter((t) => t.done)
+    .sort((a, b) => b.id.localeCompare(a.id))
+    .slice(0, 2)
+
+  recentTasks.forEach((task) => {
+    recentActivity.push({
+      icon: "✓",
+      text: `Completed: ${task.title}`,
+      time: "Today",
+      color: "text-xp-primary"
+    })
+  })
+
+  // Notas recientes
+  const recentNotes = app.notes
+    .sort((a, b) => b.updatedAt - a.updatedAt)
+    .slice(0, 2)
+
+  recentNotes.forEach((note) => {
+    recentActivity.push({
+      icon: "📝",
+      text: `Updated: ${note.title}`,
+      time: getRelativeTime(note.updatedAt),
+      color: "text-purple-500"
+    })
+  })
+
+  const activityHtml =
+    recentActivity.length > 0
+      ? recentActivity
+          .map(
+            (item) => `
+            <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                <span class="${item.color} text-2xl">${item.icon}</span>
+                <div class="flex-1">
+                    <div class="font-semibold">${item.text}</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">${item.time}</div>
+                </div>
+            </div>
+        `
+          )
+          .join("")
+      : '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No recent activity</div>'
+
+  document.getElementById("home-recent-activity").innerHTML = activityHtml
 }
 
 /**
@@ -503,11 +626,8 @@ function tasks() {
       break
   }
 
-  // Ordenar por orden y prioridad
+  // Mantener el orden definido
   tasks.sort((a, b) => {
-    if (a.done !== b.done) return a.done ? 1 : -1
-    if (a.priority === "high" && b.priority !== "high") return -1
-    if (b.priority === "high" && a.priority !== "high") return 1
     return a.order - b.order
   })
 
@@ -517,10 +637,10 @@ function tasks() {
       (task, index) => `
             <div class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20 task-item"
                  data-task-id="${task.id}" draggable="true"
-                 ondragstart="handleDragStart(event)"
-                 ondragover="handleDragOver(event)"
-                 ondrop="handleDrop(event)"
-                 ondragend="handleDragEnd(event)">
+                 ondragstart="app.handleDragStart(event)"
+                 ondragover="app.handleDragOver(event)"
+                 ondrop="app.handleDrop(event)"
+                 ondragend="app.handleDragEnd(event)">
                 <div class="flex items-start gap-3">
                     <button onclick="app.toggleTask('${task.id}')"
                             class="mt-1 w-6 h-6 rounded border-2 border-xp-primary flex items-center justify-center flex-shrink-0 hover:bg-xp-primary/20 transition-colors">
@@ -894,6 +1014,8 @@ function render() {
 
 /**
  * Objeto para gestionar el almacenamiento local (localStorage)
+ * @module store
+ * @description Proporciona métodos para inicializar, guardar y cargar datos en el localStorage, así como para gestionar un contador de visitas.
  * @type {object}
  * @namespace
  * @method init - Inicializa el almacenamiento con datos de ejemplo si no existen
@@ -903,6 +1025,7 @@ function render() {
  * @property {Array<Task>} dummyTasks - Datos con tareas de ejemplo
  * @property {Array<Habit>} dummyHabits - Datos con hábitos de ejemplo
  * @property {Array<Budget>} dummyBudget - Datos con budgets de ejemplo
+ * @property {Array<Note>} dummyNotes - Datos con notas de ejemplo
  */
 const store = {
   /**
@@ -1293,17 +1416,34 @@ Focus on what you can control:
 /**
  * Objeto principal de la aplicación.
  * Gestiona la navegación, el estado y las operaciones principales.
+ * @module app
+ * @description Es el núcleo de la aplicación, responsable de la navegación entre pantallas, el manejo del estado y la ejecución de las operaciones principales como la gestión de tareas, hábitos, presupuestos y notas.
  * @type {object}
  * @namespace
  * @method init - Inicializa la aplicación.
+ * @method loadTheme - Carga el tema guardado en el localStorage.
+ * @method toggleTheme - Alterna entre los temas claro y oscuro.
  * @method navigateTo - Cambia la pantalla actual.
  * @property {Task[]} tasks - Lista de tareas.
+ * @method filterTasks - Filtra las tareas según el criterio seleccionado.
+ * @method showCreateTaskModal - Muestra el modal para crear una nueva tarea.
+ * @method createTask - Crea una nueva tarea
+ * @method showEditTaskModal - Muestra el modal para editar una tarea existente.
+ * @method addSubtaskInput - Agrega un campo de entrada para una nueva subtarea.
+ * @method updateTask - Actualiza los datos de una tarea existente.
+ * @method deleteTask - Elimina una tarea por su ID.
  * @method toggleTask - Alterna el estado de una tarea.
  * @method toggleSubtask - Alterna el estado de una subtarea.
  * @property {Habit[]} habits - Lista de hábitos.
+ * @method createHabitFromTemplate - Crea un nuevo hábito a partir de una plantilla.
+ * @method createCustomHabit - Permite crear un habito personalizado.
+ * @method showHabitTemplatesModal - Muestra el modal con las plantillas de hábitos.
+ * @method deleteHabit - Elimina un hábito por su ID.
+ * @method toggleHabit - Alterna el estado de un hábito para hoy.
  * @method visitCounter - Cuenta las visitas y lanza confeti cada 10 visitas.
  * @property {Budget[]} budgets - Lista de presupuestos.
  * @method showCreateBudgetModal - Muestra el modal para crear un nuevo presupuesto.
+ * @method createBudget - Crea un nuevo presupuesto.
  * @method showAddTransactionModal - Muestra el modal para agregar una nueva transacción.
  * @method addTransaction - Agrega una nueva transacción a un presupuesto.
  * @method showBudgetDetails - Muestra los detalles de un presupuesto.
@@ -1313,11 +1453,24 @@ Focus on what you can control:
  * @method deleteBudgetItem - Elimina un ítem del presupuesto.
  * @method createBudget - Crea un nuevo presupuesto a partir de un formulario.
  * @property {Note[]} notes - Lista de notas.
+ * @method searchNotes - Busca notas por título o contenido.
+ * @method showCreateNoteModal - Muestra el modal para crear una nueva nota.
+ * @method createNote - Crea una nueva nota.
+ * @method showNoteModal - Muestra el modal para ver o editar una nota.
+ * @method toggleNotePreview - Alterna entre la vista previa y la edición de una nota.
+ * @method updateNote - Actualiza una nota existente.
+ * @method deleteNote - Elimina una nota por su ID.
+ * @method parseMarkdown - Convierte texto Markdown a HTML.
  * @method showModal - Muestra un modal con contenido HTML.
  * @method closeModal - Cierra el modal actual.
  * @method showToast - Muestra un mensaje emergente.
  * @method showUndoToast - Muestra un toast con opción de deshacer.
  * @method performUndo - Ejecuta la acción de deshacer.
+ * @method exportData - Exporta los datos de la aplicación a un archivo JSON.
+ * @method showImportModal - Muestra el modal para importar datos desde un archivo JSON.
+ * @method importData - Importa datos desde un archivo JSON.
+ * @method resetToDemo - Restaura los datos de la aplicación a los valores de demostración.
+ * @method clearAllData - Elimina todos los datos de la aplicación.
  */
 const app = {
   /**
@@ -1336,28 +1489,21 @@ const app = {
     this.navigateTo("home")
   },
   loadTheme: function () {
-    //load theme from localStorage
-    console.debug("Cargando en local storage:", localStorage.getItem("theme"))
     const theme = localStorage.getItem("theme") || "light"
-    console.debug("Cargando tema:", theme)
     if (theme === "dark") {
       document.documentElement.classList.add("dark")
     } else {
       document.documentElement.classList.remove("dark")
     }
-    // Set theme-toggle button state
     const themeToggleBtn = document.getElementById("theme-toggle")
     themeToggleBtn.checked = theme === "dark"
     localStorage.setItem("theme", theme)
-    console.debug("Tema cargado:", theme)
   },
   toggleTheme: function () {
     const currentTheme = localStorage.getItem("theme")
-    console.debug("Tema actual:", currentTheme)
     const newTheme = currentTheme === "dark" ? "light" : "dark"
     document.documentElement.classList.toggle("dark")
     localStorage.setItem("theme", newTheme)
-    console.debug("Tema cambiado a:", newTheme)
   },
   /**
    * Navega a la pantalla indicada y actualiza el estado visual
@@ -1365,7 +1511,6 @@ const app = {
    * @returns {void}
    */
   navigateTo: function (screen) {
-    console.debug("Navegando a la pantalla:", screen)
     currentScreen = screen
     document
       .querySelectorAll(".screen")
@@ -1758,6 +1903,100 @@ const app = {
         tasks()
       }
     }
+  },
+  /**
+   * Función para iniciar el evento de arrastre
+   * @param {Event} event - Evento de arrastre iniciado
+   */
+  handleDragStart(event) {
+    event.target.classList.add("dragging")
+    event.dataTransfer.effectAllowed = "move"
+    // TODO: Cambia el icono del cursor por uno que indique el drag
+    event.dataTransfer.setData("text/html", event.target.innerHTML)
+    event.dataTransfer.setData("taskId", event.target.dataset.taskId)
+  },
+  /**
+   * Función para manejar el evento de arrastre sobre una tarea
+   * @param {Event} event - Evento de arrastre
+   * @return {boolean} - Siempre retorna false para evitar el comportamiento por defecto
+   */
+  handleDragOver(event) {
+    if (event.preventDefault) {
+      event.preventDefault()
+    }
+    event.dataTransfer.dropEffect = "move"
+
+    const dragging = document.querySelector(".dragging")
+    const afterElement = this.getDragAfterElement(
+      event.currentTarget.parentElement,
+      event.clientY
+    )
+
+    if (afterElement == null) {
+      event.currentTarget.parentElement.appendChild(dragging)
+    } else {
+      event.currentTarget.parentElement.insertBefore(dragging, afterElement)
+    }
+
+    return false
+  },
+  /**
+   * Función para manejar el evento de soltar una tarea
+   * @param {Event} event - Evento de soltar
+   * @return {boolean} - Siempre retorna false para evitar el comportamiento por defecto
+   */
+  handleDrop(event) {
+    if (event.stopPropagation) {
+      event.stopPropagation()
+    }
+
+    const taskItems = Array.from(document.querySelectorAll(".task-item"))
+    taskItems.forEach((item, index) => {
+      const taskId = item.dataset.taskId
+      const task = app.tasks.find((t) => t.id === taskId)
+      if (task) {
+        task.order = index + 1
+      }
+    })
+
+    store.save(app.tasks, "tasks")
+    return false
+  },
+  /**
+   * Función para manejar el fin del evento de arrastre
+   * @param {Event} event - Evento de arrastre finalizado
+   */
+  handleDragEnd(event) {
+    event.target.classList.remove("dragging")
+    // TODO: Retorna el cursor a su estado inicial.
+    document.querySelectorAll(".task-item").forEach((item) => {
+      item.classList.remove("drag-over")
+    })
+  },
+  /**
+   * Obtiene el elemento después del cual se debe insertar el elemento arrastrado
+   * @param {HTMLElement} container - Contenedor de las tareas
+   * @param {number} y - Posición Y del cursor
+   * @returns {HTMLElement|null} - Elemento después del cual insertar o null si es al final
+   */
+  getDragAfterElement(container, y) {
+    const draggableElements = [
+      ...container.querySelectorAll(".task-item:not(.dragging)")
+    ]
+
+    return draggableElements.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect()
+        const offset = y - box.top - box.height / 2
+
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child }
+        } else {
+          return closest
+        }
+      },
+      { offset: Number.NEGATIVE_INFINITY }
+    ).element
   },
   /**
    * Estado inicial de los hábitos
@@ -2891,9 +3130,167 @@ const app = {
       this.undoCallback = null
     }
     document.getElementById("undo-toast").classList.add("hidden")
+  },
+  /**
+   * Exporta los datos actuales a un archivo JSON descargable
+   * @returns {void}
+   */
+  exportData() {
+    const data = {
+      budgets: this.budgets,
+      tasks: this.tasks,
+      notes: this.notes,
+      habits: this.habits
+    }
+    const dataStr = JSON.stringify(data, null, 2)
+    const dataBlob = new Blob([dataStr], { type: "application/json" })
+    const url = URL.createObjectURL(dataBlob)
+
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `productivity-xp-backup-${Date.now()}.json`
+    link.click()
+
+    URL.revokeObjectURL(url)
+    this.showToast("Data exported successfully! 📥", "success")
+    launchConfetti()
+  },
+  /**
+   * Muestra el modal para importar datos desde un archivo JSON
+   * @returns {void}
+   */
+  showImportModal() {
+    const modalContent = `
+            <div class="p-6">
+                <h3 class="text-2xl font-bold mb-4">Import Data</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    Upload a previously exported JSON file to restore your data. This will replace your current data.
+                </p>
+                <input type="file" id="import-file-input" accept=".json"
+                       class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker mb-4">
+                <div class="flex gap-3">
+                    <button onclick="app.closeModal()"
+                            class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="app.importData()"
+                            class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+                        Import
+                    </button>
+                </div>
+            </div>
+        `
+
+    this.showModal(modalContent)
+  },
+  /**
+   * Importa datos desde un archivo JSON seleccionado
+   * @returns {void}
+   */
+  importData() {
+    const fileInput = document.getElementById("import-file-input")
+    const file = fileInput.files[0]
+
+    if (!file) {
+      this.showToast("Please select a file", "error")
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target.result)
+
+        if (
+          !imported.budgets ||
+          !imported.tasks ||
+          !imported.notes ||
+          !imported.habits
+        ) {
+          throw new Error("Invalid data format")
+        }
+
+        console.log({ imported })
+
+        this.state = imported
+        store.save(this.state.budgets, "budgets")
+        store.save(this.state.tasks, "tasks")
+        store.save(this.state.notes, "notes")
+        store.save(this.state.habits, "habits")
+        this.closeModal()
+        this.showToast("Data imported successfully! 📤", "success")
+        // TODO: Borrar cache de PWA para recargar los datos
+        launchConfetti()
+        render()
+      } catch (err) {
+        this.showToast("Failed to import data. Invalid file format.", "error")
+        console.error("Import error:", err)
+      }
+    }
+
+    reader.readAsText(file)
+  },
+  /**
+   * Restaura los datos de demostración, reemplazando los datos actuales
+   * @returns {void}
+   */
+  resetToDemo() {
+    if (
+      confirm(
+        "This will replace all your current data with demo data. Are you sure?"
+      )
+    ) {
+      const budgets = store.dummyBudget
+      store.save(budgets, "budgets")
+      const tasks = store.dummyTasks
+      store.save(tasks, "tasks")
+      const notes = store.dummyNotes
+      store.save(notes, "notes")
+      const habits = store.dummyHabits
+      store.save(habits, "habits")
+      this.showToast("Demo data restored! 🔄", "success")
+      // TODO: Borrar cache de PWA para recargar los datos
+      render()
+    }
+  },
+  /**
+   * Elimina todos los datos del usuario de forma permanente
+   * @returns {void}
+   */
+  clearAllData() {
+    if (
+      confirm(
+        "This will permanently delete all your data. This action cannot be undone. Are you sure?"
+      )
+    ) {
+      this.budgets = []
+      store.save(this.budgets, "budgets")
+      this.tasks = []
+      store.save(this.tasks, "tasks")
+      this.notes = []
+      store.save(this.notes, "notes")
+      this.habits = []
+      store.save(this.habits, "habits")
+      this.showToast("All data cleared", "success")
+      render()
+    }
   }
 }
 
+/**
+ * Módulo de internacionalización (i18n)
+ * @module I18n
+ * @description Maneja la carga y aplicación de traducciones en la aplicación.
+ * @type {object}
+ * @namespace
+ * @property {string} currentLanguage - Idioma actual de la aplicación.
+ * @property {object} messages - Mensajes traducidos cargados.
+ * @method init - Inicializa el módulo i18n.
+ * @method loadMessages - Carga los mensajes traducidos para un idioma específico.
+ * @method setLanguage - Cambia el idioma actual y recarga los mensajes.
+ * @method t - Obtiene el mensaje traducido por clave.
+ * @method applyTranslations - Aplica las traducciones al HTML.
+ */
 const I18n = {
   currentLanguage: "es", // Idioma por defecto
   messages: {}, // Almacenará los mensajes cargados
@@ -2981,35 +3378,28 @@ const I18n = {
 }
 
 /**
- * Inicializa la app, modo oscuro y seguimiento de analíticas
+ * Inicializa el idioma de la aplicación
  * @event window load - Se ejecuta cuando la página ha cargado completamente
  */
 window.addEventListener("load", () => {
   I18n.init().then(() => {
     app.init()
   })
-  // Modo oscuro según preferencia del usuario o sistema
-  document.documentElement.classList.toggle(
-    "dark",
-    localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-  )
-  // Preferencias de tema (ejemplo, se puede mejorar)
-  console.debug("Página cargada. Iniciando seguimiento de analíticas...")
-  // Evento personalizado para Google Analytics 4 vía Tag Manager
-  document.addEventListener("DOMContentLoaded", function () {
-    // Medición de clics en enlaces para GA4
-    document.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function (e) {
-        if (window.dataLayer) {
-          window.dataLayer.push({
-            event: "click_link",
-            link_url: link.href,
-            link_content: link.textContent.trim()
-          })
-        }
-      })
+  document
+    .getElementById("language-selector")
+    .addEventListener("change", function () {
+      I18n.setLanguage(this.value)
     })
-  })
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then(function (registration) {
+          console.log("ServiceWorker registrado:", registration)
+        })
+        .catch(function (error) {
+          console.log("ServiceWorker error:", error)
+        })
+    })
+  }
 })

@@ -2,6 +2,31 @@
 
 ## Historial de cambios
 
+### v0.0.12
+
+- feat: agregar soporte para múltiples idiomas (i18n)
+- feat: mejorar la gestión de tareas
+
+### v0.0.11
+
+- feat: actualizar llamadas a funciones para usar el objeto app
+- refactor: mover funcionalidad de tareas para usar métodos de la aplicación
+- feat: agregar funcionalidad para crear y gestionar notas en la aplicación
+
+### v0.0.10
+
+- feat: agregar sección de mejoras por implementar en la documentación
+- docs: mejorar la documentación usando JSDoc
+- feat: agregar documentación del código para mejorar la lectura
+- feat: agregar modal para añadir transacciones y funcionalidad para guardar transacciones en el presupuesto
+- feat: agregar funcionalidad de gestión de presupuestos, incluyendo creación, visualización y eliminación de elementos de presupuesto
+- feat: agregar almacenamiento de budget en localStorage
+- feat: agregar definición de tipos para presupuesto y transacciones en app.js
+
+### v0.0.9
+
+- feat: actualizar la versión del caché de PWA
+
 ### v0.0.8
 
 - feat: agregar funcionalidad de PWA y eventos GA4

@@ -59,6 +59,7 @@ El objetivo no es solo construir la app, sino **aprender profundamente los funda
    1. [Explicación del código en app.js](/docs/codigo-app_js.md)
    2. [Ideas y mejoras futuras](/docs/ideas.md)
 7. [Estructura y mejoras por implementar](/docs/mejoras-por-implementar.md)
+8. [Implementación de Soporte i18n y Cambio de Tema](/docs/i18n-theme.md)
 
 ---
 
@@ -69,33 +70,135 @@ El objetivo no es solo construir la app, sino **aprender profundamente los funda
 ```plaintext
 frontend-fundamentals-lab/
 │
-├── roadmap/
-│ └── (plan de aprendizaje y módulos)
-├── docs/
-│ └── (archivos de documentación y recursos)
-├── index.html
-├── styles.css
-├── app.js
-├── store.js
+├── assets/
+│   ├── css/
+│   │   └── styles.css
+│   ├── images/
+│   │   ├── favicon/
+│   │   │   ├── about.txt
+│   │   │   ├── android-chrome-192x192.png
+│   │   │   ├── android-chrome-512x512.png
+│   │   │   ├── apple-touch-icon.png
+│   │   │   ├── favicon-16x16.png
+│   │   │   ├── favicon-32x32.png
+│   │   │   ├── favicon.ico
+│   │   │   └── site.webmanifest
+│   │   ├── web-works-with-html-css-javascript-mobile.avif
+│   │   ├── web-works-with-html-css-javascript-mobile.webp
+│   │   ├── web-works-with-html-css-javascript-tablet.avif
+│   │   ├── web-works-with-html-css-javascript-tablet.webp
+│   │   ├── web-works-with-html-css-javascript.avif
+│   │   └── web-works-with-html-css-javascript.webp
+│   ├── js/
+│   │   ├── analytics.js
+│   │   ├── app.js
+│   │   ├── tailwindcss.js
+│   │   └── theme.js
+│   └── locales/
+│       ├── en.json
+│       └── es.json
 │
 ├── components/
-│ ├── dashboard.js
-│ ├── tasks.js
-│ ├── budgets.js
-│ ├── notes.js
-│ └── habits.js
+│   └── .gitkeep
+│
+├── docs/
+│   ├── caracteristicas-productivity-xp.md
+│   ├── codigo-app_js.md
+│   ├── fundamentos-javascript.md
+│   ├── guia-fullstack-javascript.md
+│   ├── i18n-theme.md
+│   ├── ideas.md
+│   ├── index-documentacion.md
+│   ├── javascript-actions-app.md
+│   ├── mejoras-por-implementar.md
+│   ├── optimizacion-lighthouse.md
+│   ├── performance.md
+│   ├── standardjs-best-practices.md
+│   ├── tag-manager.md
+│   └── tailwind-css.md
+│
+├── en/
+│   └── index.html
+│
+├── roadmap/
+│   ├── fundaments-html-css-javascript.md
+│   └── .gitkeep
 │
 ├── utils/
-│ ├── date.js
-│ ├── id.js
-│ └── markdownParser.js
+│   └── .gitkeep
+│
+├── index.html
+├── sw.js
+├── CHANGELOG.md
+├── LICENSE
+└── README.md
+```
+
+---
+
+### Propuesta de mejora de estructura
+
+> Gran parte de la estructura actual es provisional y puede mejorarse a medida que el proyecto crece. Siempre pensando en DDD (Domain-Driven Design) y separación de responsabilidades. Con el tiempo, se pueden crear más carpetas y subcarpetas para organizar mejor el código. Pero, de momento, la estructura es suficiente para el estado actual del proyecto.
+
+Actualmente, la estructura es clara y modular, pero puede evolucionar para facilitar la escalabilidad y el mantenimiento a medida que el proyecto crece. Aquí algunas recomendaciones que se podrían implementar en el futuro:
+
+1. **Separar lógicamente los módulos de la app:**
+
+   - Crear una carpeta `src/` para el código fuente principal (JS, componentes, utilidades).
+   - Mover `assets/js/` y `utils/` a `src/` y dividir en subcarpetas por dominio (`src/tasks/`, `src/notes/`, etc.).
+
+2. **Componentes reutilizables:**
+
+   - Implementar una carpeta `src/components/` para componentes UI reutilizables (botones, modales, inputs, etc.).
+
+3. **Pruebas y documentación:**
+
+   - Agregar una carpeta `tests/` para pruebas unitarias y de integración.
+   - Mantener la carpeta `docs/` solo para documentación técnica y de usuario.
+
+4. **Internacionalización y temas:**
+
+   - Centralizar la lógica de i18n y temas en `src/core/` o `src/config/` para facilitar su mantenimiento y escalabilidad.
+
+5. **Automatización y herramientas:**
+
+   - Incluir scripts de automatización (build, lint, format) en una carpeta `scripts/`.
+
+6. **Convenciones de nombres:**
+   - Usar nombres consistentes y descriptivos para archivos y carpetas.
+
+**Ejemplo de estructura propuesta:**
+
+```plaintext
+frontend-fundamentals-lab/
+│
+├── src/
+│   ├── components/
+│   ├── core/           # i18n, temas, configuración global
+│   ├── tasks/
+│   ├── notes/
+│   ├── budgets/
+│   ├── habits/
+│   ├── utils/
+│   └── index.js
 │
 ├── assets/
-│ └── icons/
+│   ├── css/
+│   ├── images/
+│   └── locales/
 │
-├── README.md
-└── LICENSE
+├── docs/
+├── tests/
+├── scripts/
+├── public/            # sw.js, favicon, etc.
+├── roadmap/
+├── index.html
+├── CHANGELOG.md
+├── LICENSE
+└── README.md
 ```
+
+Esta estructura facilita la escalabilidad, la colaboración y la integración de nuevas funcionalidades, manteniendo el proyecto organizado y fácil de navegar.
 
 > Esto es solo un esquema inicial. La estructura puede evolucionar conforme se agreguen más funcionalidades y módulos al proyecto. Sin embargo, no lo seguí aún ya que el proyecto está en una etapa temprana y no le veo sentido fragmentar el código en muchos archivos aún.
 
@@ -155,6 +258,8 @@ Los frameworks cambian, los fundamentos permanecen.
 
 Este proyecto está bajo la licencia Creative Commons Attribution 4.0 International (CC BY 4.0).
 
+---
+
 ## Futuro
 
 Algunos de mis objetivos para seguir avanzando con este proyecto y mi aprendizaje:
@@ -172,3 +277,71 @@ Algunos de mis objetivos para seguir avanzando con este proyecto y mi aprendizaj
 - Investigar sobre metodologías ágiles y aplicarlas en el desarrollo continuo del proyecto.
 - Explorar la posibilidad de convertir la aplicación en una extensión de navegador para facilitar su acceso y uso.
 - Integrar React o Vue para comparar enfoques y beneficios frente a JavaScript puro.
+
+---
+
+## Mejoras por implementar
+
+> El sistema va a cambiar de nombre a "Daily Operating System (DOS) personal" en lugar de "Productivity XP", ya que el objetivo principal era aprender los fundamentos del desarrollo frontend a través de la creación de una aplicación funcional de productividad personal, sin embargo, al profundizar en el proyecto, he decidido enfocar la aplicación hacia un sistema de observabilidad personal para monitorear y mejorar mi energía y bienestar diario.
+
+Aquí algunas ideas clave para mejorar la aplicación y alinearla con este nuevo enfoque:
+
+- Pensar en un dashboard de control para un programador (sobre mí), no un diario emocional.
+- Realizar un cambio de mentalidad del producto, deja de ser una app de "hábitos" o "tareas" como "task manager genérico".
+- El objetivo de detectar qué el flujo de trabajo y qué la mantiene estable, a la vez que sea simple y rápido de usar.
+- Busco tener todo lo necesario a la mano, los módulos ya implementados (tareas, notas, presupuesto, hábitos) pueden seguir existiendo pero con un enfoque diferente.
+
+---
+
+## Flujo diario en la app (UX concreto)
+
+- Al abrir la app por la mañana
+- Pantalla: “Hoy”
+- Muestra:
+  - Timeline vertical del día
+  - Bloques ya creados
+  - Checks rápidos
+
+Feature que de momento NO se deben implementar
+
+- Gamificación
+- Streaks de hábitos detallados
+- Recompensas
+- Frases motivacionales
+- Objetivos vagos
+- ML prematuro
+
+---
+
+## Características clave a implementar
+
+Orden lógico:
+
+1. Template diario fijo
+2. Registro rápido de comida + post-comida
+3. Daily review + estado anímico
+4. Vista semanal correlativa
+5. Export simple (PDF o CSV)
+
+La aplicación debe poder ayudar a responder:
+
+> “¿Qué hice en el día, y cómo me sentí?”
+
+Se va a diseñar todo alrededor de esa pregunta.
+
+Decisiones importantes (no negociables)
+
+- ❌ No ML - Demasiado complejo y puede ser invasivo, además de que no es el objetivo principal.
+- ❌ No campos libres largos - Debe ser medible y rápido, libre de ambigüedades.
+- ❌ No “custom habits” - Solo los bloques predefinidos que yo necesito.
+- ❌ No gamificación - No es un juego, es una herramienta seria para mejorar mi vida.
+- ❌ No notificaciones - Quiero abrir la app cuando yo quiera, no que me interrumpa.
+- ❌ No objetivos vagos - Todo debe ser concreto y medible.
+- ❌ No streaks - No busco crear adicción, sino hábitos saludables.
+- ✅ Bloques fijos - Cada día tiene los mismos bloques para facilitar el registro y tener consistencia.
+- ✅ Checks rápidos - Permitir marcar rápidamente acciones o estados sin necesidad de escribir mucho.
+- ✅ Fotos como evidencia - Permitir adjuntar fotos para tener un registro visual.
+- ✅ Export simple - Poder exportar los datos de manera sencilla para análisis externo.
+- ✅ Enfoque en UX - La experiencia de usuario debe ser fluida, rápida y sin fricciones.
+- ✅ Mobile first - La aplicación debe ser completamente usable desde dispositivos móviles.
+- ✅ Offline first - La aplicación debe funcionar sin conexión a internet, con sincronización cuando sea posible.

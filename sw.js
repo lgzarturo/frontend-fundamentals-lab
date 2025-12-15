@@ -1,9 +1,14 @@
-const CACHE_NAME = "pwa-cache-v2"
+const CACHE_NAME = "pwa-cache-v3"
 const urlsToCache = [
   "/",
   "/index.html",
   "/assets/css/styles.css",
-  "/assets/js/app.js"
+  "/assets/js/analytics.js",
+  "/assets/js/app.js",
+  "/assets/js/tailwindcss.js",
+  "/assets/js/theme.js",
+  "/assets/locales/en.json",
+  "/assets/locales/es.json"
 ]
 
 self.addEventListener("install", (event) => {
