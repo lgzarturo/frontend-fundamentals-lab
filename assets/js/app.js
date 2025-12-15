@@ -1,4 +1,73 @@
 /**
+ * Clase principal de la aplicación DOSApp
+ */
+class DOSApp {
+  constructor() {
+    // Estado inicial
+    this.currentScreen = "home"
+    this.currentFilter = "all"
+    this.undoStack = []
+    this.storageKey = "dos-app-data-v1"
+
+    // Datos de la aplicación
+    this.state = {
+      budgets: [],
+      tasks: [],
+      notes: [],
+      habits: [],
+      settings: {
+        theme: "dark",
+        currency: "MXN",
+        firstDayOfWeek: 1,
+        notificationsEnabled: false
+      }
+    }
+
+    // Inicializa la aplicación
+    this.init()
+  }
+
+  /**
+   * Inicializa la aplicación DOSApp
+   * Función de arranque que configura la aplicación al cargar
+   */
+  init() {
+    console.log("DOSApp initialized")
+    // Paso 1: Cargar datos de la aplicación del localStorage
+    // Paso 2: Inicializar la interfaz de usuario (Theme, idioma, etc.)
+    // Paso 3: Configurar eventos y listeners
+    // Paso 4: Renderizar la pantalla inicial
+    // Paso 5: Configurar auto-guardado periódico
+    this.updateDateTime()
+    setInterval(() => {
+      console.log("Auto-guardado de datos")
+      this.updateDateTime()
+    }, 60000)
+  }
+
+  /**
+   * Actualiza la fecha y hora mostrada en la interfaz de usuario
+   * @returns {void}
+   */
+  updateDateTime() {
+    const now = new Date()
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    }
+    // TODO: Obtener el idioma desde la configuración del usuario
+    const dateStr = now.toLocaleDateString("en-US", options)
+    const dateEl = document.getElementById("current-date")
+    if (dateEl) dateEl.textContent = dateStr
+  }
+}
+
+// Instancia global de la aplicación
+const application = new DOSApp()
+
+/**
  * Genera un identificador único basado en la fecha actual y un valor aleatorio.
  * Útil para asignar IDs a los elementos.
  * @returns {string} - ID único generado.
@@ -251,6 +320,30 @@ function home() {
   const maxStreak = Math.max(...app.habits.map((h) => h.streak || 0), 0)
 
   document.getElementById("home-habits-streak").textContent = maxStreak
+
+  const totalTasks = app.tasks.filter(
+    (t) => !t.done && t.dueDate === todayStr
+  ).length
+  const doneTasks = app.tasks.filter(
+    (t) => t.done && t.dueDate === todayStr
+  ).length
+  document.getElementById(
+    "home-tasks-done"
+  ).textContent = `${doneTasks}/${totalTasks}`
+
+  const totalBudget = app.budgets.reduce(
+    (sum, b) => sum + b.items.reduce((s, i) => s + i.amount, 0),
+    0
+  )
+  const totalSpent = app.budgets.reduce(
+    (sum, b) =>
+      sum + b.transactions.reduce((s, t) => s + Math.abs(t.amount), 0),
+    0
+  )
+  document.getElementById("home-budget-remaining").textContent = `$${(
+    totalBudget - totalSpent
+  ).toFixed(0)}`
+  document.getElementById("home-notes-count").textContent = app.notes.length
 
   const mits = app.tasks
     .filter((t) => !t.done && (t.priority === "high" || t.dueDate === todayStr))
@@ -1313,28 +1406,21 @@ const app = {
     this.navigateTo("home")
   },
   loadTheme: function () {
-    //load theme from localStorage
-    console.debug("Cargando en local storage:", localStorage.getItem("theme"))
     const theme = localStorage.getItem("theme") || "light"
-    console.debug("Cargando tema:", theme)
     if (theme === "dark") {
       document.documentElement.classList.add("dark")
     } else {
       document.documentElement.classList.remove("dark")
     }
-    // Set theme-toggle button state
     const themeToggleBtn = document.getElementById("theme-toggle")
     themeToggleBtn.checked = theme === "dark"
     localStorage.setItem("theme", theme)
-    console.debug("Tema cargado:", theme)
   },
   toggleTheme: function () {
     const currentTheme = localStorage.getItem("theme")
-    console.debug("Tema actual:", currentTheme)
     const newTheme = currentTheme === "dark" ? "light" : "dark"
     document.documentElement.classList.toggle("dark")
     localStorage.setItem("theme", newTheme)
-    console.debug("Tema cambiado a:", newTheme)
   },
   /**
    * Navega a la pantalla indicada y actualiza el estado visual
@@ -1342,7 +1428,6 @@ const app = {
    * @returns {void}
    */
   navigateTo: function (screen) {
-    console.debug("Navegando a la pantalla:", screen)
     currentScreen = screen
     document
       .querySelectorAll(".screen")
