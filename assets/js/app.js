@@ -626,11 +626,8 @@ function tasks() {
       break
   }
 
-  // Ordenar por orden y prioridad
+  // Mantener el orden definido
   tasks.sort((a, b) => {
-    if (a.done !== b.done) return a.done ? 1 : -1
-    if (a.priority === "high" && b.priority !== "high") return -1
-    if (b.priority === "high" && a.priority !== "high") return 1
     return a.order - b.order
   })
 
@@ -640,10 +637,10 @@ function tasks() {
       (task, index) => `
             <div class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20 task-item"
                  data-task-id="${task.id}" draggable="true"
-                 ondragstart="handleDragStart(event)"
-                 ondragover="handleDragOver(event)"
-                 ondrop="handleDrop(event)"
-                 ondragend="handleDragEnd(event)">
+                 ondragstart="app.handleDragStart(event)"
+                 ondragover="app.handleDragOver(event)"
+                 ondrop="app.handleDrop(event)"
+                 ondragend="app.handleDragEnd(event)">
                 <div class="flex items-start gap-3">
                     <button onclick="app.toggleTask('${task.id}')"
                             class="mt-1 w-6 h-6 rounded border-2 border-xp-primary flex items-center justify-center flex-shrink-0 hover:bg-xp-primary/20 transition-colors">
@@ -1906,6 +1903,100 @@ const app = {
         tasks()
       }
     }
+  },
+  /**
+   * Función para iniciar el evento de arrastre
+   * @param {Event} event - Evento de arrastre iniciado
+   */
+  handleDragStart(event) {
+    event.target.classList.add("dragging")
+    event.dataTransfer.effectAllowed = "move"
+    // TODO: Cambia el icono del cursor por uno que indique el drag
+    event.dataTransfer.setData("text/html", event.target.innerHTML)
+    event.dataTransfer.setData("taskId", event.target.dataset.taskId)
+  },
+  /**
+   * Función para manejar el evento de arrastre sobre una tarea
+   * @param {Event} event - Evento de arrastre
+   * @return {boolean} - Siempre retorna false para evitar el comportamiento por defecto
+   */
+  handleDragOver(event) {
+    if (event.preventDefault) {
+      event.preventDefault()
+    }
+    event.dataTransfer.dropEffect = "move"
+
+    const dragging = document.querySelector(".dragging")
+    const afterElement = this.getDragAfterElement(
+      event.currentTarget.parentElement,
+      event.clientY
+    )
+
+    if (afterElement == null) {
+      event.currentTarget.parentElement.appendChild(dragging)
+    } else {
+      event.currentTarget.parentElement.insertBefore(dragging, afterElement)
+    }
+
+    return false
+  },
+  /**
+   * Función para manejar el evento de soltar una tarea
+   * @param {Event} event - Evento de soltar
+   * @return {boolean} - Siempre retorna false para evitar el comportamiento por defecto
+   */
+  handleDrop(event) {
+    if (event.stopPropagation) {
+      event.stopPropagation()
+    }
+
+    const taskItems = Array.from(document.querySelectorAll(".task-item"))
+    taskItems.forEach((item, index) => {
+      const taskId = item.dataset.taskId
+      const task = app.tasks.find((t) => t.id === taskId)
+      if (task) {
+        task.order = index + 1
+      }
+    })
+
+    store.save(app.tasks, "tasks")
+    return false
+  },
+  /**
+   * Función para manejar el fin del evento de arrastre
+   * @param {Event} event - Evento de arrastre finalizado
+   */
+  handleDragEnd(event) {
+    event.target.classList.remove("dragging")
+    // TODO: Retorna el cursor a su estado inicial.
+    document.querySelectorAll(".task-item").forEach((item) => {
+      item.classList.remove("drag-over")
+    })
+  },
+  /**
+   * Obtiene el elemento después del cual se debe insertar el elemento arrastrado
+   * @param {HTMLElement} container - Contenedor de las tareas
+   * @param {number} y - Posición Y del cursor
+   * @returns {HTMLElement|null} - Elemento después del cual insertar o null si es al final
+   */
+  getDragAfterElement(container, y) {
+    const draggableElements = [
+      ...container.querySelectorAll(".task-item:not(.dragging)")
+    ]
+
+    return draggableElements.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect()
+        const offset = y - box.top - box.height / 2
+
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child }
+        } else {
+          return closest
+        }
+      },
+      { offset: Number.NEGATIVE_INFINITY }
+    ).element
   },
   /**
    * Estado inicial de los hábitos
