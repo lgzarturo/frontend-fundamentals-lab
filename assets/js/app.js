@@ -4,6 +4,7 @@
 class DOSApp {
   constructor() {
     // Estado inicial
+    // TODO: El estado inicial de la aplicación depende de donde dejo de usar el usuario la aplicación
     this.currentScreen = "home"
     this.currentFilter = "all"
     this.undoStack = []
@@ -15,6 +16,7 @@ class DOSApp {
       tasks: [],
       notes: [],
       habits: [],
+      // TODO: Los settings se deben cargar de la configuración del usuario
       settings: {
         theme: "dark",
         currency: "MXN",
@@ -1015,6 +1017,8 @@ function render() {
 
 /**
  * Objeto para gestionar el almacenamiento local (localStorage)
+ * @module store
+ * @description Proporciona métodos para inicializar, guardar y cargar datos en el localStorage, así como para gestionar un contador de visitas.
  * @type {object}
  * @namespace
  * @method init - Inicializa el almacenamiento con datos de ejemplo si no existen
@@ -1024,6 +1028,7 @@ function render() {
  * @property {Array<Task>} dummyTasks - Datos con tareas de ejemplo
  * @property {Array<Habit>} dummyHabits - Datos con hábitos de ejemplo
  * @property {Array<Budget>} dummyBudget - Datos con budgets de ejemplo
+ * @property {Array<Note>} dummyNotes - Datos con notas de ejemplo
  */
 const store = {
   /**
@@ -1414,17 +1419,34 @@ Focus on what you can control:
 /**
  * Objeto principal de la aplicación.
  * Gestiona la navegación, el estado y las operaciones principales.
+ * @module app
+ * @description Es el núcleo de la aplicación, responsable de la navegación entre pantallas, el manejo del estado y la ejecución de las operaciones principales como la gestión de tareas, hábitos, presupuestos y notas.
  * @type {object}
  * @namespace
  * @method init - Inicializa la aplicación.
+ * @method loadTheme - Carga el tema guardado en el localStorage.
+ * @method toggleTheme - Alterna entre los temas claro y oscuro.
  * @method navigateTo - Cambia la pantalla actual.
  * @property {Task[]} tasks - Lista de tareas.
+ * @method filterTasks - Filtra las tareas según el criterio seleccionado.
+ * @method showCreateTaskModal - Muestra el modal para crear una nueva tarea.
+ * @method createTask - Crea una nueva tarea
+ * @method showEditTaskModal - Muestra el modal para editar una tarea existente.
+ * @method addSubtaskInput - Agrega un campo de entrada para una nueva subtarea.
+ * @method updateTask - Actualiza los datos de una tarea existente.
+ * @method deleteTask - Elimina una tarea por su ID.
  * @method toggleTask - Alterna el estado de una tarea.
  * @method toggleSubtask - Alterna el estado de una subtarea.
  * @property {Habit[]} habits - Lista de hábitos.
+ * @method createHabitFromTemplate - Crea un nuevo hábito a partir de una plantilla.
+ * @method createCustomHabit - Permite crear un habito personalizado.
+ * @method showHabitTemplatesModal - Muestra el modal con las plantillas de hábitos.
+ * @method deleteHabit - Elimina un hábito por su ID.
+ * @method toggleHabit - Alterna el estado de un hábito para hoy.
  * @method visitCounter - Cuenta las visitas y lanza confeti cada 10 visitas.
  * @property {Budget[]} budgets - Lista de presupuestos.
  * @method showCreateBudgetModal - Muestra el modal para crear un nuevo presupuesto.
+ * @method createBudget - Crea un nuevo presupuesto.
  * @method showAddTransactionModal - Muestra el modal para agregar una nueva transacción.
  * @method addTransaction - Agrega una nueva transacción a un presupuesto.
  * @method showBudgetDetails - Muestra los detalles de un presupuesto.
@@ -1434,11 +1456,24 @@ Focus on what you can control:
  * @method deleteBudgetItem - Elimina un ítem del presupuesto.
  * @method createBudget - Crea un nuevo presupuesto a partir de un formulario.
  * @property {Note[]} notes - Lista de notas.
+ * @method searchNotes - Busca notas por título o contenido.
+ * @method showCreateNoteModal - Muestra el modal para crear una nueva nota.
+ * @method createNote - Crea una nueva nota.
+ * @method showNoteModal - Muestra el modal para ver o editar una nota.
+ * @method toggleNotePreview - Alterna entre la vista previa y la edición de una nota.
+ * @method updateNote - Actualiza una nota existente.
+ * @method deleteNote - Elimina una nota por su ID.
+ * @method parseMarkdown - Convierte texto Markdown a HTML.
  * @method showModal - Muestra un modal con contenido HTML.
  * @method closeModal - Cierra el modal actual.
  * @method showToast - Muestra un mensaje emergente.
  * @method showUndoToast - Muestra un toast con opción de deshacer.
  * @method performUndo - Ejecuta la acción de deshacer.
+ * @method exportData - Exporta los datos de la aplicación a un archivo JSON.
+ * @method showImportModal - Muestra el modal para importar datos desde un archivo JSON.
+ * @method importData - Importa datos desde un archivo JSON.
+ * @method resetToDemo - Restaura los datos de la aplicación a los valores de demostración.
+ * @method clearAllData - Elimina todos los datos de la aplicación.
  */
 const app = {
   /**
@@ -3151,6 +3186,20 @@ const app = {
   }
 }
 
+/**
+ * Módulo de internacionalización (i18n)
+ * @module I18n
+ * @description Maneja la carga y aplicación de traducciones en la aplicación.
+ * @type {object}
+ * @namespace
+ * @property {string} currentLanguage - Idioma actual de la aplicación.
+ * @property {object} messages - Mensajes traducidos cargados.
+ * @method init - Inicializa el módulo i18n.
+ * @method loadMessages - Carga los mensajes traducidos para un idioma específico.
+ * @method setLanguage - Cambia el idioma actual y recarga los mensajes.
+ * @method t - Obtiene el mensaje traducido por clave.
+ * @method applyTranslations - Aplica las traducciones al HTML.
+ */
 const I18n = {
   currentLanguage: "es", // Idioma por defecto
   messages: {}, // Almacenará los mensajes cargados
