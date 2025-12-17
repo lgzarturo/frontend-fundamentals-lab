@@ -26,7 +26,8 @@
           "title": "Today's MITs (Most Important Tasks)"
         },
         "habits": {
-          "title": "Today's Habits"
+          "title": "Today's Habits",
+          "dayStreak": "day streak"
         },
         "activity": {
           "title": "Recent Activity"

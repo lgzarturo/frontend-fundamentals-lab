@@ -430,7 +430,7 @@ function home() {
                             )}</div>
                             <div class="text-xs text-gray-600 dark:text-gray-400">🔥 ${
                               habit.streak
-                            } day streak</div>
+                            } <span data-i18n="app.screens.home.habits.dayStreak">day streak</span></div>
                         </div>
                     </div>
                     ${
@@ -3371,6 +3371,18 @@ const I18n = {
       } else {
         element.setAttribute(attr, translation)
       }
+    })
+    // Aplica las traducciones placeholder con data-i18n-placeholder
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+      const key = element.getAttribute("data-i18n-placeholder")
+      const translation = this.t(key)
+      element.setAttribute("placeholder", translation)
+    })
+    // Aplica las traducciones aria-label con data-i18n-aria-label
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+      const key = element.getAttribute("data-i18n-aria-label")
+      const translation = this.t(key)
+      element.setAttribute("aria-label", translation)
     })
     // Actualizar el lang del <html> para SEO y accesibilidad
     document.getElementById("html-root").lang = this.currentLanguage

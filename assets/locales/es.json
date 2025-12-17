@@ -26,7 +26,8 @@
           "title": "TIPs de Hoy (Tareas Más Importantes)"
         },
         "habits": {
-          "title": "Hábitos de Hoy"
+          "title": "Hábitos de Hoy",
+          "dayStreak": "días de racha"
         },
         "activity": {
           "title": "Actividad Reciente"
