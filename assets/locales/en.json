@@ -3,19 +3,19 @@
     "name": "Productivity XP",
     "tagline": "Level up your life",
     "menu": {
-      "home": "Dashboard",
-      "tasks": "Tasks & Checklist",
-      "budgets": "Budget Manager",
-      "notes": "Markdown Notes",
-      "habits": "Habit Tracker",
+      "home": "Home",
+      "budgets": "Budgets",
+      "tasks": "Tasks",
+      "habits": "Habits",
+      "notes": "Notes",
       "settings": "Settings"
     },
     "screens": {
       "home": {
         "title": "Dashboard",
-        "welcomeMessage": "Welcome back, {{username}}! 🎮",
+        "welcome": "Welcome back, Developer! 🎮",
         "description": "Welcome to your productivity dashboard! Here you can manage your tasks, budgets, notes, and habits all in one place.",
-        "hitCounter": "Hit Counter: {{count}} hits",
+        "hitCounter": "visits",
         "quickAccess": {
           "dayStreak": "Day Streak",
           "tasksDone": "Tasks Done",
@@ -23,9 +23,140 @@
           "notes": "Notes"
         },
         "mits": {
-          "title": "Today's MITs (Most Important Tasks)",
-          "noMits": "No tasks for today. Create some MITs! 🎯"
+          "title": "Today's MITs (Most Important Tasks)"
+        },
+        "habits": {
+          "title": "Today's Habits"
+        },
+        "activity": {
+          "title": "Recent Activity"
         }
+      },
+      "budgets": {
+        "title": "Budget Manager",
+        "newButton": "+ New Budget",
+        "overview": {
+          "totalBudget": "Total Budget",
+          "totalSpent": "Total Spent",
+          "remaining": "Remaining"
+        },
+        "details": {
+          "addItem": "+ Add Item",
+          "delete": "Delete",
+          "noItems": "No items yet",
+          "noTransactions": "No transactions yet"
+        }
+      },
+      "tasks": {
+        "title": "Tasks & Checklist",
+        "newButton": "+ New Task",
+        "noTasks": "No tasks for today. Create some MITs! 🎯",
+        "filters": {
+          "all": "All Tasks",
+          "today": "Today",
+          "high": "High Priority",
+          "completed": "Completed"
+        },
+        "modal": {
+          "create": {
+            "title": "Create New Task",
+            "cancel": "Cancel",
+            "create": "Create Task"
+          },
+          "edit": {
+            "title": "Edit Task",
+            "update": "Update Task"
+          }
+        }
+      },
+      "habits": {
+        "title": "Habit Tracker",
+        "newButton": "+ Add Habit",
+        "streak": "Current Streak",
+        "rate": "Completion Rate",
+        "templates": {
+          "title": "Programmer Routine Templates",
+          "custom": "Or create custom habit"
+        },
+        "modal": {
+          "createCustom": {
+            "title": "Create Custom Habit",
+            "cancel": "Cancel",
+            "create": "Create Habit"
+          }
+        }
+      },
+      "notes": {
+        "title": "Markdown Notes",
+        "newButton": "+ New Note",
+        "searchPlaceholder": "🔍 Search notes..."
+      },
+      "settings": {
+        "title": "Settings",
+        "appearance": {
+          "title": "Appearance",
+          "darkMode": "Dark Mode",
+          "toggleLabel": "Toggle between light and dark theme",
+          "enableDarkMode": "Enable Dark Mode"
+        },
+        "language": {
+          "title": "Language",
+          "selectLabel": "Select your preferred language",
+          "english": "English",
+          "spanish": "Spanish"
+        },
+        "data": {
+          "title": "Data Management",
+          "export": {
+            "title": "📥 Export Data",
+            "description": "Download all your data as JSON"
+          },
+          "import": {
+            "title": "📤 Import Data",
+            "description": "Upload previously exported data"
+          },
+          "reset": {
+            "title": "🔄 Reset to Demo Data",
+            "description": "Restore sample data (will overwrite current data)"
+          },
+          "clear": {
+            "title": "🗑️ Clear All Data",
+            "description": "Delete all stored data (cannot be undone)"
+          }
+        },
+        "about": {
+          "title": "About Productivity XP",
+          "description": "A gamified productivity suite designed for developers and creators. Track your habits, manage budgets, organize tasks, and write notes - all with an XP-inspired aesthetic.",
+          "version": "Version 0.0.13 | Built with ❤️ and ☕ by"
+        }
+      }
+    }
+  },
+  "ui": {
+    "common": {
+      "hitCounter": "Hit Counter",
+      "visits": "Visits",
+      "loading": "Loading...",
+      "close": "Close",
+      "back": "Back",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "save": "Save",
+      "add": "Add",
+      "edit": "Edit",
+      "undo": "Undo",
+      "toast": {
+        "taskCreated": "Task created! 📝",
+        "taskUpdated": "Task updated! ✓",
+        "taskDeleted": "Task deleted",
+        "habitCreated": "Habit added! 🎯",
+        "habitCustomCreated": "Custom habit created! 🎯",
+        "habitCompleted": "Habit completed! +10 XP 🎉",
+        "habitUnchecked": "Habit unchecked",
+        "budgetCreated": "Budget created successfully! 💰",
+        "transactionAdded": "Transaction added! 💸",
+        "itemAdded": "Budget item added! 📝",
+        "notImplemented": "Not implemented yet 🚧"
       }
     }
   }

@@ -254,7 +254,7 @@
           data-screen="home"
         >
           <span class="text-2xl">🏠</span>
-          <span class="text-xs mt-1">Home</span>
+          <span class="text-xs mt-1" data-i18n="app.menu.home">Home</span>
         </button>
         <button
           onclick="app.navigateTo('budgets')"
@@ -262,7 +262,7 @@
           data-screen="budgets"
         >
           <span class="text-2xl">💰</span>
-          <span class="text-xs mt-1">Budget</span>
+          <span class="text-xs mt-1" data-i18n="app.menu.budgets">Budget</span>
         </button>
         <button
           onclick="app.navigateTo('tasks')"
@@ -270,7 +270,7 @@
           data-screen="tasks"
         >
           <span class="text-2xl">✓</span>
-          <span class="text-xs mt-1">Tasks</span>
+          <span class="text-xs mt-1" data-i18n="app.menu.tasks">Tasks</span>
         </button>
         <button
           onclick="app.navigateTo('notes')"
@@ -278,7 +278,7 @@
           data-screen="notes"
         >
           <span class="text-2xl">📝</span>
-          <span class="text-xs mt-1">Notes</span>
+          <span class="text-xs mt-1" data-i18n="app.menu.notes">Notes</span>
         </button>
         <button
           onclick="app.navigateTo('habits')"
@@ -286,7 +286,7 @@
           data-screen="habits"
         >
           <span class="text-2xl">🎯</span>
-          <span class="text-xs mt-1">Habits</span>
+          <span class="text-xs mt-1" data-i18n="app.menu.habits">Habits</span>
         </button>
       </div>
     </nav>
@@ -380,14 +380,23 @@
       <div id="home-screen" class="screen active">
         <div class="max-w-7xl mx-auto p-4 md:p-6">
           <div class="mb-6">
-            <h2 class="text-3xl font-bold mb-4">Welcome back, Developer! 🎮</h2>
+            <h2
+              class="text-3xl font-bold mb-4"
+              data-i18n="app.screens.home.welcome"
+            >
+              Welcome back, Developer! 🎮
+            </h2>
             <p class="text-gray-600 dark:text-gray-400" id="current-date"></p>
             <p class="text-2xl font-bold mb-4 mt-6">
-              Hit counter:
-              <span id="hit-counter" class="font-mono font-bold text-green-600">
+              <span data-i18n="ui.common.hitCounter">Hit counter:</span>
+              <span
+                id="hit-counter"
+                class="font-mono font-bold text-green-600"
+                data-i18n="ui.common.loading"
+              >
                 Cargando...
               </span>
-              visits
+              <span data-i18n="ui.common.visits">visits</span>
             </p>
           </div>
           <!-- Begin: navigation quick access -->
@@ -402,7 +411,10 @@
               >
                 0
               </div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">
+              <div
+                class="text-sm text-gray-600 dark:text-gray-400"
+                data-i18n="app.screens.home.quickAccess.dayStreak"
+              >
                 Day Streak
               </div>
             </div>
@@ -416,7 +428,10 @@
               >
                 0/0
               </div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">
+              <div
+                class="text-sm text-gray-600 dark:text-gray-400"
+                data-i18n="app.screens.home.quickAccess.tasksDone"
+              >
                 Tasks Today Done
               </div>
             </div>
@@ -430,7 +445,10 @@
               >
                 $0
               </div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">
+              <div
+                class="text-sm text-gray-600 dark:text-gray-400"
+                data-i18n="app.screens.home.quickAccess.remaining"
+              >
                 Remaining
               </div>
             </div>
@@ -444,7 +462,12 @@
               >
                 0
               </div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Notes</div>
+              <div
+                class="text-sm text-gray-600 dark:text-gray-400"
+                data-i18n="app.screens.home.quickAccess.notes"
+              >
+                Notes
+              </div>
             </div>
           </div>
           <!-- End: navigation quick access -->
@@ -454,7 +477,10 @@
             class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20 mb-6"
           >
             <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-              <span>⭐</span> Today's MITs (Most Important Tasks)
+              <span>⭐</span>
+              <span data-i18n="app.screens.home.mits.title"
+                >Today's MITs (Most Important Tasks)</span
+              >
             </h3>
             <div id="home-mits-list" class="space-y-3">
               <!-- Las tareas mas importantes se van a mostrar aquí -->
@@ -467,7 +493,10 @@
             class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20 mb-6"
           >
             <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-              <span>🎯</span> Today's Habits
+              <span>🎯</span>
+              <span data-i18n="app.screens.home.habits.title"
+                >Today's Habits</span
+              >
             </h3>
             <div id="home-habits-list" class="space-y-2">
               <!-- Habits will be rendered here -->
@@ -480,7 +509,10 @@
             class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20"
           >
             <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-              <span>📊</span> Recent Activity
+              <span>📊</span>
+              <span data-i18n="app.screens.home.activity.title"
+                >Recent Activity</span
+              >
             </h3>
             <div id="home-recent-activity" class="space-y-3">
               <!-- Recent activity will be rendered here -->
@@ -496,13 +528,16 @@
         <div class="max-w-7xl mx-auto p-4 md:p-6">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-3xl font-bold flex items-center gap-2">
-              <span>💰</span> Budget Manager
+              <span>💰</span>
+              <span data-i18n="app.screens.budgets.title">Budget Manager</span>
             </h2>
             <button
               onclick="app.showCreateBudgetModal()"
               class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
             >
-              + New Budget
+              <span data-i18n="app.screens.budgets.newButton"
+                >+ New Budget</span
+              >
             </button>
           </div>
 
@@ -511,7 +546,10 @@
             <div
               class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-xp-primary/20"
             >
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+              <div
+                class="text-sm text-gray-600 dark:text-gray-400 mb-1"
+                data-i18n="app.screens.budgets.overview.totalBudget"
+              >
                 Total Budget
               </div>
               <div class="text-3xl font-bold text-xp-primary" id="budget-total">
@@ -521,7 +559,10 @@
             <div
               class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-xp-danger/20"
             >
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+              <div
+                class="text-sm text-gray-600 dark:text-gray-400 mb-1"
+                data-i18n="app.screens.budgets.overview.totalSpent"
+              >
                 Total Spent
               </div>
               <div class="text-3xl font-bold text-xp-danger" id="budget-spent">
@@ -531,7 +572,10 @@
             <div
               class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-xp-secondary/20"
             >
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+              <div
+                class="text-sm text-gray-600 dark:text-gray-400 mb-1"
+                data-i18n="app.screens.budgets.overview.remaining"
+              >
                 Remaining
               </div>
               <div
@@ -556,13 +600,14 @@
         <div class="max-w-7xl mx-auto p-4 md:p-6">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-3xl font-bold flex items-center gap-2">
-              <span>✓</span> Tasks & Checklist
+              <span>✓</span>
+              <span data-i18n="app.screens.tasks.title">Tasks & Checklist</span>
             </h2>
             <button
               onclick="app.showCreateTaskModal()"
               class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
             >
-              + New Task
+              <span data-i18n="app.screens.tasks.newButton">+ New Task</span>
             </button>
           </div>
 
@@ -573,28 +618,32 @@
               class="task-filter-btn px-4 py-2 rounded-lg bg-xp-primary text-xp-darker font-semibold whitespace-nowrap"
               data-filter="all"
             >
-              All Tasks
+              <span data-i18n="app.screens.tasks.filters.all">All Tasks</span>
             </button>
             <button
               onclick="app.filterTasks('today')"
               class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
               data-filter="today"
             >
-              Today
+              <span data-i18n="app.screens.tasks.filters.today">Today</span>
             </button>
             <button
               onclick="app.filterTasks('high')"
               class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
               data-filter="high"
             >
-              High Priority
+              <span data-i18n="app.screens.tasks.filters.high"
+                >High Priority</span
+              >
             </button>
             <button
               onclick="app.filterTasks('completed')"
               class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
               data-filter="completed"
             >
-              Completed
+              <span data-i18n="app.screens.tasks.filters.completed"
+                >Completed</span
+              >
             </button>
           </div>
 
@@ -611,13 +660,14 @@
         <div class="max-w-7xl mx-auto p-4 md:p-6">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-3xl font-bold flex items-center gap-2">
-              <span>📝</span> Markdown Notes
+              <span>📝</span>
+              <span data-i18n="app.screens.notes.title">Markdown Notes</span>
             </h2>
             <button
               onclick="app.showCreateNoteModal();"
               class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
             >
-              + New Note
+              <span data-i18n="app.screens.notes.newButton">+ New Note</span>
             </button>
           </div>
 
@@ -627,6 +677,7 @@
               type="text"
               id="notes-search"
               placeholder="🔍 Search notes..."
+              data-i18n-aria-label="app.screens.notes.searchPlaceholder"
               oninput="app.searchNotes(this.value)"
               class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-card focus:outline-none focus:border-xp-primary"
             />
@@ -648,13 +699,14 @@
         <div class="max-w-7xl mx-auto p-4 md:p-6">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-3xl font-bold flex items-center gap-2">
-              <span>🎯</span> Habit Tracker
+              <span>🎯</span>
+              <span data-i18n="app.screens.habits.title">Habit Tracker</span>
             </h2>
             <button
               onclick="app.showHabitTemplatesModal();"
               class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
             >
-              + Add Habit
+              <span data-i18n="app.screens.habits.newButton">+ Add Habit</span>
             </button>
           </div>
 
@@ -664,7 +716,10 @@
           >
             <div class="flex items-center justify-between flex-wrap gap-4">
               <div>
-                <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                <div
+                  class="text-sm text-gray-600 dark:text-gray-400 mb-1"
+                  data-i18n="app.screens.habits.streak"
+                >
                   Current Streak
                 </div>
                 <div class="text-4xl font-bold" id="habits-current-streak">
@@ -672,7 +727,10 @@
                 </div>
               </div>
               <div class="text-right">
-                <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                <div
+                  class="text-sm text-gray-600 dark:text-gray-400 mb-1"
+                  data-i18n="app.screens.habits.rate"
+                >
                   Completion Rate
                 </div>
                 <div
@@ -697,18 +755,32 @@
       <div id="settings-screen" class="screen">
         <div class="max-w-4xl mx-auto p-4 md:p-6">
           <h2 class="text-3xl font-bold mb-6 flex items-center gap-2">
-            <span>⚙️</span> Settings
+            <span>⚙️</span>
+            <span data-i18n="app.screens.settings.title">Settings</span>
           </h2>
 
           <!-- Theme Toggle -->
           <div
             class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20 mb-4"
           >
-            <h3 class="text-xl font-bold mb-4">Appearance</h3>
+            <h3
+              class="text-xl font-bold mb-4"
+              data-i18n="app.screens.settings.appearance.title"
+            >
+              Appearance
+            </h3>
             <div class="flex items-center justify-between">
               <div>
-                <div class="font-semibold">Dark Mode</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">
+                <div
+                  class="font-semibold"
+                  data-i18n="app.screens.settings.appearance.darkMode"
+                >
+                  Dark Mode
+                </div>
+                <div
+                  class="text-sm text-gray-600 dark:text-gray-400"
+                  data-i18n="app.screens.settings.appearance.toggleLabel"
+                >
                   Toggle between light and dark theme
                 </div>
               </div>
@@ -729,20 +801,38 @@
                 ></div>
                 <span
                   class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  data-i18n="app.screens.settings.appearance.enableDarkMode"
                   >Enable Dark Mode</span
                 >
               </label>
             </div>
 
-            <h3 class="text-xl font-bold mt-6 mb-4">Language</h3>
+            <h3
+              class="text-xl font-bold mt-6 mb-4"
+              data-i18n="app.screens.settings.language.title"
+            >
+              Language
+            </h3>
             <div class="mt-4">
               <select
                 id="language-selector"
                 class="bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2"
                 title="Language/Idioma"
+                aria-label="Select your preferred language"
+                data-i18n-aria-label="app.screens.settings.language.selectLabel"
               >
-                <option value="es">Español (ES)</option>
-                <option value="en">English (EN)</option>
+                <option
+                  value="es"
+                  data-i18n="app.screens.settings.language.spanish"
+                >
+                  Español (ES)
+                </option>
+                <option
+                  value="en"
+                  data-i18n="app.screens.settings.language.english"
+                >
+                  English (EN)
+                </option>
               </select>
             </div>
           </div>
@@ -751,14 +841,27 @@
           <div
             class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20 mb-4"
           >
-            <h3 class="text-xl font-bold mb-4">Data Management</h3>
+            <h3
+              class="text-xl font-bold mb-4"
+              data-i18n="app.screens.settings.data.title"
+            >
+              Data Management
+            </h3>
             <div class="space-y-3">
               <button
                 onclick="app.exportData()"
                 class="w-full text-left px-4 py-3 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded-lg transition-colors"
               >
-                <div class="font-semibold">📥 Export Data</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">
+                <div
+                  class="font-semibold"
+                  data-i18n="app.screens.settings.data.export.title"
+                >
+                  📥 Export Data
+                </div>
+                <div
+                  class="text-sm text-gray-600 dark:text-gray-400"
+                  data-i18n="app.screens.settings.data.export.description"
+                >
                   Download all your data as JSON
                 </div>
               </button>
@@ -766,8 +869,16 @@
                 onclick="app.showImportModal()"
                 class="w-full text-left px-4 py-3 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg transition-colors"
               >
-                <div class="font-semibold">📤 Import Data</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">
+                <div
+                  class="font-semibold"
+                  data-i18n="app.screens.settings.data.import.title"
+                >
+                  📤 Import Data
+                </div>
+                <div
+                  class="text-sm text-gray-600 dark:text-gray-400"
+                  data-i18n="app.screens.settings.data.import.description"
+                >
                   Upload previously exported data
                 </div>
               </button>
@@ -775,8 +886,16 @@
                 onclick="app.resetToDemo()"
                 class="w-full text-left px-4 py-3 bg-xp-warning/20 hover:bg-xp-warning/30 rounded-lg transition-colors"
               >
-                <div class="font-semibold">🔄 Reset to Demo Data</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">
+                <div
+                  class="font-semibold"
+                  data-i18n="app.screens.settings.data.reset.title"
+                >
+                  🔄 Reset to Demo Data
+                </div>
+                <div
+                  class="text-sm text-gray-600 dark:text-gray-400"
+                  data-i18n="app.screens.settings.data.reset.description"
+                >
                   Restore sample data (will overwrite current data)
                 </div>
               </button>
@@ -784,8 +903,16 @@
                 onclick="app.clearAllData()"
                 class="w-full text-left px-4 py-3 bg-xp-danger/20 hover:bg-xp-danger/30 rounded-lg transition-colors"
               >
-                <div class="font-semibold">🗑️ Clear All Data</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">
+                <div
+                  class="font-semibold"
+                  data-i18n="app.screens.settings.data.clear.title"
+                >
+                  🗑️ Clear All Data
+                </div>
+                <div
+                  class="text-sm text-gray-600 dark:text-gray-400"
+                  data-i18n="app.screens.settings.data.clear.description"
+                >
                   Delete all stored data (cannot be undone)
                 </div>
               </button>
@@ -796,14 +923,24 @@
           <div
             class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20"
           >
-            <h3 class="text-xl font-bold mb-2">About Productivity XP</h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-4">
+            <h3
+              class="text-xl font-bold mb-2"
+              data-i18n="app.screens.settings.about.title"
+            >
+              About Productivity XP
+            </h3>
+            <p
+              class="text-gray-600 dark:text-gray-400 mb-4"
+              data-i18n="app.screens.settings.about.description"
+            >
               A gamified productivity suite designed for developers and
               creators. Track your habits, manage budgets, organize tasks, and
               write notes - all with an XP-inspired aesthetic.
             </p>
             <div class="text-sm text-gray-500 dark:text-gray-500">
-              Version 0.0.13 | Built with ❤️ and ☕ by
+              <span data-i18n="app.screens.settings.about.version"
+                >Version 0.0.13 | Built with ❤️ and ☕ by</span
+              >
               <a
                 href="https://www.lgzarturo.com"
                 target="_blank"
@@ -851,7 +988,7 @@
         onclick="app.performUndo()"
         class="bg-xp-primary text-xp-darker px-4 py-1 rounded font-semibold"
       >
-        Undo
+        <span data-i18n="app.ui.common.undo">Undo</span>
       </button>
     </div>
     <!-- End: Undo Toast -->
@@ -895,7 +1032,10 @@
       </span>
     </template>
     <template id="home-no-content-template">
-      <div class="text-gray-500 dark:text-gray-400 text-center py-8">
+      <div
+        class="text-gray-500 dark:text-gray-400 text-center py-8"
+        data-i18n="app.screens.tasks.noTasks"
+      >
         No tasks for today. Create some MITs! 🎯
       </div>
     </template>

@@ -1,31 +1,162 @@
 {
   "app": {
     "name": "Productividad XP",
-    "tagline": "Mejora tu vida al máximo",
+    "tagline": "Sube de nivel tu vida",
     "menu": {
       "home": "Inicio",
-      "tasks": "Tareas",
       "budgets": "Presupuestos",
-      "notes": "Notas",
+      "tasks": "Tareas",
       "habits": "Hábitos",
+      "notes": "Notas",
       "settings": "Configuración"
     },
     "screens": {
       "home": {
-        "title": "Panel",
-        "welcomeMessage": "¡Bienvenido de nuevo, {{username}}! 🎮",
-        "description": "¡Bienvenido a tu panel de productividad! Aquí puedes gestionar tus tareas, presupuestos, notas y hábitos, todo en un solo lugar.",
-        "hitCounter": "Contador de golpes: {{count}} golpes",
+        "title": "Panel de Control",
+        "welcome": "¡Hola de nuevo, Desarrollador! 🎮",
+        "description": "Bienvenido a tu panel de productividad. Aquí puedes gestionar tus tareas, presupuestos, notas y hábitos en un solo lugar.",
+        "hitCounter": "visitas",
         "quickAccess": {
-          "dayStreak": "Racha de días",
-          "tasksDone": "Tareas completadas",
-          "remaining": "Restantes",
+          "dayStreak": "Racha de Días",
+          "tasksDone": "Tareas Hechas",
+          "remaining": "Restante",
           "notes": "Notas"
         },
         "mits": {
-          "title": "MITs de hoy (Tareas Más Importantes)",
-          "noMits": "No hay tareas para hoy. ¡Crea algunos MITs! 🎯"
+          "title": "TIPs de Hoy (Tareas Más Importantes)"
+        },
+        "habits": {
+          "title": "Hábitos de Hoy"
+        },
+        "activity": {
+          "title": "Actividad Reciente"
         }
+      },
+      "budgets": {
+        "title": "Gestor de Presupuestos",
+        "newButton": "+ Nuevo Presupuesto",
+        "overview": {
+          "totalBudget": "Presupuesto Total",
+          "totalSpent": "Total Gastado",
+          "remaining": "Restante"
+        },
+        "details": {
+          "addItem": "+ Añadir Artículo",
+          "delete": "Eliminar",
+          "noItems": "No hay artículos aún",
+          "noTransactions": "No hay transacciones aún"
+        }
+      },
+      "tasks": {
+        "title": "Tareas y Lista de Verificación",
+        "newButton": "+ Nueva Tarea",
+        "noTasks": "No hay tareas para hoy. ¡Crea algunas MITs! 🎯",
+        "filters": {
+          "all": "Todas las Tareas",
+          "today": "Hoy",
+          "high": "Alta Prioridad",
+          "completed": "Completadas"
+        },
+        "modal": {
+          "create": {
+            "title": "Crear Nueva Tarea",
+            "cancel": "Cancelar",
+            "create": "Crear Tarea"
+          },
+          "edit": {
+            "title": "Editar Tarea",
+            "update": "Actualizar Tarea"
+          }
+        }
+      },
+      "habits": {
+        "title": "Seguimiento de Hábitos",
+        "newButton": "+ Añadir Hábito",
+        "streak": "Racha Actual",
+        "rate": "Tasa de Completado",
+        "templates": {
+          "title": "Plantillas de Rutina de Programador",
+          "custom": "O crear hábito personalizado"
+        },
+        "modal": {
+          "createCustom": {
+            "title": "Crear Hábito Personalizado",
+            "cancel": "Cancelar",
+            "create": "Crear Hábito"
+          }
+        }
+      },
+      "notes": {
+        "title": "Notas en Markdown",
+        "newButton": "+ Nueva Nota",
+        "searchPlaceholder": "🔍 Buscar notas..."
+      },
+      "settings": {
+        "title": "Configuración",
+        "appearance": {
+          "title": "Apariencia",
+          "darkMode": "Modo Oscuro",
+          "toggleLabel": "Alternar entre tema claro y oscuro",
+          "enableDarkMode": "Activar Modo Oscuro"
+        },
+        "language": {
+          "title": "Idioma",
+          "selectLabel": "Selecciona tu idioma preferido",
+          "english": "Inglés",
+          "spanish": "Español"
+        },
+        "data": {
+          "title": "Gestión de Datos",
+          "export": {
+            "title": "📥 Exportar Datos",
+            "description": "Descargar todos tus datos como JSON"
+          },
+          "import": {
+            "title": "📤 Importar Datos",
+            "description": "Subir datos previamente exportados"
+          },
+          "reset": {
+            "title": "🔄 Restablecer a Datos de Demostración",
+            "description": "Restaurar datos de ejemplo (sobrescribirá los datos actuales)"
+          },
+          "clear": {
+            "title": "🗑️ Borrar Todos los Datos",
+            "description": "Eliminar todos los datos almacenados (no se puede deshacer)"
+          }
+        },
+        "about": {
+          "title": "Acerca de Productividad XP",
+          "description": "Una suite de productividad gamificada diseñada para desarrolladores y creadores. Seguimiento de hábitos, gestión de presupuestos, organización de tareas y escritura de notas - todo con un estilo inspirado en XP.",
+          "version": "Versión 0.0.13 | Hecho con ❤️ y ☕ por"
+        }
+      }
+    }
+  },
+  "ui": {
+    "common": {
+      "hitCounter": "Contador:",
+      "visits": "visitas",
+      "loading": "Cargando...",
+      "close": "Cerrar",
+      "back": "Volver",
+      "delete": "Eliminar",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "add": "Añadir",
+      "edit": "Editar",
+      "undo": "Deshacer",
+      "toast": {
+        "taskCreated": "¡Tarea creada! 📝",
+        "taskUpdated": "¡Tarea actualizada! ✓",
+        "taskDeleted": "Tarea eliminada",
+        "habitCreated": "¡Hábito añadido! 🎯",
+        "habitCustomCreated": "¡Hábito personalizado creado! 🎯",
+        "habitCompleted": "¡Hábito completado! +10 XP 🎉",
+        "habitUnchecked": "Hábito desmarcado",
+        "budgetCreated": "¡Presupuesto creado con éxito! 💰",
+        "transactionAdded": "¡Transacción añadida! 💸",
+        "itemAdded": "¡Artículo de presupuesto añadido! 📝",
+        "notImplemented": "Aún no está implementado 🚧"
       }
     }
   }
