@@ -60,7 +60,10 @@ class DOSApp {
       day: "numeric"
     }
     // TODO: Obtener el idioma desde la configuración del usuario
-    const dateStr = now.toLocaleDateString("en-US", options)
+    const languageFromHtml = localStorage.getItem("userLanguage") || "es"
+    const localeToDateString = languageFromHtml === "es" ? "es-ES" : "en-US"
+    console.log({ languageFromHtml, localeToDateString })
+    const dateStr = now.toLocaleDateString(localeToDateString, options)
     const dateEl = document.getElementById("current-date")
     if (dateEl) dateEl.textContent = dateStr
   }
@@ -3298,10 +3301,18 @@ const I18n = {
   async init(defaultLang = "es") {
     // Detectar idioma del navegador si no hay uno guardado
     const savedLang = localStorage.getItem("userLanguage")
-    this.currentLanguage =
-      savedLang || navigator.language.split("-")[0] || defaultLang
-        ? defaultLang
-        : "en"
+    console.log(`Idioma guardado: ${savedLang}`)
+    let detectedLang = savedLang
+    if (!detectedLang) {
+      detectedLang = navigator.language
+        ? navigator.language.split("-")[0]
+        : null
+    }
+    if (!detectedLang) {
+      detectedLang = defaultLang
+    }
+    this.currentLanguage = detectedLang
+    console.log(`Idioma detectado: ${this.currentLanguage}`)
     // Asegurar que el idioma detectado esté disponible
     if (!["es", "en"].includes(this.currentLanguage)) {
       this.currentLanguage = defaultLang
@@ -3359,6 +3370,7 @@ const I18n = {
     return message
   },
 
+  // TODO: Refactorizar para evitar código duplicado
   applyTranslations() {
     // Aplica traducciones a elementos con data-i18n
     document.querySelectorAll("[data-i18n]").forEach((element) => {
@@ -3385,6 +3397,7 @@ const I18n = {
       element.setAttribute("aria-label", translation)
     })
     // Actualizar el lang del <html> para SEO y accesibilidad
+    application.updateDateTime()
     document.getElementById("html-root").lang = this.currentLanguage
   }
 }
@@ -3395,6 +3408,7 @@ const I18n = {
  */
 window.addEventListener("load", () => {
   I18n.init().then(() => {
+    document.getElementById("language-selector").value = I18n.currentLanguage
     app.init()
   })
   document
