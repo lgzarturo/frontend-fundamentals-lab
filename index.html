@@ -1039,6 +1039,56 @@
         No tasks for today. Create some MITs! 🎯
       </div>
     </template>
+
+    <template id="home-habit-template">
+      <div
+        class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg"
+      >
+        <div class="flex items-center gap-3 flex-1">
+          <button
+            class="w-8 h-8 rounded-full border-2 flex items-center justify-center hover:scale-110 transition-transform"
+            data-habit-done-button
+          >
+            <!--isDone-->
+          </button>
+          <div>
+            <div class="font-semibold" data-habit-title>
+              <!-- habit.title -->
+            </div>
+            <div class="text-xs text-gray-600 dark:text-gray-400">
+              🔥
+              <span data-habit-streak-title><!-- habit.streak --></span>
+              <span data-habit-streak-label><!-- day streak --></span>
+            </div>
+          </div>
+        </div>
+        <span class="text-xp-primary font-bold hidden" data-xp-reward>
+          <!-- XP Reward -->
+        </span>
+      </div>
+    </template>
+
+    <template id="recent-activity-template">
+      <div
+        class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-xp-darker rounded-lg"
+      >
+        <span class="text-2xl" data-icon><!--item.icon--></span>
+        <div class="flex-1">
+          <div class="font-semibold" data-text><!--item.text--></div>
+          <div class="text-xs text-gray-600 dark:text-gray-400" data-time>
+            <!--item.time-->
+          </div>
+        </div>
+      </div>
+    </template>
+    <template id="home-no-activity-template">
+      <div
+        class="text-gray-500 dark:text-gray-400 text-center py-4"
+        data-i18n="app.screens.home.activity.noActivity"
+      >
+        No recent activity to show
+      </div>
+    </template>
     <!-- End Template Home -->
 
     <script src="/assets/js/app.js" defer></script>

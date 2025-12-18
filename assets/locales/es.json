@@ -30,7 +30,8 @@
           "dayStreak": "días de racha"
         },
         "activity": {
-          "title": "Actividad Reciente"
+          "title": "Actividad Reciente",
+          "noActivity": "No hay actividad reciente"
         }
       },
       "budgets": {
@@ -132,6 +133,13 @@
         }
       }
     }
+  },
+  "label": {
+    "today": "Hoy",
+    "completed": "Completado",
+    "updated": "Actualizado",
+    "ago": "atrás",
+    "justNow": "Justo ahora"
   },
   "ui": {
     "common": {

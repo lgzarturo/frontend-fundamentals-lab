@@ -30,7 +30,8 @@
           "dayStreak": "day streak"
         },
         "activity": {
-          "title": "Recent Activity"
+          "title": "Recent Activity",
+          "noActivity": "No recent activity to show"
         }
       },
       "budgets": {
@@ -132,6 +133,13 @@
         }
       }
     }
+  },
+  "label": {
+    "today": "Today",
+    "completed": "Completed",
+    "updated": "Updated",
+    "ago": "ago",
+    "justNow": "Just now"
   },
   "ui": {
     "common": {

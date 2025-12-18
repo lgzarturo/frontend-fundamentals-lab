@@ -59,10 +59,8 @@ class DOSApp {
       month: "long",
       day: "numeric"
     }
-    // TODO: Obtener el idioma desde la configuración del usuario
     const languageFromHtml = localStorage.getItem("userLanguage") || "es"
     const localeToDateString = languageFromHtml === "es" ? "es-ES" : "en-US"
-    console.log({ languageFromHtml, localeToDateString })
     const dateStr = now.toLocaleDateString(localeToDateString, options)
     const dateEl = document.getElementById("current-date")
     if (dateEl) dateEl.textContent = dateStr
@@ -149,10 +147,10 @@ function getRelativeTime(timestamp) {
   const hours = Math.floor(diff / 3600000)
   const days = Math.floor(diff / 86400000)
 
-  if (minutes < 1) return "Just now"
-  if (minutes < 60) return `${minutes}m ago`
-  if (hours < 24) return `${hours}h ago`
-  if (days < 7) return `${days}d ago`
+  if (minutes < 1) return I18n.getMessage("label.justNow")
+  if (minutes < 60) return `${minutes}m ${I18n.getMessage("label.ago")}`
+  if (hours < 24) return `${hours}h ${I18n.getMessage("label.ago")}`
+  if (days < 7) return `${days}d ${I18n.getMessage("label.ago")}`
   return new Date(timestamp).toLocaleDateString()
 }
 
@@ -401,52 +399,52 @@ function home() {
       mitsList.appendChild(node)
     })
   } else {
-    const noContentTemplate = document.getElementById(
-      "home-no-content-template"
-    )
-    const noContentNode = noContentTemplate.content.cloneNode(true)
+    const noContentNode = I18n.cloneTemplateWithI18n("home-no-content-template")
     mitsList.appendChild(noContentNode)
   }
 
   // Renderizar los hábitos en el inicio
-  const habitsHtml = app.habits
-    .map((habit) => {
-      const isDone = habit.dailyRecords[todayStr]
-      return `
-                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
-                    <div class="flex items-center gap-3 flex-1">
-                        <button onclick="app.toggleHabit('${habit.id}')"
-                                class="w-8 h-8 rounded-full border-2 ${
-                                  isDone
-                                    ? "bg-xp-primary border-xp-primary"
-                                    : "border-gray-400"
-                                } flex items-center justify-center hover:scale-110 transition-transform">
-                            ${
-                              isDone
-                                ? '<span class="text-xp-darker text-lg">✓</span>'
-                                : ""
-                            }
-                        </button>
-                        <div>
-                            <div class="font-semibold">${escapeHtml(
-                              habit.title
-                            )}</div>
-                            <div class="text-xs text-gray-600 dark:text-gray-400">🔥 ${
-                              habit.streak
-                            } <span data-i18n="app.screens.home.habits.dayStreak">day streak</span></div>
-                        </div>
-                    </div>
-                    ${
-                      isDone
-                        ? '<span class="text-xp-primary font-bold">+10 XP</span>'
-                        : ""
-                    }
-                </div>
-            `
+  const todayHabits = []
+  app.habits.forEach((habit) => {
+    todayHabits.push({
+      ...habit,
+      isDone: habit.dailyRecords[todayStr] || false,
+      onClick: () => app.toggleHabit(habit.id)
     })
-    .join("")
+  })
 
-  document.getElementById("home-habits-list").innerHTML = habitsHtml
+  const habitsList = document.getElementById("home-habits-list")
+  habitsList.innerHTML = ""
+  if (todayHabits.length > 0) {
+    const template = document.getElementById("home-habit-template")
+    todayHabits.forEach((habit) => {
+      const node = template.content.cloneNode(true)
+      // Título
+      node.querySelector("[data-habit-title]").textContent = habit.title
+      // Racha de días
+      node.querySelector("[data-habit-streak-title]").textContent = habit.streak
+      node.querySelector("[data-habit-streak-label]").textContent =
+        I18n.getMessage("app.screens.home.habits.dayStreak")
+      // Estado completado
+      const doneButton = node.querySelector("[data-habit-done-button]")
+      doneButton.onclick = () => app.toggleHabit(habit.id)
+      if (habit.isDone) {
+        doneButton.classList.remove("border-gray-400")
+        doneButton.classList.add("bg-xp-primary", "border-xp-primary")
+        doneButton.innerHTML = '<span class="text-xp-darker text-lg">✓</span>'
+        const xpReward = node.querySelector("[data-xp-reward]")
+        xpReward.textContent = "+10 XP"
+        xpReward.classList.remove("hidden")
+      } else {
+        doneButton.classList.remove("bg-xp-primary", "border-xp-primary")
+        doneButton.innerHTML = ""
+        doneButton.classList.add("border-gray-400")
+        const xpReward = node.querySelector("[data-xp-reward]")
+        xpReward.classList.add("hidden")
+      }
+      habitsList.appendChild(node)
+    })
+  }
 
   // Mostrar la actividad reciente
   const recentActivity = []
@@ -460,8 +458,8 @@ function home() {
   recentTasks.forEach((task) => {
     recentActivity.push({
       icon: "✓",
-      text: `Completed: ${task.title}`,
-      time: "Today",
+      text: `${I18n.getMessage("label.completed")}: ${task.title}`,
+      time: I18n.getMessage("label.today"),
       color: "text-xp-primary"
     })
   })
@@ -474,30 +472,30 @@ function home() {
   recentNotes.forEach((note) => {
     recentActivity.push({
       icon: "📝",
-      text: `Updated: ${note.title}`,
+      text: `${I18n.getMessage("label.updated")}: ${note.title}`,
       time: getRelativeTime(note.updatedAt),
       color: "text-purple-500"
     })
   })
 
-  const activityHtml =
-    recentActivity.length > 0
-      ? recentActivity
-          .map(
-            (item) => `
-            <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
-                <span class="${item.color} text-2xl">${item.icon}</span>
-                <div class="flex-1">
-                    <div class="font-semibold">${item.text}</div>
-                    <div class="text-xs text-gray-600 dark:text-gray-400">${item.time}</div>
-                </div>
-            </div>
-        `
-          )
-          .join("")
-      : '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No recent activity</div>'
-
-  document.getElementById("home-recent-activity").innerHTML = activityHtml
+  const recentActivityList = document.getElementById("home-recent-activity")
+  recentActivityList.innerHTML = ""
+  if (recentActivity.length > 0) {
+    const template = document.getElementById("recent-activity-template")
+    recentActivity.forEach((item) => {
+      const node = template.content.cloneNode(true)
+      node.querySelector("[data-icon]").textContent = item.icon
+      node.querySelector("[data-text]").textContent = item.text
+      node.querySelector("[data-time]").textContent = item.time
+      node.querySelector("[data-icon]").className = item.color + " text-2xl"
+      recentActivityList.appendChild(node)
+    })
+  } else {
+    const noActivityNode = I18n.cloneTemplateWithI18n(
+      "home-no-activity-template"
+    )
+    recentActivityList.appendChild(noActivityNode)
+  }
 }
 
 /**
@@ -3298,6 +3296,11 @@ const I18n = {
   currentLanguage: "es", // Idioma por defecto
   messages: {}, // Almacenará los mensajes cargados
 
+  /**
+   * Inicializa el módulo i18n
+   * @param {string} defaultLang - Idioma por defecto si no se detecta otro
+   * @returns {Promise<void>}
+   */
   async init(defaultLang = "es") {
     // Detectar idioma del navegador si no hay uno guardado
     const savedLang = localStorage.getItem("userLanguage")
@@ -3322,6 +3325,11 @@ const I18n = {
     this.applyTranslations() // Aplicar traducciones al HTML inicial
   },
 
+  /**
+   * Carga los mensajes traducidos para un idioma específico
+   * @param {string} lang - Código del idioma a cargar (e.g., "es", "en")
+   * @returns {Promise<void>}
+   */
   async loadMessages(lang) {
     try {
       const response = await fetch(`/assets/locales/${lang}.json`)
@@ -3342,6 +3350,11 @@ const I18n = {
     }
   },
 
+  /**
+   * Establece el idioma actual y recarga los mensajes
+   * @param {string} lang - Código del idioma a establecer (e.g., "es", "en")
+   * @returns {void}
+   */
   setLanguage(lang) {
     if (["es", "en"].includes(lang)) {
       this.currentLanguage = lang
@@ -3354,6 +3367,12 @@ const I18n = {
     }
   },
 
+  /**
+   * Obtiene el mensaje traducido por clave
+   * @param {string} key - Clave del mensaje a traducir
+   * @param {object} params - Parámetros para placeholders en el mensaje
+   * @returns {string} - Mensaje traducido
+   */
   t(key, params = {}) {
     // Obtiene el mensaje traducido por clave
     // Soporta placeholders básicos: {nombre} -> params.nombre
@@ -3371,6 +3390,10 @@ const I18n = {
   },
 
   // TODO: Refactorizar para evitar código duplicado
+  /**
+   * Aplica las traducciones a los elementos del DOM
+   * @returns {void}
+   */
   applyTranslations() {
     // Aplica traducciones a elementos con data-i18n
     document.querySelectorAll("[data-i18n]").forEach((element) => {
@@ -3399,6 +3422,36 @@ const I18n = {
     // Actualizar el lang del <html> para SEO y accesibilidad
     application.updateDateTime()
     document.getElementById("html-root").lang = this.currentLanguage
+  },
+
+  /**
+   * Clona un template y aplica traducciones a los elementos con data-i18n
+   * @param {string} templateId - El id del template a clonar
+   * @returns {DocumentFragment} - El fragmento clonado y traducido
+   */
+  cloneTemplateWithI18n(templateId) {
+    const template = document.getElementById(templateId)
+    if (!template) return null
+    const clone = template.content.cloneNode(true)
+
+    // Buscar todos los elementos con data-i18n dentro del clon
+    clone.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.getAttribute("data-i18n")
+      const translation = I18n.t(key)
+      el.textContent = translation
+    })
+
+    return clone
+  },
+
+  /**
+   * Función auxiliar para obtener mensajes traducidos
+   * @param {string} key - Clave del mensaje a traducir
+   * @param {object} params - Parámetros para placeholders en el mensaje
+   * @returns {string} - Mensaje traducido
+   */
+  getMessage(key, params = {}) {
+    return this.t(key, params)
   }
 }
 
