@@ -916,6 +916,7 @@ function notes() {
  */
 function render() {
   console.debug("Renderizando la pantalla:", currentScreen)
+  localStorage.setItem("currentScreen", currentScreen)
   switch (currentScreen) {
     case "home":
       home()
@@ -1485,7 +1486,12 @@ const app = {
     store.load("budgets", "array")
     store.load("notes", "array")
     this.visitCounter()
-    this.navigateTo("home")
+    if (localStorage.getItem("currentScreen")) {
+      currentScreen = localStorage.getItem("currentScreen")
+    } else {
+      currentScreen = "home"
+    }
+    this.navigateTo(currentScreen)
   },
   loadTheme: function () {
     const theme = localStorage.getItem("theme") || "light"
@@ -1510,6 +1516,7 @@ const app = {
    * @returns {void}
    */
   navigateTo: function (screen) {
+    console.log("Navegando a la pantalla:", screen)
     currentScreen = screen
     document
       .querySelectorAll(".screen")
