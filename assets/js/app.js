@@ -524,83 +524,81 @@ function budgets() {
     "budget-remaining"
   ).textContent = `$${remaining.toFixed(2)}`
 
-  const budgetsHtml = app.budgets
-    .map((budget) => {
-      const budgetTotal = budget.items.reduce(
-        (sum, item) => sum + item.amount,
-        0
-      )
-      const budgetSpent = budget.transactions.reduce(
-        (sum, t) => sum + Math.abs(t.amount),
-        0
-      )
-      const budgetRemaining = budgetTotal - budgetSpent
-      const percentage = budgetTotal > 0 ? (budgetSpent / budgetTotal) * 100 : 0
+  const budgetList = []
+  app.budgets.forEach((budget) => {
+    const budgetTotal = budget.items.reduce((sum, item) => sum + item.amount, 0)
+    const budgetSpent = budget.transactions.reduce(
+      (sum, t) => sum + Math.abs(t.amount),
+      0
+    )
+    const budgetRemaining = budgetTotal - budgetSpent
+    const percentage = budgetTotal > 0 ? (budgetSpent / budgetTotal) * 100 : 0
 
-      return `
-                <div class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xl font-bold">${escapeHtml(
-                          budget.name
-                        )}</h3>
-                        <div class="flex gap-2">
-                            <button onclick="app.showBudgetDetails('${
-                              budget.id
-                            }')"
-                                    class="px-4 py-2 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded-lg transition-colors">
-                                View Details
-                            </button>
-                            <button onclick="app.showAddTransactionModal('${
-                              budget.id
-                            }')"
-                                    class="px-4 py-2 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker rounded-lg transition-colors">
-                                + Transaction
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-4 mb-4">
-                        <div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">Budget</div>
-                            <div class="text-lg font-bold">$${budgetTotal.toFixed(
-                              2
-                            )}</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">Spent</div>
-                            <div class="text-lg font-bold text-xp-danger">$${budgetSpent.toFixed(
-                              2
-                            )}</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">Remaining</div>
-                            <div class="text-lg font-bold text-xp-primary">$${budgetRemaining.toFixed(
-                              2
-                            )}</div>
-                        </div>
-                    </div>
-
-                    <div class="relative w-full h-4 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden">
-                        <div class="xp-bar-fill absolute top-0 left-0 h-full ${
-                          percentage > 90
-                            ? "bg-xp-danger"
-                            : percentage > 70
-                            ? "bg-xp-warning"
-                            : "bg-xp-primary"
-                        }"
-                             style="width: ${Math.min(percentage, 100)}%"></div>
-                    </div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-2 text-right">${percentage.toFixed(
-                      1
-                    )}% used</div>
-                </div>
-            `
+    budgetList.push({
+      name: escapeHtml(budget.name),
+      showBudgetAction: () => app.showBudgetDetails(budget.id),
+      addTransactionAction: () => app.showAddTransactionModal(budget.id),
+      total: budgetTotal.toFixed(2),
+      spent: budgetSpent.toFixed(2),
+      remaining: budgetRemaining.toFixed(1),
+      percentage
     })
-    .join("")
+  })
 
-  document.getElementById("budgets-list").innerHTML =
-    budgetsHtml ||
-    '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No budgets yet. Create your first budget to get started! 💰</div>'
+  const budgetElementList = document.getElementById("budgets-list")
+  budgetElementList.innerHTML = ""
+  if (budgetList.length > 0) {
+    const template = document.getElementById("budget-card-template")
+    budgetList.forEach((budget) => {
+      console.log("Rendering budget:", budget)
+      const node = template.content.cloneNode(true)
+      node.querySelector("[data-budget-name]").textContent = budget.name
+      node.querySelector("[data-budget-total-label]").textContent =
+        I18n.getMessage("app.screens.budgets.overview.totalBudget")
+      node.querySelector("[data-budget-total]").textContent = `$${budget.total}`
+      node.querySelector("[data-budget-spent-label]").textContent =
+        I18n.getMessage("app.screens.budgets.overview.totalSpent")
+      node.querySelector("[data-budget-spent]").textContent = `$${budget.spent}`
+      node.querySelector("[data-budget-remaining-label]").textContent =
+        I18n.getMessage("app.screens.budgets.overview.remaining")
+      node.querySelector(
+        "[data-budget-remaining]"
+      ).textContent = `$${budget.remaining}`
+      const percentageBar = node.querySelector("[data-budget-bar-fill]")
+      percentageBar.style.width = `${Math.min(budget.percentage, 100)}%`
+      if (budget.percentage > 90) {
+        percentageBar.classList.add("bg-xp-danger")
+      } else if (budget.percentage > 70) {
+        percentageBar.classList.add("bg-xp-warning")
+      } else {
+        percentageBar.classList.add("bg-xp-primary")
+      }
+      const percentageLabel = node.querySelector(
+        "[data-budget-percentage-used]"
+      )
+      percentageLabel.textContent = `${budget.percentage.toFixed(
+        1
+      )}% ${I18n.getMessage("app.screens.budgets.used")}`
+      const showBudgetBtn = node.querySelector(
+        "[data-budget-view-details-button]"
+      )
+      showBudgetBtn.textContent = I18n.getMessage(
+        "app.screens.budgets.overview.viewDetails"
+      )
+      showBudgetBtn.onclick = () => budget.showBudgetAction()
+      const addTransactionBtn = node.querySelector(
+        "[data-budget-add-transaction-button]"
+      )
+      addTransactionBtn.textContent = I18n.getMessage(
+        "app.screens.budgets.overview.addTransaction"
+      )
+      addTransactionBtn.onclick = () => budget.addTransactionAction()
+      budgetElementList.appendChild(node)
+    })
+  } else {
+    const noBudgetsNode = I18n.cloneTemplateWithI18n("no-budgets-template")
+    budgetElementList.appendChild(noBudgetsNode)
+  }
 }
 
 // Controlador de filtro actual

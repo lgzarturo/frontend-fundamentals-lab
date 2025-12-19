@@ -37,10 +37,13 @@
       "budgets": {
         "title": "Budget Manager",
         "newButton": "+ New Budget",
+        "used": "used",
         "overview": {
           "totalBudget": "Total Budget",
           "totalSpent": "Total Spent",
-          "remaining": "Remaining"
+          "remaining": "Remaining",
+          "viewDetails": "View Details",
+          "addTransaction": "+ Transaction"
         },
         "details": {
           "addItem": "+ Add Item",

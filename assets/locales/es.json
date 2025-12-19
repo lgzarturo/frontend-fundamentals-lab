@@ -37,10 +37,13 @@
       "budgets": {
         "title": "Gestor de Presupuestos",
         "newButton": "+ Nuevo Presupuesto",
+        "used": "usado",
         "overview": {
           "totalBudget": "Presupuesto Total",
           "totalSpent": "Total Gastado",
-          "remaining": "Restante"
+          "remaining": "Restante",
+          "viewDetails": "Ver Detalles",
+          "addTransaction": "+ Añadir Transacción"
         },
         "details": {
           "addItem": "+ Añadir Artículo",

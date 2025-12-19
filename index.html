@@ -1091,6 +1091,96 @@
     </template>
     <!-- End Template Home -->
 
+    <!-- Template budgets -->
+    <template id="budget-card-template">
+      <div
+        class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-bold" data-budget-name>
+            <!-- budget.name -->
+          </h3>
+          <div class="flex gap-2">
+            <button
+              class="px-4 py-2 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded-lg transition-colors"
+              data-budget-view-details-button
+            >
+              <!-- View Details -->
+            </button>
+            <button
+              class="px-4 py-2 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker rounded-lg transition-colors"
+              data-budget-add-transaction-button
+            >
+              <!-- + Transaction -->
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4 mb-4">
+          <div>
+            <div
+              class="text-sm text-gray-600 dark:text-gray-400"
+              data-budget-total-label
+            >
+              <!--Budget-->
+            </div>
+            <div class="text-lg font-bold" data-budget-total>
+              <!-- budgetTotal -->
+            </div>
+          </div>
+          <div>
+            <div
+              class="text-sm text-gray-600 dark:text-gray-400"
+              data-budget-spent-label
+            >
+              <!--Spent-->
+            </div>
+            <div class="text-lg font-bold text-xp-danger" data-budget-spent>
+              <!--budgetSpent-->
+            </div>
+          </div>
+          <div>
+            <div
+              class="text-sm text-gray-600 dark:text-gray-400"
+              data-budget-remaining-label
+            >
+              <!--Remaining-->
+            </div>
+            <div
+              class="text-lg font-bold text-xp-primary"
+              data-budget-remaining
+            >
+              <!--budgetRemaining-->
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="relative w-full h-4 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden"
+        >
+          <div
+            class="xp-bar-fill absolute top-0 left-0 h-full"
+            data-budget-bar-fill
+          ></div>
+        </div>
+        <div
+          class="text-sm text-gray-600 dark:text-gray-400 mt-2 text-right"
+          data-budget-percentage-used
+        >
+          <!--percentage used-->
+        </div>
+      </div>
+    </template>
+    <template id="no-budgets-template">
+      <div
+        class="text-gray-500 dark:text-gray-400 text-center py-8"
+        data-i18n="app.screens.budgets.noBudgets"
+      >
+        No budgets yet. Create your first budget to get started! 💰
+      </div>
+    </template>
+    <!-- End Template budgets -->
+
     <script src="/assets/js/app.js" defer></script>
     <script src="/assets/js/tailwindcss.js" defer></script>
     <script src="/assets/js/theme.js" defer></script>
