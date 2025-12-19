@@ -23,7 +23,7 @@
           "notes": "Notas"
         },
         "mits": {
-          "title": "TIPs de Hoy (Tareas Más Importantes)"
+          "title": "Tareas Importantes"
         },
         "habits": {
           "title": "Hábitos de Hoy",
@@ -35,32 +35,32 @@
         }
       },
       "budgets": {
-        "title": "Gestor de Presupuestos",
-        "newButton": "+ Nuevo Presupuesto",
+        "title": "Dinero",
+        "newButton": "+ Presupuesto",
         "used": "usado",
         "overview": {
           "totalBudget": "Presupuesto Total",
           "totalSpent": "Total Gastado",
           "remaining": "Restante",
           "viewDetails": "Ver Detalles",
-          "addTransaction": "+ Añadir Transacción"
+          "addTransaction": "+ Transacción"
         },
         "details": {
-          "addItem": "+ Añadir Artículo",
+          "addItem": "+ Artículo",
           "delete": "Eliminar",
           "noItems": "No hay artículos aún",
           "noTransactions": "No hay transacciones aún"
         }
       },
       "tasks": {
-        "title": "Tareas y Lista de Verificación",
-        "newButton": "+ Nueva Tarea",
+        "title": "Tareas",
+        "newButton": "+ Tarea",
         "noTasks": "No hay tareas para hoy. ¡Crea algunas MITs! 🎯",
         "filters": {
-          "all": "Todas las Tareas",
+          "all": "Todas",
           "today": "Hoy",
-          "high": "Alta Prioridad",
-          "completed": "Completadas"
+          "high": "Urgentes",
+          "completed": "Acabadas"
         },
         "modal": {
           "create": {
@@ -75,8 +75,8 @@
         }
       },
       "habits": {
-        "title": "Seguimiento de Hábitos",
-        "newButton": "+ Añadir Hábito",
+        "title": "Seguimiento",
+        "newButton": "+ Hábito",
         "streak": "Racha Actual",
         "rate": "Tasa de Completado",
         "templates": {
@@ -92,8 +92,8 @@
         }
       },
       "notes": {
-        "title": "Notas en Markdown",
-        "newButton": "+ Nueva Nota",
+        "title": "Notas",
+        "newButton": "+ Nota",
         "searchPlaceholder": "🔍 Buscar notas..."
       },
       "settings": {

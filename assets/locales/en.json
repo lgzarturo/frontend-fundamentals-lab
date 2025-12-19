@@ -23,7 +23,7 @@
           "notes": "Notes"
         },
         "mits": {
-          "title": "Today's MITs (Most Important Tasks)"
+          "title": "Most Important Tasks"
         },
         "habits": {
           "title": "Today's Habits",
@@ -35,8 +35,8 @@
         }
       },
       "budgets": {
-        "title": "Budget Manager",
-        "newButton": "+ New Budget",
+        "title": "Money",
+        "newButton": "+ Budget",
         "used": "used",
         "overview": {
           "totalBudget": "Total Budget",
@@ -46,18 +46,18 @@
           "addTransaction": "+ Transaction"
         },
         "details": {
-          "addItem": "+ Add Item",
+          "addItem": "+ Item",
           "delete": "Delete",
           "noItems": "No items yet",
           "noTransactions": "No transactions yet"
         }
       },
       "tasks": {
-        "title": "Tasks & Checklist",
-        "newButton": "+ New Task",
+        "title": "Tasks",
+        "newButton": "+ Task",
         "noTasks": "No tasks for today. Create some MITs! 🎯",
         "filters": {
-          "all": "All Tasks",
+          "all": "All",
           "today": "Today",
           "high": "High Priority",
           "completed": "Completed"
@@ -75,8 +75,8 @@
         }
       },
       "habits": {
-        "title": "Habit Tracker",
-        "newButton": "+ Add Habit",
+        "title": "Tracking",
+        "newButton": "+ Habit",
         "streak": "Current Streak",
         "rate": "Completion Rate",
         "templates": {
@@ -92,8 +92,8 @@
         }
       },
       "notes": {
-        "title": "Markdown Notes",
-        "newButton": "+ New Note",
+        "title": "Notes",
+        "newButton": "+ Note",
         "searchPlaceholder": "🔍 Search notes..."
       },
       "settings": {
