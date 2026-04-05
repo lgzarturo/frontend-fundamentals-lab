@@ -10,6 +10,8 @@ De momento mi objetivo es tener una herramienta de uso diario, así que el enfoq
 
 El desarrollo se divide en **5 fases**, cada una construyendo sobre la anterior. Las primeras dos fases son de cimentación (arquitectura + infraestructura), y las tres restantes agregan funcionalidad nueva.
 
+> **Nota importante:** Aunque el plan es ambicioso, es fundamental mantener la flexibilidad. Al inicio para iniciar el plan es necesario terminar el soporte i18n para tener la aplicación completamente en español, y luego enfocarse en la Fase 1 de refactorización. Es posible que durante la Fase 1 se identifiquen mejoras o cambios necesarios que afecten el plan original, y eso está bien. El objetivo es tener una base sólida para poder iterar rápidamente en las funcionalidades nuevas sin que el código se vuelva inmanejable.
+
 ---
 
 ## Fase 1: Refactorización y Arquitectura Modular
