@@ -19,11 +19,11 @@ Después de agregar GTM, Lighthouse reportó una caída en el performance a **96
 
 ### Detalle de recursos y ahorro estimado
 
-| Recurso | Transfer Size | Est Savings |
-|---------|---------------|-------------|
-| Google Tag Manager tag-manager | 242.9 KiB | 104.1 KiB |
-| /gtag/js?id=G-6YJ3WLEG9P | 142.6 KiB | 53.9 KiB |
-| /gtm.js?id=GTM-N9PXJX8V | 100.3 KiB | 50.2 KiB |
+| Recurso                        | Transfer Size | Est Savings |
+| ------------------------------ | ------------- | ----------- |
+| Google Tag Manager tag-manager | 242.9 KiB     | 104.1 KiB   |
+| /gtag/js?id=G-6YJ3WLEG9P       | 142.6 KiB     | 53.9 KiB    |
+| /gtm.js?id=GTM-N9PXJX8V        | 100.3 KiB     | 50.2 KiB    |
 
 ## 4. Reflexión: ¿Vale la pena el costo en performance?
 

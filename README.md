@@ -143,25 +143,20 @@ frontend-fundamentals-lab/
 Actualmente, la estructura es clara y modular, pero puede evolucionar para facilitar la escalabilidad y el mantenimiento a medida que el proyecto crece. Aquí algunas recomendaciones que se podrían implementar en el futuro:
 
 1. **Separar lógicamente los módulos de la app:**
-
    - Crear una carpeta `src/` para el código fuente principal (JS, componentes, utilidades).
    - Mover `assets/js/` y `utils/` a `src/` y dividir en subcarpetas por dominio (`src/tasks/`, `src/notes/`, etc.).
 
 2. **Componentes reutilizables:**
-
    - Implementar una carpeta `src/components/` para componentes UI reutilizables (botones, modales, inputs, etc.).
 
 3. **Pruebas y documentación:**
-
    - Agregar una carpeta `tests/` para pruebas unitarias y de integración.
    - Mantener la carpeta `docs/` solo para documentación técnica y de usuario.
 
 4. **Internacionalización y temas:**
-
    - Centralizar la lógica de i18n y temas en `src/core/` o `src/config/` para facilitar su mantenimiento y escalabilidad.
 
 5. **Automatización y herramientas:**
-
    - Incluir scripts de automatización (build, lint, format) en una carpeta `scripts/`.
 
 6. **Convenciones de nombres:**
