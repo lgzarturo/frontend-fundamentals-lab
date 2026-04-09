@@ -1,31 +1,315 @@
 {
   "app": {
     "name": "Productividad XP",
-    "tagline": "Mejora tu vida al máximo",
+    "tagline": "Sube de nivel tu vida",
     "menu": {
       "home": "Inicio",
-      "tasks": "Tareas",
       "budgets": "Presupuestos",
-      "notes": "Notas",
+      "tasks": "Tareas",
       "habits": "Hábitos",
+      "notes": "Notas",
       "settings": "Configuración"
     },
     "screens": {
       "home": {
-        "title": "Panel",
-        "welcomeMessage": "¡Bienvenido de nuevo, {{username}}! 🎮",
-        "description": "¡Bienvenido a tu panel de productividad! Aquí puedes gestionar tus tareas, presupuestos, notas y hábitos, todo en un solo lugar.",
-        "hitCounter": "Contador de golpes: {{count}} golpes",
+        "title": "Panel de Control",
+        "welcome": "¡Hola de nuevo, Desarrollador! 🎮",
+        "description": "Bienvenido a tu panel de productividad. Aquí puedes gestionar tus tareas, presupuestos, notas y hábitos en un solo lugar.",
+        "hitCounter": "visitas",
         "quickAccess": {
-          "dayStreak": "Racha de días",
-          "tasksDone": "Tareas completadas",
-          "remaining": "Restantes",
+          "dayStreak": "Racha de Días",
+          "tasksDone": "Tareas Hechas",
+          "remaining": "Restante",
           "notes": "Notas"
         },
         "mits": {
-          "title": "MITs de hoy (Tareas Más Importantes)",
-          "noMits": "No hay tareas para hoy. ¡Crea algunos MITs! 🎯"
+          "title": "Tareas Importantes",
+          "noContent": "No hay tareas importantes. ¡Crea algunas! 🎯"
+        },
+        "habits": {
+          "title": "Hábitos de Hoy",
+          "dayStreak": "días de racha"
+        },
+        "activity": {
+          "title": "Actividad Reciente",
+          "noActivity": "No hay actividad reciente"
         }
+      },
+      "budgets": {
+        "title": "Dinero",
+        "newButton": "+ Presupuesto",
+        "used": "usado",
+        "noBudgets": "No hay presupuestos aún. ¡Crea uno! 💰",
+        "overview": {
+          "totalBudget": "Presupuesto Total",
+          "totalSpent": "Total Gastado",
+          "remaining": "Restante",
+          "viewDetails": "Ver Detalles",
+          "addTransaction": "+ Transacción"
+        },
+        "details": {
+          "addItem": "+ Artículo",
+          "delete": "Eliminar",
+          "noItems": "No hay artículos aún",
+          "noTransactions": "No hay transacciones aún",
+          "transactions": "Transacciones"
+        },
+        "modal": {
+          "create": {
+            "title": "Crear Nuevo Presupuesto",
+            "name": "Nombre del Presupuesto",
+            "namePlaceholder": "ej., Presupuesto Personal Mensual",
+            "currency": "Moneda",
+            "cancel": "Cancelar",
+            "create": "Crear Presupuesto"
+          },
+          "addTransaction": {
+            "title": "Agregar Transacción",
+            "description": "Descripción",
+            "descriptionPlaceholder": "ej., Compras semanales",
+            "amount": "Monto (negativo para gastos)",
+            "amountPlaceholder": "-50.00",
+            "cancel": "Cancelar",
+            "add": "Agregar Transacción"
+          },
+          "addItem": {
+            "title": "Agregar Artículo",
+            "category": "Categoría/Título",
+            "categoryPlaceholder": "ej., Comestibles",
+            "amount": "Monto",
+            "amountPlaceholder": "0.00",
+            "notes": "Notas (opcional)",
+            "notesPlaceholder": "Notas adicionales...",
+            "back": "Volver",
+            "add": "Agregar Artículo"
+          }
+        }
+      },
+      "tasks": {
+        "title": "Tareas",
+        "newButton": "+ Tarea",
+        "noTasks": "No hay tareas para hoy. ¡Crea algunas MITs! 🎯",
+        "filters": {
+          "all": "Todas",
+          "today": "Hoy",
+          "high": "Urgentes",
+          "completed": "Acabadas"
+        },
+        "modal": {
+          "create": {
+            "title": "Crear Nueva Tarea",
+            "titleLabel": "Título *",
+            "titlePlaceholder": "ej., Completar implementación de feature",
+            "description": "Descripción",
+            "descriptionPlaceholder": "Detalles de la tarea...",
+            "dueDate": "Fecha de Vencimiento",
+            "priority": "Prioridad",
+            "tags": "Etiquetas (separadas por coma)",
+            "tagsPlaceholder": "coding, important, review",
+            "cancel": "Cancelar",
+            "create": "Crear Tarea"
+          },
+          "edit": {
+            "title": "Editar Tarea",
+            "update": "Actualizar Tarea",
+            "subtasks": "Subtareas",
+            "addSubtask": "+ Agregar Subtarea"
+          }
+        },
+        "priority": {
+          "low": "Baja",
+          "medium": "Media",
+          "high": "Alta"
+        },
+        "action": {
+          "edit": "Editar",
+          "delete": "Eliminar"
+        },
+        "dueDate": "Vence: "
+      },
+      "habits": {
+        "title": "Seguimiento",
+        "newButton": "+ Hábito",
+        "streak": "Racha Actual",
+        "rate": "Tasa de Completado",
+        "noHabits": "No hay hábitos aún. ¡Añade hábitos para empezar! 🎯",
+        "completedToday": "✓ Completado Hoy",
+        "markComplete": "○ Marcar Completo",
+        "streakLabel": "racha",
+        "templates": {
+          "title": "Plantillas de Rutina de Programador",
+          "custom": "O crear hábito personalizado",
+          "items": [
+            {
+              "title": "🌅 Despertar sin snooze",
+              "description": "Despertar a la hora objetivo sin tocar el botón de snooze"
+            },
+            {
+              "title": "💧 Hidratarse (500ml agua)",
+              "description": "Beber 500ml de agua con limón inmediatamente al despertar"
+            },
+            {
+              "title": "🧘 Meditación estoica (10 min)",
+              "description": "Meditación matutina y diario"
+            },
+            {
+              "title": "🏃 Rutina de movilidad",
+              "description": "15-20 minutos de estiramientos y calistenia"
+            },
+            {
+              "title": "⭐ Definir 3 MITs",
+              "description": "Planificar las 3 tareas más importantes durante el desayuno"
+            },
+            {
+              "title": "🎯 Completar primer bloque de trabajo profundo",
+              "description": "Sesión de trabajo enfocada de 60 minutos"
+            },
+            {
+              "title": "📚 Bloque de aprendizaje (30-45 min)",
+              "description": "Tiempo dedicado a aprender nuevas habilidades"
+            },
+            {
+              "title": "📝 Revisión de fin de día",
+              "description": "Revisar logros y planear mañana"
+            },
+            {
+              "title": "🌙 Atardecer digital (6 PM)",
+              "description": "Desconectarse de las pantallas a las 6 PM"
+            },
+            {
+              "title": "😴 Preparación para dormir (9 PM)",
+              "description": "Iniciar rutina de sueño, objetivo dormirse a las 11 PM"
+            }
+          ]
+        },
+        "modal": {
+          "add": {
+            "title": "Agregar Hábito",
+            "createCustom": "O crear hábito personalizado",
+            "titleLabel": "Título *",
+            "titlePlaceholder": "ej., Corrida matutina",
+            "description": "Descripción",
+            "descriptionPlaceholder": "Breve descripción...",
+            "cancel": "Cancelar",
+            "create": "Crear Hábito"
+          }
+        }
+      },
+      "notes": {
+        "title": "Notas",
+        "newButton": "+ Nota",
+        "searchPlaceholder": "🔍 Buscar notas...",
+        "noNotes": "No hay notas aún. ¡Empieza a escribir! 📝",
+        "modal": {
+          "create": {
+            "title": "Crear Nueva Nota",
+            "titleLabel": "Título *",
+            "titlePlaceholder": "Título de la nota...",
+            "content": "Contenido (Markdown)",
+            "contentPlaceholder": "# Escribe tu nota en markdown...",
+            "preview": "Vista Previa",
+            "tags": "Etiquetas (separadas por coma)",
+            "tagsPlaceholder": "ideas, trabajo, personal",
+            "cancel": "Cancelar",
+            "create": "Crear Nota"
+          },
+          "edit": {
+            "title": "Ver/Editar Nota",
+            "update": "Actualizar Nota"
+          }
+        }
+      },
+      "settings": {
+        "title": "Configuración",
+        "appearance": {
+          "title": "Apariencia",
+          "darkMode": "Modo Oscuro",
+          "toggleLabel": "Alternar entre tema claro y oscuro",
+          "enableDarkMode": "Activar Modo Oscuro"
+        },
+        "language": {
+          "title": "Idioma",
+          "selectLabel": "Selecciona tu idioma preferido",
+          "english": "Inglés",
+          "spanish": "Español"
+        },
+        "data": {
+          "title": "Gestión de Datos",
+          "export": {
+            "title": "📥 Exportar Datos",
+            "description": "Descargar todos tus datos como JSON"
+          },
+          "import": {
+            "title": "📤 Importar Datos",
+            "description": "Subir datos previamente exportados"
+          },
+          "reset": {
+            "title": "🔄 Restablecer a Datos de Demostración",
+            "description": "Restaurar datos de ejemplo (sobrescribirá los datos actuales)"
+          },
+          "clear": {
+            "title": "🗑️ Borrar Todos los Datos",
+            "description": "Eliminar todos los datos almacenados (no se puede deshacer)"
+          }
+        },
+        "about": {
+          "title": "Acerca de Productividad XP",
+          "description": "Una suite de productividad gamificada diseñada para desarrolladores y creadores. Seguimiento de hábitos, gestión de presupuestos, organización de tareas y escritura de notas - todo con un estilo inspirado en XP.",
+          "version": "Versión 0.0.13 | Hecho con ❤️ y ☕ por"
+        }
+      }
+    }
+  },
+  "label": {
+    "today": "Hoy",
+    "completed": "Completado",
+    "updated": "Actualizado",
+    "ago": "atrás",
+    "justNow": "Justo ahora",
+    "noTasks": "No hay tareas. ¡Crea tu primera! ✓",
+    "noHabits": "No hay hábitos. ¡Añade hábitos para empezar! 🎯",
+    "noNotes": "No hay notas. ¡Empieza a escribir! 📝",
+    "noBudgets": "No hay presupuestos aún. ¡Crea uno! 💰",
+    "days": "días"
+  },
+  "ui": {
+    "common": {
+      "hitCounter": "Contador:",
+      "visits": "visitas",
+      "loading": "Cargando...",
+      "close": "Cerrar",
+      "back": "Volver",
+      "delete": "Eliminar",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "add": "Añadir",
+      "edit": "Editar",
+      "undo": "Deshacer",
+      "deleted": "Eliminado",
+      "confirm": "Confirmar",
+      "confirmDelete": "¿Estás seguro de que quieres eliminar esto? Esta acción no se puede deshacer.",
+      "toast": {
+        "taskCreated": "¡Tarea creada! 📝",
+        "taskUpdated": "¡Tarea actualizada! ✓",
+        "taskDeleted": "Tarea eliminada",
+        "taskCompleted": "¡Tarea completada! +15 XP 🎉",
+        "taskReopened": "Tarea reopened",
+        "habitCreated": "¡Hábito añadido! 🎯",
+        "habitCustomCreated": "¡Hábito personalizado creado! 🎯",
+        "habitCompleted": "¡Hábito completado! +10 XP 🎉",
+        "habitUnchecked": "Hábito desmarcado",
+        "budgetCreated": "¡Presupuesto creado con éxito! 💰",
+        "budgetDeleted": "Presupuesto eliminado",
+        "transactionAdded": "¡Transacción añadida! 💸",
+        "itemAdded": "¡Artículo de presupuesto añadido! 📝",
+        "noteCreated": "¡Nota creada! 📄",
+        "noteUpdated": "¡Nota actualizada! ✓",
+        "noteDeleted": "Nota eliminada",
+        "notImplemented": "Aún no está implementado 🚧",
+        "dataExported": "¡Datos exportados! 📥",
+        "dataImported": "¡Datos importados! 📤",
+        "dataReset": "Datos restablecidos a demo",
+        "dataCleared": "Todos los datos eliminados"
       }
     }
   }

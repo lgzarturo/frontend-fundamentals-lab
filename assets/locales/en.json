@@ -3,19 +3,19 @@
     "name": "Productivity XP",
     "tagline": "Level up your life",
     "menu": {
-      "home": "Dashboard",
-      "tasks": "Tasks & Checklist",
-      "budgets": "Budget Manager",
-      "notes": "Markdown Notes",
-      "habits": "Habit Tracker",
+      "home": "Home",
+      "budgets": "Budgets",
+      "tasks": "Tasks",
+      "habits": "Habits",
+      "notes": "Notes",
       "settings": "Settings"
     },
     "screens": {
       "home": {
         "title": "Dashboard",
-        "welcomeMessage": "Welcome back, {{username}}! 🎮",
+        "welcome": "Welcome back, Developer! 🎮",
         "description": "Welcome to your productivity dashboard! Here you can manage your tasks, budgets, notes, and habits all in one place.",
-        "hitCounter": "Hit Counter: {{count}} hits",
+        "hitCounter": "visits",
         "quickAccess": {
           "dayStreak": "Day Streak",
           "tasksDone": "Tasks Done",
@@ -23,9 +23,293 @@
           "notes": "Notes"
         },
         "mits": {
-          "title": "Today's MITs (Most Important Tasks)",
-          "noMits": "No tasks for today. Create some MITs! 🎯"
+          "title": "Most Important Tasks",
+          "noContent": "No important tasks yet. Create some! 🎯"
+        },
+        "habits": {
+          "title": "Today's Habits",
+          "dayStreak": "day streak"
+        },
+        "activity": {
+          "title": "Recent Activity",
+          "noActivity": "No recent activity to show"
         }
+      },
+      "budgets": {
+        "title": "Money",
+        "newButton": "+ Budget",
+        "used": "used",
+        "noBudgets": "No budgets yet. Create one! 💰",
+        "overview": {
+          "totalBudget": "Total Budget",
+          "totalSpent": "Total Spent",
+          "remaining": "Remaining",
+          "viewDetails": "View Details",
+          "addTransaction": "+ Transaction"
+        },
+        "details": {
+          "addItem": "+ Item",
+          "delete": "Delete",
+          "noItems": "No items yet",
+          "noTransactions": "No transactions yet",
+          "transactions": "Transactions"
+        },
+        "modal": {
+          "create": {
+            "title": "Create New Budget",
+            "name": "Budget Name",
+            "namePlaceholder": "e.g., Monthly Personal Budget",
+            "currency": "Currency",
+            "cancel": "Cancel",
+            "create": "Create Budget"
+          },
+          "addTransaction": {
+            "title": "Add Transaction",
+            "description": "Description",
+            "descriptionPlaceholder": "e.g., Weekly groceries",
+            "amount": "Amount (negative for expenses)",
+            "amountPlaceholder": "-50.00",
+            "cancel": "Cancel",
+            "add": "Add Transaction"
+          },
+          "addItem": {
+            "title": "Add Budget Item",
+            "category": "Category/Title",
+            "categoryPlaceholder": "e.g., Groceries",
+            "amount": "Amount",
+            "amountPlaceholder": "0.00",
+            "notes": "Notes (optional)",
+            "notesPlaceholder": "Additional notes...",
+            "back": "Back",
+            "add": "Add Item"
+          }
+        }
+      },
+      "tasks": {
+        "title": "Tasks",
+        "newButton": "+ Task",
+        "noTasks": "No tasks for today. Create some MITs! 🎯",
+        "filters": {
+          "all": "All",
+          "today": "Today",
+          "high": "High Priority",
+          "completed": "Completed"
+        },
+        "modal": {
+          "create": {
+            "title": "Create New Task",
+            "titleLabel": "Title *",
+            "titlePlaceholder": "e.g., Complete feature implementation",
+            "description": "Description",
+            "descriptionPlaceholder": "Task details...",
+            "dueDate": "Due Date",
+            "priority": "Priority",
+            "tags": "Tags (comma-separated)",
+            "tagsPlaceholder": "coding, important, review",
+            "cancel": "Cancel",
+            "create": "Create Task"
+          },
+          "edit": {
+            "title": "Edit Task",
+            "update": "Update Task",
+            "subtasks": "Subtasks",
+            "addSubtask": "+ Add Subtask"
+          }
+        },
+        "priority": {
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High"
+        },
+        "action": {
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "dueDate": "Due: "
+      },
+      "habits": {
+        "title": "Tracking",
+        "newButton": "+ Habit",
+        "streak": "Current Streak",
+        "rate": "Completion Rate",
+        "noHabits": "No habits yet. Add habits to start tracking! 🎯",
+        "completedToday": "✓ Completed Today",
+        "markComplete": "○ Mark Complete",
+        "streakLabel": "streak",
+        "templates": {
+          "title": "Programmer Routine Templates",
+          "custom": "Or create custom habit",
+          "items": [
+            {
+              "title": "🌅 Wake without snooze",
+              "description": "Wake up at target time without hitting snooze"
+            },
+            {
+              "title": "💧 Hydrate (500ml water)",
+              "description": "Drink 500ml water with lemon immediately after waking"
+            },
+            {
+              "title": "🧘 Stoic meditation (10 min)",
+              "description": "Morning meditation and journaling"
+            },
+            {
+              "title": "🏃 Mobility routine",
+              "description": "15-20 minutes of stretching and calisthenics"
+            },
+            {
+              "title": "⭐ Define 3 MITs",
+              "description": "Plan the 3 most important tasks during breakfast"
+            },
+            {
+              "title": "🎯 Complete first deep work block",
+              "description": "60-minute focused work session"
+            },
+            {
+              "title": "📚 Learning block (30-45 min)",
+              "description": "Dedicated time for learning new skills"
+            },
+            {
+              "title": "📝 End of day review",
+              "description": "Review accomplishments and plan tomorrow"
+            },
+            {
+              "title": "🌙 Digital sunset (6 PM)",
+              "description": "Disconnect from screens by 6 PM"
+            },
+            {
+              "title": "😴 Sleep prep by 9 PM",
+              "description": "Begin sleep routine, target sleep by 11 PM"
+            }
+          ]
+        },
+        "modal": {
+          "add": {
+            "title": "Add Habit",
+            "createCustom": "Or create custom habit",
+            "titleLabel": "Title *",
+            "titlePlaceholder": "e.g., Morning run",
+            "description": "Description",
+            "descriptionPlaceholder": "Brief description...",
+            "cancel": "Cancel",
+            "create": "Create Habit"
+          }
+        }
+      },
+      "notes": {
+        "title": "Notes",
+        "newButton": "+ Note",
+        "searchPlaceholder": "🔍 Search notes...",
+        "noNotes": "No notes yet. Start writing! 📝",
+        "modal": {
+          "create": {
+            "title": "Create New Note",
+            "titleLabel": "Title *",
+            "titlePlaceholder": "Note title...",
+            "content": "Content (Markdown)",
+            "contentPlaceholder": "# Write your note in markdown...",
+            "preview": "Preview",
+            "tags": "Tags (comma-separated)",
+            "tagsPlaceholder": "ideas, work, personal",
+            "cancel": "Cancel",
+            "create": "Create Note"
+          },
+          "edit": {
+            "title": "View/Edit Note",
+            "update": "Update Note"
+          }
+        }
+      },
+      "settings": {
+        "title": "Settings",
+        "appearance": {
+          "title": "Appearance",
+          "darkMode": "Dark Mode",
+          "toggleLabel": "Toggle between light and dark theme",
+          "enableDarkMode": "Enable Dark Mode"
+        },
+        "language": {
+          "title": "Language",
+          "selectLabel": "Select your preferred language",
+          "english": "English",
+          "spanish": "Spanish"
+        },
+        "data": {
+          "title": "Data Management",
+          "export": {
+            "title": "📥 Export Data",
+            "description": "Download all your data as JSON"
+          },
+          "import": {
+            "title": "📤 Import Data",
+            "description": "Upload previously exported data"
+          },
+          "reset": {
+            "title": "🔄 Reset to Demo Data",
+            "description": "Restore sample data (will overwrite current data)"
+          },
+          "clear": {
+            "title": "🗑️ Clear All Data",
+            "description": "Delete all stored data (cannot be undone)"
+          }
+        },
+        "about": {
+          "title": "About Productivity XP",
+          "description": "A gamified productivity suite designed for developers and creators. Track your habits, manage budgets, organize tasks, and write notes - all with an XP-inspired aesthetic.",
+          "version": "Version 0.0.13 | Built with ❤️ and ☕ by"
+        }
+      }
+    }
+  },
+  "label": {
+    "today": "Today",
+    "completed": "Completed",
+    "updated": "Updated",
+    "ago": "ago",
+    "justNow": "Just now",
+    "noTasks": "No tasks. Create your first! ✓",
+    "noHabits": "No habits yet. Add habits to start tracking! 🎯",
+    "noNotes": "No notes yet. Start writing! 📝",
+    "noBudgets": "No budgets yet. Create one! 💰",
+    "days": "days"
+  },
+  "ui": {
+    "common": {
+      "hitCounter": "Hit Counter",
+      "visits": "Visits",
+      "loading": "Loading...",
+      "close": "Close",
+      "back": "Back",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "save": "Save",
+      "add": "Add",
+      "edit": "Edit",
+      "undo": "Undo",
+      "deleted": "Deleted",
+      "confirm": "Confirm",
+      "confirmDelete": "Are you sure you want to delete this? This action cannot be undone.",
+      "toast": {
+        "taskCreated": "Task created! 📝",
+        "taskUpdated": "Task updated! ✓",
+        "taskDeleted": "Task deleted",
+        "taskCompleted": "Task completed! +15 XP 🎉",
+        "taskReopened": "Task reopened",
+        "habitCreated": "Habit added! 🎯",
+        "habitCustomCreated": "Custom habit created! 🎯",
+        "habitCompleted": "Habit completed! +10 XP 🎉",
+        "habitUnchecked": "Habit unchecked",
+        "budgetCreated": "Budget created successfully! 💰",
+        "budgetDeleted": "Budget deleted",
+        "transactionAdded": "Transaction added! 💸",
+        "itemAdded": "Budget item added! 📝",
+        "noteCreated": "Note created! 📄",
+        "noteUpdated": "Note updated! ✓",
+        "noteDeleted": "Note deleted",
+        "notImplemented": "Not implemented yet 🚧",
+        "dataExported": "Data exported! 📥",
+        "dataImported": "Data imported! 📤",
+        "dataReset": "Data reset to demo",
+        "dataCleared": "All data cleared"
       }
     }
   }

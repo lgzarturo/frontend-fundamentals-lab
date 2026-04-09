@@ -1,4 +1,17 @@
 /**
+ * Función helper para obtener traducciones con fallback seguro
+ * @param {string} key - Clave de traducción
+ * @returns {string} - Traducción o la clave si no existe
+ */
+function getI18n(key) {
+  if (typeof I18n === 'undefined' || !I18n.messages) {
+    console.warn('I18n not initialized yet')
+    return key
+  }
+  return I18n.getMessage(key)
+}
+
+/**
  * Clase principal de la aplicación DOSApp
  */
 class DOSApp {
@@ -59,8 +72,9 @@ class DOSApp {
       month: "long",
       day: "numeric"
     }
-    // TODO: Obtener el idioma desde la configuración del usuario
-    const dateStr = now.toLocaleDateString("en-US", options)
+    const languageFromHtml = localStorage.getItem("userLanguage") || "es"
+    const localeToDateString = languageFromHtml === "es" ? "es-ES" : "en-US"
+    const dateStr = now.toLocaleDateString(localeToDateString, options)
     const dateEl = document.getElementById("current-date")
     if (dateEl) dateEl.textContent = dateStr
   }
@@ -146,10 +160,10 @@ function getRelativeTime(timestamp) {
   const hours = Math.floor(diff / 3600000)
   const days = Math.floor(diff / 86400000)
 
-  if (minutes < 1) return "Just now"
-  if (minutes < 60) return `${minutes}m ago`
-  if (hours < 24) return `${hours}h ago`
-  if (days < 7) return `${days}d ago`
+  if (minutes < 1) return I18n.getMessage("label.justNow")
+  if (minutes < 60) return `${minutes}m ${I18n.getMessage("label.ago")}`
+  if (hours < 24) return `${hours}h ${I18n.getMessage("label.ago")}`
+  if (days < 7) return `${days}d ${I18n.getMessage("label.ago")}`
   return new Date(timestamp).toLocaleDateString()
 }
 
@@ -398,52 +412,52 @@ function home() {
       mitsList.appendChild(node)
     })
   } else {
-    const noContentTemplate = document.getElementById(
-      "home-no-content-template"
-    )
-    const noContentNode = noContentTemplate.content.cloneNode(true)
+    const noContentNode = I18n.cloneTemplateWithI18n("home-no-content-template")
     mitsList.appendChild(noContentNode)
   }
 
   // Renderizar los hábitos en el inicio
-  const habitsHtml = app.habits
-    .map((habit) => {
-      const isDone = habit.dailyRecords[todayStr]
-      return `
-                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
-                    <div class="flex items-center gap-3 flex-1">
-                        <button onclick="app.toggleHabit('${habit.id}')"
-                                class="w-8 h-8 rounded-full border-2 ${
-                                  isDone
-                                    ? "bg-xp-primary border-xp-primary"
-                                    : "border-gray-400"
-                                } flex items-center justify-center hover:scale-110 transition-transform">
-                            ${
-                              isDone
-                                ? '<span class="text-xp-darker text-lg">✓</span>'
-                                : ""
-                            }
-                        </button>
-                        <div>
-                            <div class="font-semibold">${escapeHtml(
-                              habit.title
-                            )}</div>
-                            <div class="text-xs text-gray-600 dark:text-gray-400">🔥 ${
-                              habit.streak
-                            } day streak</div>
-                        </div>
-                    </div>
-                    ${
-                      isDone
-                        ? '<span class="text-xp-primary font-bold">+10 XP</span>'
-                        : ""
-                    }
-                </div>
-            `
+  const todayHabits = []
+  app.habits.forEach((habit) => {
+    todayHabits.push({
+      ...habit,
+      isDone: habit.dailyRecords[todayStr] || false,
+      onClick: () => app.toggleHabit(habit.id)
     })
-    .join("")
+  })
 
-  document.getElementById("home-habits-list").innerHTML = habitsHtml
+  const habitsList = document.getElementById("home-habits-list")
+  habitsList.innerHTML = ""
+  if (todayHabits.length > 0) {
+    const template = document.getElementById("home-habit-template")
+    todayHabits.forEach((habit) => {
+      const node = template.content.cloneNode(true)
+      // Título
+      node.querySelector("[data-habit-title]").textContent = habit.title
+      // Racha de días
+      node.querySelector("[data-habit-streak-title]").textContent = habit.streak
+      node.querySelector("[data-habit-streak-label]").textContent =
+        I18n.getMessage("app.screens.home.habits.dayStreak")
+      // Estado completado
+      const doneButton = node.querySelector("[data-habit-done-button]")
+      doneButton.onclick = () => app.toggleHabit(habit.id)
+      if (habit.isDone) {
+        doneButton.classList.remove("border-gray-400")
+        doneButton.classList.add("bg-xp-primary", "border-xp-primary")
+        doneButton.innerHTML = '<span class="text-xp-darker text-lg">✓</span>'
+        const xpReward = node.querySelector("[data-xp-reward]")
+        xpReward.textContent = "+10 XP"
+        xpReward.classList.remove("hidden")
+      } else {
+        doneButton.classList.remove("bg-xp-primary", "border-xp-primary")
+        doneButton.innerHTML = ""
+        doneButton.classList.add("border-gray-400")
+        const xpReward = node.querySelector("[data-xp-reward]")
+        xpReward.classList.add("hidden")
+      }
+      habitsList.appendChild(node)
+    })
+  }
 
   // Mostrar la actividad reciente
   const recentActivity = []
@@ -457,8 +471,8 @@ function home() {
   recentTasks.forEach((task) => {
     recentActivity.push({
       icon: "✓",
-      text: `Completed: ${task.title}`,
-      time: "Today",
+      text: `${I18n.getMessage("label.completed")}: ${task.title}`,
+      time: I18n.getMessage("label.today"),
       color: "text-xp-primary"
     })
   })
@@ -471,30 +485,30 @@ function home() {
   recentNotes.forEach((note) => {
     recentActivity.push({
       icon: "📝",
-      text: `Updated: ${note.title}`,
+      text: `${I18n.getMessage("label.updated")}: ${note.title}`,
       time: getRelativeTime(note.updatedAt),
       color: "text-purple-500"
     })
   })
 
-  const activityHtml =
-    recentActivity.length > 0
-      ? recentActivity
-          .map(
-            (item) => `
-            <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
-                <span class="${item.color} text-2xl">${item.icon}</span>
-                <div class="flex-1">
-                    <div class="font-semibold">${item.text}</div>
-                    <div class="text-xs text-gray-600 dark:text-gray-400">${item.time}</div>
-                </div>
-            </div>
-        `
-          )
-          .join("")
-      : '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No recent activity</div>'
-
-  document.getElementById("home-recent-activity").innerHTML = activityHtml
+  const recentActivityList = document.getElementById("home-recent-activity")
+  recentActivityList.innerHTML = ""
+  if (recentActivity.length > 0) {
+    const template = document.getElementById("recent-activity-template")
+    recentActivity.forEach((item) => {
+      const node = template.content.cloneNode(true)
+      node.querySelector("[data-icon]").textContent = item.icon
+      node.querySelector("[data-text]").textContent = item.text
+      node.querySelector("[data-time]").textContent = item.time
+      node.querySelector("[data-icon]").className = item.color + " text-2xl"
+      recentActivityList.appendChild(node)
+    })
+  } else {
+    const noActivityNode = I18n.cloneTemplateWithI18n(
+      "home-no-activity-template"
+    )
+    recentActivityList.appendChild(noActivityNode)
+  }
 }
 
 /**
@@ -523,83 +537,81 @@ function budgets() {
     "budget-remaining"
   ).textContent = `$${remaining.toFixed(2)}`
 
-  const budgetsHtml = app.budgets
-    .map((budget) => {
-      const budgetTotal = budget.items.reduce(
-        (sum, item) => sum + item.amount,
-        0
-      )
-      const budgetSpent = budget.transactions.reduce(
-        (sum, t) => sum + Math.abs(t.amount),
-        0
-      )
-      const budgetRemaining = budgetTotal - budgetSpent
-      const percentage = budgetTotal > 0 ? (budgetSpent / budgetTotal) * 100 : 0
+  const budgetList = []
+  app.budgets.forEach((budget) => {
+    const budgetTotal = budget.items.reduce((sum, item) => sum + item.amount, 0)
+    const budgetSpent = budget.transactions.reduce(
+      (sum, t) => sum + Math.abs(t.amount),
+      0
+    )
+    const budgetRemaining = budgetTotal - budgetSpent
+    const percentage = budgetTotal > 0 ? (budgetSpent / budgetTotal) * 100 : 0
 
-      return `
-                <div class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xl font-bold">${escapeHtml(
-                          budget.name
-                        )}</h3>
-                        <div class="flex gap-2">
-                            <button onclick="app.showBudgetDetails('${
-                              budget.id
-                            }')"
-                                    class="px-4 py-2 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded-lg transition-colors">
-                                View Details
-                            </button>
-                            <button onclick="app.showAddTransactionModal('${
-                              budget.id
-                            }')"
-                                    class="px-4 py-2 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker rounded-lg transition-colors">
-                                + Transaction
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-4 mb-4">
-                        <div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">Budget</div>
-                            <div class="text-lg font-bold">$${budgetTotal.toFixed(
-                              2
-                            )}</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">Spent</div>
-                            <div class="text-lg font-bold text-xp-danger">$${budgetSpent.toFixed(
-                              2
-                            )}</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-600 dark:text-gray-400">Remaining</div>
-                            <div class="text-lg font-bold text-xp-primary">$${budgetRemaining.toFixed(
-                              2
-                            )}</div>
-                        </div>
-                    </div>
-
-                    <div class="relative w-full h-4 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden">
-                        <div class="xp-bar-fill absolute top-0 left-0 h-full ${
-                          percentage > 90
-                            ? "bg-xp-danger"
-                            : percentage > 70
-                            ? "bg-xp-warning"
-                            : "bg-xp-primary"
-                        }"
-                             style="width: ${Math.min(percentage, 100)}%"></div>
-                    </div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-2 text-right">${percentage.toFixed(
-                      1
-                    )}% used</div>
-                </div>
-            `
+    budgetList.push({
+      name: escapeHtml(budget.name),
+      showBudgetAction: () => app.showBudgetDetails(budget.id),
+      addTransactionAction: () => app.showAddTransactionModal(budget.id),
+      total: budgetTotal.toFixed(2),
+      spent: budgetSpent.toFixed(2),
+      remaining: budgetRemaining.toFixed(1),
+      percentage
     })
-    .join("")
+  })
 
-  document.getElementById("budgets-list").innerHTML =
-    budgetsHtml ||
-    '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No budgets yet. Create your first budget to get started! 💰</div>'
+  const budgetElementList = document.getElementById("budgets-list")
+  budgetElementList.innerHTML = ""
+  if (budgetList.length > 0) {
+    const template = document.getElementById("budget-card-template")
+    budgetList.forEach((budget) => {
+      console.log("Rendering budget:", budget)
+      const node = template.content.cloneNode(true)
+      node.querySelector("[data-budget-name]").textContent = budget.name
+      node.querySelector("[data-budget-total-label]").textContent =
+        I18n.getMessage("app.screens.budgets.overview.totalBudget")
+      node.querySelector("[data-budget-total]").textContent = `$${budget.total}`
+      node.querySelector("[data-budget-spent-label]").textContent =
+        I18n.getMessage("app.screens.budgets.overview.totalSpent")
+      node.querySelector("[data-budget-spent]").textContent = `$${budget.spent}`
+      node.querySelector("[data-budget-remaining-label]").textContent =
+        I18n.getMessage("app.screens.budgets.overview.remaining")
+      node.querySelector(
+        "[data-budget-remaining]"
+      ).textContent = `$${budget.remaining}`
+      const percentageBar = node.querySelector("[data-budget-bar-fill]")
+      percentageBar.style.width = `${Math.min(budget.percentage, 100)}%`
+      if (budget.percentage > 90) {
+        percentageBar.classList.add("bg-xp-danger")
+      } else if (budget.percentage > 70) {
+        percentageBar.classList.add("bg-xp-warning")
+      } else {
+        percentageBar.classList.add("bg-xp-primary")
+      }
+      const percentageLabel = node.querySelector(
+        "[data-budget-percentage-used]"
+      )
+      percentageLabel.textContent = `${budget.percentage.toFixed(
+        1
+      )}% ${I18n.getMessage("app.screens.budgets.used")}`
+      const showBudgetBtn = node.querySelector(
+        "[data-budget-view-details-button]"
+      )
+      showBudgetBtn.textContent = I18n.getMessage(
+        "app.screens.budgets.overview.viewDetails"
+      )
+      showBudgetBtn.onclick = () => budget.showBudgetAction()
+      const addTransactionBtn = node.querySelector(
+        "[data-budget-add-transaction-button]"
+      )
+      addTransactionBtn.textContent = I18n.getMessage(
+        "app.screens.budgets.overview.addTransaction"
+      )
+      addTransactionBtn.onclick = () => budget.addTransactionAction()
+      budgetElementList.appendChild(node)
+    })
+  } else {
+    const noBudgetsNode = I18n.cloneTemplateWithI18n("no-budgets-template")
+    budgetElementList.appendChild(noBudgetsNode)
+  }
 }
 
 // Controlador de filtro actual
@@ -722,7 +734,7 @@ function tasks() {
                                   .join("")}
                                 ${
                                   task.dueDate
-                                    ? `<span class="text-xs px-2 py-1 bg-gray-200 dark:bg-xp-darker text-gray-700 dark:text-gray-300 rounded">Due: ${task.dueDate}</span>`
+                                    ? `<span class="text-xs px-2 py-1 bg-gray-200 dark:bg-xp-darker text-gray-700 dark:text-gray-300 rounded">${I18n.getMessage("app.screens.tasks.dueDate")}${task.dueDate}</span>`
                                     : ""
                                 }
                             </div>
@@ -731,11 +743,11 @@ function tasks() {
                                   task.id
                                 }')"
                                         class="text-sm px-3 py-1 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded transition-colors">
-                                    Edit
+                                    ${I18n.getMessage("app.screens.tasks.action.edit")}
                                 </button>
                                 <button onclick="app.deleteTask('${task.id}')"
                                         class="text-sm px-3 py-1 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded transition-colors">
-                                    Delete
+                                    ${I18n.getMessage("app.screens.tasks.action.delete")}
                                 </button>
                             </div>
                         </div>
@@ -748,7 +760,7 @@ function tasks() {
 
   document.getElementById("tasks-list").innerHTML =
     tasksHtml ||
-    '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No tasks found. Create your first task! ✓</div>'
+    `<div class="text-center text-gray-500 dark:text-gray-400 py-12">${I18n.getMessage("label.noTasks")}</div>`
 }
 
 /**
@@ -767,7 +779,7 @@ function habits() {
 
   document.getElementById(
     "habits-current-streak"
-  ).textContent = `${maxStreak} days 🔥`
+  ).textContent = `${maxStreak} ${I18n.getMessage("label.days")} 🔥`
   document.getElementById(
     "habits-completion-rate"
   ).textContent = `${completionRate}%`
@@ -794,7 +806,7 @@ function habits() {
                         </div>
                         <button onclick="app.deleteHabit('${habit.id}')"
                                 class="px-3 py-1 text-xs bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
-                            Delete
+                            ${I18n.getMessage("app.screens.tasks.action.delete")}
                         </button>
                     </div>
 
@@ -807,17 +819,17 @@ function habits() {
                                 } hover:opacity-80 transition-all font-semibold">
                             ${
                               isDoneToday
-                                ? "✓ Completed Today"
-                                : "○ Mark Complete"
+                                ? I18n.getMessage("app.screens.habits.completedToday")
+                                : I18n.getMessage("app.screens.habits.markComplete")
                             }
                         </button>
                         <div class="flex items-center gap-2">
                             <span class="text-2xl">🔥</span>
                             <div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400">Streak</div>
+                                <div class="text-xs text-gray-600 dark:text-gray-400">${I18n.getMessage("app.screens.habits.streak")}</div>
                                 <div class="font-bold text-lg">${
                                   habit.streak
-                                } days</div>
+                                } ${I18n.getMessage("label.days")}</div>
                             </div>
                         </div>
                         ${
@@ -867,7 +879,7 @@ function habits() {
 
   document.getElementById("habits-list").innerHTML =
     habitsHtml ||
-    '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No habits yet. Add habits to start tracking! 🎯</div>'
+    `<div class="text-center text-gray-500 dark:text-gray-400 py-12">${I18n.getMessage("label.noHabits")}</div>`
 }
 
 /**
@@ -908,7 +920,7 @@ function notes() {
 
   document.getElementById("notes-list").innerHTML =
     notesHtml ||
-    '<div class="col-span-full text-center text-gray-500 dark:text-gray-400 py-12">No notes yet. Start writing! 📝</div>'
+    `<div class="col-span-full text-center text-gray-500 dark:text-gray-400 py-12">${I18n.getMessage("label.noNotes")}</div>`
 }
 
 /**
@@ -917,6 +929,7 @@ function notes() {
  */
 function render() {
   console.debug("Renderizando la pantalla:", currentScreen)
+  localStorage.setItem("currentScreen", currentScreen)
   switch (currentScreen) {
     case "home":
       home()
@@ -1486,7 +1499,12 @@ const app = {
     store.load("budgets", "array")
     store.load("notes", "array")
     this.visitCounter()
-    this.navigateTo("home")
+    if (localStorage.getItem("currentScreen")) {
+      currentScreen = localStorage.getItem("currentScreen")
+    } else {
+      currentScreen = "home"
+    }
+    this.navigateTo(currentScreen)
   },
   loadTheme: function () {
     const theme = localStorage.getItem("theme") || "light"
@@ -1511,6 +1529,7 @@ const app = {
    * @returns {void}
    */
   navigateTo: function (screen) {
+    console.log("Navegando a la pantalla:", screen)
     currentScreen = screen
     document
       .querySelectorAll(".screen")
@@ -1592,54 +1611,55 @@ const app = {
     const todayStr = formatDate(new Date())
 
     // Contenido del modal para crear una nueva tarea
+    const t = (key) => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Create New Task</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.tasks.modal.create.title")}</h3>
                 <form onsubmit="app.createTask(event)">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.titleLabel")}</label>
                             <input type="text" name="title" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="e.g., Complete feature implementation">
+                                   placeholder="${t("app.screens.tasks.modal.create.titlePlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.description")}</label>
                             <textarea name="description" rows="3"
                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                      placeholder="Task details..."></textarea>
+                                      placeholder="${t("app.screens.tasks.modal.create.descriptionPlaceholder")}"></textarea>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Due Date</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.dueDate")}</label>
                                 <input type="date" name="dueDate" value="${todayStr}"
                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Priority</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.priority")}</label>
                                 <select name="priority"
                                         class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                                    <option value="low">Low</option>
-                                    <option value="medium" selected>Medium</option>
-                                    <option value="high">High</option>
+                                    <option value="low">${t("app.screens.tasks.priority.low")}</option>
+                                    <option value="medium" selected>${t("app.screens.tasks.priority.medium")}</option>
+                                    <option value="high">${t("app.screens.tasks.priority.high")}</option>
                                 </select>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.tags")}</label>
                             <input type="text" name="tags"
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="coding, important, review">
+                                   placeholder="${t("app.screens.tasks.modal.create.tagsPlaceholder")}">
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
+                            ${t("app.screens.tasks.modal.create.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Create Task
+                            ${t("app.screens.tasks.modal.create.create")}
                         </button>
                     </div>
                 </form>
@@ -1679,7 +1699,7 @@ const app = {
     app.tasks.push(task)
     store.save(app.tasks, "tasks")
     app.closeModal()
-    app.showToast("Task created! 📝", "success")
+    app.showToast(getI18n("ui.common.toast.taskCreated"), "success")
     tasks()
     if (this.currentScreen === "home") home()
   },
@@ -1693,20 +1713,21 @@ const app = {
     if (!task) return
 
     // Contenido del modal para editar la tarea
+    const t = (key) => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Edit Task</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.tasks.modal.edit.title")}</h3>
                 <form onsubmit="app.updateTask(event, '${taskId}')">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.titleLabel")}</label>
                             <input type="text" name="title" required value="${escapeHtml(
                               task.title
                             )}"
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.description")}</label>
                             <textarea name="description" rows="3"
                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">${escapeHtml(
                                         task.description
@@ -1714,39 +1735,39 @@ const app = {
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Due Date</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.dueDate")}</label>
                                 <input type="date" name="dueDate" value="${
                                   task.dueDate
                                 }"
                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Priority</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.priority")}</label>
                                 <select name="priority"
                                         class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                                     <option value="low" ${
                                       task.priority === "low" ? "selected" : ""
-                                    }>Low</option>
+                                    }>${t("app.screens.tasks.priority.low")}</option>
                                     <option value="medium" ${
                                       task.priority === "medium"
                                         ? "selected"
                                         : ""
-                                    }>Medium</option>
+                                    }>${t("app.screens.tasks.priority.medium")}</option>
                                     <option value="high" ${
                                       task.priority === "high" ? "selected" : ""
-                                    }>High</option>
+                                    }>${t("app.screens.tasks.priority.high")}</option>
                                 </select>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.tags")}</label>
                             <input type="text" name="tags" value="${task.tags.join(
                               ", "
                             )}"
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Subtasks</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.edit.subtasks")}</label>
                             <div id="subtasks-list" class="space-y-2 mb-2">
                                 ${task.subtasks
                                   .map(
@@ -1766,18 +1787,18 @@ const app = {
                             </div>
                             <button type="button" onclick="app.addSubtaskInput()"
                                     class="text-sm px-3 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30">
-                                + Add Subtask
+                                ${t("app.screens.tasks.modal.edit.addSubtask")}
                             </button>
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
+                            ${t("app.screens.tasks.modal.create.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Update Task
+                            ${t("app.screens.tasks.modal.edit.update")}
                         </button>
                     </div>
                 </form>
@@ -1847,7 +1868,7 @@ const app = {
 
       store.save(app.tasks, "tasks")
       app.closeModal()
-      app.showToast("Task updated! ✓", "success")
+      app.showToast(getI18n("ui.common.toast.taskUpdated"), "success")
       tasks()
     }
   },
@@ -1863,7 +1884,7 @@ const app = {
       store.save(app.tasks, "tasks")
       tasks()
       // Mostrar opción de deshacer
-      app.showUndoToast(`Deleted "${deleted.title}"`, () => {
+      app.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () => {
         app.tasks.splice(index, 0, deleted)
         store.save(app.tasks, "tasks")
         tasks()
@@ -1881,7 +1902,7 @@ const app = {
       task.done = !task.done
       store.save(app.tasks, "tasks")
       app.showToast(
-        task.done ? "Task completed! +15 XP 🎉" : "Task reopened",
+        task.done ? I18n.getMessage("ui.common.toast.taskCompleted") : I18n.getMessage("ui.common.toast.taskReopened"),
         "success"
       )
       render()
@@ -2008,61 +2029,10 @@ const app = {
    * @param {number} templateIndex - Índice de la plantilla a usar
    * @returns {void}
    */
-  createHabitFromTemplate(templateIndex) {
-    const templates = [
-      {
-        title: "🌅 Wake without snooze",
-        description: "Wake up at target time without hitting snooze",
-        color: "#00ff88"
-      },
-      {
-        title: "💧 Hydrate (500ml water)",
-        description: "Drink 500ml water with lemon immediately after waking",
-        color: "#0099ff"
-      },
-      {
-        title: "🧘 Stoic meditation (10 min)",
-        description: "Morning meditation and journaling",
-        color: "#9333ea"
-      },
-      {
-        title: "🏃 Mobility routine",
-        description: "15-20 minutes of stretching and calisthenics",
-        color: "#f59e0b"
-      },
-      {
-        title: "⭐ Define 3 MITs",
-        description: "Plan the 3 most important tasks during breakfast",
-        color: "#00ff88"
-      },
-      {
-        title: "🎯 Complete first deep work block",
-        description: "60-minute focused work session",
-        color: "#ef4444"
-      },
-      {
-        title: "📚 Learning block (30-45 min)",
-        description: "Dedicated time for learning new skills",
-        color: "#8b5cf6"
-      },
-      {
-        title: "📝 End of day review",
-        description: "Review accomplishments and plan tomorrow",
-        color: "#10b981"
-      },
-      {
-        title: "🌙 Digital sunset (6 PM)",
-        description: "Disconnect from screens by 6 PM",
-        color: "#f97316"
-      },
-      {
-        title: "😴 Sleep prep by 9 PM",
-        description: "Begin sleep routine, target sleep by 11 PM",
-        color: "#06b6d4"
-      }
-    ]
-
+createHabitFromTemplate(templateIndex) {
+    const templates = getI18n("app.screens.habits.templates.items") || []
     const template = templates[templateIndex]
+    if (!template) return
 
     const habit = {
       id: generateId(),
@@ -2071,30 +2041,18 @@ const app = {
       schedule: "daily",
       dailyRecords: {},
       streak: 0,
-      color: template.color
+      color: "#00ff88"
     }
 
     app.habits.push(habit)
     store.save(app.habits, "habits")
-    // Google Analytics event
-    if (window.dataLayer) {
-      window.dataLayer.push({
-        event: "habit_create_template",
-        habit_id: habit.id,
-        habit_title: habit.title,
-        template_index: templateIndex
-      })
-    }
-    app.closeModal()
-    app.showToast("Habit added! 🎯", "success")
+    this.closeModal()
+    this.showToast(getI18n("ui.common.toast.habitCreated"), "success")
     habits()
-  },
-  /**
-   * Crea un hábito personalizado a partir de un formulario
-   * @param {Event} event - Evento del formulario
-   * @returns {void}
-   */
-  createCustomHabit(event) {
+    if (this.currentScreen === "home") home()
+},
+
+  showHabitTemplatesModal() {
     event.preventDefault()
     const formData = new FormData(event.target)
 
@@ -2119,7 +2077,7 @@ const app = {
       })
     }
     app.closeModal()
-    app.showToast("Custom habit created! 🎯", "success")
+    app.showToast(getI18n("ui.common.toast.habitCustomCreated"), "success")
     habits()
   },
   /**
@@ -2127,55 +2085,15 @@ const app = {
    * @returns {void}
    */
   showHabitTemplatesModal() {
-    const templates = [
-      {
-        title: "🌅 Wake without snooze",
-        description: "Wake up at target time without hitting snooze"
-      },
-      {
-        title: "💧 Hydrate (500ml water)",
-        description: "Drink 500ml water with lemon immediately after waking"
-      },
-      {
-        title: "🧘 Stoic meditation (10 min)",
-        description: "Morning meditation and journaling"
-      },
-      {
-        title: "🏃 Mobility routine",
-        description: "15-20 minutes of stretching and calisthenics"
-      },
-      {
-        title: "⭐ Define 3 MITs",
-        description: "Plan the 3 most important tasks during breakfast"
-      },
-      {
-        title: "🎯 Complete first deep work block",
-        description: "60-minute focused work session"
-      },
-      {
-        title: "📚 Learning block (30-45 min)",
-        description: "Dedicated time for learning new skills"
-      },
-      {
-        title: "📝 End of day review",
-        description: "Review accomplishments and plan tomorrow"
-      },
-      {
-        title: "🌙 Digital sunset (6 PM)",
-        description: "Disconnect from screens by 6 PM"
-      },
-      {
-        title: "😴 Sleep prep by 9 PM",
-        description: "Begin sleep routine, target sleep by 11 PM"
-      }
-    ]
+    const t = (key) => getI18n(key)
+    const templates = t("app.screens.habits.templates.items") || []
 
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Add Habit</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.habits.modal.add.title")}</h3>
 
                 <div class="mb-6">
-                    <h4 class="font-semibold mb-3">Programmer Routine Templates</h4>
+                    <h4 class="font-semibold mb-3">${t("app.screens.habits.templates.title")}</h4>
                     <div class="space-y-2 max-h-96 overflow-y-auto">
                         ${templates
                           .map(
@@ -2196,30 +2114,30 @@ const app = {
                 </div>
 
                 <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
-                    <h4 class="font-semibold mb-3">Or create custom habit</h4>
+                    <h4 class="font-semibold mb-3">${t("app.screens.habits.modal.add.createCustom")}</h4>
                     <form onsubmit="app.createCustomHabit(event)">
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Title *</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.habits.modal.add.titleLabel")}</label>
                                 <input type="text" name="title" required
                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                       placeholder="e.g., Morning run">
+                                       placeholder="${t("app.screens.habits.modal.add.titlePlaceholder")}">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Description</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.habits.modal.add.description")}</label>
                                 <input type="text" name="description"
                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                       placeholder="Brief description...">
+                                       placeholder="${t("app.screens.habits.modal.add.descriptionPlaceholder")}">
                             </div>
                         </div>
                         <div class="flex gap-3 mt-6">
                             <button type="button" onclick="app.closeModal()"
                                     class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                                Cancel
+                                ${t("app.screens.habits.modal.add.cancel")}
                             </button>
                             <button type="submit"
                                     class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                                Create Habit
+                                ${t("app.screens.habits.modal.add.create")}
                             </button>
                         </div>
                     </form>
@@ -2248,7 +2166,7 @@ const app = {
           habit_title: deleted.title
         })
       }
-      app.showUndoToast(`Deleted "${deleted.title}"`, () => {
+      app.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () => {
         app.habits.splice(index, 0, deleted)
         store.save(app.habits, "habits")
         habits()
@@ -2285,7 +2203,7 @@ const app = {
 
     store.save(app.habits, "habits")
     app.showToast(
-      wasDone ? "Habit unchecked" : "Habit completed! +10 XP 🎉",
+      wasDone ? I18n.getMessage("ui.common.toast.habitUnchecked") : I18n.getMessage("ui.common.toast.habitCompleted"),
       "success"
     )
 
@@ -2334,22 +2252,23 @@ const app = {
   budgets: [],
   /**
    * Muestra el modal para crear un nuevo presupuesto
-   * @returns {void}
+* @returns {void}
    */
   showCreateBudgetModal() {
+    const t = (key) => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Create New Budget</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.create.title")}</h3>
                 <form onsubmit="app.createBudget(event)">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Budget Name</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.create.name")}</label>
                             <input type="text" name="name" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="e.g., Monthly Personal Budget">
+                                   placeholder="${t("app.screens.budgets.modal.create.namePlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Currency</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.create.currency")}</label>
                             <select name="currency"
                                     class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                                 <option value="USD">USD ($)</option>
@@ -2361,11 +2280,11 @@ const app = {
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
+                            ${t("app.screens.budgets.modal.create.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Create Budget
+                            ${t("app.screens.budgets.modal.create.create")}
                         </button>
                     </div>
                 </form>
@@ -2394,7 +2313,7 @@ const app = {
     app.budgets.push(budget)
     store.save(app.budgets, "budgets")
     this.closeModal()
-    this.showToast("Budget created successfully! 💰", "success")
+    this.showToast(getI18n("ui.common.toast.budgetCreated"), "success")
     budgets()
   },
   /**
@@ -2403,32 +2322,33 @@ const app = {
    * @returns {void}
    */
   showAddTransactionModal(budgetId) {
+    const t = (key) => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Add Transaction</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.addTransaction.title")}</h3>
                 <form onsubmit="app.addTransaction(event, '${budgetId}')">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addTransaction.description")}</label>
                             <input type="text" name="description" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="e.g., Weekly groceries">
+                                   placeholder="${t("app.screens.budgets.modal.addTransaction.descriptionPlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Amount (negative for expenses)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addTransaction.amount")}</label>
                             <input type="number" step="0.01" name="amount" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="-50.00">
+                                   placeholder="${t("app.screens.budgets.modal.addTransaction.amountPlaceholder")}">
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
+                            ${t("app.screens.budgets.modal.addTransaction.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Add Transaction
+                            ${t("app.screens.budgets.modal.addTransaction.add")}
                         </button>
                     </div>
                 </form>
@@ -2460,7 +2380,7 @@ const app = {
       budget.transactions.push(transaction)
       store.save(app.budgets, "budgets")
       this.closeModal()
-      this.showToast("Transaction added! 💸", "success")
+      this.showToast(getI18n("ui.common.toast.transactionAdded"), "success")
       budgets()
       if (this.currentScreen === "home") home()
     }
@@ -2474,6 +2394,8 @@ const app = {
     const budget = app.budgets.find((b) => b.id === budgetId)
     if (!budget) return
 
+    const t = (key) => getI18n(key)
+
     const modalContent = `
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -2482,16 +2404,16 @@ const app = {
                     )}</h3>
                     <button onclick="app.deleteBudget('${budgetId}')"
                             class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
-                        Delete
+                        ${t("ui.common.delete")}
                     </button>
                 </div>
 
                 <div class="mb-6">
                     <h4 class="font-bold mb-3 flex items-center justify-between">
-                        <span>Budget Items</span>
+                        <span>${t("app.screens.budgets.details.addItem").replace("+ ", "")}</span>
                         <button onclick="app.showAddBudgetItemModal('${budgetId}')"
                                 class="text-sm px-3 py-1 bg-xp-primary text-xp-darker rounded-lg">
-                            + Add Item
+                            ${t("app.screens.budgets.details.addItem")}
                         </button>
                     </h4>
                     <div class="space-y-2">
@@ -2518,7 +2440,7 @@ const app = {
                                     <button onclick="app.deleteBudgetItem('${budgetId}', '${
                               item.id
                             }')"
-                                            class="text-xs text-xp-danger hover:underline">Delete</button>
+                                            class="text-xs text-xp-danger hover:underline">${t("ui.common.delete")}</button>
                                 </div>
                             </div>
                         `
@@ -2526,14 +2448,14 @@ const app = {
                           .join("")}
                         ${
                           budget.items.length === 0
-                            ? '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No items yet</div>'
+                            ? `<div class="text-gray-500 dark:text-gray-400 text-center py-4">${t("app.screens.budgets.details.noItems")}</div>`
                             : ""
                         }
                     </div>
                 </div>
 
                 <div>
-                    <h4 class="font-bold mb-3">Transactions</h4>
+                    <h4 class="font-bold mb-3">${t("app.screens.budgets.details.transactions") || "Transactions"}</h4>
                     <div class="space-y-2 max-h-64 overflow-y-auto">
                         ${budget.transactions
                           .map(
@@ -2562,7 +2484,7 @@ const app = {
                           .join("")}
                         ${
                           budget.transactions.length === 0
-                            ? '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No transactions yet</div>'
+                            ? `<div class="text-gray-500 dark:text-gray-400 text-center py-4">${t("app.screens.budgets.details.noTransactions")}</div>`
                             : ""
                         }
                     </div>
@@ -2578,38 +2500,39 @@ const app = {
    * @returns {void}
    */
   showAddBudgetItemModal(budgetId) {
+    const t = (key) => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Add Budget Item</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.addItem.title")}</h3>
                 <form onsubmit="app.addBudgetItem(event, '${budgetId}')">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Category/Title</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addItem.category")}</label>
                             <input type="text" name="title" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="e.g., Groceries">
+                                   placeholder="${t("app.screens.budgets.modal.addItem.categoryPlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Amount</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addItem.amount")}</label>
                             <input type="number" step="0.01" name="amount" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="0.00">
+                                   placeholder="${t("app.screens.budgets.modal.addItem.amountPlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Notes (optional)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addItem.notes")}</label>
                             <textarea name="notes" rows="2"
                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                      placeholder="Additional notes..."></textarea>
+                                      placeholder="${t("app.screens.budgets.modal.addItem.notesPlaceholder")}"></textarea>
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.showBudgetDetails('${budgetId}')"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Back
+                            ${t("app.screens.budgets.modal.addItem.back")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Add Item
+                            ${t("app.screens.budgets.modal.addItem.add")}
                         </button>
                     </div>
                 </form>
@@ -2640,7 +2563,7 @@ const app = {
 
       budget.items.push(item)
       store.save(app.budgets, "budgets")
-      this.showToast("Budget item added! 📝", "success")
+      this.showToast(getI18n("ui.common.toast.itemAdded"), "success")
       this.showBudgetDetails(budgetId)
       budgets()
     }
@@ -2661,7 +2584,7 @@ const app = {
         app.budgets.splice(index, 1)
         store.save(app.budgets, "budgets")
         this.closeModal()
-        this.showToast("Budget deleted", "success")
+        this.showToast(getI18n("ui.common.toast.budgetDeleted"), "success")
         budgets()
       }
     }
@@ -2679,7 +2602,7 @@ const app = {
       if (index !== -1) {
         const deleted = budget.items.splice(index, 1)[0]
         store.save(app.budgets, "budgets")
-        this.showUndoToast(`Deleted ${deleted.title}`, () => {
+        this.showUndoToast(`${getI18n("ui.common.deleted")} ${deleted.title}`, () => {
           budget.items.splice(index, 0, deleted)
           store.save(app.budgets, "budgets")
           this.showBudgetDetails(budgetId)
@@ -2754,46 +2677,48 @@ const app = {
    * @returns {void}
    */
   showCreateNoteModal() {
+    const t = (key) => getI18n(key)
+
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Create New Note</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.notes.modal.create.title")}</h3>
                 <form onsubmit="app.createNote(event)">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.notes.modal.create.titleLabel")}</label>
                             <input type="text" name="title" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="Note title...">
+                                   placeholder="${t("app.screens.notes.modal.create.titlePlaceholder")}">
                         </div>
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <label class="block text-sm font-semibold">Content (Markdown)</label>
+                                <label class="block text-sm font-semibold">${t("app.screens.notes.modal.create.content")}</label>
                                 <button type="button" onclick="app.toggleNotePreview()" id="preview-toggle-btn"
                                         class="text-xs px-3 py-1 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30">
-                                    Preview
+                                    ${t("app.screens.notes.modal.create.preview")}
                                 </button>
                             </div>
                             <textarea name="body" id="note-editor" rows="12"
                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary font-mono text-sm"
-                                      placeholder="# Write your note in markdown..."></textarea>
+                                      placeholder="${t("app.screens.notes.modal.create.contentPlaceholder") || "# Write your note in markdown..."}"></textarea>
                             <div id="note-preview" class="hidden w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker min-h-[300px]">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.notes.modal.create.tags")}</label>
                             <input type="text" name="tags"
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="ideas, work, personal">
+                                   placeholder="${t("app.screens.notes.modal.create.tagsPlaceholder")}">
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
+                            ${t("app.screens.notes.modal.create.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Create Note
+                            ${t("app.screens.notes.modal.create.create")}
                         </button>
                     </div>
                 </form>
@@ -2828,7 +2753,7 @@ const app = {
     app.notes.push(note)
     store.save(app.notes, "notes")
     this.closeModal()
-    this.showToast("Note created! 📝", "success")
+    this.showToast(getI18n("ui.common.toast.noteCreated"), "success")
     notes()
   },
   /**
@@ -2840,19 +2765,21 @@ const app = {
     const note = app.notes.find((n) => n.id === noteId)
     if (!note) return
 
+    const t = (key) => getI18n(key)
+
     const modalContent = `
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-2xl font-bold">View/Edit Note</h3>
+                    <h3 class="text-2xl font-bold">${t("app.screens.notes.modal.edit.title")}</h3>
                     <button onclick="app.deleteNote('${noteId}')"
                             class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
-                        Delete
+                        ${t("ui.common.delete")}
                     </button>
                 </div>
                 <form onsubmit="app.updateNote(event, '${noteId}')">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.notes.modal.create.titleLabel")}</label>
                             <input type="text" name="title" required value="${escapeHtml(
                               note.title
                             )}"
@@ -2860,10 +2787,10 @@ const app = {
                         </div>
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <label class="block text-sm font-semibold">Content (Markdown)</label>
+                                <label class="block text-sm font-semibold">${t("app.screens.notes.modal.create.content")}</label>
                                 <button type="button" onclick="app.toggleNotePreview()" id="preview-toggle-btn"
                                         class="text-xs px-3 py-1 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30">
-                                    Preview
+                                    ${t("app.screens.notes.modal.create.preview")}
                                 </button>
                             </div>
                             <textarea name="body" id="note-editor" rows="12"
@@ -2874,7 +2801,7 @@ const app = {
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.notes.modal.create.tags")}</label>
                             <input type="text" name="tags" value="${note.tags.join(
                               ", "
                             )}"
@@ -2884,11 +2811,11 @@ const app = {
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Close
+                            ${t("ui.common.close")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Update Note
+                            ${t("app.screens.notes.modal.edit.update") || t("ui.common.save")}
                         </button>
                     </div>
                 </form>
@@ -2944,7 +2871,7 @@ const app = {
 
       store.save(app.notes, "notes")
       this.closeModal()
-      this.showToast("Note updated! ✓", "success")
+      this.showToast(getI18n("ui.common.toast.noteUpdated"), "success")
       notes()
     }
   },
@@ -2960,7 +2887,7 @@ const app = {
       store.save(app.notes, "notes")
       this.closeModal()
       notes()
-      this.showUndoToast(`Deleted "${deleted.title}"`, () => {
+      this.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () => {
         app.notes.splice(index, 0, deleted)
         store.save(app.notes, "notes")
         notes()
@@ -3152,7 +3079,7 @@ const app = {
     link.click()
 
     URL.revokeObjectURL(url)
-    this.showToast("Data exported successfully! 📥", "success")
+    this.showToast(getI18n("ui.common.toast.dataExported"), "success")
     launchConfetti()
   },
   /**
@@ -3218,7 +3145,7 @@ const app = {
         store.save(this.state.notes, "notes")
         store.save(this.state.habits, "habits")
         this.closeModal()
-        this.showToast("Data imported successfully! 📤", "success")
+        this.showToast(getI18n("ui.common.toast.dataImported"), "success")
         // TODO: Borrar cache de PWA para recargar los datos
         launchConfetti()
         render()
@@ -3248,7 +3175,7 @@ const app = {
       store.save(notes, "notes")
       const habits = store.dummyHabits
       store.save(habits, "habits")
-      this.showToast("Demo data restored! 🔄", "success")
+      this.showToast(getI18n("ui.common.toast.dataReset"), "success")
       // TODO: Borrar cache de PWA para recargar los datos
       render()
     }
@@ -3271,7 +3198,7 @@ const app = {
       store.save(this.notes, "notes")
       this.habits = []
       store.save(this.habits, "habits")
-      this.showToast("All data cleared", "success")
+      this.showToast(getI18n("ui.common.toast.dataCleared"), "success")
       render()
     }
   }
@@ -3295,13 +3222,26 @@ const I18n = {
   currentLanguage: "es", // Idioma por defecto
   messages: {}, // Almacenará los mensajes cargados
 
+  /**
+   * Inicializa el módulo i18n
+   * @param {string} defaultLang - Idioma por defecto si no se detecta otro
+   * @returns {Promise<void>}
+   */
   async init(defaultLang = "es") {
     // Detectar idioma del navegador si no hay uno guardado
     const savedLang = localStorage.getItem("userLanguage")
-    this.currentLanguage =
-      savedLang || navigator.language.split("-")[0] || defaultLang
-        ? defaultLang
-        : "en"
+    console.log(`Idioma guardado: ${savedLang}`)
+    let detectedLang = savedLang
+    if (!detectedLang) {
+      detectedLang = navigator.language
+        ? navigator.language.split("-")[0]
+        : null
+    }
+    if (!detectedLang) {
+      detectedLang = defaultLang
+    }
+    this.currentLanguage = detectedLang
+    console.log(`Idioma detectado: ${this.currentLanguage}`)
     // Asegurar que el idioma detectado esté disponible
     if (!["es", "en"].includes(this.currentLanguage)) {
       this.currentLanguage = defaultLang
@@ -3311,6 +3251,11 @@ const I18n = {
     this.applyTranslations() // Aplicar traducciones al HTML inicial
   },
 
+  /**
+   * Carga los mensajes traducidos para un idioma específico
+   * @param {string} lang - Código del idioma a cargar (e.g., "es", "en")
+   * @returns {Promise<void>}
+   */
   async loadMessages(lang) {
     try {
       const response = await fetch(`/assets/locales/${lang}.json`)
@@ -3331,6 +3276,11 @@ const I18n = {
     }
   },
 
+  /**
+   * Establece el idioma actual y recarga los mensajes
+   * @param {string} lang - Código del idioma a establecer (e.g., "es", "en")
+   * @returns {void}
+   */
   setLanguage(lang) {
     if (["es", "en"].includes(lang)) {
       this.currentLanguage = lang
@@ -3343,6 +3293,12 @@ const I18n = {
     }
   },
 
+  /**
+   * Obtiene el mensaje traducido por clave
+   * @param {string} key - Clave del mensaje a traducir
+   * @param {object} params - Parámetros para placeholders en el mensaje
+   * @returns {string} - Mensaje traducido
+   */
   t(key, params = {}) {
     // Obtiene el mensaje traducido por clave
     // Soporta placeholders básicos: {nombre} -> params.nombre
@@ -3359,6 +3315,11 @@ const I18n = {
     return message
   },
 
+  // TODO: Refactorizar para evitar código duplicado
+  /**
+   * Aplica las traducciones a los elementos del DOM
+   * @returns {void}
+   */
   applyTranslations() {
     // Aplica traducciones a elementos con data-i18n
     document.querySelectorAll("[data-i18n]").forEach((element) => {
@@ -3372,8 +3333,51 @@ const I18n = {
         element.setAttribute(attr, translation)
       }
     })
+    // Aplica las traducciones placeholder con data-i18n-placeholder
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+      const key = element.getAttribute("data-i18n-placeholder")
+      const translation = this.t(key)
+      element.setAttribute("placeholder", translation)
+    })
+    // Aplica las traducciones aria-label con data-i18n-aria-label
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+      const key = element.getAttribute("data-i18n-aria-label")
+      const translation = this.t(key)
+      element.setAttribute("aria-label", translation)
+    })
     // Actualizar el lang del <html> para SEO y accesibilidad
+    application.updateDateTime()
     document.getElementById("html-root").lang = this.currentLanguage
+  },
+
+  /**
+   * Clona un template y aplica traducciones a los elementos con data-i18n
+   * @param {string} templateId - El id del template a clonar
+   * @returns {DocumentFragment} - El fragmento clonado y traducido
+   */
+  cloneTemplateWithI18n(templateId) {
+    const template = document.getElementById(templateId)
+    if (!template) return null
+    const clone = template.content.cloneNode(true)
+
+    // Buscar todos los elementos con data-i18n dentro del clon
+    clone.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.getAttribute("data-i18n")
+      const translation = I18n.t(key)
+      el.textContent = translation
+    })
+
+    return clone
+  },
+
+  /**
+   * Función auxiliar para obtener mensajes traducidos
+   * @param {string} key - Clave del mensaje a traducir
+   * @param {object} params - Parámetros para placeholders en el mensaje
+   * @returns {string} - Mensaje traducido
+   */
+  getMessage(key, params = {}) {
+    return this.t(key, params)
   }
 }
 
@@ -3383,6 +3387,7 @@ const I18n = {
  */
 window.addEventListener("load", () => {
   I18n.init().then(() => {
+    document.getElementById("language-selector").value = I18n.currentLanguage
     app.init()
   })
   document
