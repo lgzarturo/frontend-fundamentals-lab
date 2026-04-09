@@ -1,4 +1,17 @@
 /**
+ * Función helper para obtener traducciones con fallback seguro
+ * @param {string} key - Clave de traducción
+ * @returns {string} - Traducción o la clave si no existe
+ */
+function getI18n(key) {
+  if (typeof I18n === 'undefined' || !I18n.messages) {
+    console.warn('I18n not initialized yet')
+    return key
+  }
+  return I18n.getMessage(key)
+}
+
+/**
  * Clase principal de la aplicación DOSApp
  */
 class DOSApp {
@@ -721,7 +734,7 @@ function tasks() {
                                   .join("")}
                                 ${
                                   task.dueDate
-                                    ? `<span class="text-xs px-2 py-1 bg-gray-200 dark:bg-xp-darker text-gray-700 dark:text-gray-300 rounded">Due: ${task.dueDate}</span>`
+                                    ? `<span class="text-xs px-2 py-1 bg-gray-200 dark:bg-xp-darker text-gray-700 dark:text-gray-300 rounded">${I18n.getMessage("app.screens.tasks.dueDate")}${task.dueDate}</span>`
                                     : ""
                                 }
                             </div>
@@ -730,11 +743,11 @@ function tasks() {
                                   task.id
                                 }')"
                                         class="text-sm px-3 py-1 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded transition-colors">
-                                    Edit
+                                    ${I18n.getMessage("app.screens.tasks.action.edit")}
                                 </button>
                                 <button onclick="app.deleteTask('${task.id}')"
                                         class="text-sm px-3 py-1 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded transition-colors">
-                                    Delete
+                                    ${I18n.getMessage("app.screens.tasks.action.delete")}
                                 </button>
                             </div>
                         </div>
@@ -747,7 +760,7 @@ function tasks() {
 
   document.getElementById("tasks-list").innerHTML =
     tasksHtml ||
-    '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No tasks found. Create your first task! ✓</div>'
+    `<div class="text-center text-gray-500 dark:text-gray-400 py-12">${I18n.getMessage("label.noTasks")}</div>`
 }
 
 /**
@@ -766,7 +779,7 @@ function habits() {
 
   document.getElementById(
     "habits-current-streak"
-  ).textContent = `${maxStreak} days 🔥`
+  ).textContent = `${maxStreak} ${I18n.getMessage("label.days")} 🔥`
   document.getElementById(
     "habits-completion-rate"
   ).textContent = `${completionRate}%`
@@ -793,7 +806,7 @@ function habits() {
                         </div>
                         <button onclick="app.deleteHabit('${habit.id}')"
                                 class="px-3 py-1 text-xs bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
-                            Delete
+                            ${I18n.getMessage("app.screens.tasks.action.delete")}
                         </button>
                     </div>
 
@@ -806,17 +819,17 @@ function habits() {
                                 } hover:opacity-80 transition-all font-semibold">
                             ${
                               isDoneToday
-                                ? "✓ Completed Today"
-                                : "○ Mark Complete"
+                                ? I18n.getMessage("app.screens.habits.completedToday")
+                                : I18n.getMessage("app.screens.habits.markComplete")
                             }
                         </button>
                         <div class="flex items-center gap-2">
                             <span class="text-2xl">🔥</span>
                             <div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400">Streak</div>
+                                <div class="text-xs text-gray-600 dark:text-gray-400">${I18n.getMessage("app.screens.habits.streak")}</div>
                                 <div class="font-bold text-lg">${
                                   habit.streak
-                                } days</div>
+                                } ${I18n.getMessage("label.days")}</div>
                             </div>
                         </div>
                         ${
@@ -866,7 +879,7 @@ function habits() {
 
   document.getElementById("habits-list").innerHTML =
     habitsHtml ||
-    '<div class="text-center text-gray-500 dark:text-gray-400 py-12">No habits yet. Add habits to start tracking! 🎯</div>'
+    `<div class="text-center text-gray-500 dark:text-gray-400 py-12">${I18n.getMessage("label.noHabits")}</div>`
 }
 
 /**
@@ -907,7 +920,7 @@ function notes() {
 
   document.getElementById("notes-list").innerHTML =
     notesHtml ||
-    '<div class="col-span-full text-center text-gray-500 dark:text-gray-400 py-12">No notes yet. Start writing! 📝</div>'
+    `<div class="col-span-full text-center text-gray-500 dark:text-gray-400 py-12">${I18n.getMessage("label.noNotes")}</div>`
 }
 
 /**
@@ -1598,54 +1611,55 @@ const app = {
     const todayStr = formatDate(new Date())
 
     // Contenido del modal para crear una nueva tarea
+    const t = (key) => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Create New Task</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.tasks.modal.create.title")}</h3>
                 <form onsubmit="app.createTask(event)">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.titleLabel")}</label>
                             <input type="text" name="title" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="e.g., Complete feature implementation">
+                                   placeholder="${t("app.screens.tasks.modal.create.titlePlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.description")}</label>
                             <textarea name="description" rows="3"
                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                      placeholder="Task details..."></textarea>
+                                      placeholder="${t("app.screens.tasks.modal.create.descriptionPlaceholder")}"></textarea>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Due Date</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.dueDate")}</label>
                                 <input type="date" name="dueDate" value="${todayStr}"
                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Priority</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.priority")}</label>
                                 <select name="priority"
                                         class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
-                                    <option value="low">Low</option>
-                                    <option value="medium" selected>Medium</option>
-                                    <option value="high">High</option>
+                                    <option value="low">${t("app.screens.tasks.priority.low")}</option>
+                                    <option value="medium" selected>${t("app.screens.tasks.priority.medium")}</option>
+                                    <option value="high">${t("app.screens.tasks.priority.high")}</option>
                                 </select>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.tags")}</label>
                             <input type="text" name="tags"
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="coding, important, review">
+                                   placeholder="${t("app.screens.tasks.modal.create.tagsPlaceholder")}">
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
+                            ${t("app.screens.tasks.modal.create.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Create Task
+                            ${t("app.screens.tasks.modal.create.create")}
                         </button>
                     </div>
                 </form>
@@ -1685,7 +1699,7 @@ const app = {
     app.tasks.push(task)
     store.save(app.tasks, "tasks")
     app.closeModal()
-    app.showToast("Task created! 📝", "success")
+    app.showToast(getI18n("ui.common.toast.taskCreated"), "success")
     tasks()
     if (this.currentScreen === "home") home()
   },
@@ -1699,20 +1713,21 @@ const app = {
     if (!task) return
 
     // Contenido del modal para editar la tarea
+    const t = (key) => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Edit Task</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.tasks.modal.edit.title")}</h3>
                 <form onsubmit="app.updateTask(event, '${taskId}')">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.titleLabel")}</label>
                             <input type="text" name="title" required value="${escapeHtml(
                               task.title
                             )}"
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.description")}</label>
                             <textarea name="description" rows="3"
                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">${escapeHtml(
                                         task.description
@@ -1720,39 +1735,39 @@ const app = {
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Due Date</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.dueDate")}</label>
                                 <input type="date" name="dueDate" value="${
                                   task.dueDate
                                 }"
                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Priority</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.priority")}</label>
                                 <select name="priority"
                                         class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                                     <option value="low" ${
                                       task.priority === "low" ? "selected" : ""
-                                    }>Low</option>
+                                    }>${t("app.screens.tasks.priority.low")}</option>
                                     <option value="medium" ${
                                       task.priority === "medium"
                                         ? "selected"
                                         : ""
-                                    }>Medium</option>
+                                    }>${t("app.screens.tasks.priority.medium")}</option>
                                     <option value="high" ${
                                       task.priority === "high" ? "selected" : ""
-                                    }>High</option>
+                                    }>${t("app.screens.tasks.priority.high")}</option>
                                 </select>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.create.tags")}</label>
                             <input type="text" name="tags" value="${task.tags.join(
                               ", "
                             )}"
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Subtasks</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.tasks.modal.edit.subtasks")}</label>
                             <div id="subtasks-list" class="space-y-2 mb-2">
                                 ${task.subtasks
                                   .map(
@@ -1772,18 +1787,18 @@ const app = {
                             </div>
                             <button type="button" onclick="app.addSubtaskInput()"
                                     class="text-sm px-3 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30">
-                                + Add Subtask
+                                ${t("app.screens.tasks.modal.edit.addSubtask")}
                             </button>
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
+                            ${t("app.screens.tasks.modal.create.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Update Task
+                            ${t("app.screens.tasks.modal.edit.update")}
                         </button>
                     </div>
                 </form>
@@ -1853,7 +1868,7 @@ const app = {
 
       store.save(app.tasks, "tasks")
       app.closeModal()
-      app.showToast("Task updated! ✓", "success")
+      app.showToast(getI18n("ui.common.toast.taskUpdated"), "success")
       tasks()
     }
   },
@@ -1869,7 +1884,7 @@ const app = {
       store.save(app.tasks, "tasks")
       tasks()
       // Mostrar opción de deshacer
-      app.showUndoToast(`Deleted "${deleted.title}"`, () => {
+      app.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () => {
         app.tasks.splice(index, 0, deleted)
         store.save(app.tasks, "tasks")
         tasks()
@@ -1887,7 +1902,7 @@ const app = {
       task.done = !task.done
       store.save(app.tasks, "tasks")
       app.showToast(
-        task.done ? "Task completed! +15 XP 🎉" : "Task reopened",
+        task.done ? I18n.getMessage("ui.common.toast.taskCompleted") : I18n.getMessage("ui.common.toast.taskReopened"),
         "success"
       )
       render()
@@ -2014,61 +2029,10 @@ const app = {
    * @param {number} templateIndex - Índice de la plantilla a usar
    * @returns {void}
    */
-  createHabitFromTemplate(templateIndex) {
-    const templates = [
-      {
-        title: "🌅 Wake without snooze",
-        description: "Wake up at target time without hitting snooze",
-        color: "#00ff88"
-      },
-      {
-        title: "💧 Hydrate (500ml water)",
-        description: "Drink 500ml water with lemon immediately after waking",
-        color: "#0099ff"
-      },
-      {
-        title: "🧘 Stoic meditation (10 min)",
-        description: "Morning meditation and journaling",
-        color: "#9333ea"
-      },
-      {
-        title: "🏃 Mobility routine",
-        description: "15-20 minutes of stretching and calisthenics",
-        color: "#f59e0b"
-      },
-      {
-        title: "⭐ Define 3 MITs",
-        description: "Plan the 3 most important tasks during breakfast",
-        color: "#00ff88"
-      },
-      {
-        title: "🎯 Complete first deep work block",
-        description: "60-minute focused work session",
-        color: "#ef4444"
-      },
-      {
-        title: "📚 Learning block (30-45 min)",
-        description: "Dedicated time for learning new skills",
-        color: "#8b5cf6"
-      },
-      {
-        title: "📝 End of day review",
-        description: "Review accomplishments and plan tomorrow",
-        color: "#10b981"
-      },
-      {
-        title: "🌙 Digital sunset (6 PM)",
-        description: "Disconnect from screens by 6 PM",
-        color: "#f97316"
-      },
-      {
-        title: "😴 Sleep prep by 9 PM",
-        description: "Begin sleep routine, target sleep by 11 PM",
-        color: "#06b6d4"
-      }
-    ]
-
+createHabitFromTemplate(templateIndex) {
+    const templates = getI18n("app.screens.habits.templates.items") || []
     const template = templates[templateIndex]
+    if (!template) return
 
     const habit = {
       id: generateId(),
@@ -2077,30 +2041,18 @@ const app = {
       schedule: "daily",
       dailyRecords: {},
       streak: 0,
-      color: template.color
+      color: "#00ff88"
     }
 
     app.habits.push(habit)
     store.save(app.habits, "habits")
-    // Google Analytics event
-    if (window.dataLayer) {
-      window.dataLayer.push({
-        event: "habit_create_template",
-        habit_id: habit.id,
-        habit_title: habit.title,
-        template_index: templateIndex
-      })
-    }
-    app.closeModal()
-    app.showToast("Habit added! 🎯", "success")
+    this.closeModal()
+    this.showToast(getI18n("ui.common.toast.habitCreated"), "success")
     habits()
-  },
-  /**
-   * Crea un hábito personalizado a partir de un formulario
-   * @param {Event} event - Evento del formulario
-   * @returns {void}
-   */
-  createCustomHabit(event) {
+    if (this.currentScreen === "home") home()
+},
+
+  showHabitTemplatesModal() {
     event.preventDefault()
     const formData = new FormData(event.target)
 
@@ -2125,7 +2077,7 @@ const app = {
       })
     }
     app.closeModal()
-    app.showToast("Custom habit created! 🎯", "success")
+    app.showToast(getI18n("ui.common.toast.habitCustomCreated"), "success")
     habits()
   },
   /**
@@ -2133,55 +2085,15 @@ const app = {
    * @returns {void}
    */
   showHabitTemplatesModal() {
-    const templates = [
-      {
-        title: "🌅 Wake without snooze",
-        description: "Wake up at target time without hitting snooze"
-      },
-      {
-        title: "💧 Hydrate (500ml water)",
-        description: "Drink 500ml water with lemon immediately after waking"
-      },
-      {
-        title: "🧘 Stoic meditation (10 min)",
-        description: "Morning meditation and journaling"
-      },
-      {
-        title: "🏃 Mobility routine",
-        description: "15-20 minutes of stretching and calisthenics"
-      },
-      {
-        title: "⭐ Define 3 MITs",
-        description: "Plan the 3 most important tasks during breakfast"
-      },
-      {
-        title: "🎯 Complete first deep work block",
-        description: "60-minute focused work session"
-      },
-      {
-        title: "📚 Learning block (30-45 min)",
-        description: "Dedicated time for learning new skills"
-      },
-      {
-        title: "📝 End of day review",
-        description: "Review accomplishments and plan tomorrow"
-      },
-      {
-        title: "🌙 Digital sunset (6 PM)",
-        description: "Disconnect from screens by 6 PM"
-      },
-      {
-        title: "😴 Sleep prep by 9 PM",
-        description: "Begin sleep routine, target sleep by 11 PM"
-      }
-    ]
+    const t = (key) => getI18n(key)
+    const templates = t("app.screens.habits.templates.items") || []
 
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Add Habit</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.habits.modal.add.title")}</h3>
 
                 <div class="mb-6">
-                    <h4 class="font-semibold mb-3">Programmer Routine Templates</h4>
+                    <h4 class="font-semibold mb-3">${t("app.screens.habits.templates.title")}</h4>
                     <div class="space-y-2 max-h-96 overflow-y-auto">
                         ${templates
                           .map(
@@ -2202,30 +2114,30 @@ const app = {
                 </div>
 
                 <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
-                    <h4 class="font-semibold mb-3">Or create custom habit</h4>
+                    <h4 class="font-semibold mb-3">${t("app.screens.habits.modal.add.createCustom")}</h4>
                     <form onsubmit="app.createCustomHabit(event)">
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Title *</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.habits.modal.add.titleLabel")}</label>
                                 <input type="text" name="title" required
                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                       placeholder="e.g., Morning run">
+                                       placeholder="${t("app.screens.habits.modal.add.titlePlaceholder")}">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold mb-2">Description</label>
+                                <label class="block text-sm font-semibold mb-2">${t("app.screens.habits.modal.add.description")}</label>
                                 <input type="text" name="description"
                                        class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                       placeholder="Brief description...">
+                                       placeholder="${t("app.screens.habits.modal.add.descriptionPlaceholder")}">
                             </div>
                         </div>
                         <div class="flex gap-3 mt-6">
                             <button type="button" onclick="app.closeModal()"
                                     class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                                Cancel
+                                ${t("app.screens.habits.modal.add.cancel")}
                             </button>
                             <button type="submit"
                                     class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                                Create Habit
+                                ${t("app.screens.habits.modal.add.create")}
                             </button>
                         </div>
                     </form>
@@ -2254,7 +2166,7 @@ const app = {
           habit_title: deleted.title
         })
       }
-      app.showUndoToast(`Deleted "${deleted.title}"`, () => {
+      app.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () => {
         app.habits.splice(index, 0, deleted)
         store.save(app.habits, "habits")
         habits()
@@ -2291,7 +2203,7 @@ const app = {
 
     store.save(app.habits, "habits")
     app.showToast(
-      wasDone ? "Habit unchecked" : "Habit completed! +10 XP 🎉",
+      wasDone ? I18n.getMessage("ui.common.toast.habitUnchecked") : I18n.getMessage("ui.common.toast.habitCompleted"),
       "success"
     )
 
@@ -2340,22 +2252,23 @@ const app = {
   budgets: [],
   /**
    * Muestra el modal para crear un nuevo presupuesto
-   * @returns {void}
+* @returns {void}
    */
   showCreateBudgetModal() {
+    const t = (key) => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Create New Budget</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.create.title")}</h3>
                 <form onsubmit="app.createBudget(event)">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Budget Name</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.create.name")}</label>
                             <input type="text" name="name" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="e.g., Monthly Personal Budget">
+                                   placeholder="${t("app.screens.budgets.modal.create.namePlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Currency</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.create.currency")}</label>
                             <select name="currency"
                                     class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
                                 <option value="USD">USD ($)</option>
@@ -2367,11 +2280,11 @@ const app = {
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
+                            ${t("app.screens.budgets.modal.create.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Create Budget
+                            ${t("app.screens.budgets.modal.create.create")}
                         </button>
                     </div>
                 </form>
@@ -2400,7 +2313,7 @@ const app = {
     app.budgets.push(budget)
     store.save(app.budgets, "budgets")
     this.closeModal()
-    this.showToast("Budget created successfully! 💰", "success")
+    this.showToast(getI18n("ui.common.toast.budgetCreated"), "success")
     budgets()
   },
   /**
@@ -2409,32 +2322,33 @@ const app = {
    * @returns {void}
    */
   showAddTransactionModal(budgetId) {
+    const t = (key) => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Add Transaction</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.addTransaction.title")}</h3>
                 <form onsubmit="app.addTransaction(event, '${budgetId}')">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Description</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addTransaction.description")}</label>
                             <input type="text" name="description" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="e.g., Weekly groceries">
+                                   placeholder="${t("app.screens.budgets.modal.addTransaction.descriptionPlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Amount (negative for expenses)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addTransaction.amount")}</label>
                             <input type="number" step="0.01" name="amount" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="-50.00">
+                                   placeholder="${t("app.screens.budgets.modal.addTransaction.amountPlaceholder")}">
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
+                            ${t("app.screens.budgets.modal.addTransaction.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Add Transaction
+                            ${t("app.screens.budgets.modal.addTransaction.add")}
                         </button>
                     </div>
                 </form>
@@ -2466,7 +2380,7 @@ const app = {
       budget.transactions.push(transaction)
       store.save(app.budgets, "budgets")
       this.closeModal()
-      this.showToast("Transaction added! 💸", "success")
+      this.showToast(getI18n("ui.common.toast.transactionAdded"), "success")
       budgets()
       if (this.currentScreen === "home") home()
     }
@@ -2480,6 +2394,8 @@ const app = {
     const budget = app.budgets.find((b) => b.id === budgetId)
     if (!budget) return
 
+    const t = (key) => getI18n(key)
+
     const modalContent = `
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
@@ -2488,16 +2404,16 @@ const app = {
                     )}</h3>
                     <button onclick="app.deleteBudget('${budgetId}')"
                             class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
-                        Delete
+                        ${t("ui.common.delete")}
                     </button>
                 </div>
 
                 <div class="mb-6">
                     <h4 class="font-bold mb-3 flex items-center justify-between">
-                        <span>Budget Items</span>
+                        <span>${t("app.screens.budgets.details.addItem").replace("+ ", "")}</span>
                         <button onclick="app.showAddBudgetItemModal('${budgetId}')"
                                 class="text-sm px-3 py-1 bg-xp-primary text-xp-darker rounded-lg">
-                            + Add Item
+                            ${t("app.screens.budgets.details.addItem")}
                         </button>
                     </h4>
                     <div class="space-y-2">
@@ -2524,7 +2440,7 @@ const app = {
                                     <button onclick="app.deleteBudgetItem('${budgetId}', '${
                               item.id
                             }')"
-                                            class="text-xs text-xp-danger hover:underline">Delete</button>
+                                            class="text-xs text-xp-danger hover:underline">${t("ui.common.delete")}</button>
                                 </div>
                             </div>
                         `
@@ -2532,14 +2448,14 @@ const app = {
                           .join("")}
                         ${
                           budget.items.length === 0
-                            ? '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No items yet</div>'
+                            ? `<div class="text-gray-500 dark:text-gray-400 text-center py-4">${t("app.screens.budgets.details.noItems")}</div>`
                             : ""
                         }
                     </div>
                 </div>
 
                 <div>
-                    <h4 class="font-bold mb-3">Transactions</h4>
+                    <h4 class="font-bold mb-3">${t("app.screens.budgets.details.transactions") || "Transactions"}</h4>
                     <div class="space-y-2 max-h-64 overflow-y-auto">
                         ${budget.transactions
                           .map(
@@ -2568,7 +2484,7 @@ const app = {
                           .join("")}
                         ${
                           budget.transactions.length === 0
-                            ? '<div class="text-gray-500 dark:text-gray-400 text-center py-4">No transactions yet</div>'
+                            ? `<div class="text-gray-500 dark:text-gray-400 text-center py-4">${t("app.screens.budgets.details.noTransactions")}</div>`
                             : ""
                         }
                     </div>
@@ -2584,38 +2500,39 @@ const app = {
    * @returns {void}
    */
   showAddBudgetItemModal(budgetId) {
+    const t = (key) => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Add Budget Item</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.addItem.title")}</h3>
                 <form onsubmit="app.addBudgetItem(event, '${budgetId}')">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Category/Title</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addItem.category")}</label>
                             <input type="text" name="title" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="e.g., Groceries">
+                                   placeholder="${t("app.screens.budgets.modal.addItem.categoryPlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Amount</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addItem.amount")}</label>
                             <input type="number" step="0.01" name="amount" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="0.00">
+                                   placeholder="${t("app.screens.budgets.modal.addItem.amountPlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Notes (optional)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addItem.notes")}</label>
                             <textarea name="notes" rows="2"
                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                      placeholder="Additional notes..."></textarea>
+                                      placeholder="${t("app.screens.budgets.modal.addItem.notesPlaceholder")}"></textarea>
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.showBudgetDetails('${budgetId}')"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Back
+                            ${t("app.screens.budgets.modal.addItem.back")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Add Item
+                            ${t("app.screens.budgets.modal.addItem.add")}
                         </button>
                     </div>
                 </form>
@@ -2646,7 +2563,7 @@ const app = {
 
       budget.items.push(item)
       store.save(app.budgets, "budgets")
-      this.showToast("Budget item added! 📝", "success")
+      this.showToast(getI18n("ui.common.toast.itemAdded"), "success")
       this.showBudgetDetails(budgetId)
       budgets()
     }
@@ -2667,7 +2584,7 @@ const app = {
         app.budgets.splice(index, 1)
         store.save(app.budgets, "budgets")
         this.closeModal()
-        this.showToast("Budget deleted", "success")
+        this.showToast(getI18n("ui.common.toast.budgetDeleted"), "success")
         budgets()
       }
     }
@@ -2685,7 +2602,7 @@ const app = {
       if (index !== -1) {
         const deleted = budget.items.splice(index, 1)[0]
         store.save(app.budgets, "budgets")
-        this.showUndoToast(`Deleted ${deleted.title}`, () => {
+        this.showUndoToast(`${getI18n("ui.common.deleted")} ${deleted.title}`, () => {
           budget.items.splice(index, 0, deleted)
           store.save(app.budgets, "budgets")
           this.showBudgetDetails(budgetId)
@@ -2760,46 +2677,48 @@ const app = {
    * @returns {void}
    */
   showCreateNoteModal() {
+    const t = (key) => getI18n(key)
+
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">Create New Note</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.notes.modal.create.title")}</h3>
                 <form onsubmit="app.createNote(event)">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.notes.modal.create.titleLabel")}</label>
                             <input type="text" name="title" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="Note title...">
+                                   placeholder="${t("app.screens.notes.modal.create.titlePlaceholder")}">
                         </div>
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <label class="block text-sm font-semibold">Content (Markdown)</label>
+                                <label class="block text-sm font-semibold">${t("app.screens.notes.modal.create.content")}</label>
                                 <button type="button" onclick="app.toggleNotePreview()" id="preview-toggle-btn"
                                         class="text-xs px-3 py-1 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30">
-                                    Preview
+                                    ${t("app.screens.notes.modal.create.preview")}
                                 </button>
                             </div>
                             <textarea name="body" id="note-editor" rows="12"
                                       class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary font-mono text-sm"
-                                      placeholder="# Write your note in markdown..."></textarea>
+                                      placeholder="${t("app.screens.notes.modal.create.contentPlaceholder") || "# Write your note in markdown..."}"></textarea>
                             <div id="note-preview" class="hidden w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker min-h-[300px]">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.notes.modal.create.tags")}</label>
                             <input type="text" name="tags"
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="ideas, work, personal">
+                                   placeholder="${t("app.screens.notes.modal.create.tagsPlaceholder")}">
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Cancel
+                            ${t("app.screens.notes.modal.create.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Create Note
+                            ${t("app.screens.notes.modal.create.create")}
                         </button>
                     </div>
                 </form>
@@ -2834,7 +2753,7 @@ const app = {
     app.notes.push(note)
     store.save(app.notes, "notes")
     this.closeModal()
-    this.showToast("Note created! 📝", "success")
+    this.showToast(getI18n("ui.common.toast.noteCreated"), "success")
     notes()
   },
   /**
@@ -2846,19 +2765,21 @@ const app = {
     const note = app.notes.find((n) => n.id === noteId)
     if (!note) return
 
+    const t = (key) => getI18n(key)
+
     const modalContent = `
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-2xl font-bold">View/Edit Note</h3>
+                    <h3 class="text-2xl font-bold">${t("app.screens.notes.modal.edit.title")}</h3>
                     <button onclick="app.deleteNote('${noteId}')"
                             class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
-                        Delete
+                        ${t("ui.common.delete")}
                     </button>
                 </div>
                 <form onsubmit="app.updateNote(event, '${noteId}')">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Title *</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.notes.modal.create.titleLabel")}</label>
                             <input type="text" name="title" required value="${escapeHtml(
                               note.title
                             )}"
@@ -2866,10 +2787,10 @@ const app = {
                         </div>
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <label class="block text-sm font-semibold">Content (Markdown)</label>
+                                <label class="block text-sm font-semibold">${t("app.screens.notes.modal.create.content")}</label>
                                 <button type="button" onclick="app.toggleNotePreview()" id="preview-toggle-btn"
                                         class="text-xs px-3 py-1 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30">
-                                    Preview
+                                    ${t("app.screens.notes.modal.create.preview")}
                                 </button>
                             </div>
                             <textarea name="body" id="note-editor" rows="12"
@@ -2880,7 +2801,7 @@ const app = {
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Tags (comma-separated)</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.notes.modal.create.tags")}</label>
                             <input type="text" name="tags" value="${note.tags.join(
                               ", "
                             )}"
@@ -2890,11 +2811,11 @@ const app = {
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            Close
+                            ${t("ui.common.close")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            Update Note
+                            ${t("app.screens.notes.modal.edit.update") || t("ui.common.save")}
                         </button>
                     </div>
                 </form>
@@ -2950,7 +2871,7 @@ const app = {
 
       store.save(app.notes, "notes")
       this.closeModal()
-      this.showToast("Note updated! ✓", "success")
+      this.showToast(getI18n("ui.common.toast.noteUpdated"), "success")
       notes()
     }
   },
@@ -2966,7 +2887,7 @@ const app = {
       store.save(app.notes, "notes")
       this.closeModal()
       notes()
-      this.showUndoToast(`Deleted "${deleted.title}"`, () => {
+      this.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () => {
         app.notes.splice(index, 0, deleted)
         store.save(app.notes, "notes")
         notes()
@@ -3158,7 +3079,7 @@ const app = {
     link.click()
 
     URL.revokeObjectURL(url)
-    this.showToast("Data exported successfully! 📥", "success")
+    this.showToast(getI18n("ui.common.toast.dataExported"), "success")
     launchConfetti()
   },
   /**
@@ -3224,7 +3145,7 @@ const app = {
         store.save(this.state.notes, "notes")
         store.save(this.state.habits, "habits")
         this.closeModal()
-        this.showToast("Data imported successfully! 📤", "success")
+        this.showToast(getI18n("ui.common.toast.dataImported"), "success")
         // TODO: Borrar cache de PWA para recargar los datos
         launchConfetti()
         render()
@@ -3254,7 +3175,7 @@ const app = {
       store.save(notes, "notes")
       const habits = store.dummyHabits
       store.save(habits, "habits")
-      this.showToast("Demo data restored! 🔄", "success")
+      this.showToast(getI18n("ui.common.toast.dataReset"), "success")
       // TODO: Borrar cache de PWA para recargar los datos
       render()
     }
@@ -3277,7 +3198,7 @@ const app = {
       store.save(this.notes, "notes")
       this.habits = []
       store.save(this.habits, "habits")
-      this.showToast("All data cleared", "success")
+      this.showToast(getI18n("ui.common.toast.dataCleared"), "success")
       render()
     }
   }
