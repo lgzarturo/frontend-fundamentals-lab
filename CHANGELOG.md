@@ -1,6 +1,23 @@
-# CHANGELOG
+﻿# CHANGELOG
 
 ## Historial de cambios
+
+### v0.0.14
+
+- feat: implementar soporte completo de idiomas y configuración de agentes (.agents, CLAUDE.md)
+- feat: agregar plantillas dinámicas para presupuestos y visualización de racha de hábitos
+- feat: soporte para traducciones de placeholders, aria-labels y mensajes dinámicos
+- feat: implementar selección de idioma y formateo automático de fechas según el locale
+- feat: funcionalidad de arrastre y soltar (Drag & Drop) para la organización de tareas
+- feat: herramientas de exportación e importación de datos en formato JSON
+- feat: refactorizar lógica principal en la clase DOSApp con cálculo de totales
+- feat: mejorar la arquitectura del proyecto mediante la reorganización de carpetas
+- feat: soporte para cambio de tema (claro/oscuro) y gestión de caché de PWA
+- docs: documentación detallada sobre i18n y el sistema de plantillas
+
+### v0.0.13
+
+- feat: actualización de versión y ajustes menores en index.html
 
 ### v0.0.12
 
