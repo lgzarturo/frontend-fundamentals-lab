@@ -57,24 +57,66 @@ fundamentos del frontend a través de su desarrollo**.
 
 ---
 
-## Tabla de contenidos
+## 📚 Índice de Documentación
 
-### Roadmap de aprendizaje
+Documentación técnica y educativa para desarrolladores y programadores juniors.
 
-1. [Fundamentos de HTML, CSS y JavaScript](/roadmap/fundaments-html-css-javascript.md)
-   1. [Entendiendo la estructura básica de un documento HTML](/docs/index-documentacion.md)
-   2. [Configuración inicial de Google Tag Manager](/docs/tag-manager.md)
-2. [Integración y organización del diseño con TailwindCSS](/docs/tailwind-css.md)
-3. [Fundamentos de JavaScript y manipulación del DOM - _Crear un contador de visitas_](/docs/fundamentos-javascript.md)
-4. [Guía de estudio fullstack JavaScript/TypeScript](/docs/guia-fullstack-javascript.md)
-5. [Características de Productivity XP - La app principal](/docs/caracteristicas-productivity-xp.md)
-6. [Acciones y lógica de la app - _Gestión de hábitos_](/docs/javascript-actions-app.md)
-   1. [Explicación del código en app.js](/docs/codigo-app_js.md)
-   2. [Ideas y mejoras futuras](/docs/ideas.md)
-7. [Estructura y mejoras por implementar](/docs/mejoras-por-implementar.md)
-8. [Implementación de Soporte i18n y Cambio de Tema](/docs/i18n-theme.md)
-   1. [Sistema de Plantillas Dinámicas e Internacionalización (i18n)](/docs/templates-dinamicos-i18n.md)
-   2. [Terminando traducciones](/docs/i18n-terminando-traducciones.md)
+### 1. Fundamentos del Frontend
+
+- [Entendiendo la estructura HTML](/docs/index-documentacion.md) — Estructura,
+  metadatos, SEO, accesibilidad
+- [Configuración de Google Tag Manager](/docs/tag-manager.md) — Telemetría
+  básica
+
+### 2. CSS y Diseño
+
+- [Integración TailwindCSS](/docs/tailwind-css.md) — Framework utility-first via
+  CDN
+- [Estilo StandardJS](/docs/standardjs-best-practices.md) — Convenciones de
+  código
+
+### 3. JavaScript
+
+- [Fundamentos JS](/docs/fundamentos-javascript.md) — DOM, localStorage,
+  contador de visitas
+- [Lógica de la app](/docs/javascript-actions-app.md) — Gestión de hábitos
+- [Código app.js](/docs/codigo-app_js.md) — Explicación detallada
+- [Guía fullstack JS/TS](/docs/guia-fullstack-javascript.md) — Ruta de estudio
+  (6 meses)
+
+### 4. Características de la App
+
+- [Productivity XP](/docs/caracteristicas-productivity-xp.md) — Todas las
+  funcionalidades
+
+### 5. i18n y Temas
+
+- [Sistema i18n y Tema](/docs/i18n-theme.md) — Internacionalización y tema
+  oscuro/claro
+- [Plantillas dinámicas](/docs/templates-dinamicos-i18n.md) — Templates
+  dinámicos
+- [Completar traducciones](/docs/i18n-terminando-traducciones.md) — Traducciones
+  pendientes
+
+### 6. Arquitectura y Mejoras
+
+- [Arquitectura modular](/docs/MODULAR_ARCHITECTURE.md) — Propuesta de
+  arquitectura
+- [Mejoras por implementar](/docs/mejoras-por-implementar.md) — Roadmap de
+  features
+- [Ideas](/docs/ideas.md) — Sugerencias futuras
+
+### 7. Optimización
+
+- [Optimización Lighthouse](/docs/optimizacion-lighthouse.md) — Performance web
+- [Mejores prácticas SEO](/docs/seo-best-practices.md) — Posicionamiento
+- [Rendimiento](/docs/performance.md) — Optimización
+
+### 8. Planes de Desarrollo
+
+- [Migración a ES6 Modules](/plans/01-plan-javascript-to-modules-es6.md) —
+  Estado: en progreso
+- [Estimación de desarrollo](/docs/estimacion-plan-desarrollo.md) — Planning
 
 ---
 
