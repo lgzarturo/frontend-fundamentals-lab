@@ -1,0 +1,26 @@
+{
+  "name": "frontend-fundamentals-lab",
+  "version": "2.0.0",
+  "description": "Daily Operating System - Productivity App with modular architecture",
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "dev": "npx serve ."
+  },
+  "devDependencies": {
+    "@vitest/ui": "^1.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "jsdom": "^23.0.0",
+    "vitest": "^1.0.0"
+  },
+  "keywords": [
+    "productivity",
+    "javascript",
+    "vanilla-js",
+    "modular-architecture"
+  ],
+  "author": "Arturo López",
+  "license": "MIT"
+}

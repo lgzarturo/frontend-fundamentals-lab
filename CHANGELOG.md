@@ -4,14 +4,20 @@
 
 ### v0.0.14
 
-- feat: implementar soporte completo de idiomas y configuración de agentes (.agents, CLAUDE.md)
-- feat: agregar plantillas dinámicas para presupuestos y visualización de racha de hábitos
-- feat: soporte para traducciones de placeholders, aria-labels y mensajes dinámicos
-- feat: implementar selección de idioma y formateo automático de fechas según el locale
-- feat: funcionalidad de arrastre y soltar (Drag & Drop) para la organización de tareas
+- feat: implementar soporte completo de idiomas y configuración de agentes
+  (.agents, CLAUDE.md)
+- feat: agregar plantillas dinámicas para presupuestos y visualización de racha
+  de hábitos
+- feat: soporte para traducciones de placeholders, aria-labels y mensajes
+  dinámicos
+- feat: implementar selección de idioma y formateo automático de fechas según el
+  locale
+- feat: funcionalidad de arrastre y soltar (Drag & Drop) para la organización de
+  tareas
 - feat: herramientas de exportación e importación de datos en formato JSON
 - feat: refactorizar lógica principal en la clase DOSApp con cálculo de totales
-- feat: mejorar la arquitectura del proyecto mediante la reorganización de carpetas
+- feat: mejorar la arquitectura del proyecto mediante la reorganización de
+  carpetas
 - feat: soporte para cambio de tema (claro/oscuro) y gestión de caché de PWA
 - docs: documentación detallada sobre i18n y el sistema de plantillas
 
@@ -35,8 +41,10 @@
 - feat: agregar sección de mejoras por implementar en la documentación
 - docs: mejorar la documentación usando JSDoc
 - feat: agregar documentación del código para mejorar la lectura
-- feat: agregar modal para añadir transacciones y funcionalidad para guardar transacciones en el presupuesto
-- feat: agregar funcionalidad de gestión de presupuestos, incluyendo creación, visualización y eliminación de elementos de presupuesto
+- feat: agregar modal para añadir transacciones y funcionalidad para guardar
+  transacciones en el presupuesto
+- feat: agregar funcionalidad de gestión de presupuestos, incluyendo creación,
+  visualización y eliminación de elementos de presupuesto
 - feat: agregar almacenamiento de budget en localStorage
 - feat: agregar definición de tipos para presupuesto y transacciones en app.js
 
@@ -47,7 +55,8 @@
 ### v0.0.8
 
 - feat: agregar funcionalidad de PWA y eventos GA4
-- feat: actualizar la gestión de hábitos para usar el espacio de nombres 'app' en lugar de 'store'
+- feat: actualizar la gestión de hábitos para usar el espacio de nombres 'app'
+  en lugar de 'store'
 - feat: agregar nuevos hábitos
 - feat: agregar funcionalidad para la pantalla de hábitos
 - docs: agregar sección de características de Productivity XP al README
@@ -68,7 +77,8 @@
 
 ### v0.0.5
 
-- refactor: reorganizar la gestión del almacenamiento local y simplificar la inicialización de la aplicación
+- refactor: reorganizar la gestión del almacenamiento local y simplificar la
+  inicialización de la aplicación
 - refactor: inicializar datos en localStorage
 - feat: agregar estado inicial de la aplicación y datos de ejemplo para tareas
 - chore: agregar comentarios TODO para continuar
@@ -84,24 +94,32 @@
 - feat: implementar navegación entre pantallas
 - feat: eliminar sección de héroe del documento HTML
 - feat: eliminar el pie de página del documento HTML
-- feat: optimizar la carga inicial y el rendimiento aplicando mejoras de Lighthouse
-- feat: mejorar la gestión del modo oscuro y eliminar la preferencia de tema del almacenamiento local
+- feat: optimizar la carga inicial y el rendimiento aplicando mejoras de
+  Lighthouse
+- feat: mejorar la gestión del modo oscuro y eliminar la preferencia de tema del
+  almacenamiento local
 - feat: actualizar color primario para tener más contraste
 - feat: optimizar imágenes para lighthouse
-- feat: agregar nuevas imágenes y optimizar el rendimiento con ajustes en el HTML
+- feat: agregar nuevas imágenes y optimizar el rendimiento con ajustes en el
+  HTML
 
 ### v0.0.3
 
 - fix: enlace a la documentación sobre TailwindCSS [skip ci]
 - doc: utilizando TailwindCSS con CDN [skip ci]
-- feat: agregar esquinas redondeadas a botones y enlaces para mejorar la estética
+- feat: agregar esquinas redondeadas a botones y enlaces para mejorar la
+  estética
 - feat: mejorar la sección de héroe y el pie de página en index.html
 - feat: agregar estilos CSS y configuración de TailwindCSS en archivos separados
-- feat: actualizar contenido principal y mejorar la presentación de imágenes en index.html
-- feat: agregar navegación móvil y barra lateral para mejorar la experiencia del usuario
+- feat: actualizar contenido principal y mejorar la presentación de imágenes en
+  index.html
+- feat: agregar navegación móvil y barra lateral para mejorar la experiencia del
+  usuario
 - fix: eliminar estilos de enlace innecesarios y mejorar el footer en index.html
-- feat: agregar nuevos colores personalizados y mejorar la estructura del contenido principal en index.html
-- feat: agregar configuración de TailwindCSS y mejorar fuentes en el documento HTML
+- feat: agregar nuevos colores personalizados y mejorar la estructura del
+  contenido principal en index.html
+- feat: agregar configuración de TailwindCSS y mejorar fuentes en el documento
+  HTML
 - feat: agregar soporte para TailwindCSS en el proyecto
 
 ### v0.0.2
@@ -117,7 +135,8 @@
 - docs: se agregan las etiquetas productivas
 - feat: agregar estructura HTML y metadatos SEO
 - docs: agregar tabla de contenidos y roadmap de aprendizaje al README.md
-- docs: actualizar README.md con detalles del proyecto y objetivos de aprendizaje
+- docs: actualizar README.md con detalles del proyecto y objetivos de
+  aprendizaje
 
 ### v0.0.1
 
