@@ -1,6 +1,15 @@
-﻿# CHANGELOG
+# CHANGELOG
 
 ## Historial de cambios
+
+### v0.0.15
+
+- fix: cambiar estrategia de cache en service worker para archivos JSON de
+  locale a network-first, resolviendo problema de cambio de idioma en mobile
+  donde se mostraban etiquetas en vez de traducciones
+- feat: agregar método invalidateLocaleCache para invalidar cache de locale antes
+  de cargar nuevas traducciones
+- refactor: mejorar manejo de cache en PWA para archivos de idioma
 
 ### v0.0.14
 
