@@ -45,6 +45,20 @@ self.addEventListener("fetch", event => {
     return
   }
 
+  // Network first para JSON de locale
+  if (request.destination === "json" || request.url.includes("/locales/")) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          const responseClone = response.clone()
+          caches.open(CACHE_NAME).then(cache => cache.put(request, responseClone))
+          return response
+        })
+        .catch(() => caches.match(request))
+    )
+    return
+  }
+
   // Cache first para assets estables (imágenes)
   event.respondWith(
     caches.match(request).then(response => {

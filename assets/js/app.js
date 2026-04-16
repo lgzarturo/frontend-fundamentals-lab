@@ -3294,14 +3294,22 @@ const I18n = {
    * @param {string} lang - Código del idioma a establecer (e.g., "es", "en")
    * @returns {void}
    */
+  async invalidateLocaleCache(lang) {
+    if ("caches" in window) {
+      const cache = await caches.open("pwa-cache-v3")
+      await cache.delete(`/assets/locales/${lang}.json`)
+    }
+  },
+
   setLanguage(lang) {
     if (["es", "en"].includes(lang)) {
       this.currentLanguage = lang
       localStorage.setItem("userLanguage", lang)
-      this.loadMessages(lang).then(() => {
-        this.applyTranslations()
-        // Opcional: Volver a renderizar la pantalla actual si es necesario
-        app.init()
+      this.invalidateLocaleCache(lang).then(() => {
+        this.loadMessages(lang).then(() => {
+          this.applyTranslations()
+          app.init()
+        })
       })
     }
   },
