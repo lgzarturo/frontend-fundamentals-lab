@@ -1,41 +1,67 @@
 # Productivity XP
 
-Es un proyecto personal diseñado para mejorar la productividad a través de una aplicación web de una sola página (SPA) que integra múltiples herramientas útiles. La aplicación está construida con HTML, Tailwind CSS v3 y JavaScript puro, y ofrece funcionalidades como un gestor de presupuesto, tareas, notas en markdown y seguimiento de hábitos.
+Es un proyecto personal diseñado para mejorar la productividad a través de una
+aplicación web de una sola página (SPA) que integra múltiples herramientas
+útiles. La aplicación está construida con HTML, Tailwind CSS v3 y JavaScript
+puro, y ofrece funcionalidades como un gestor de presupuesto, tareas, notas en
+markdown y seguimiento de hábitos.
 
 ## Características principales
 
-- **Modo oscuro por defecto:** La interfaz está optimizada para uso en condiciones de poca luz, reduciendo la fatiga visual.
-- **Totalmente responsive:** La aplicación se adapta a diferentes tamaños de pantalla, ofreciendo una experiencia fluida tanto en dispositivos móviles como en escritorio.
-- **Usable sin conexión:** Gracias al almacenamiento en `localStorage`, los usuarios pueden acceder a sus datos y funcionalidades incluso sin conexión a internet.
-- **Persistencia local y exportación/importación de datos en JSON:** Los usuarios pueden guardar sus datos localmente y exportarlos o importarlos en formato JSON para facilitar la gestión y respaldo de su información.
-- **Microinteracciones sutiles inspiradas en videojuegos:** La aplicación incluye pequeñas animaciones y efectos que mejoran la experiencia del usuario, haciendo que la interacción sea más atractiva y divertida.
-- **Accesibilidad:** Se han implementado buenas prácticas de accesibilidad para asegurar que la aplicación sea usable por la mayor cantidad de personas posible.
-- **Experiencia fluida en móvil:** La interfaz y las interacciones están diseñadas para ser intuitivas y fáciles de usar en dispositivos móviles.
-- **Aprendizaje profundo de fundamentos del frontend:** El desarrollo de esta aplicación sirve como una oportunidad para aprender y comprender a fondo los conceptos básicos del desarrollo frontend.
+- **Modo oscuro por defecto:** La interfaz está optimizada para uso en
+  condiciones de poca luz, reduciendo la fatiga visual.
+- **Totalmente responsive:** La aplicación se adapta a diferentes tamaños de
+  pantalla, ofreciendo una experiencia fluida tanto en dispositivos móviles como
+  en escritorio.
+- **Usable sin conexión:** Gracias al almacenamiento en `localStorage`, los
+  usuarios pueden acceder a sus datos y funcionalidades incluso sin conexión a
+  internet.
+- **Persistencia local y exportación/importación de datos en JSON:** Los
+  usuarios pueden guardar sus datos localmente y exportarlos o importarlos en
+  formato JSON para facilitar la gestión y respaldo de su información.
+- **Microinteracciones sutiles inspiradas en videojuegos:** La aplicación
+  incluye pequeñas animaciones y efectos que mejoran la experiencia del usuario,
+  haciendo que la interacción sea más atractiva y divertida.
+- **Accesibilidad:** Se han implementado buenas prácticas de accesibilidad para
+  asegurar que la aplicación sea usable por la mayor cantidad de personas
+  posible.
+- **Experiencia fluida en móvil:** La interfaz y las interacciones están
+  diseñadas para ser intuitivas y fáciles de usar en dispositivos móviles.
+- **Aprendizaje profundo de fundamentos del frontend:** El desarrollo de esta
+  aplicación sirve como una oportunidad para aprender y comprender a fondo los
+  conceptos básicos del desarrollo frontend.
 
 ### 🏠 Panel Principal
 
-- **Resumen rápido**: Visualiza tu racha de hábitos, tareas completadas, presupuesto restante y cantidad de notas de un vistazo.
-- **MITs (Tareas Más Importantes)**: Enfócate en tus 3 tareas prioritarias del día.
+- **Resumen rápido**: Visualiza tu racha de hábitos, tareas completadas,
+  presupuesto restante y cantidad de notas de un vistazo.
+- **MITs (Tareas Más Importantes)**: Enfócate en tus 3 tareas prioritarias del
+  día.
 - **Hábitos de hoy**: Acceso rápido para completar tus hábitos diarios.
 - **Actividad reciente**: Consulta tus logros y actualizaciones más recientes.
 
 ### 💰 Gestor de Presupuesto
 
-- **Crear múltiples presupuestos**: Organiza tus finanzas con categorías personalizadas.
+- **Crear múltiples presupuestos**: Organiza tus finanzas con categorías
+  personalizadas.
 - **Elementos de presupuesto**: Añade categorías con montos asignados y notas.
 - **Transacciones**: Registra gastos e ingresos con historial detallado.
-- **Progreso visual**: Barras de progreso estilo XP muestran el gasto de un vistazo.
+- **Progreso visual**: Barras de progreso estilo XP muestran el gasto de un
+  vistazo.
 - **Resumen en el panel**: Presupuesto total, gastado y restante destacados.
-- **Alertas por colores**: Verde (seguro), amarillo (advertencia), rojo (exceso de gasto).
+- **Alertas por colores**: Verde (seguro), amarillo (advertencia), rojo (exceso
+  de gasto).
 
 ### ✓ Tareas y Checklist
 
 - **Operaciones CRUD completas**: Crea, consulta, edita y elimina tareas.
-- **Detalles enriquecidos**: Título, descripción, fecha límite, niveles de prioridad y etiquetas.
+- **Detalles enriquecidos**: Título, descripción, fecha límite, niveles de
+  prioridad y etiquetas.
 - **Subtareas**: Divide tareas complejas en pasos manejables.
-- **Arrastrar para reordenar**: Prioriza tareas fácilmente (funciona en escritorio y móvil).
-- **Filtros inteligentes**: Ver todas las tareas, las de hoy, alta prioridad o completadas.
+- **Arrastrar para reordenar**: Prioriza tareas fácilmente (funciona en
+  escritorio y móvil).
+- **Filtros inteligentes**: Ver todas las tareas, las de hoy, alta prioridad o
+  completadas.
 - **Indicadores de prioridad**: Las tareas urgentes se marcan con un rayo ⚡.
 - **Recompensas XP**: Gana +15 XP por cada tarea completada.
 
@@ -43,19 +69,22 @@ Es un proyecto personal diseñado para mejorar la productividad a través de una
 
 - **Editor Markdown**: Escribe notas con formato markdown.
 - **Vista previa en vivo**: Alterna entre edición y vista previa.
-- **Parser personalizado**: Analizador markdown minimalista integrado (sin librerías externas).
+- **Parser personalizado**: Analizador markdown minimalista integrado (sin
+  librerías externas).
   - Encabezados (h1, h2, h3)
   - Texto en negrita y cursiva
   - Bloques de código con estilos de resaltado
   - Código en línea
   - Listas sin orden
 - **Función de búsqueda**: Encuentra notas por título, contenido o etiquetas.
-- **Organización por etiquetas**: Clasifica notas con etiquetas separadas por comas.
+- **Organización por etiquetas**: Clasifica notas con etiquetas separadas por
+  comas.
 - **Auto-fechas**: Registra cuándo se actualizó cada nota.
 
 ### 🎯 Seguimiento de Hábitos
 
-- **Plantillas de rutina para programadores**: Hábitos predefinidos basados en rutinas óptimas para desarrolladores.
+- **Plantillas de rutina para programadores**: Hábitos predefinidos basados en
+  rutinas óptimas para desarrolladores.
   - Despertar sin posponer
   - Hidratarse (500ml de agua)
   - Meditación estoica (10 min)
@@ -78,15 +107,19 @@ Es un proyecto personal diseñado para mejorar la productividad a través de una
 - **Tema oscuro/claro**: Alterna entre modos (oscuro por defecto).
 - **Exportar datos**: Descarga todos tus datos en formato JSON.
 - **Importar datos**: Sube datos previamente exportados.
-- **Restaurar datos de demostración**: Recupera datos de ejemplo en cualquier momento.
+- **Restaurar datos de demostración**: Recupera datos de ejemplo en cualquier
+  momento.
 - **Borrar todos los datos**: Comienza desde cero (con confirmación).
 
 ### 🎨 Características de Diseño
 
-- **Estética de videojuego**: Puntos XP, animaciones de subida de nivel, barras de progreso.
-- **Toques retro**: Esquinas estilo pixel y paleta de colores inspirada en videojuegos.
+- **Estética de videojuego**: Puntos XP, animaciones de subida de nivel, barras
+  de progreso.
+- **Toques retro**: Esquinas estilo pixel y paleta de colores inspirada en
+  videojuegos.
 - **Tema oscuro**: Predeterminado, amigable para la vista y con alto contraste.
-- **Mobile-first**: Diseño responsivo que funciona perfectamente en todos los dispositivos.
+- **Mobile-first**: Diseño responsivo que funciona perfectamente en todos los
+  dispositivos.
 - **Optimizado para tacto**: Áreas de toque grandes (mínimo 44x44px).
 - **Microanimaciones**: Transiciones suaves y animaciones sutiles.
 - **Deshacer acciones**: Recupera elementos eliminados dentro de 5 segundos.
@@ -94,11 +127,16 @@ Es un proyecto personal diseñado para mejorar la productividad a través de una
 ## 🎮 Elementos de Gamificación
 
 - **Puntos XP**: Gana puntos de experiencia al completar tareas y hábitos.
-- **Sistema de rachas**: Construye rachas diarias de hábitos con el emoji de fuego 🔥.
-- **Barras de progreso**: Indicadores visuales con estilo de barras de vida/mana de videojuegos.
-- **Animaciones**: Microanimaciones suaves para acciones (subida de nivel, ganancia de XP).
-- **Codificación por colores**: Verde para éxito, rojo para peligro, amarillo para advertencias.
-- **Sensación de logro**: Retroalimentación visual satisfactoria al completar elementos.
+- **Sistema de rachas**: Construye rachas diarias de hábitos con el emoji de
+  fuego 🔥.
+- **Barras de progreso**: Indicadores visuales con estilo de barras de vida/mana
+  de videojuegos.
+- **Animaciones**: Microanimaciones suaves para acciones (subida de nivel,
+  ganancia de XP).
+- **Codificación por colores**: Verde para éxito, rojo para peligro, amarillo
+  para advertencias.
+- **Sensación de logro**: Retroalimentación visual satisfactoria al completar
+  elementos.
 
 ## 🎯 Características de Rutina para Programadores
 
@@ -116,11 +154,13 @@ La app incluye una rutina completa de productividad para desarrolladores:
 
 ### Bloques de Trabajo
 
-- **Bloque de trabajo profundo 1** (9:00 - 10:00): 60 min de enfoque en programación
+- **Bloque de trabajo profundo 1** (9:00 - 10:00): 60 min de enfoque en
+  programación
 - **Comunicación asíncrona** (10:00 - 10:30): Revisar y responder mensajes
 - **Bloque de trabajo profundo 2** (12:00 - 13:00): 60 min de trabajo enfocado
 - **Tareas administrativas** (15:00 - 15:30): Organización y planificación
-- **Bloque de aprendizaje** (16:30 - 17:15): 30-45 min de desarrollo de habilidades
+- **Bloque de aprendizaje** (16:30 - 17:15): 30-45 min de desarrollo de
+  habilidades
 
 ### Rutina Vespertina (17:30 - 23:00)
 
@@ -203,7 +243,8 @@ Posibles funciones para próximas versiones:
 
 ## 🙏 Créditos
 
-Creado con ❤️ y ☕ por [Arturo López](https://lgzarturo.com) para desarrolladores que quieren mejorar su productividad.
+Creado con ❤️ y ☕ por [Arturo López](https://lgzarturo.com) para
+desarrolladores que quieren mejorar su productividad.
 
 **Inspiración:**
 
@@ -213,7 +254,8 @@ Creado con ❤️ y ☕ por [Arturo López](https://lgzarturo.com) para desarrol
 
 ## 📄 Licencia
 
-Este proyecto es open source y está disponible para uso personal. ¡Siéntete libre de modificarlo y ampliarlo según tus necesidades!
+Este proyecto es open source y está disponible para uso personal. ¡Siéntete
+libre de modificarlo y ampliarlo según tus necesidades!
 
 ---
 

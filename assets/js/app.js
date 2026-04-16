@@ -4,8 +4,8 @@
  * @returns {string} - Traducción o la clave si no existe
  */
 function getI18n(key) {
-  if (typeof I18n === 'undefined' || !I18n.messages) {
-    console.warn('I18n not initialized yet')
+  if (typeof I18n === "undefined" || !I18n.messages) {
+    console.warn("I18n not initialized yet")
     return key
   }
   return I18n.getMessage(key)
@@ -256,7 +256,7 @@ function launchConfetti() {
    */
   function animate() {
     context.clearRect(0, 0, width, height)
-    particles.forEach((p) => {
+    particles.forEach(p => {
       // Spread explosivo, parabólico y balanceo
       // Detectar el pico (cuando la velocidad vertical cambia de negativa a positiva)
       if (!p.reachedPeak && p.speedY > 0) {
@@ -333,19 +333,18 @@ let visitCount = 0
  */
 function home() {
   const todayStr = formatDate(new Date())
-  const maxStreak = Math.max(...app.habits.map((h) => h.streak || 0), 0)
+  const maxStreak = Math.max(...app.habits.map(h => h.streak || 0), 0)
 
   document.getElementById("home-habits-streak").textContent = maxStreak
 
   const totalTasks = app.tasks.filter(
-    (t) => !t.done && t.dueDate === todayStr
+    t => !t.done && t.dueDate === todayStr
   ).length
   const doneTasks = app.tasks.filter(
-    (t) => t.done && t.dueDate === todayStr
+    t => t.done && t.dueDate === todayStr
   ).length
-  document.getElementById(
-    "home-tasks-done"
-  ).textContent = `${doneTasks}/${totalTasks}`
+  document.getElementById("home-tasks-done").textContent =
+    `${doneTasks}/${totalTasks}`
 
   const totalBudget = app.budgets.reduce(
     (sum, b) => sum + b.items.reduce((s, i) => s + i.amount, 0),
@@ -362,7 +361,7 @@ function home() {
   document.getElementById("home-notes-count").textContent = app.notes.length
 
   const mits = app.tasks
-    .filter((t) => !t.done && (t.priority === "high" || t.dueDate === todayStr))
+    .filter(t => !t.done && (t.priority === "high" || t.dueDate === todayStr))
     .sort((a, b) => {
       if (a.priority === "high" && b.priority !== "high") return -1
       if (b.priority === "high" && a.priority !== "high") return 1
@@ -375,7 +374,7 @@ function home() {
 
   if (mits.length > 0) {
     const template = document.getElementById("home-content-template")
-    mits.forEach((task) => {
+    mits.forEach(task => {
       const node = template.content.cloneNode(true)
       // Submit action
       const btn = node.querySelector("[data-done-button]")
@@ -391,7 +390,7 @@ function home() {
       tagsContainer.innerHTML = ""
       if (task.tags.length > 0) {
         const tagTemplate = document.getElementById("home-component-tag")
-        task.tags.forEach((tag) => {
+        task.tags.forEach(tag => {
           const tagNode = tagTemplate.content.cloneNode(true)
           tagNode.querySelector("[data-tag-name]").textContent = tag
           tagsContainer.appendChild(tagNode)
@@ -418,7 +417,7 @@ function home() {
 
   // Renderizar los hábitos en el inicio
   const todayHabits = []
-  app.habits.forEach((habit) => {
+  app.habits.forEach(habit => {
     todayHabits.push({
       ...habit,
       isDone: habit.dailyRecords[todayStr] || false,
@@ -430,7 +429,7 @@ function home() {
   habitsList.innerHTML = ""
   if (todayHabits.length > 0) {
     const template = document.getElementById("home-habit-template")
-    todayHabits.forEach((habit) => {
+    todayHabits.forEach(habit => {
       const node = template.content.cloneNode(true)
       // Título
       node.querySelector("[data-habit-title]").textContent = habit.title
@@ -464,11 +463,11 @@ function home() {
 
   // Tareas recientes
   const recentTasks = app.tasks
-    .filter((t) => t.done)
+    .filter(t => t.done)
     .sort((a, b) => b.id.localeCompare(a.id))
     .slice(0, 2)
 
-  recentTasks.forEach((task) => {
+  recentTasks.forEach(task => {
     recentActivity.push({
       icon: "✓",
       text: `${I18n.getMessage("label.completed")}: ${task.title}`,
@@ -482,7 +481,7 @@ function home() {
     .sort((a, b) => b.updatedAt - a.updatedAt)
     .slice(0, 2)
 
-  recentNotes.forEach((note) => {
+  recentNotes.forEach(note => {
     recentActivity.push({
       icon: "📝",
       text: `${I18n.getMessage("label.updated")}: ${note.title}`,
@@ -495,7 +494,7 @@ function home() {
   recentActivityList.innerHTML = ""
   if (recentActivity.length > 0) {
     const template = document.getElementById("recent-activity-template")
-    recentActivity.forEach((item) => {
+    recentActivity.forEach(item => {
       const node = template.content.cloneNode(true)
       node.querySelector("[data-icon]").textContent = item.icon
       node.querySelector("[data-text]").textContent = item.text
@@ -533,12 +532,11 @@ function budgets() {
   document.getElementById("budget-spent").textContent = `$${totalSpent.toFixed(
     2
   )}`
-  document.getElementById(
-    "budget-remaining"
-  ).textContent = `$${remaining.toFixed(2)}`
+  document.getElementById("budget-remaining").textContent =
+    `$${remaining.toFixed(2)}`
 
   const budgetList = []
-  app.budgets.forEach((budget) => {
+  app.budgets.forEach(budget => {
     const budgetTotal = budget.items.reduce((sum, item) => sum + item.amount, 0)
     const budgetSpent = budget.transactions.reduce(
       (sum, t) => sum + Math.abs(t.amount),
@@ -562,7 +560,7 @@ function budgets() {
   budgetElementList.innerHTML = ""
   if (budgetList.length > 0) {
     const template = document.getElementById("budget-card-template")
-    budgetList.forEach((budget) => {
+    budgetList.forEach(budget => {
       console.log("Rendering budget:", budget)
       const node = template.content.cloneNode(true)
       node.querySelector("[data-budget-name]").textContent = budget.name
@@ -574,9 +572,8 @@ function budgets() {
       node.querySelector("[data-budget-spent]").textContent = `$${budget.spent}`
       node.querySelector("[data-budget-remaining-label]").textContent =
         I18n.getMessage("app.screens.budgets.overview.remaining")
-      node.querySelector(
-        "[data-budget-remaining]"
-      ).textContent = `$${budget.remaining}`
+      node.querySelector("[data-budget-remaining]").textContent =
+        `$${budget.remaining}`
       const percentageBar = node.querySelector("[data-budget-bar-fill]")
       percentageBar.style.width = `${Math.min(budget.percentage, 100)}%`
       if (budget.percentage > 90) {
@@ -628,13 +625,13 @@ function tasks() {
   // Aplicar filtros
   switch (currentFilter) {
     case "today":
-      tasks = tasks.filter((t) => t.dueDate === todayStr && !t.done)
+      tasks = tasks.filter(t => t.dueDate === todayStr && !t.done)
       break
     case "high":
-      tasks = tasks.filter((t) => t.priority === "high" && !t.done)
+      tasks = tasks.filter(t => t.priority === "high" && !t.done)
       break
     case "completed":
-      tasks = tasks.filter((t) => t.done)
+      tasks = tasks.filter(t => t.done)
       break
   }
 
@@ -698,7 +695,7 @@ function tasks() {
                             <div class="mt-3 space-y-2 pl-2 border-l-2 border-gray-200 dark:border-gray-700">
                                 ${task.subtasks
                                   .map(
-                                    (subtask) => `
+                                    subtask => `
                                     <div class="flex items-center gap-2">
                                         <button onclick="app.toggleSubtask('${
                                           task.id
@@ -728,7 +725,7 @@ function tasks() {
                             <div class="flex gap-2 flex-wrap">
                                 ${task.tags
                                   .map(
-                                    (tag) =>
+                                    tag =>
                                       `<span class="text-xs px-2 py-1 bg-xp-primary/20 text-xp-primary rounded">${tag}</span>`
                                   )
                                   .join("")}
@@ -770,22 +767,18 @@ function tasks() {
 function habits() {
   const todayStr = formatDate(new Date())
   const totalHabits = app.habits.length
-  const completedToday = app.habits.filter(
-    (h) => h.dailyRecords[todayStr]
-  ).length
+  const completedToday = app.habits.filter(h => h.dailyRecords[todayStr]).length
   const completionRate =
     totalHabits > 0 ? ((completedToday / totalHabits) * 100).toFixed(0) : 0
-  const maxStreak = Math.max(...app.habits.map((h) => h.streak || 0), 0)
+  const maxStreak = Math.max(...app.habits.map(h => h.streak || 0), 0)
 
-  document.getElementById(
-    "habits-current-streak"
-  ).textContent = `${maxStreak} ${I18n.getMessage("label.days")} 🔥`
-  document.getElementById(
-    "habits-completion-rate"
-  ).textContent = `${completionRate}%`
+  document.getElementById("habits-current-streak").textContent =
+    `${maxStreak} ${I18n.getMessage("label.days")} 🔥`
+  document.getElementById("habits-completion-rate").textContent =
+    `${completionRate}%`
 
   const habitsHtml = app.habits
-    .map((habit) => {
+    .map(habit => {
       const isDoneToday = habit.dailyRecords[todayStr]
       const last7Days = getLast7Days()
 
@@ -819,8 +812,12 @@ function habits() {
                                 } hover:opacity-80 transition-all font-semibold">
                             ${
                               isDoneToday
-                                ? I18n.getMessage("app.screens.habits.completedToday")
-                                : I18n.getMessage("app.screens.habits.markComplete")
+                                ? I18n.getMessage(
+                                    "app.screens.habits.completedToday"
+                                  )
+                                : I18n.getMessage(
+                                    "app.screens.habits.markComplete"
+                                  )
                             }
                         </button>
                         <div class="flex items-center gap-2">
@@ -841,7 +838,7 @@ function habits() {
 
                     <div class="flex gap-2">
                         ${last7Days
-                          .map((date) => {
+                          .map(date => {
                             const done = habit.dailyRecords[date]
                             const isToday = date === todayStr
                             return `
@@ -850,8 +847,8 @@ function habits() {
                                     ? "bg-xp-primary"
                                     : "bg-gray-200 dark:bg-xp-darker"
                                 } ${
-                              isToday ? "ring-2 ring-xp-secondary" : ""
-                            } flex items-center justify-center">
+                                  isToday ? "ring-2 ring-xp-secondary" : ""
+                                } flex items-center justify-center">
                                     ${
                                       done
                                         ? '<span class="text-xp-darker text-xl">✓</span>'
@@ -864,7 +861,7 @@ function habits() {
                     </div>
                     <div class="flex justify-between mt-2 text-xs text-gray-600 dark:text-gray-400">
                         ${last7Days
-                          .map((date) => {
+                          .map(date => {
                             const d = new Date(date)
                             return `<div class="flex-1 text-center">${d
                               .toLocaleDateString("en-US", { weekday: "short" })
@@ -889,7 +886,7 @@ function habits() {
 function notes() {
   const notesHtml = app.notes
     .map(
-      (note) => `
+      note => `
             <div class="bg-white dark:bg-xp-card rounded-xl p-5 border-2 border-gray-200 dark:border-xp-primary/20 hover:border-xp-primary/40 transition-colors cursor-pointer"
                  onclick="app.showNoteModal('${note.id}')">
                 <h4 class="font-bold text-lg mb-2">${escapeHtml(
@@ -897,14 +894,14 @@ function notes() {
                 )}</h4>
                 <div class="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3">
                     ${escapeHtml(note.bodyMarkdown.substring(0, 100))}${
-        note.bodyMarkdown.length > 100 ? "..." : ""
-      }
+                      note.bodyMarkdown.length > 100 ? "..." : ""
+                    }
                 </div>
                 <div class="flex items-center justify-between">
                     <div class="flex gap-1 flex-wrap">
                         ${note.tags
                           .map(
-                            (tag) =>
+                            tag =>
                               `<span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-500 rounded">${tag}</span>`
                           )
                           .join("")}
@@ -1533,10 +1530,10 @@ const app = {
     currentScreen = screen
     document
       .querySelectorAll(".screen")
-      .forEach((s) => s.classList.remove("active"))
+      .forEach(s => s.classList.remove("active"))
     const screenEl = document.getElementById(`${screen}-screen`)
     if (screenEl) screenEl.classList.add("active")
-    document.querySelectorAll(".nav-btn").forEach((btn) => {
+    document.querySelectorAll(".nav-btn").forEach(btn => {
       if (btn.dataset.screen === screen) {
         btn.classList.add(
           "bg-xp-primary",
@@ -1581,7 +1578,7 @@ const app = {
     currentFilter = filter
 
     // Actualizar estilos de botones de filtro
-    document.querySelectorAll(".task-filter-btn").forEach((btn) => {
+    document.querySelectorAll(".task-filter-btn").forEach(btn => {
       if (btn.dataset.filter === filter) {
         btn.classList.add("bg-xp-primary", "text-xp-darker")
         btn.classList.remove(
@@ -1611,7 +1608,7 @@ const app = {
     const todayStr = formatDate(new Date())
 
     // Contenido del modal para crear una nueva tarea
-    const t = (key) => getI18n(key)
+    const t = key => getI18n(key)
     const modalContent = `
             <div class="p-6">
                 <h3 class="text-2xl font-bold mb-4">${t("app.screens.tasks.modal.create.title")}</h3>
@@ -1688,8 +1685,8 @@ const app = {
         ? formData
             .get("tags")
             .split(",")
-            .map((t) => t.trim())
-            .filter((t) => t)
+            .map(t => t.trim())
+            .filter(t => t)
         : [],
       subtasks: [],
       done: false,
@@ -1709,11 +1706,11 @@ const app = {
    * @returns {void}
    */
   showEditTaskModal(taskId) {
-    const task = app.tasks.find((t) => t.id === taskId)
+    const task = app.tasks.find(t => t.id === taskId)
     if (!task) return
 
     // Contenido del modal para editar la tarea
-    const t = (key) => getI18n(key)
+    const t = key => getI18n(key)
     const modalContent = `
             <div class="p-6">
                 <h3 class="text-2xl font-bold mb-4">${t("app.screens.tasks.modal.edit.title")}</h3>
@@ -1838,7 +1835,7 @@ const app = {
   updateTask(event, taskId) {
     event.preventDefault()
     const formData = new FormData(event.target)
-    const task = app.tasks.find((t) => t.id === taskId)
+    const task = app.tasks.find(t => t.id === taskId)
 
     if (task) {
       // Actualizar campos de la tarea
@@ -1850,21 +1847,21 @@ const app = {
         ? formData
             .get("tags")
             .split(",")
-            .map((t) => t.trim())
-            .filter((t) => t)
+            .map(t => t.trim())
+            .filter(t => t)
         : []
 
       // Actualizar subtareas
       const subtaskInputs = document.querySelectorAll(".subtask-input")
       task.subtasks = Array.from(subtaskInputs)
-        .map((input) => ({
+        .map(input => ({
           id: input.dataset.subtaskId || generateId(),
           text: input.value,
           done:
-            task.subtasks.find((st) => st.id === input.dataset.subtaskId)
-              ?.done || false
+            task.subtasks.find(st => st.id === input.dataset.subtaskId)?.done ||
+            false
         }))
-        .filter((st) => st.text.trim())
+        .filter(st => st.text.trim())
 
       store.save(app.tasks, "tasks")
       app.closeModal()
@@ -1878,17 +1875,20 @@ const app = {
    * @return {void}
    */
   deleteTask(taskId) {
-    const index = app.tasks.findIndex((t) => t.id === taskId)
+    const index = app.tasks.findIndex(t => t.id === taskId)
     if (index !== -1) {
       const deleted = app.tasks.splice(index, 1)[0]
       store.save(app.tasks, "tasks")
       tasks()
       // Mostrar opción de deshacer
-      app.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () => {
-        app.tasks.splice(index, 0, deleted)
-        store.save(app.tasks, "tasks")
-        tasks()
-      })
+      app.showUndoToast(
+        `${getI18n("ui.common.deleted")} "${deleted.title}"`,
+        () => {
+          app.tasks.splice(index, 0, deleted)
+          store.save(app.tasks, "tasks")
+          tasks()
+        }
+      )
     }
   },
   /**
@@ -1897,12 +1897,14 @@ const app = {
    * @returns {void}
    */
   toggleTask: function (taskId) {
-    const task = app.tasks.find((t) => t.id === taskId)
+    const task = app.tasks.find(t => t.id === taskId)
     if (task) {
       task.done = !task.done
       store.save(app.tasks, "tasks")
       app.showToast(
-        task.done ? I18n.getMessage("ui.common.toast.taskCompleted") : I18n.getMessage("ui.common.toast.taskReopened"),
+        task.done
+          ? I18n.getMessage("ui.common.toast.taskCompleted")
+          : I18n.getMessage("ui.common.toast.taskReopened"),
         "success"
       )
       render()
@@ -1915,9 +1917,9 @@ const app = {
    * @returns {void}
    */
   toggleSubtask(taskId, subtaskId) {
-    const task = app.tasks.find((t) => t.id === taskId)
+    const task = app.tasks.find(t => t.id === taskId)
     if (task && task.subtasks) {
-      const subtask = task.subtasks.find((st) => st.id === subtaskId)
+      const subtask = task.subtasks.find(st => st.id === subtaskId)
       if (subtask) {
         subtask.done = !subtask.done
         store.save(app.tasks, "tasks")
@@ -1974,7 +1976,7 @@ const app = {
     const taskItems = Array.from(document.querySelectorAll(".task-item"))
     taskItems.forEach((item, index) => {
       const taskId = item.dataset.taskId
-      const task = app.tasks.find((t) => t.id === taskId)
+      const task = app.tasks.find(t => t.id === taskId)
       if (task) {
         task.order = index + 1
       }
@@ -1990,7 +1992,7 @@ const app = {
   handleDragEnd(event) {
     event.target.classList.remove("dragging")
     // TODO: Retorna el cursor a su estado inicial.
-    document.querySelectorAll(".task-item").forEach((item) => {
+    document.querySelectorAll(".task-item").forEach(item => {
       item.classList.remove("drag-over")
     })
   },
@@ -2029,7 +2031,7 @@ const app = {
    * @param {number} templateIndex - Índice de la plantilla a usar
    * @returns {void}
    */
-createHabitFromTemplate(templateIndex) {
+  createHabitFromTemplate(templateIndex) {
     const templates = getI18n("app.screens.habits.templates.items") || []
     const template = templates[templateIndex]
     if (!template) return
@@ -2050,7 +2052,7 @@ createHabitFromTemplate(templateIndex) {
     this.showToast(getI18n("ui.common.toast.habitCreated"), "success")
     habits()
     if (this.currentScreen === "home") home()
-},
+  },
 
   showHabitTemplatesModal() {
     event.preventDefault()
@@ -2085,7 +2087,7 @@ createHabitFromTemplate(templateIndex) {
    * @returns {void}
    */
   showHabitTemplatesModal() {
-    const t = (key) => getI18n(key)
+    const t = key => getI18n(key)
     const templates = t("app.screens.habits.templates.items") || []
 
     const modalContent = `
@@ -2153,7 +2155,7 @@ createHabitFromTemplate(templateIndex) {
    * @returns {void}
    */
   deleteHabit(habitId) {
-    const index = app.habits.findIndex((h) => h.id === habitId)
+    const index = app.habits.findIndex(h => h.id === habitId)
     if (index !== -1) {
       const deleted = app.habits.splice(index, 1)[0]
       store.save(app.habits, "habits")
@@ -2166,11 +2168,14 @@ createHabitFromTemplate(templateIndex) {
           habit_title: deleted.title
         })
       }
-      app.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () => {
-        app.habits.splice(index, 0, deleted)
-        store.save(app.habits, "habits")
-        habits()
-      })
+      app.showUndoToast(
+        `${getI18n("ui.common.deleted")} "${deleted.title}"`,
+        () => {
+          app.habits.splice(index, 0, deleted)
+          store.save(app.habits, "habits")
+          habits()
+        }
+      )
     }
   },
   /**
@@ -2179,7 +2184,7 @@ createHabitFromTemplate(templateIndex) {
    * @returns {void}
    */
   toggleHabit(habitId) {
-    const habit = app.habits.find((h) => h.id === habitId)
+    const habit = app.habits.find(h => h.id === habitId)
     if (!habit) return
 
     const todayStr = formatDate(new Date())
@@ -2203,7 +2208,9 @@ createHabitFromTemplate(templateIndex) {
 
     store.save(app.habits, "habits")
     app.showToast(
-      wasDone ? I18n.getMessage("ui.common.toast.habitUnchecked") : I18n.getMessage("ui.common.toast.habitCompleted"),
+      wasDone
+        ? I18n.getMessage("ui.common.toast.habitUnchecked")
+        : I18n.getMessage("ui.common.toast.habitCompleted"),
       "success"
     )
 
@@ -2219,7 +2226,7 @@ createHabitFromTemplate(templateIndex) {
 
     const totalHabits = app.habits.length
     const completedHabitsToday = app.habits.filter(
-      (h) => h.dailyRecords[todayStr]
+      h => h.dailyRecords[todayStr]
     ).length
 
     console.debug(
@@ -2252,10 +2259,10 @@ createHabitFromTemplate(templateIndex) {
   budgets: [],
   /**
    * Muestra el modal para crear un nuevo presupuesto
-* @returns {void}
+   * @returns {void}
    */
   showCreateBudgetModal() {
-    const t = (key) => getI18n(key)
+    const t = key => getI18n(key)
     const modalContent = `
             <div class="p-6">
                 <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.create.title")}</h3>
@@ -2322,7 +2329,7 @@ createHabitFromTemplate(templateIndex) {
    * @returns {void}
    */
   showAddTransactionModal(budgetId) {
-    const t = (key) => getI18n(key)
+    const t = key => getI18n(key)
     const modalContent = `
             <div class="p-6">
                 <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.addTransaction.title")}</h3>
@@ -2366,7 +2373,7 @@ createHabitFromTemplate(templateIndex) {
   addTransaction(event, budgetId) {
     event.preventDefault()
     const formData = new FormData(event.target)
-    const budget = app.budgets.find((b) => b.id === budgetId)
+    const budget = app.budgets.find(b => b.id === budgetId)
 
     if (budget) {
       const transaction = {
@@ -2391,10 +2398,10 @@ createHabitFromTemplate(templateIndex) {
    * @returns {void}
    */
   showBudgetDetails(budgetId) {
-    const budget = app.budgets.find((b) => b.id === budgetId)
+    const budget = app.budgets.find(b => b.id === budgetId)
     if (!budget) return
 
-    const t = (key) => getI18n(key)
+    const t = key => getI18n(key)
 
     const modalContent = `
             <div class="p-6">
@@ -2419,7 +2426,7 @@ createHabitFromTemplate(templateIndex) {
                     <div class="space-y-2">
                         ${budget.items
                           .map(
-                            (item) => `
+                            item => `
                             <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
                                 <div>
                                     <div class="font-semibold">${escapeHtml(
@@ -2438,8 +2445,8 @@ createHabitFromTemplate(templateIndex) {
                                       2
                                     )}</div>
                                     <button onclick="app.deleteBudgetItem('${budgetId}', '${
-                              item.id
-                            }')"
+                                      item.id
+                                    }')"
                                             class="text-xs text-xp-danger hover:underline">${t("ui.common.delete")}</button>
                                 </div>
                             </div>
@@ -2459,7 +2466,7 @@ createHabitFromTemplate(templateIndex) {
                     <div class="space-y-2 max-h-64 overflow-y-auto">
                         ${budget.transactions
                           .map(
-                            (t) => `
+                            t => `
                             <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
                                 <div>
                                     <div class="font-semibold">${escapeHtml(
@@ -2475,8 +2482,8 @@ createHabitFromTemplate(templateIndex) {
                                     : "text-xp-primary"
                                 }">
                                     ${t.amount < 0 ? "-" : "+"}$${Math.abs(
-                              t.amount
-                            ).toFixed(2)}
+                                      t.amount
+                                    ).toFixed(2)}
                                 </div>
                             </div>
                         `
@@ -2500,7 +2507,7 @@ createHabitFromTemplate(templateIndex) {
    * @returns {void}
    */
   showAddBudgetItemModal(budgetId) {
-    const t = (key) => getI18n(key)
+    const t = key => getI18n(key)
     const modalContent = `
             <div class="p-6">
                 <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.addItem.title")}</h3>
@@ -2550,7 +2557,7 @@ createHabitFromTemplate(templateIndex) {
   addBudgetItem(event, budgetId) {
     event.preventDefault()
     const formData = new FormData(event.target)
-    const budget = app.budgets.find((b) => b.id === budgetId)
+    const budget = app.budgets.find(b => b.id === budgetId)
 
     if (budget) {
       const item = {
@@ -2579,7 +2586,7 @@ createHabitFromTemplate(templateIndex) {
         "Are you sure you want to delete this budget? This action cannot be undone."
       )
     ) {
-      const index = app.budgets.findIndex((b) => b.id === budgetId)
+      const index = app.budgets.findIndex(b => b.id === budgetId)
       if (index !== -1) {
         app.budgets.splice(index, 1)
         store.save(app.budgets, "budgets")
@@ -2596,18 +2603,21 @@ createHabitFromTemplate(templateIndex) {
    * @returns {void}
    */
   deleteBudgetItem(budgetId, itemId) {
-    const budget = app.budgets.find((b) => b.id === budgetId)
+    const budget = app.budgets.find(b => b.id === budgetId)
     if (budget) {
-      const index = budget.items.findIndex((i) => i.id === itemId)
+      const index = budget.items.findIndex(i => i.id === itemId)
       if (index !== -1) {
         const deleted = budget.items.splice(index, 1)[0]
         store.save(app.budgets, "budgets")
-        this.showUndoToast(`${getI18n("ui.common.deleted")} ${deleted.title}`, () => {
-          budget.items.splice(index, 0, deleted)
-          store.save(app.budgets, "budgets")
-          this.showBudgetDetails(budgetId)
-          budgets()
-        })
+        this.showUndoToast(
+          `${getI18n("ui.common.deleted")} ${deleted.title}`,
+          () => {
+            budget.items.splice(index, 0, deleted)
+            store.save(app.budgets, "budgets")
+            this.showBudgetDetails(budgetId)
+            budgets()
+          }
+        )
         this.showBudgetDetails(budgetId)
         budgets()
       }
@@ -2631,15 +2641,15 @@ createHabitFromTemplate(templateIndex) {
 
     // Filtrar notas que coincidan con el título, contenido o etiquetas
     const filtered = app.notes.filter(
-      (note) =>
+      note =>
         note.title.toLowerCase().includes(query.toLowerCase()) ||
         note.bodyMarkdown.toLowerCase().includes(query.toLowerCase()) ||
-        note.tags.some((tag) => tag.toLowerCase().includes(query.toLowerCase()))
+        note.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
     )
 
     const notesHtml = filtered
       .map(
-        (note) => `
+        note => `
             <div class="bg-white dark:bg-xp-card rounded-xl p-5 border-2 border-gray-200 dark:border-xp-primary/20 hover:border-xp-primary/40 transition-colors cursor-pointer"
                  onclick="app.showNoteModal('${note.id}')">
                 <h4 class="font-bold text-lg mb-2">${escapeHtml(
@@ -2647,14 +2657,14 @@ createHabitFromTemplate(templateIndex) {
                 )}</h4>
                 <div class="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3">
                     ${escapeHtml(note.bodyMarkdown.substring(0, 100))}${
-          note.bodyMarkdown.length > 100 ? "..." : ""
-        }
+                      note.bodyMarkdown.length > 100 ? "..." : ""
+                    }
                 </div>
                 <div class="flex items-center justify-between">
                     <div class="flex gap-1 flex-wrap">
                         ${note.tags
                           .map(
-                            (tag) =>
+                            tag =>
                               `<span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-500 rounded">${tag}</span>`
                           )
                           .join("")}
@@ -2677,7 +2687,7 @@ createHabitFromTemplate(templateIndex) {
    * @returns {void}
    */
   showCreateNoteModal() {
-    const t = (key) => getI18n(key)
+    const t = key => getI18n(key)
 
     const modalContent = `
             <div class="p-6">
@@ -2744,8 +2754,8 @@ createHabitFromTemplate(templateIndex) {
         ? formData
             .get("tags")
             .split(",")
-            .map((t) => t.trim())
-            .filter((t) => t)
+            .map(t => t.trim())
+            .filter(t => t)
         : [],
       updatedAt: Date.now()
     }
@@ -2762,10 +2772,10 @@ createHabitFromTemplate(templateIndex) {
    * @returns {void}
    */
   showNoteModal(noteId) {
-    const note = app.notes.find((n) => n.id === noteId)
+    const note = app.notes.find(n => n.id === noteId)
     if (!note) return
 
-    const t = (key) => getI18n(key)
+    const t = key => getI18n(key)
 
     const modalContent = `
             <div class="p-6">
@@ -2856,7 +2866,7 @@ createHabitFromTemplate(templateIndex) {
   updateNote(event, noteId) {
     event.preventDefault()
     const formData = new FormData(event.target)
-    const note = app.notes.find((n) => n.id === noteId)
+    const note = app.notes.find(n => n.id === noteId)
     if (note) {
       note.title = formData.get("title")
       note.bodyMarkdown = formData.get("body") || ""
@@ -2864,8 +2874,8 @@ createHabitFromTemplate(templateIndex) {
         ? formData
             .get("tags")
             .split(",")
-            .map((t) => t.trim())
-            .filter((t) => t)
+            .map(t => t.trim())
+            .filter(t => t)
         : []
       note.updatedAt = Date.now()
 
@@ -2881,17 +2891,20 @@ createHabitFromTemplate(templateIndex) {
    * @returns {void}
    */
   deleteNote(noteId) {
-    const index = app.notes.findIndex((n) => n.id === noteId)
+    const index = app.notes.findIndex(n => n.id === noteId)
     if (index !== -1) {
       const deleted = app.notes.splice(index, 1)[0]
       store.save(app.notes, "notes")
       this.closeModal()
       notes()
-      this.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () => {
-        app.notes.splice(index, 0, deleted)
-        store.save(app.notes, "notes")
-        notes()
-      })
+      this.showUndoToast(
+        `${getI18n("ui.common.deleted")} "${deleted.title}"`,
+        () => {
+          app.notes.splice(index, 0, deleted)
+          store.save(app.notes, "notes")
+          notes()
+        }
+      )
     }
   },
   /**
@@ -2951,7 +2964,7 @@ createHabitFromTemplate(templateIndex) {
     // Párrafos
     html = html
       .split("\n\n")
-      .map((para) => {
+      .map(para => {
         if (
           para.startsWith("<h") ||
           para.startsWith("<ul") ||
@@ -2976,7 +2989,7 @@ createHabitFromTemplate(templateIndex) {
     )
 
     // Espacios múltiples
-    html = html.replace(/ {2,}/g, (match) => "&nbsp;".repeat(match.length))
+    html = html.replace(/ {2,}/g, match => "&nbsp;".repeat(match.length))
 
     // Salto de lineas
     html = html.replace(/\n/g, "<br>")
@@ -3014,8 +3027,8 @@ createHabitFromTemplate(templateIndex) {
       type === "success"
         ? "bg-xp-primary text-xp-darker"
         : type === "error"
-        ? "bg-xp-danger"
-        : "bg-xp-secondary"
+          ? "bg-xp-danger"
+          : "bg-xp-secondary"
     }`
     toast.textContent = message
 
@@ -3124,7 +3137,7 @@ createHabitFromTemplate(templateIndex) {
     }
 
     const reader = new FileReader()
-    reader.onload = (e) => {
+    reader.onload = e => {
       try {
         const imported = JSON.parse(e.target.result)
 
@@ -3281,14 +3294,22 @@ const I18n = {
    * @param {string} lang - Código del idioma a establecer (e.g., "es", "en")
    * @returns {void}
    */
+  async invalidateLocaleCache(lang) {
+    if ("caches" in window) {
+      const cache = await caches.open("pwa-cache-v3")
+      await cache.delete(`/assets/locales/${lang}.json`)
+    }
+  },
+
   setLanguage(lang) {
     if (["es", "en"].includes(lang)) {
       this.currentLanguage = lang
       localStorage.setItem("userLanguage", lang)
-      this.loadMessages(lang).then(() => {
-        this.applyTranslations()
-        // Opcional: Volver a renderizar la pantalla actual si es necesario
-        app.init()
+      this.invalidateLocaleCache(lang).then(() => {
+        this.loadMessages(lang).then(() => {
+          this.applyTranslations()
+          app.init()
+        })
       })
     }
   },
@@ -3308,7 +3329,7 @@ const I18n = {
       return key // Devolver la clave si no se encuentra la traducción
     }
     if (params && typeof params === "object") {
-      Object.keys(params).forEach((param) => {
+      Object.keys(params).forEach(param => {
         message = message.replace(new RegExp(`{${param}}`, "g"), params[param])
       })
     }
@@ -3322,7 +3343,7 @@ const I18n = {
    */
   applyTranslations() {
     // Aplica traducciones a elementos con data-i18n
-    document.querySelectorAll("[data-i18n]").forEach((element) => {
+    document.querySelectorAll("[data-i18n]").forEach(element => {
       const key = element.getAttribute("data-i18n")
       const translation = this.t(key)
       // Soporta data-i18n-attr para traducir atributos como placeholder
@@ -3334,13 +3355,13 @@ const I18n = {
       }
     })
     // Aplica las traducciones placeholder con data-i18n-placeholder
-    document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
       const key = element.getAttribute("data-i18n-placeholder")
       const translation = this.t(key)
       element.setAttribute("placeholder", translation)
     })
     // Aplica las traducciones aria-label con data-i18n-aria-label
-    document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+    document.querySelectorAll("[data-i18n-aria-label]").forEach(element => {
       const key = element.getAttribute("data-i18n-aria-label")
       const translation = this.t(key)
       element.setAttribute("aria-label", translation)
@@ -3361,7 +3382,7 @@ const I18n = {
     const clone = template.content.cloneNode(true)
 
     // Buscar todos los elementos con data-i18n dentro del clon
-    clone.querySelectorAll("[data-i18n]").forEach((el) => {
+    clone.querySelectorAll("[data-i18n]").forEach(el => {
       const key = el.getAttribute("data-i18n")
       const translation = I18n.t(key)
       el.textContent = translation

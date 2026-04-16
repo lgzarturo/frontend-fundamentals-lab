@@ -11,15 +11,15 @@ const urlsToCache = [
   "/assets/locales/es.json"
 ]
 
-self.addEventListener("install", (event) => {
+self.addEventListener("install", event => {
   // Instala el service worker y cachea los recursos necesarios
   self.skipWaiting()
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   )
 })
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", event => {
   const { request } = event
 
   // No caches manifest ni cosas raras
@@ -33,11 +33,25 @@ self.addEventListener("fetch", (event) => {
   ) {
     event.respondWith(
       fetch(request)
-        .then((response) => {
+        .then(response => {
           const responseClone = response.clone()
           caches
             .open(CACHE_NAME)
-            .then((cache) => cache.put(request, responseClone))
+            .then(cache => cache.put(request, responseClone))
+          return response
+        })
+        .catch(() => caches.match(request))
+    )
+    return
+  }
+
+  // Network first para JSON de locale
+  if (request.destination === "json" || request.url.includes("/locales/")) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          const responseClone = response.clone()
+          caches.open(CACHE_NAME).then(cache => cache.put(request, responseClone))
           return response
         })
         .catch(() => caches.match(request))
@@ -47,23 +61,21 @@ self.addEventListener("fetch", (event) => {
 
   // Cache first para assets estables (imágenes)
   event.respondWith(
-    caches.match(request).then((response) => {
+    caches.match(request).then(response => {
       return response || fetch(request)
     })
   )
 })
 
-self.addEventListener("activate", (event) => {
+self.addEventListener("activate", event => {
   // Activa el service worker y limpia cachés antiguas
   clients.claim()
   event.waitUntil(
     caches
       .keys()
-      .then((keys) =>
+      .then(keys =>
         Promise.all(
-          keys
-            .filter((key) => key !== CACHE_NAME)
-            .map((key) => caches.delete(key))
+          keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
         )
       )
   )

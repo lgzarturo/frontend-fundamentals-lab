@@ -1,6 +1,7 @@
 # Implementar i18n en todos los textos de la aplicación
 
-Como parte de la solución es importante agregar claves de traducción faltantes en JSON
+Como parte de la solución es importante agregar claves de traducción faltantes
+en JSON
 
 En es.json y en.json - agregar:
 
@@ -25,7 +26,9 @@ En es.json y en.json - agregar:
 
 ## Modificar app.js - Crear/Editar modales
 
-Para estos modales, agregar traducciones en la sección app.screens.tasks.modal.create, app.screens.budgets.modal.create, etc. en los JSON, es necesario completar los siguientes modales:
+Para estos modales, agregar traducciones en la sección
+app.screens.tasks.modal.create, app.screens.budgets.modal.create, etc. en los
+JSON, es necesario completar los siguientes modales:
 
 1. Modal Crear Tarea
 2. Modal Crear Presupuesto
@@ -54,4 +57,9 @@ En app.showToast() y otros lugares:
 
 ## Modificar opciones de selectores
 
-En los <select> de prioridad y moneda, los valores hardcodeados como "Low", "Medium", "High" deben usar traducciones. Esto es complicado porque los valores son usados como claves en el código. Pero se puede hacer ajustando el código para que use las claves de traducción en lugar de los valores hardcodeados. Por ejemplo, en lugar de usar "Low" como valor, usar "low" y en el código usar `I18n.getMessage("label.low")` para obtener la traducción.
+En los <select> de prioridad y moneda, los valores hardcodeados como "Low",
+"Medium", "High" deben usar traducciones. Esto es complicado porque los valores
+son usados como claves en el código. Pero se puede hacer ajustando el código
+para que use las claves de traducción en lugar de los valores hardcodeados. Por
+ejemplo, en lugar de usar "Low" como valor, usar "low" y en el código usar
+`I18n.getMessage("label.low")` para obtener la traducción.
