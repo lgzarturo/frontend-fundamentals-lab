@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/82</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/82</span>
             </div>
         
             
@@ -133,7 +133,31 @@
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -216,15 +240,15 @@
 <span class="cstat-no" title="statement not covered" >  "/assets/locales/es.json"</span>
 <span class="cstat-no" title="statement not covered" >]</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >self.addEventListener("install", (event) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >self.addEventListener("install", event =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  // Instala el service worker y cachea los recursos necesarios</span>
 <span class="cstat-no" title="statement not covered" >  self.skipWaiting()</span>
 <span class="cstat-no" title="statement not covered" >  event.waitUntil(</span>
-<span class="cstat-no" title="statement not covered" >    caches.open(CACHE_NAME).then((cache) =&gt; cache.addAll(urlsToCache))</span>
+<span class="cstat-no" title="statement not covered" >    caches.open(CACHE_NAME).then(cache =&gt; cache.addAll(urlsToCache))</span>
 <span class="cstat-no" title="statement not covered" >  )</span>
 <span class="cstat-no" title="statement not covered" >})</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >self.addEventListener("fetch", (event) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >self.addEventListener("fetch", event =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  const { request } = event</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  // No caches manifest ni cosas raras</span>
@@ -238,11 +262,25 @@
 <span class="cstat-no" title="statement not covered" >  ) {</span>
 <span class="cstat-no" title="statement not covered" >    event.respondWith(</span>
 <span class="cstat-no" title="statement not covered" >      fetch(request)</span>
-<span class="cstat-no" title="statement not covered" >        .then((response) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        .then(response =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          const responseClone = response.clone()</span>
 <span class="cstat-no" title="statement not covered" >          caches</span>
 <span class="cstat-no" title="statement not covered" >            .open(CACHE_NAME)</span>
-<span class="cstat-no" title="statement not covered" >            .then((cache) =&gt; cache.put(request, responseClone))</span>
+<span class="cstat-no" title="statement not covered" >            .then(cache =&gt; cache.put(request, responseClone))</span>
+<span class="cstat-no" title="statement not covered" >          return response</span>
+<span class="cstat-no" title="statement not covered" >        })</span>
+<span class="cstat-no" title="statement not covered" >        .catch(() =&gt; caches.match(request))</span>
+<span class="cstat-no" title="statement not covered" >    )</span>
+<span class="cstat-no" title="statement not covered" >    return</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  // Network first para JSON de locale</span>
+<span class="cstat-no" title="statement not covered" >  if (request.destination === "json" || request.url.includes("/locales/")) {</span>
+<span class="cstat-no" title="statement not covered" >    event.respondWith(</span>
+<span class="cstat-no" title="statement not covered" >      fetch(request)</span>
+<span class="cstat-no" title="statement not covered" >        .then(response =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          const responseClone = response.clone()</span>
+<span class="cstat-no" title="statement not covered" >          caches.open(CACHE_NAME).then(cache =&gt; cache.put(request, responseClone))</span>
 <span class="cstat-no" title="statement not covered" >          return response</span>
 <span class="cstat-no" title="statement not covered" >        })</span>
 <span class="cstat-no" title="statement not covered" >        .catch(() =&gt; caches.match(request))</span>
@@ -252,23 +290,21 @@
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  // Cache first para assets estables (imágenes)</span>
 <span class="cstat-no" title="statement not covered" >  event.respondWith(</span>
-<span class="cstat-no" title="statement not covered" >    caches.match(request).then((response) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    caches.match(request).then(response =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      return response || fetch(request)</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
 <span class="cstat-no" title="statement not covered" >  )</span>
 <span class="cstat-no" title="statement not covered" >})</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >self.addEventListener("activate", (event) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >self.addEventListener("activate", event =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  // Activa el service worker y limpia cachés antiguas</span>
 <span class="cstat-no" title="statement not covered" >  clients.claim()</span>
 <span class="cstat-no" title="statement not covered" >  event.waitUntil(</span>
 <span class="cstat-no" title="statement not covered" >    caches</span>
 <span class="cstat-no" title="statement not covered" >      .keys()</span>
-<span class="cstat-no" title="statement not covered" >      .then((keys) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      .then(keys =&gt;</span>
 <span class="cstat-no" title="statement not covered" >        Promise.all(</span>
-<span class="cstat-no" title="statement not covered" >          keys</span>
-<span class="cstat-no" title="statement not covered" >            .filter((key) =&gt; key !== CACHE_NAME)</span>
-<span class="cstat-no" title="statement not covered" >            .map((key) =&gt; caches.delete(key))</span>
+<span class="cstat-no" title="statement not covered" >          keys.filter(key =&gt; key !== CACHE_NAME).map(key =&gt; caches.delete(key))</span>
 <span class="cstat-no" title="statement not covered" >        )</span>
 <span class="cstat-no" title="statement not covered" >      )</span>
 <span class="cstat-no" title="statement not covered" >  )</span>
@@ -280,7 +316,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-09T01:54:00.536Z
+                at 2026-05-06T23:20:42.650Z
             </div>
         <script src="../prettify.js"></script>
         <script>

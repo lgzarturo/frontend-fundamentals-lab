@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.08% </span>
+                <span class="strong">82.84% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>221/266</span>
+                <span class='fraction'>227/274</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.08% </span>
+                <span class="strong">82.84% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>221/266</span>
+                <span class='fraction'>227/274</span>
             </div>
         
             
@@ -329,7 +329,15 @@
 <a name='L264'></a><a href='#L264'>264</a>
 <a name='L265'></a><a href='#L265'>265</a>
 <a name='L266'></a><a href='#L266'>266</a>
-<a name='L267'></a><a href='#L267'>267</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -457,6 +465,10 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -520,6 +532,7 @@
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -537,6 +550,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -596,23 +612,23 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Budget Item class - Represents a budget category/item
+ * Budget Item class - Representa una categoría/item del presupuesto
  */
 &nbsp;
-import { generateId } from '../../utils/id.js'
-import { formatDate } from '../../utils/date.js'
+import { formatDate } from "../../utils/date.js"
+import { generateId } from "../../utils/id.js"
 &nbsp;
 export class BudgetItem {
   constructor(data = {}) {
     this.id = data.id || generateId()
-    this.title = data.title <span class="branch-0 cbranch-no" title="branch not covered" >|| ''</span>
+    this.title = data.title <span class="branch-0 cbranch-no" title="branch not covered" >|| ""</span>
     this.amount = parseFloat(data.amount) <span class="branch-0 cbranch-no" title="branch not covered" >|| 0</span>
     this.date = data.date || formatDate(new Date())
-    this.notes = data.notes || ''
+    this.notes = data.notes || ""
   }
 &nbsp;
   /**
-   * Convert to plain object for storage
+   * Convierte a objeto plano para almacenamiento
    */
   toJSON() {
     return {
@@ -625,62 +641,62 @@ export class BudgetItem {
   }
 &nbsp;
   /**
-   * Create from plain object
+   * Crea a partir de un objeto plano
    */
   static fromJSON(data) {
     return new BudgetItem(data)
   }
 &nbsp;
   /**
-   * Validate item data
+   * Valida los datos del item
    */
   static validate(data) {
     const errors = []
     if (!data.title?.trim()) {
-      errors.push('Title is required')
+      errors.push("Title is required")
     }
     if (isNaN(data.amount) || data.amount &lt;= 0) {
-      errors.push('Amount must be greater than 0')
+      errors.push("Amount must be greater than 0")
     }
     return errors
   }
 }
 &nbsp;
 /**
- * Transaction class - Represents a financial transaction
+ * Transaction class - Representa una transacción financiera
  */
 export class Transaction {
   constructor(data = {}) {
     this.id = data.id || generateId()
     this.itemId = data.itemId || null
     this.amount = parseFloat(data.amount) <span class="branch-0 cbranch-no" title="branch not covered" >|| 0</span>
-    this.description = data.description <span class="branch-0 cbranch-no" title="branch not covered" >|| ''</span>
+    this.description = data.description <span class="branch-0 cbranch-no" title="branch not covered" >|| ""</span>
     this.date = data.date || formatDate(new Date())
   }
 &nbsp;
   /**
-   * Check if transaction is an expense
+   * Verifica si la transacción es un gasto
    */
   isExpense() {
     return this.amount &lt; 0
   }
 &nbsp;
   /**
-   * Check if transaction is income
+   * Verifica si la transacción es un ingreso
    */
 <span class="fstat-no" title="function not covered" >  isIncome() {</span>
 <span class="cstat-no" title="statement not covered" >    return this.amount &gt; 0</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   /**
-   * Get absolute amount
+   * Obtiene el monto absoluto
    */
   getAbsoluteAmount() {
     return Math.abs(this.amount)
   }
 &nbsp;
   /**
-   * Convert to plain object for storage
+   * Convierte a objeto plano para almacenamiento
    */
 <span class="fstat-no" title="function not covered" >  toJSON() {</span>
 <span class="cstat-no" title="statement not covered" >    return {</span>
@@ -693,48 +709,52 @@ export class Transaction {
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   /**
-   * Create from plain object
+   * Crea a partir de un objeto plano
    */
   static <span class="fstat-no" title="function not covered" >fromJSON(data) {</span>
 <span class="cstat-no" title="statement not covered" >    return new Transaction(data)</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   /**
-   * Validate transaction data
+   * Valida los datos de la transacción
    */
   static <span class="fstat-no" title="function not covered" >validate(data) {</span>
 <span class="cstat-no" title="statement not covered" >    const errors = []</span>
 <span class="cstat-no" title="statement not covered" >    if (!data.description?.trim()) {</span>
-<span class="cstat-no" title="statement not covered" >      errors.push('Description is required')</span>
+<span class="cstat-no" title="statement not covered" >      errors.push("Description is required")</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >    if (isNaN(data.amount) || data.amount === 0) {</span>
-<span class="cstat-no" title="statement not covered" >      errors.push('Amount cannot be zero')</span>
+<span class="cstat-no" title="statement not covered" >      errors.push("Amount cannot be zero")</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >    return errors</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 }
 &nbsp;
 /**
- * Budget class - Represents a complete budget
+ * Budget class - Representa un presupuesto completo
  */
 export class Budget {
   constructor(data = {}) {
     this.id = data.id || generateId()
-    this.name = data.name <span class="branch-0 cbranch-no" title="branch not covered" >|| 'New Budget'</span>
-    this.currency = data.currency <span class="branch-0 cbranch-no" title="branch not covered" >|| 'USD'</span>
-    this.items = (data.items || []).map(i =&gt; i instanceof BudgetItem ? i : BudgetItem.fromJSON(i))
-    this.transactions = (data.transactions || []).map(t =&gt; t instanceof Transaction ? t : Transaction.fromJSON(t))
+    this.name = data.name <span class="branch-0 cbranch-no" title="branch not covered" >|| "New Budget"</span>
+    this.currency = data.currency <span class="branch-0 cbranch-no" title="branch not covered" >|| "USD"</span>
+    this.items = (data.items || []).map(i =&gt;
+<span class="cstat-no" title="statement not covered" >      i instanceof BudgetItem ? i : BudgetItem.fromJSON(i)</span>
+    )
+    this.transactions = (data.transactions || []).map(t =&gt;
+<span class="cstat-no" title="statement not covered" >      t instanceof Transaction ? t : Transaction.fromJSON(t)</span>
+    )
   }
 &nbsp;
   /**
-   * Get total allocated amount from items
+   * Obtiene el monto total asignado de los items
    */
   getTotalAllocated() {
     return this.items.reduce((sum, item) =&gt; sum + item.amount, 0)
   }
 &nbsp;
   /**
-   * Get total spent amount
+   * Obtiene el monto total gastado
    */
   getTotalSpent() {
     return this.transactions
@@ -743,7 +763,7 @@ export class Budget {
   }
 &nbsp;
   /**
-   * Get total income
+   * Obtiene el ingreso total
    */
 <span class="fstat-no" title="function not covered" >  getTotalIncome() {</span>
 <span class="cstat-no" title="statement not covered" >    return this.transactions</span>
@@ -752,14 +772,14 @@ export class Budget {
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   /**
-   * Get remaining amount
+   * Obtiene el monto restante
    */
   getRemaining() {
     return this.getTotalAllocated() - this.getTotalSpent()
   }
 &nbsp;
   /**
-   * Get percentage used
+   * Obtiene el porcentaje utilizado
    */
   getUsagePercentage() {
     const allocated = this.getTotalAllocated()
@@ -768,27 +788,28 @@ export class Budget {
   }
 &nbsp;
   /**
-   * Get status based on usage
+   * Obtiene el estado basado en el uso
    * @returns {string} 'safe', 'warning', 'danger'
    */
   getStatus() {
     const percentage = this.getUsagePercentage()
-    if (percentage &gt; 90) <span class="branch-0 cbranch-no" title="branch not covered" >return 'danger'</span>
-    if (percentage &gt; 70) return 'warning'
-    return 'safe'
+    if (percentage &gt; 90) <span class="branch-0 cbranch-no" title="branch not covered" >return "danger"</span>
+    if (percentage &gt; 70) return "warning"
+    return "safe"
   }
 &nbsp;
   /**
-   * Add a new item
+   * Agrega un nuevo item
    */
   addItem(itemData) {
-    const item = itemData instanceof BudgetItem <span class="branch-0 cbranch-no" title="branch not covered" >? itemData </span>: new BudgetItem(itemData)
+    const item =
+      itemData instanceof BudgetItem <span class="branch-0 cbranch-no" title="branch not covered" >? itemData </span>: new BudgetItem(itemData)
     this.items.push(item)
     return item
   }
 &nbsp;
   /**
-   * Remove an item
+   * Remueve un item
    */
   removeItem(itemId) {
     const index = this.items.findIndex(i =&gt; i.id === itemId)
@@ -800,16 +821,19 @@ export class Budget {
   }
 &nbsp;
   /**
-   * Add a transaction
+   * Agrega una transacción
    */
   addTransaction(transactionData) {
-    const transaction = transactionData instanceof Transaction <span class="branch-0 cbranch-no" title="branch not covered" >? transactionData </span>: new Transaction(transactionData)
+    const transaction =
+      transactionData instanceof Transaction
+<span class="branch-0 cbranch-no" title="branch not covered" >        ? transactionData</span>
+        : new Transaction(transactionData)
     this.transactions.push(transaction)
     return transaction
   }
 &nbsp;
   /**
-   * Remove a transaction
+   * Remueve una transacción
    */
 <span class="fstat-no" title="function not covered" >  removeTransaction(transactionId) {</span>
 <span class="cstat-no" title="statement not covered" >    const index = this.transactions.findIndex(t =&gt; t.id === transactionId)</span>
@@ -821,14 +845,14 @@ export class Budget {
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   /**
-   * Get transactions for an item
+   * Obtiene las transacciones de un item
    */
 <span class="fstat-no" title="function not covered" >  getTransactionsForItem(itemId) {</span>
 <span class="cstat-no" title="statement not covered" >    return this.transactions.filter(t =&gt; t.itemId === itemId)</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   /**
-   * Convert to plain object for storage
+   * Convierte a objeto plano para almacenamiento
    */
 <span class="fstat-no" title="function not covered" >  toJSON() {</span>
 <span class="cstat-no" title="statement not covered" >    return {</span>
@@ -841,22 +865,22 @@ export class Budget {
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   /**
-   * Create from plain object
+   * Crea a partir de un objeto plano
    */
   static <span class="fstat-no" title="function not covered" >fromJSON(data) {</span>
 <span class="cstat-no" title="statement not covered" >    return new Budget(data)</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   /**
-   * Validate budget data
+   * Valida los datos del presupuesto
    */
   static validate(data) {
     const errors = []
     if (!data.name?.trim()) {
-      errors.push('Budget name is required')
+      errors.push("Budget name is required")
     }
-    if (!['USD', 'EUR', 'GBP', 'MXN'].includes(data.currency)) {
-      errors.push('Invalid currency')
+    if (!["USD", "EUR", "GBP", "MXN"].includes(data.currency)) {
+      errors.push("Invalid currency")
     }
     return errors
   }
@@ -868,7 +892,7 @@ export class Budget {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-09T01:54:00.536Z
+                at 2026-05-06T23:20:42.650Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

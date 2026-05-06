@@ -10,11 +10,20 @@
 export function formatDate(date) {
   if (typeof date === "string") return date
   const d = new Date(date)
-  // Usar métodos UTC para evitar problemas de zona horaria
-  const year = d.getUTCFullYear()
-  const month = String(d.getUTCMonth() + 1).padStart(2, "0")
-  const day = String(d.getUTCDate()).padStart(2, "0")
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, "0")
+  const day = String(d.getDate()).padStart(2, "0")
   return `${year}-${month}-${day}`
+}
+
+/**
+ * Parsea una cadena YYYY-MM-DD como fecha local.
+ * @param {string} dateString - Fecha en formato YYYY-MM-DD
+ * @returns {Date} Fecha local
+ */
+export function parseDateStringLocal(dateString) {
+  const [year, month, day] = dateString.split("-").map(Number)
+  return new Date(year, month - 1, day)
 }
 
 /**
@@ -41,6 +50,29 @@ export function getLastNDays(days) {
   }
 
   return result
+}
+
+/**
+ * Obtiene las fechas de la semana calendario de referencia.
+ * @param {Date} referenceDate - Fecha dentro de la semana
+ * @param {number} firstDayOfWeek - Día inicial: 0 domingo, 1 lunes
+ * @returns {string[]} Array de fechas YYYY-MM-DD
+ */
+export function getCurrentWeekDates(
+  referenceDate = new Date(),
+  firstDayOfWeek = 1
+) {
+  const reference = new Date(referenceDate)
+  const dayOffset = (reference.getDay() - firstDayOfWeek + 7) % 7
+  const startDate = new Date(reference)
+  startDate.setHours(0, 0, 0, 0)
+  startDate.setDate(reference.getDate() - dayOffset)
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(startDate)
+    date.setDate(startDate.getDate() + index)
+    return formatDate(date)
+  })
 }
 
 /**

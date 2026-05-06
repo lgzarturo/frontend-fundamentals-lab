@@ -4,9 +4,11 @@
 import { describe, expect, it } from "vitest"
 import {
   formatDate,
+  getCurrentWeekDates,
   getLastNDays,
   getRelativeTime,
-  getTodayString
+  getTodayString,
+  parseDateStringLocal
 } from "../assets/js/utils/date.js"
 import { escapeHtml } from "../assets/js/utils/html.js"
 import { generateId, isValidId } from "../assets/js/utils/id.js"
@@ -29,9 +31,17 @@ describe("Utils", () => {
 
   describe("Date Utils", () => {
     it("debería formatear la fecha a YYYY-MM-DD", () => {
-      // Usar UTC para evitar problemas de zona horaria
-      const date = new Date(Date.UTC(2024, 2, 15))
-      expect(formatDate(date)).toBe("2024-03-15")
+      const date = new Date(2026, 4, 6)
+      expect(formatDate(date)).toBe("2026-05-06")
+    })
+
+    it("debería parsear YYYY-MM-DD como fecha local", () => {
+      const date = parseDateStringLocal("2026-05-06")
+
+      expect(date.getFullYear()).toBe(2026)
+      expect(date.getMonth()).toBe(4)
+      expect(date.getDate()).toBe(6)
+      expect(date.getDay()).toBe(3)
     })
 
     it("debería devolver la fecha de hoy como cadena formateada", () => {
@@ -43,6 +53,34 @@ describe("Utils", () => {
       const days = getLastNDays(7)
       expect(days).toHaveLength(7)
       expect(days[0]).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    })
+
+    it("debería obtener la semana actual de lunes a domingo", () => {
+      const days = getCurrentWeekDates(new Date(2026, 4, 6))
+
+      expect(days).toEqual([
+        "2026-05-04",
+        "2026-05-05",
+        "2026-05-06",
+        "2026-05-07",
+        "2026-05-08",
+        "2026-05-09",
+        "2026-05-10"
+      ])
+    })
+
+    it("debería mantener el domingo al final de la semana actual", () => {
+      const days = getCurrentWeekDates(new Date(2026, 4, 10))
+
+      expect(days).toEqual([
+        "2026-05-04",
+        "2026-05-05",
+        "2026-05-06",
+        "2026-05-07",
+        "2026-05-08",
+        "2026-05-09",
+        "2026-05-10"
+      ])
     })
 
     it("debería calcular el tiempo relativo", () => {

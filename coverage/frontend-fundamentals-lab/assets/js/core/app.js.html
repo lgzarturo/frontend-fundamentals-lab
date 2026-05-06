@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/244</span>
+                <span class='fraction'>0/248</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/244</span>
+                <span class='fraction'>0/248</span>
             </div>
         
             
@@ -307,7 +307,15 @@
 <a name='L242'></a><a href='#L242'>242</a>
 <a name='L243'></a><a href='#L243'>243</a>
 <a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -552,51 +560,55 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >/**</span></span></span>
-<span class="cstat-no" title="statement not covered" > * Main Application Core - Orchestrates all modules</span>
+<span class="cstat-no" title="statement not covered" > * Main Application Core - Es la orquesta de todos los módulos</span>
 <span class="cstat-no" title="statement not covered" > */</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >import { StorageService } from '../services/storage.js'</span>
-<span class="cstat-no" title="statement not covered" >import { EventBus } from './eventBus.js'</span>
-<span class="cstat-no" title="statement not covered" >import { BudgetsModule } from '../modules/budgets/index.js'</span>
+<span class="cstat-no" title="statement not covered" >import { BudgetsModule } from "../modules/budgets/index.js"</span>
+<span class="cstat-no" title="statement not covered" >import { StorageService } from "../services/storage.js"</span>
+<span class="cstat-no" title="statement not covered" >import { EventBus } from "./eventBus.js"</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >export class DOSApp {</span>
 <span class="cstat-no" title="statement not covered" >  constructor() {</span>
 <span class="cstat-no" title="statement not covered" >    this.storage = new StorageService()</span>
 <span class="cstat-no" title="statement not covered" >    this.eventBus = new EventBus()</span>
-<span class="cstat-no" title="statement not covered" >    this.i18n = null // Will be set when I18n is loaded</span>
+<span class="cstat-no" title="statement not covered" >    this.i18n = null // Se establecerá cuando se cargue I18n</span>
 <span class="cstat-no" title="statement not covered" >    this.modules = {}</span>
-<span class="cstat-no" title="statement not covered" >    this.currentScreen = 'home'</span>
+<span class="cstat-no" title="statement not covered" >    this.currentScreen = "home"</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Initialize the application</span>
+<span class="cstat-no" title="statement not covered" >   * Inicializa la aplicación</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  async init() {</span>
-<span class="cstat-no" title="statement not covered" >    // Initialize storage and migrate legacy data</span>
+<span class="cstat-no" title="statement not covered" >    // Inicializa el almacenamiento y migra datos antiguos</span>
 <span class="cstat-no" title="statement not covered" >    this.storage.init()</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    // Initialize modules</span>
+<span class="cstat-no" title="statement not covered" >    // Inicializa los módulos</span>
 <span class="cstat-no" title="statement not covered" >    this._initModules()</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    // Bind global events</span>
+<span class="cstat-no" title="statement not covered" >    // Enlaza eventos globales</span>
 <span class="cstat-no" title="statement not covered" >    this._bindGlobalEvents()</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    // Navigate to initial screen</span>
+<span class="cstat-no" title="statement not covered" >    // Navega a la pantalla inicial</span>
 <span class="cstat-no" title="statement not covered" >    this.navigateTo(this._getInitialScreen())</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    console.log('DOSApp initialized')</span>
+<span class="cstat-no" title="statement not covered" >    console.log("DOSApp initialized")</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Initialize all modules</span>
+<span class="cstat-no" title="statement not covered" >   * Inicializa todos los módulos</span>
 <span class="cstat-no" title="statement not covered" >   * @private</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  _initModules() {</span>
-<span class="cstat-no" title="statement not covered" >    // Budgets module</span>
-<span class="cstat-no" title="statement not covered" >    this.modules.budgets = new BudgetsModule(this.storage, this.eventBus, this.i18n)</span>
+<span class="cstat-no" title="statement not covered" >    // Módulo de presupuestos</span>
+<span class="cstat-no" title="statement not covered" >    this.modules.budgets = new BudgetsModule(</span>
+<span class="cstat-no" title="statement not covered" >      this.storage,</span>
+<span class="cstat-no" title="statement not covered" >      this.eventBus,</span>
+<span class="cstat-no" title="statement not covered" >      this.i18n</span>
+<span class="cstat-no" title="statement not covered" >    )</span>
 <span class="cstat-no" title="statement not covered" >    this.modules.budgets.init()</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    // TODO: Initialize other modules (tasks, habits, notes)</span>
+<span class="cstat-no" title="statement not covered" >    // TODO: Inicializa otros módulos (tareas, hábitos, notas)</span>
 <span class="cstat-no" title="statement not covered" >    // this.modules.tasks = new TasksModule(...)</span>
 <span class="cstat-no" title="statement not covered" >    // this.modules.habits = new HabitsModule(...)</span>
 <span class="cstat-no" title="statement not covered" >    // this.modules.notes = new NotesModule(...)</span>
@@ -604,87 +616,87 @@
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Bind global event handlers</span>
+<span class="cstat-no" title="statement not covered" >   * Enlaza eventos globales</span>
 <span class="cstat-no" title="statement not covered" >   * @private</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  _bindGlobalEvents() {</span>
-<span class="cstat-no" title="statement not covered" >    // Toast notifications</span>
-<span class="cstat-no" title="statement not covered" >    this.eventBus.on('toast:show', ({ message, type = 'info' }) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    // Notificaciones toast</span>
+<span class="cstat-no" title="statement not covered" >    this.eventBus.on("toast:show", ({ message, type = "info" }) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.showToast(message, type)</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    // Modal events</span>
-<span class="cstat-no" title="statement not covered" >    this.eventBus.on('modal:close', () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    // Eventos de modal</span>
+<span class="cstat-no" title="statement not covered" >    this.eventBus.on("modal:close", () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.closeModal()</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    // Screen change events</span>
-<span class="cstat-no" title="statement not covered" >    this.eventBus.on('screen:change', ({ screen }) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    // Eventos de cambio de pantalla</span>
+<span class="cstat-no" title="statement not covered" >    this.eventBus.on("screen:change", ({ screen }) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.navigateTo(screen)</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Get initial screen from storage or default</span>
+<span class="cstat-no" title="statement not covered" >   * Obtiene la pantalla inicial del almacenamiento o la predeterminada</span>
 <span class="cstat-no" title="statement not covered" >   * @private</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  _getInitialScreen() {</span>
-<span class="cstat-no" title="statement not covered" >    return localStorage.getItem('currentScreen') || 'home'</span>
+<span class="cstat-no" title="statement not covered" >    return localStorage.getItem("currentScreen") || "home"</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Navigate to a screen</span>
-<span class="cstat-no" title="statement not covered" >   * @param {string} screen - Screen name</span>
+<span class="cstat-no" title="statement not covered" >   * Navega a una pantalla</span>
+<span class="cstat-no" title="statement not covered" >   * @param {string} screen - Nombre de la pantalla</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  navigateTo(screen) {</span>
 <span class="cstat-no" title="statement not covered" >    this.currentScreen = screen</span>
-<span class="cstat-no" title="statement not covered" >    localStorage.setItem('currentScreen', screen)</span>
+<span class="cstat-no" title="statement not covered" >    localStorage.setItem("currentScreen", screen)</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    // Hide all screens</span>
-<span class="cstat-no" title="statement not covered" >    document.querySelectorAll('.screen').forEach(s =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      s.classList.remove('active')</span>
+<span class="cstat-no" title="statement not covered" >    // Oculta todas las pantallas</span>
+<span class="cstat-no" title="statement not covered" >    document.querySelectorAll(".screen").forEach(s =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      s.classList.remove("active")</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    // Show target screen</span>
+<span class="cstat-no" title="statement not covered" >    // Muestra la pantalla objetivo</span>
 <span class="cstat-no" title="statement not covered" >    const screenEl = document.getElementById(`${screen}-screen`)</span>
 <span class="cstat-no" title="statement not covered" >    if (screenEl) {</span>
-<span class="cstat-no" title="statement not covered" >      screenEl.classList.add('active')</span>
+<span class="cstat-no" title="statement not covered" >      screenEl.classList.add("active")</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    // Update navigation</span>
+<span class="cstat-no" title="statement not covered" >    // Actualiza la navegación</span>
 <span class="cstat-no" title="statement not covered" >    this._updateNavigation(screen)</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    // Render module content</span>
+<span class="cstat-no" title="statement not covered" >    // Renderiza el contenido del módulo</span>
 <span class="cstat-no" title="statement not covered" >    this._renderScreen(screen)</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Update navigation UI</span>
+<span class="cstat-no" title="statement not covered" >   * Actualiza la navegación</span>
 <span class="cstat-no" title="statement not covered" >   * @private</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  _updateNavigation(activeScreen) {</span>
-<span class="cstat-no" title="statement not covered" >    document.querySelectorAll('.nav-btn').forEach(btn =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    document.querySelectorAll(".nav-btn").forEach(btn =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const isActive = btn.dataset.screen === activeScreen</span>
 <span class="cstat-no" title="statement not covered" >      if (isActive) {</span>
-<span class="cstat-no" title="statement not covered" >        btn.classList.add('bg-xp-primary', 'text-xp-darker')</span>
-<span class="cstat-no" title="statement not covered" >        btn.classList.remove('bg-gray-200', 'text-gray-700')</span>
+<span class="cstat-no" title="statement not covered" >        btn.classList.add("bg-xp-primary", "text-xp-darker")</span>
+<span class="cstat-no" title="statement not covered" >        btn.classList.remove("bg-gray-200", "text-gray-700")</span>
 <span class="cstat-no" title="statement not covered" >      } else {</span>
-<span class="cstat-no" title="statement not covered" >        btn.classList.remove('bg-xp-primary', 'text-xp-darker')</span>
-<span class="cstat-no" title="statement not covered" >        btn.classList.add('bg-gray-200', 'text-gray-700')</span>
+<span class="cstat-no" title="statement not covered" >        btn.classList.remove("bg-xp-primary", "text-xp-darker")</span>
+<span class="cstat-no" title="statement not covered" >        btn.classList.add("bg-gray-200", "text-gray-700")</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Render current screen content</span>
+<span class="cstat-no" title="statement not covered" >   * Renderiza el contenido de la pantalla actual</span>
 <span class="cstat-no" title="statement not covered" >   * @private</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  _renderScreen(screen) {</span>
 <span class="cstat-no" title="statement not covered" >    switch (screen) {</span>
-<span class="cstat-no" title="statement not covered" >      case 'budgets':</span>
+<span class="cstat-no" title="statement not covered" >      case "budgets":</span>
 <span class="cstat-no" title="statement not covered" >        this.modules.budgets?.render()</span>
 <span class="cstat-no" title="statement not covered" >        break</span>
-<span class="cstat-no" title="statement not covered" >      // TODO: Add other screens</span>
+<span class="cstat-no" title="statement not covered" >      // TODO: Agregar otras pantallas</span>
 <span class="cstat-no" title="statement not covered" >      // case 'tasks':</span>
 <span class="cstat-no" title="statement not covered" >      //   this.modules.tasks?.render()</span>
 <span class="cstat-no" title="statement not covered" >      //   break</span>
@@ -701,19 +713,19 @@
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Show toast notification</span>
-<span class="cstat-no" title="statement not covered" >   * @param {string} message - Message to show</span>
-<span class="cstat-no" title="statement not covered" >   * @param {string} type - Toast type (info, success, error)</span>
+<span class="cstat-no" title="statement not covered" >   * Muestra una notificación toast</span>
+<span class="cstat-no" title="statement not covered" >   * @param {string} message - Mensaje a mostrar</span>
+<span class="cstat-no" title="statement not covered" >   * @param {string} type - Tipo de toast (info, success, error)</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
-<span class="cstat-no" title="statement not covered" >  showToast(message, type = 'info') {</span>
-<span class="cstat-no" title="statement not covered" >    const container = document.getElementById('toast-container')</span>
+<span class="cstat-no" title="statement not covered" >  showToast(message, type = "info") {</span>
+<span class="cstat-no" title="statement not covered" >    const container = document.getElementById("toast-container")</span>
 <span class="cstat-no" title="statement not covered" >    if (!container) return</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    const toast = document.createElement('div')</span>
+<span class="cstat-no" title="statement not covered" >    const toast = document.createElement("div")</span>
 <span class="cstat-no" title="statement not covered" >    const colors = {</span>
-<span class="cstat-no" title="statement not covered" >      success: 'bg-xp-primary text-xp-darker',</span>
-<span class="cstat-no" title="statement not covered" >      error: 'bg-xp-danger',</span>
-<span class="cstat-no" title="statement not covered" >      info: 'bg-xp-secondary'</span>
+<span class="cstat-no" title="statement not covered" >      success: "bg-xp-primary text-xp-darker",</span>
+<span class="cstat-no" title="statement not covered" >      error: "bg-xp-danger",</span>
+<span class="cstat-no" title="statement not covered" >      info: "bg-xp-secondary"</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    toast.className = `toast px-6 py-3 rounded-lg shadow-lg text-white ${colors[type] || colors.info}`</span>
@@ -722,51 +734,51 @@
 <span class="cstat-no" title="statement not covered" >    container.appendChild(toast)</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    setTimeout(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      toast.style.opacity = '0'</span>
+<span class="cstat-no" title="statement not covered" >      toast.style.opacity = "0"</span>
 <span class="cstat-no" title="statement not covered" >      setTimeout(() =&gt; toast.remove(), 300)</span>
 <span class="cstat-no" title="statement not covered" >    }, 3000)</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Show modal with content</span>
-<span class="cstat-no" title="statement not covered" >   * @param {string} contentHtml - HTML content</span>
+<span class="cstat-no" title="statement not covered" >   * Muestra un modal con contenido</span>
+<span class="cstat-no" title="statement not covered" >   * @param {string} contentHtml - Contenido HTML</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  showModal(contentHtml) {</span>
-<span class="cstat-no" title="statement not covered" >    const backdrop = document.getElementById('modal-backdrop')</span>
-<span class="cstat-no" title="statement not covered" >    const modalContent = document.getElementById('modal-content')</span>
+<span class="cstat-no" title="statement not covered" >    const backdrop = document.getElementById("modal-backdrop")</span>
+<span class="cstat-no" title="statement not covered" >    const modalContent = document.getElementById("modal-content")</span>
 <span class="cstat-no" title="statement not covered" >    if (!backdrop || !modalContent) return</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    modalContent.innerHTML = contentHtml</span>
-<span class="cstat-no" title="statement not covered" >    backdrop.classList.remove('hidden')</span>
+<span class="cstat-no" title="statement not covered" >    backdrop.classList.remove("hidden")</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Close modal</span>
+<span class="cstat-no" title="statement not covered" >   * Cierra el modal</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  closeModal() {</span>
-<span class="cstat-no" title="statement not covered" >    const backdrop = document.getElementById('modal-backdrop')</span>
+<span class="cstat-no" title="statement not covered" >    const backdrop = document.getElementById("modal-backdrop")</span>
 <span class="cstat-no" title="statement not covered" >    if (backdrop) {</span>
-<span class="cstat-no" title="statement not covered" >      backdrop.classList.add('hidden')</span>
+<span class="cstat-no" title="statement not covered" >      backdrop.classList.add("hidden")</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Export all data</span>
-<span class="cstat-no" title="statement not covered" >   * @returns {string} JSON data</span>
+<span class="cstat-no" title="statement not covered" >   * Exporta todos los datos</span>
+<span class="cstat-no" title="statement not covered" >   * @returns {string} Datos en formato JSON</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  exportData() {</span>
 <span class="cstat-no" title="statement not covered" >    return this.storage.exportData()</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Import data</span>
-<span class="cstat-no" title="statement not covered" >   * @param {string} json - JSON data</span>
-<span class="cstat-no" title="statement not covered" >   * @returns {boolean} Success</span>
+<span class="cstat-no" title="statement not covered" >   * Importa datos</span>
+<span class="cstat-no" title="statement not covered" >   * @param {string} json - Datos en formato JSON</span>
+<span class="cstat-no" title="statement not covered" >   * @returns {boolean} Éxito</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  importData(json) {</span>
 <span class="cstat-no" title="statement not covered" >    const success = this.storage.importData(json)</span>
 <span class="cstat-no" title="statement not covered" >    if (success) {</span>
-<span class="cstat-no" title="statement not covered" >      // Re-initialize modules with new data</span>
+<span class="cstat-no" title="statement not covered" >      // Re-inicializa los módulos con los nuevos datos</span>
 <span class="cstat-no" title="statement not covered" >      this._initModules()</span>
 <span class="cstat-no" title="statement not covered" >      this._renderScreen(this.currentScreen)</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -774,7 +786,7 @@
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Clear all data</span>
+<span class="cstat-no" title="statement not covered" >   * Limpia todos los datos</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  clearAllData() {</span>
 <span class="cstat-no" title="statement not covered" >    this.storage.clear()</span>
@@ -783,8 +795,8 @@
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
-<span class="cstat-no" title="statement not covered" >   * Reset to demo data</span>
-<span class="cstat-no" title="statement not covered" >   * @param {Object} demoData - Demo data object</span>
+<span class="cstat-no" title="statement not covered" >   * Reinicia a datos de demostración</span>
+<span class="cstat-no" title="statement not covered" >   * @param {Object} demoData - Objeto de datos de demostración</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  resetToDemo(demoData) {</span>
 <span class="cstat-no" title="statement not covered" >    this.storage.resetToDemo(demoData)</span>
@@ -793,7 +805,7 @@
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >// Create and export singleton instance</span>
+<span class="cstat-no" title="statement not covered" >// Crea y exporta la instancia singleton</span>
 <span class="cstat-no" title="statement not covered" >export const app = new DOSApp()</span>
 &nbsp;</pre></td></tr></table></pre>
 
@@ -802,7 +814,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-09T01:54:00.536Z
+                at 2026-05-06T23:20:42.650Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
