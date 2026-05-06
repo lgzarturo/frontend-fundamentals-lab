@@ -7,7 +7,9 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "dev": "npx serve ."
+    "dev": "npx serve .",
+    "version:sync": "node scripts/version-sync.js",
+    "version": "node scripts/version-sync.js && git add assets/locales/en.json assets/locales/es.json index.html CHANGELOG.md"
   },
   "devDependencies": {
     "@vitest/ui": "^1.0.0",

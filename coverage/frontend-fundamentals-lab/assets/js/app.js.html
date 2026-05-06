@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/3410</span>
+                <span class='fraction'>0/3431</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/3410</span>
+                <span class='fraction'>0/3431</span>
             </div>
         
             
@@ -3473,7 +3473,49 @@
 <a name='L3408'></a><a href='#L3408'>3408</a>
 <a name='L3409'></a><a href='#L3409'>3409</a>
 <a name='L3410'></a><a href='#L3410'>3410</a>
-<a name='L3411'></a><a href='#L3411'>3411</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L3411'></a><a href='#L3411'>3411</a>
+<a name='L3412'></a><a href='#L3412'>3412</a>
+<a name='L3413'></a><a href='#L3413'>3413</a>
+<a name='L3414'></a><a href='#L3414'>3414</a>
+<a name='L3415'></a><a href='#L3415'>3415</a>
+<a name='L3416'></a><a href='#L3416'>3416</a>
+<a name='L3417'></a><a href='#L3417'>3417</a>
+<a name='L3418'></a><a href='#L3418'>3418</a>
+<a name='L3419'></a><a href='#L3419'>3419</a>
+<a name='L3420'></a><a href='#L3420'>3420</a>
+<a name='L3421'></a><a href='#L3421'>3421</a>
+<a name='L3422'></a><a href='#L3422'>3422</a>
+<a name='L3423'></a><a href='#L3423'>3423</a>
+<a name='L3424'></a><a href='#L3424'>3424</a>
+<a name='L3425'></a><a href='#L3425'>3425</a>
+<a name='L3426'></a><a href='#L3426'>3426</a>
+<a name='L3427'></a><a href='#L3427'>3427</a>
+<a name='L3428'></a><a href='#L3428'>3428</a>
+<a name='L3429'></a><a href='#L3429'>3429</a>
+<a name='L3430'></a><a href='#L3430'>3430</a>
+<a name='L3431'></a><a href='#L3431'>3431</a>
+<a name='L3432'></a><a href='#L3432'>3432</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -6889,8 +6931,8 @@
 <span class="cstat-no" title="statement not covered" > * @returns {string} - Traducción o la clave si no existe</span>
 <span class="cstat-no" title="statement not covered" > */</span>
 <span class="cstat-no" title="statement not covered" >function getI18n(key) {</span>
-<span class="cstat-no" title="statement not covered" >  if (typeof I18n === 'undefined' || !I18n.messages) {</span>
-<span class="cstat-no" title="statement not covered" >    console.warn('I18n not initialized yet')</span>
+<span class="cstat-no" title="statement not covered" >  if (typeof I18n === "undefined" || !I18n.messages) {</span>
+<span class="cstat-no" title="statement not covered" >    console.warn("I18n not initialized yet")</span>
 <span class="cstat-no" title="statement not covered" >    return key</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" >  return I18n.getMessage(key)</span>
@@ -7141,7 +7183,7 @@
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  function animate() {</span>
 <span class="cstat-no" title="statement not covered" >    context.clearRect(0, 0, width, height)</span>
-<span class="cstat-no" title="statement not covered" >    particles.forEach((p) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    particles.forEach(p =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      // Spread explosivo, parabólico y balanceo</span>
 <span class="cstat-no" title="statement not covered" >      // Detectar el pico (cuando la velocidad vertical cambia de negativa a positiva)</span>
 <span class="cstat-no" title="statement not covered" >      if (!p.reachedPeak &amp;&amp; p.speedY &gt; 0) {</span>
@@ -7218,19 +7260,18 @@
 <span class="cstat-no" title="statement not covered" > */</span>
 <span class="cstat-no" title="statement not covered" >function home() {</span>
 <span class="cstat-no" title="statement not covered" >  const todayStr = formatDate(new Date())</span>
-<span class="cstat-no" title="statement not covered" >  const maxStreak = Math.max(...app.habits.map((h) =&gt; h.streak || 0), 0)</span>
+<span class="cstat-no" title="statement not covered" >  const maxStreak = Math.max(...app.habits.map(h =&gt; h.streak || 0), 0)</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  document.getElementById("home-habits-streak").textContent = maxStreak</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const totalTasks = app.tasks.filter(</span>
-<span class="cstat-no" title="statement not covered" >    (t) =&gt; !t.done &amp;&amp; t.dueDate === todayStr</span>
+<span class="cstat-no" title="statement not covered" >    t =&gt; !t.done &amp;&amp; t.dueDate === todayStr</span>
 <span class="cstat-no" title="statement not covered" >  ).length</span>
 <span class="cstat-no" title="statement not covered" >  const doneTasks = app.tasks.filter(</span>
-<span class="cstat-no" title="statement not covered" >    (t) =&gt; t.done &amp;&amp; t.dueDate === todayStr</span>
+<span class="cstat-no" title="statement not covered" >    t =&gt; t.done &amp;&amp; t.dueDate === todayStr</span>
 <span class="cstat-no" title="statement not covered" >  ).length</span>
-<span class="cstat-no" title="statement not covered" >  document.getElementById(</span>
-<span class="cstat-no" title="statement not covered" >    "home-tasks-done"</span>
-<span class="cstat-no" title="statement not covered" >  ).textContent = `${doneTasks}/${totalTasks}`</span>
+<span class="cstat-no" title="statement not covered" >  document.getElementById("home-tasks-done").textContent =</span>
+<span class="cstat-no" title="statement not covered" >    `${doneTasks}/${totalTasks}`</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const totalBudget = app.budgets.reduce(</span>
 <span class="cstat-no" title="statement not covered" >    (sum, b) =&gt; sum + b.items.reduce((s, i) =&gt; s + i.amount, 0),</span>
@@ -7247,7 +7288,7 @@
 <span class="cstat-no" title="statement not covered" >  document.getElementById("home-notes-count").textContent = app.notes.length</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const mits = app.tasks</span>
-<span class="cstat-no" title="statement not covered" >    .filter((t) =&gt; !t.done &amp;&amp; (t.priority === "high" || t.dueDate === todayStr))</span>
+<span class="cstat-no" title="statement not covered" >    .filter(t =&gt; !t.done &amp;&amp; (t.priority === "high" || t.dueDate === todayStr))</span>
 <span class="cstat-no" title="statement not covered" >    .sort((a, b) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (a.priority === "high" &amp;&amp; b.priority !== "high") return -1</span>
 <span class="cstat-no" title="statement not covered" >      if (b.priority === "high" &amp;&amp; a.priority !== "high") return 1</span>
@@ -7260,7 +7301,7 @@
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  if (mits.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    const template = document.getElementById("home-content-template")</span>
-<span class="cstat-no" title="statement not covered" >    mits.forEach((task) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    mits.forEach(task =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const node = template.content.cloneNode(true)</span>
 <span class="cstat-no" title="statement not covered" >      // Submit action</span>
 <span class="cstat-no" title="statement not covered" >      const btn = node.querySelector("[data-done-button]")</span>
@@ -7276,7 +7317,7 @@
 <span class="cstat-no" title="statement not covered" >      tagsContainer.innerHTML = ""</span>
 <span class="cstat-no" title="statement not covered" >      if (task.tags.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >        const tagTemplate = document.getElementById("home-component-tag")</span>
-<span class="cstat-no" title="statement not covered" >        task.tags.forEach((tag) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        task.tags.forEach(tag =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          const tagNode = tagTemplate.content.cloneNode(true)</span>
 <span class="cstat-no" title="statement not covered" >          tagNode.querySelector("[data-tag-name]").textContent = tag</span>
 <span class="cstat-no" title="statement not covered" >          tagsContainer.appendChild(tagNode)</span>
@@ -7303,7 +7344,7 @@
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  // Renderizar los hábitos en el inicio</span>
 <span class="cstat-no" title="statement not covered" >  const todayHabits = []</span>
-<span class="cstat-no" title="statement not covered" >  app.habits.forEach((habit) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  app.habits.forEach(habit =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    todayHabits.push({</span>
 <span class="cstat-no" title="statement not covered" >      ...habit,</span>
 <span class="cstat-no" title="statement not covered" >      isDone: habit.dailyRecords[todayStr] || false,</span>
@@ -7315,7 +7356,7 @@
 <span class="cstat-no" title="statement not covered" >  habitsList.innerHTML = ""</span>
 <span class="cstat-no" title="statement not covered" >  if (todayHabits.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    const template = document.getElementById("home-habit-template")</span>
-<span class="cstat-no" title="statement not covered" >    todayHabits.forEach((habit) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    todayHabits.forEach(habit =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const node = template.content.cloneNode(true)</span>
 <span class="cstat-no" title="statement not covered" >      // Título</span>
 <span class="cstat-no" title="statement not covered" >      node.querySelector("[data-habit-title]").textContent = habit.title</span>
@@ -7349,11 +7390,11 @@
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  // Tareas recientes</span>
 <span class="cstat-no" title="statement not covered" >  const recentTasks = app.tasks</span>
-<span class="cstat-no" title="statement not covered" >    .filter((t) =&gt; t.done)</span>
+<span class="cstat-no" title="statement not covered" >    .filter(t =&gt; t.done)</span>
 <span class="cstat-no" title="statement not covered" >    .sort((a, b) =&gt; b.id.localeCompare(a.id))</span>
 <span class="cstat-no" title="statement not covered" >    .slice(0, 2)</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  recentTasks.forEach((task) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  recentTasks.forEach(task =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    recentActivity.push({</span>
 <span class="cstat-no" title="statement not covered" >      icon: "✓",</span>
 <span class="cstat-no" title="statement not covered" >      text: `${I18n.getMessage("label.completed")}: ${task.title}`,</span>
@@ -7367,7 +7408,7 @@
 <span class="cstat-no" title="statement not covered" >    .sort((a, b) =&gt; b.updatedAt - a.updatedAt)</span>
 <span class="cstat-no" title="statement not covered" >    .slice(0, 2)</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  recentNotes.forEach((note) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  recentNotes.forEach(note =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    recentActivity.push({</span>
 <span class="cstat-no" title="statement not covered" >      icon: "📝",</span>
 <span class="cstat-no" title="statement not covered" >      text: `${I18n.getMessage("label.updated")}: ${note.title}`,</span>
@@ -7380,7 +7421,7 @@
 <span class="cstat-no" title="statement not covered" >  recentActivityList.innerHTML = ""</span>
 <span class="cstat-no" title="statement not covered" >  if (recentActivity.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    const template = document.getElementById("recent-activity-template")</span>
-<span class="cstat-no" title="statement not covered" >    recentActivity.forEach((item) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    recentActivity.forEach(item =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const node = template.content.cloneNode(true)</span>
 <span class="cstat-no" title="statement not covered" >      node.querySelector("[data-icon]").textContent = item.icon</span>
 <span class="cstat-no" title="statement not covered" >      node.querySelector("[data-text]").textContent = item.text</span>
@@ -7418,12 +7459,11 @@
 <span class="cstat-no" title="statement not covered" >  document.getElementById("budget-spent").textContent = `$${totalSpent.toFixed(</span>
 <span class="cstat-no" title="statement not covered" >    2</span>
 <span class="cstat-no" title="statement not covered" >  )}`</span>
-<span class="cstat-no" title="statement not covered" >  document.getElementById(</span>
-<span class="cstat-no" title="statement not covered" >    "budget-remaining"</span>
-<span class="cstat-no" title="statement not covered" >  ).textContent = `$${remaining.toFixed(2)}`</span>
+<span class="cstat-no" title="statement not covered" >  document.getElementById("budget-remaining").textContent =</span>
+<span class="cstat-no" title="statement not covered" >    `$${remaining.toFixed(2)}`</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const budgetList = []</span>
-<span class="cstat-no" title="statement not covered" >  app.budgets.forEach((budget) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  app.budgets.forEach(budget =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const budgetTotal = budget.items.reduce((sum, item) =&gt; sum + item.amount, 0)</span>
 <span class="cstat-no" title="statement not covered" >    const budgetSpent = budget.transactions.reduce(</span>
 <span class="cstat-no" title="statement not covered" >      (sum, t) =&gt; sum + Math.abs(t.amount),</span>
@@ -7447,7 +7487,7 @@
 <span class="cstat-no" title="statement not covered" >  budgetElementList.innerHTML = ""</span>
 <span class="cstat-no" title="statement not covered" >  if (budgetList.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >    const template = document.getElementById("budget-card-template")</span>
-<span class="cstat-no" title="statement not covered" >    budgetList.forEach((budget) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    budgetList.forEach(budget =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      console.log("Rendering budget:", budget)</span>
 <span class="cstat-no" title="statement not covered" >      const node = template.content.cloneNode(true)</span>
 <span class="cstat-no" title="statement not covered" >      node.querySelector("[data-budget-name]").textContent = budget.name</span>
@@ -7459,9 +7499,8 @@
 <span class="cstat-no" title="statement not covered" >      node.querySelector("[data-budget-spent]").textContent = `$${budget.spent}`</span>
 <span class="cstat-no" title="statement not covered" >      node.querySelector("[data-budget-remaining-label]").textContent =</span>
 <span class="cstat-no" title="statement not covered" >        I18n.getMessage("app.screens.budgets.overview.remaining")</span>
-<span class="cstat-no" title="statement not covered" >      node.querySelector(</span>
-<span class="cstat-no" title="statement not covered" >        "[data-budget-remaining]"</span>
-<span class="cstat-no" title="statement not covered" >      ).textContent = `$${budget.remaining}`</span>
+<span class="cstat-no" title="statement not covered" >      node.querySelector("[data-budget-remaining]").textContent =</span>
+<span class="cstat-no" title="statement not covered" >        `$${budget.remaining}`</span>
 <span class="cstat-no" title="statement not covered" >      const percentageBar = node.querySelector("[data-budget-bar-fill]")</span>
 <span class="cstat-no" title="statement not covered" >      percentageBar.style.width = `${Math.min(budget.percentage, 100)}%`</span>
 <span class="cstat-no" title="statement not covered" >      if (budget.percentage &gt; 90) {</span>
@@ -7513,13 +7552,13 @@
 <span class="cstat-no" title="statement not covered" >  // Aplicar filtros</span>
 <span class="cstat-no" title="statement not covered" >  switch (currentFilter) {</span>
 <span class="cstat-no" title="statement not covered" >    case "today":</span>
-<span class="cstat-no" title="statement not covered" >      tasks = tasks.filter((t) =&gt; t.dueDate === todayStr &amp;&amp; !t.done)</span>
+<span class="cstat-no" title="statement not covered" >      tasks = tasks.filter(t =&gt; t.dueDate === todayStr &amp;&amp; !t.done)</span>
 <span class="cstat-no" title="statement not covered" >      break</span>
 <span class="cstat-no" title="statement not covered" >    case "high":</span>
-<span class="cstat-no" title="statement not covered" >      tasks = tasks.filter((t) =&gt; t.priority === "high" &amp;&amp; !t.done)</span>
+<span class="cstat-no" title="statement not covered" >      tasks = tasks.filter(t =&gt; t.priority === "high" &amp;&amp; !t.done)</span>
 <span class="cstat-no" title="statement not covered" >      break</span>
 <span class="cstat-no" title="statement not covered" >    case "completed":</span>
-<span class="cstat-no" title="statement not covered" >      tasks = tasks.filter((t) =&gt; t.done)</span>
+<span class="cstat-no" title="statement not covered" >      tasks = tasks.filter(t =&gt; t.done)</span>
 <span class="cstat-no" title="statement not covered" >      break</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -7583,7 +7622,7 @@
 <span class="cstat-no" title="statement not covered" >                            &lt;div class="mt-3 space-y-2 pl-2 border-l-2 border-gray-200 dark:border-gray-700"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                ${task.subtasks</span>
 <span class="cstat-no" title="statement not covered" >                                  .map(</span>
-<span class="cstat-no" title="statement not covered" >                                    (subtask) =&gt; `</span>
+<span class="cstat-no" title="statement not covered" >                                    subtask =&gt; `</span>
 <span class="cstat-no" title="statement not covered" >                                    &lt;div class="flex items-center gap-2"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                        &lt;button onclick="app.toggleSubtask('${</span>
 <span class="cstat-no" title="statement not covered" >                                          task.id</span>
@@ -7613,7 +7652,7 @@
 <span class="cstat-no" title="statement not covered" >                            &lt;div class="flex gap-2 flex-wrap"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                ${task.tags</span>
 <span class="cstat-no" title="statement not covered" >                                  .map(</span>
-<span class="cstat-no" title="statement not covered" >                                    (tag) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >                                    tag =&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                      `&lt;span class="text-xs px-2 py-1 bg-xp-primary/20 text-xp-primary rounded"&gt;${tag}&lt;/span&gt;`</span>
 <span class="cstat-no" title="statement not covered" >                                  )</span>
 <span class="cstat-no" title="statement not covered" >                                  .join("")}</span>
@@ -7655,22 +7694,18 @@
 <span class="cstat-no" title="statement not covered" >function habits() {</span>
 <span class="cstat-no" title="statement not covered" >  const todayStr = formatDate(new Date())</span>
 <span class="cstat-no" title="statement not covered" >  const totalHabits = app.habits.length</span>
-<span class="cstat-no" title="statement not covered" >  const completedToday = app.habits.filter(</span>
-<span class="cstat-no" title="statement not covered" >    (h) =&gt; h.dailyRecords[todayStr]</span>
-<span class="cstat-no" title="statement not covered" >  ).length</span>
+<span class="cstat-no" title="statement not covered" >  const completedToday = app.habits.filter(h =&gt; h.dailyRecords[todayStr]).length</span>
 <span class="cstat-no" title="statement not covered" >  const completionRate =</span>
 <span class="cstat-no" title="statement not covered" >    totalHabits &gt; 0 ? ((completedToday / totalHabits) * 100).toFixed(0) : 0</span>
-<span class="cstat-no" title="statement not covered" >  const maxStreak = Math.max(...app.habits.map((h) =&gt; h.streak || 0), 0)</span>
+<span class="cstat-no" title="statement not covered" >  const maxStreak = Math.max(...app.habits.map(h =&gt; h.streak || 0), 0)</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  document.getElementById(</span>
-<span class="cstat-no" title="statement not covered" >    "habits-current-streak"</span>
-<span class="cstat-no" title="statement not covered" >  ).textContent = `${maxStreak} ${I18n.getMessage("label.days")} 🔥`</span>
-<span class="cstat-no" title="statement not covered" >  document.getElementById(</span>
-<span class="cstat-no" title="statement not covered" >    "habits-completion-rate"</span>
-<span class="cstat-no" title="statement not covered" >  ).textContent = `${completionRate}%`</span>
+<span class="cstat-no" title="statement not covered" >  document.getElementById("habits-current-streak").textContent =</span>
+<span class="cstat-no" title="statement not covered" >    `${maxStreak} ${I18n.getMessage("label.days")} 🔥`</span>
+<span class="cstat-no" title="statement not covered" >  document.getElementById("habits-completion-rate").textContent =</span>
+<span class="cstat-no" title="statement not covered" >    `${completionRate}%`</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const habitsHtml = app.habits</span>
-<span class="cstat-no" title="statement not covered" >    .map((habit) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    .map(habit =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const isDoneToday = habit.dailyRecords[todayStr]</span>
 <span class="cstat-no" title="statement not covered" >      const last7Days = getLast7Days()</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -7704,8 +7739,12 @@
 <span class="cstat-no" title="statement not covered" >                                } hover:opacity-80 transition-all font-semibold"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                            ${</span>
 <span class="cstat-no" title="statement not covered" >                              isDoneToday</span>
-<span class="cstat-no" title="statement not covered" >                                ? I18n.getMessage("app.screens.habits.completedToday")</span>
-<span class="cstat-no" title="statement not covered" >                                : I18n.getMessage("app.screens.habits.markComplete")</span>
+<span class="cstat-no" title="statement not covered" >                                ? I18n.getMessage(</span>
+<span class="cstat-no" title="statement not covered" >                                    "app.screens.habits.completedToday"</span>
+<span class="cstat-no" title="statement not covered" >                                  )</span>
+<span class="cstat-no" title="statement not covered" >                                : I18n.getMessage(</span>
+<span class="cstat-no" title="statement not covered" >                                    "app.screens.habits.markComplete"</span>
+<span class="cstat-no" title="statement not covered" >                                  )</span>
 <span class="cstat-no" title="statement not covered" >                            }</span>
 <span class="cstat-no" title="statement not covered" >                        &lt;/button&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        &lt;div class="flex items-center gap-2"&gt;</span>
@@ -7726,7 +7765,7 @@
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >                    &lt;div class="flex gap-2"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        ${last7Days</span>
-<span class="cstat-no" title="statement not covered" >                          .map((date) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                          .map(date =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >                            const done = habit.dailyRecords[date]</span>
 <span class="cstat-no" title="statement not covered" >                            const isToday = date === todayStr</span>
 <span class="cstat-no" title="statement not covered" >                            return `</span>
@@ -7735,8 +7774,8 @@
 <span class="cstat-no" title="statement not covered" >                                    ? "bg-xp-primary"</span>
 <span class="cstat-no" title="statement not covered" >                                    : "bg-gray-200 dark:bg-xp-darker"</span>
 <span class="cstat-no" title="statement not covered" >                                } ${</span>
-<span class="cstat-no" title="statement not covered" >                              isToday ? "ring-2 ring-xp-secondary" : ""</span>
-<span class="cstat-no" title="statement not covered" >                            } flex items-center justify-center"&gt;</span>
+<span class="cstat-no" title="statement not covered" >                                  isToday ? "ring-2 ring-xp-secondary" : ""</span>
+<span class="cstat-no" title="statement not covered" >                                } flex items-center justify-center"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                    ${</span>
 <span class="cstat-no" title="statement not covered" >                                      done</span>
 <span class="cstat-no" title="statement not covered" >                                        ? '&lt;span class="text-xp-darker text-xl"&gt;✓&lt;/span&gt;'</span>
@@ -7749,7 +7788,7 @@
 <span class="cstat-no" title="statement not covered" >                    &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    &lt;div class="flex justify-between mt-2 text-xs text-gray-600 dark:text-gray-400"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        ${last7Days</span>
-<span class="cstat-no" title="statement not covered" >                          .map((date) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                          .map(date =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >                            const d = new Date(date)</span>
 <span class="cstat-no" title="statement not covered" >                            return `&lt;div class="flex-1 text-center"&gt;${d</span>
 <span class="cstat-no" title="statement not covered" >                              .toLocaleDateString("en-US", { weekday: "short" })</span>
@@ -7774,7 +7813,7 @@
 <span class="cstat-no" title="statement not covered" >function notes() {</span>
 <span class="cstat-no" title="statement not covered" >  const notesHtml = app.notes</span>
 <span class="cstat-no" title="statement not covered" >    .map(</span>
-<span class="cstat-no" title="statement not covered" >      (note) =&gt; `</span>
+<span class="cstat-no" title="statement not covered" >      note =&gt; `</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div class="bg-white dark:bg-xp-card rounded-xl p-5 border-2 border-gray-200 dark:border-xp-primary/20 hover:border-xp-primary/40 transition-colors cursor-pointer"</span>
 <span class="cstat-no" title="statement not covered" >                 onclick="app.showNoteModal('${note.id}')"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;h4 class="font-bold text-lg mb-2"&gt;${escapeHtml(</span>
@@ -7782,14 +7821,14 @@
 <span class="cstat-no" title="statement not covered" >                )}&lt;/h4&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;div class="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    ${escapeHtml(note.bodyMarkdown.substring(0, 100))}${</span>
-<span class="cstat-no" title="statement not covered" >        note.bodyMarkdown.length &gt; 100 ? "..." : ""</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >                      note.bodyMarkdown.length &gt; 100 ? "..." : ""</span>
+<span class="cstat-no" title="statement not covered" >                    }</span>
 <span class="cstat-no" title="statement not covered" >                &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;div class="flex items-center justify-between"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    &lt;div class="flex gap-1 flex-wrap"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        ${note.tags</span>
 <span class="cstat-no" title="statement not covered" >                          .map(</span>
-<span class="cstat-no" title="statement not covered" >                            (tag) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >                            tag =&gt;</span>
 <span class="cstat-no" title="statement not covered" >                              `&lt;span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-500 rounded"&gt;${tag}&lt;/span&gt;`</span>
 <span class="cstat-no" title="statement not covered" >                          )</span>
 <span class="cstat-no" title="statement not covered" >                          .join("")}</span>
@@ -8418,10 +8457,10 @@
 <span class="cstat-no" title="statement not covered" >    currentScreen = screen</span>
 <span class="cstat-no" title="statement not covered" >    document</span>
 <span class="cstat-no" title="statement not covered" >      .querySelectorAll(".screen")</span>
-<span class="cstat-no" title="statement not covered" >      .forEach((s) =&gt; s.classList.remove("active"))</span>
+<span class="cstat-no" title="statement not covered" >      .forEach(s =&gt; s.classList.remove("active"))</span>
 <span class="cstat-no" title="statement not covered" >    const screenEl = document.getElementById(`${screen}-screen`)</span>
 <span class="cstat-no" title="statement not covered" >    if (screenEl) screenEl.classList.add("active")</span>
-<span class="cstat-no" title="statement not covered" >    document.querySelectorAll(".nav-btn").forEach((btn) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    document.querySelectorAll(".nav-btn").forEach(btn =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (btn.dataset.screen === screen) {</span>
 <span class="cstat-no" title="statement not covered" >        btn.classList.add(</span>
 <span class="cstat-no" title="statement not covered" >          "bg-xp-primary",</span>
@@ -8466,7 +8505,7 @@
 <span class="cstat-no" title="statement not covered" >    currentFilter = filter</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    // Actualizar estilos de botones de filtro</span>
-<span class="cstat-no" title="statement not covered" >    document.querySelectorAll(".task-filter-btn").forEach((btn) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    document.querySelectorAll(".task-filter-btn").forEach(btn =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (btn.dataset.filter === filter) {</span>
 <span class="cstat-no" title="statement not covered" >        btn.classList.add("bg-xp-primary", "text-xp-darker")</span>
 <span class="cstat-no" title="statement not covered" >        btn.classList.remove(</span>
@@ -8496,7 +8535,7 @@
 <span class="cstat-no" title="statement not covered" >    const todayStr = formatDate(new Date())</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    // Contenido del modal para crear una nueva tarea</span>
-<span class="cstat-no" title="statement not covered" >    const t = (key) =&gt; getI18n(key)</span>
+<span class="cstat-no" title="statement not covered" >    const t = key =&gt; getI18n(key)</span>
 <span class="cstat-no" title="statement not covered" >    const modalContent = `</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div class="p-6"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;h3 class="text-2xl font-bold mb-4"&gt;${t("app.screens.tasks.modal.create.title")}&lt;/h3&gt;</span>
@@ -8573,8 +8612,8 @@
 <span class="cstat-no" title="statement not covered" >        ? formData</span>
 <span class="cstat-no" title="statement not covered" >            .get("tags")</span>
 <span class="cstat-no" title="statement not covered" >            .split(",")</span>
-<span class="cstat-no" title="statement not covered" >            .map((t) =&gt; t.trim())</span>
-<span class="cstat-no" title="statement not covered" >            .filter((t) =&gt; t)</span>
+<span class="cstat-no" title="statement not covered" >            .map(t =&gt; t.trim())</span>
+<span class="cstat-no" title="statement not covered" >            .filter(t =&gt; t)</span>
 <span class="cstat-no" title="statement not covered" >        : [],</span>
 <span class="cstat-no" title="statement not covered" >      subtasks: [],</span>
 <span class="cstat-no" title="statement not covered" >      done: false,</span>
@@ -8594,11 +8633,11 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  showEditTaskModal(taskId) {</span>
-<span class="cstat-no" title="statement not covered" >    const task = app.tasks.find((t) =&gt; t.id === taskId)</span>
+<span class="cstat-no" title="statement not covered" >    const task = app.tasks.find(t =&gt; t.id === taskId)</span>
 <span class="cstat-no" title="statement not covered" >    if (!task) return</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    // Contenido del modal para editar la tarea</span>
-<span class="cstat-no" title="statement not covered" >    const t = (key) =&gt; getI18n(key)</span>
+<span class="cstat-no" title="statement not covered" >    const t = key =&gt; getI18n(key)</span>
 <span class="cstat-no" title="statement not covered" >    const modalContent = `</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div class="p-6"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;h3 class="text-2xl font-bold mb-4"&gt;${t("app.screens.tasks.modal.edit.title")}&lt;/h3&gt;</span>
@@ -8723,7 +8762,7 @@
 <span class="cstat-no" title="statement not covered" >  updateTask(event, taskId) {</span>
 <span class="cstat-no" title="statement not covered" >    event.preventDefault()</span>
 <span class="cstat-no" title="statement not covered" >    const formData = new FormData(event.target)</span>
-<span class="cstat-no" title="statement not covered" >    const task = app.tasks.find((t) =&gt; t.id === taskId)</span>
+<span class="cstat-no" title="statement not covered" >    const task = app.tasks.find(t =&gt; t.id === taskId)</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    if (task) {</span>
 <span class="cstat-no" title="statement not covered" >      // Actualizar campos de la tarea</span>
@@ -8735,21 +8774,21 @@
 <span class="cstat-no" title="statement not covered" >        ? formData</span>
 <span class="cstat-no" title="statement not covered" >            .get("tags")</span>
 <span class="cstat-no" title="statement not covered" >            .split(",")</span>
-<span class="cstat-no" title="statement not covered" >            .map((t) =&gt; t.trim())</span>
-<span class="cstat-no" title="statement not covered" >            .filter((t) =&gt; t)</span>
+<span class="cstat-no" title="statement not covered" >            .map(t =&gt; t.trim())</span>
+<span class="cstat-no" title="statement not covered" >            .filter(t =&gt; t)</span>
 <span class="cstat-no" title="statement not covered" >        : []</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      // Actualizar subtareas</span>
 <span class="cstat-no" title="statement not covered" >      const subtaskInputs = document.querySelectorAll(".subtask-input")</span>
 <span class="cstat-no" title="statement not covered" >      task.subtasks = Array.from(subtaskInputs)</span>
-<span class="cstat-no" title="statement not covered" >        .map((input) =&gt; ({</span>
+<span class="cstat-no" title="statement not covered" >        .map(input =&gt; ({</span>
 <span class="cstat-no" title="statement not covered" >          id: input.dataset.subtaskId || generateId(),</span>
 <span class="cstat-no" title="statement not covered" >          text: input.value,</span>
 <span class="cstat-no" title="statement not covered" >          done:</span>
-<span class="cstat-no" title="statement not covered" >            task.subtasks.find((st) =&gt; st.id === input.dataset.subtaskId)</span>
-<span class="cstat-no" title="statement not covered" >              ?.done || false</span>
+<span class="cstat-no" title="statement not covered" >            task.subtasks.find(st =&gt; st.id === input.dataset.subtaskId)?.done ||</span>
+<span class="cstat-no" title="statement not covered" >            false</span>
 <span class="cstat-no" title="statement not covered" >        }))</span>
-<span class="cstat-no" title="statement not covered" >        .filter((st) =&gt; st.text.trim())</span>
+<span class="cstat-no" title="statement not covered" >        .filter(st =&gt; st.text.trim())</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      store.save(app.tasks, "tasks")</span>
 <span class="cstat-no" title="statement not covered" >      app.closeModal()</span>
@@ -8763,17 +8802,20 @@
 <span class="cstat-no" title="statement not covered" >   * @return {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  deleteTask(taskId) {</span>
-<span class="cstat-no" title="statement not covered" >    const index = app.tasks.findIndex((t) =&gt; t.id === taskId)</span>
+<span class="cstat-no" title="statement not covered" >    const index = app.tasks.findIndex(t =&gt; t.id === taskId)</span>
 <span class="cstat-no" title="statement not covered" >    if (index !== -1) {</span>
 <span class="cstat-no" title="statement not covered" >      const deleted = app.tasks.splice(index, 1)[0]</span>
 <span class="cstat-no" title="statement not covered" >      store.save(app.tasks, "tasks")</span>
 <span class="cstat-no" title="statement not covered" >      tasks()</span>
 <span class="cstat-no" title="statement not covered" >      // Mostrar opción de deshacer</span>
-<span class="cstat-no" title="statement not covered" >      app.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        app.tasks.splice(index, 0, deleted)</span>
-<span class="cstat-no" title="statement not covered" >        store.save(app.tasks, "tasks")</span>
-<span class="cstat-no" title="statement not covered" >        tasks()</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
+<span class="cstat-no" title="statement not covered" >      app.showUndoToast(</span>
+<span class="cstat-no" title="statement not covered" >        `${getI18n("ui.common.deleted")} "${deleted.title}"`,</span>
+<span class="cstat-no" title="statement not covered" >        () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          app.tasks.splice(index, 0, deleted)</span>
+<span class="cstat-no" title="statement not covered" >          store.save(app.tasks, "tasks")</span>
+<span class="cstat-no" title="statement not covered" >          tasks()</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >      )</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  },</span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
@@ -8782,12 +8824,14 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  toggleTask: function (taskId) {</span>
-<span class="cstat-no" title="statement not covered" >    const task = app.tasks.find((t) =&gt; t.id === taskId)</span>
+<span class="cstat-no" title="statement not covered" >    const task = app.tasks.find(t =&gt; t.id === taskId)</span>
 <span class="cstat-no" title="statement not covered" >    if (task) {</span>
 <span class="cstat-no" title="statement not covered" >      task.done = !task.done</span>
 <span class="cstat-no" title="statement not covered" >      store.save(app.tasks, "tasks")</span>
 <span class="cstat-no" title="statement not covered" >      app.showToast(</span>
-<span class="cstat-no" title="statement not covered" >        task.done ? I18n.getMessage("ui.common.toast.taskCompleted") : I18n.getMessage("ui.common.toast.taskReopened"),</span>
+<span class="cstat-no" title="statement not covered" >        task.done</span>
+<span class="cstat-no" title="statement not covered" >          ? I18n.getMessage("ui.common.toast.taskCompleted")</span>
+<span class="cstat-no" title="statement not covered" >          : I18n.getMessage("ui.common.toast.taskReopened"),</span>
 <span class="cstat-no" title="statement not covered" >        "success"</span>
 <span class="cstat-no" title="statement not covered" >      )</span>
 <span class="cstat-no" title="statement not covered" >      render()</span>
@@ -8800,9 +8844,9 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  toggleSubtask(taskId, subtaskId) {</span>
-<span class="cstat-no" title="statement not covered" >    const task = app.tasks.find((t) =&gt; t.id === taskId)</span>
+<span class="cstat-no" title="statement not covered" >    const task = app.tasks.find(t =&gt; t.id === taskId)</span>
 <span class="cstat-no" title="statement not covered" >    if (task &amp;&amp; task.subtasks) {</span>
-<span class="cstat-no" title="statement not covered" >      const subtask = task.subtasks.find((st) =&gt; st.id === subtaskId)</span>
+<span class="cstat-no" title="statement not covered" >      const subtask = task.subtasks.find(st =&gt; st.id === subtaskId)</span>
 <span class="cstat-no" title="statement not covered" >      if (subtask) {</span>
 <span class="cstat-no" title="statement not covered" >        subtask.done = !subtask.done</span>
 <span class="cstat-no" title="statement not covered" >        store.save(app.tasks, "tasks")</span>
@@ -8859,7 +8903,7 @@
 <span class="cstat-no" title="statement not covered" >    const taskItems = Array.from(document.querySelectorAll(".task-item"))</span>
 <span class="cstat-no" title="statement not covered" >    taskItems.forEach((item, index) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const taskId = item.dataset.taskId</span>
-<span class="cstat-no" title="statement not covered" >      const task = app.tasks.find((t) =&gt; t.id === taskId)</span>
+<span class="cstat-no" title="statement not covered" >      const task = app.tasks.find(t =&gt; t.id === taskId)</span>
 <span class="cstat-no" title="statement not covered" >      if (task) {</span>
 <span class="cstat-no" title="statement not covered" >        task.order = index + 1</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
@@ -8875,7 +8919,7 @@
 <span class="cstat-no" title="statement not covered" >  handleDragEnd(event) {</span>
 <span class="cstat-no" title="statement not covered" >    event.target.classList.remove("dragging")</span>
 <span class="cstat-no" title="statement not covered" >    // TODO: Retorna el cursor a su estado inicial.</span>
-<span class="cstat-no" title="statement not covered" >    document.querySelectorAll(".task-item").forEach((item) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    document.querySelectorAll(".task-item").forEach(item =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      item.classList.remove("drag-over")</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
 <span class="cstat-no" title="statement not covered" >  },</span>
@@ -8914,7 +8958,7 @@
 <span class="cstat-no" title="statement not covered" >   * @param {number} templateIndex - Índice de la plantilla a usar</span>
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
-<span class="cstat-no" title="statement not covered" >createHabitFromTemplate(templateIndex) {</span>
+<span class="cstat-no" title="statement not covered" >  createHabitFromTemplate(templateIndex) {</span>
 <span class="cstat-no" title="statement not covered" >    const templates = getI18n("app.screens.habits.templates.items") || []</span>
 <span class="cstat-no" title="statement not covered" >    const template = templates[templateIndex]</span>
 <span class="cstat-no" title="statement not covered" >    if (!template) return</span>
@@ -8935,7 +8979,7 @@
 <span class="cstat-no" title="statement not covered" >    this.showToast(getI18n("ui.common.toast.habitCreated"), "success")</span>
 <span class="cstat-no" title="statement not covered" >    habits()</span>
 <span class="cstat-no" title="statement not covered" >    if (this.currentScreen === "home") home()</span>
-<span class="cstat-no" title="statement not covered" >},</span>
+<span class="cstat-no" title="statement not covered" >  },</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  showHabitTemplatesModal() {</span>
 <span class="cstat-no" title="statement not covered" >    event.preventDefault()</span>
@@ -8970,7 +9014,7 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  showHabitTemplatesModal() {</span>
-<span class="cstat-no" title="statement not covered" >    const t = (key) =&gt; getI18n(key)</span>
+<span class="cstat-no" title="statement not covered" >    const t = key =&gt; getI18n(key)</span>
 <span class="cstat-no" title="statement not covered" >    const templates = t("app.screens.habits.templates.items") || []</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const modalContent = `</span>
@@ -9038,7 +9082,7 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  deleteHabit(habitId) {</span>
-<span class="cstat-no" title="statement not covered" >    const index = app.habits.findIndex((h) =&gt; h.id === habitId)</span>
+<span class="cstat-no" title="statement not covered" >    const index = app.habits.findIndex(h =&gt; h.id === habitId)</span>
 <span class="cstat-no" title="statement not covered" >    if (index !== -1) {</span>
 <span class="cstat-no" title="statement not covered" >      const deleted = app.habits.splice(index, 1)[0]</span>
 <span class="cstat-no" title="statement not covered" >      store.save(app.habits, "habits")</span>
@@ -9051,11 +9095,14 @@
 <span class="cstat-no" title="statement not covered" >          habit_title: deleted.title</span>
 <span class="cstat-no" title="statement not covered" >        })</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
-<span class="cstat-no" title="statement not covered" >      app.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        app.habits.splice(index, 0, deleted)</span>
-<span class="cstat-no" title="statement not covered" >        store.save(app.habits, "habits")</span>
-<span class="cstat-no" title="statement not covered" >        habits()</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
+<span class="cstat-no" title="statement not covered" >      app.showUndoToast(</span>
+<span class="cstat-no" title="statement not covered" >        `${getI18n("ui.common.deleted")} "${deleted.title}"`,</span>
+<span class="cstat-no" title="statement not covered" >        () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          app.habits.splice(index, 0, deleted)</span>
+<span class="cstat-no" title="statement not covered" >          store.save(app.habits, "habits")</span>
+<span class="cstat-no" title="statement not covered" >          habits()</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >      )</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  },</span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
@@ -9064,7 +9111,7 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  toggleHabit(habitId) {</span>
-<span class="cstat-no" title="statement not covered" >    const habit = app.habits.find((h) =&gt; h.id === habitId)</span>
+<span class="cstat-no" title="statement not covered" >    const habit = app.habits.find(h =&gt; h.id === habitId)</span>
 <span class="cstat-no" title="statement not covered" >    if (!habit) return</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const todayStr = formatDate(new Date())</span>
@@ -9088,7 +9135,9 @@
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    store.save(app.habits, "habits")</span>
 <span class="cstat-no" title="statement not covered" >    app.showToast(</span>
-<span class="cstat-no" title="statement not covered" >      wasDone ? I18n.getMessage("ui.common.toast.habitUnchecked") : I18n.getMessage("ui.common.toast.habitCompleted"),</span>
+<span class="cstat-no" title="statement not covered" >      wasDone</span>
+<span class="cstat-no" title="statement not covered" >        ? I18n.getMessage("ui.common.toast.habitUnchecked")</span>
+<span class="cstat-no" title="statement not covered" >        : I18n.getMessage("ui.common.toast.habitCompleted"),</span>
 <span class="cstat-no" title="statement not covered" >      "success"</span>
 <span class="cstat-no" title="statement not covered" >    )</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -9104,7 +9153,7 @@
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const totalHabits = app.habits.length</span>
 <span class="cstat-no" title="statement not covered" >    const completedHabitsToday = app.habits.filter(</span>
-<span class="cstat-no" title="statement not covered" >      (h) =&gt; h.dailyRecords[todayStr]</span>
+<span class="cstat-no" title="statement not covered" >      h =&gt; h.dailyRecords[todayStr]</span>
 <span class="cstat-no" title="statement not covered" >    ).length</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    console.debug(</span>
@@ -9137,10 +9186,10 @@
 <span class="cstat-no" title="statement not covered" >  budgets: [],</span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
 <span class="cstat-no" title="statement not covered" >   * Muestra el modal para crear un nuevo presupuesto</span>
-<span class="cstat-no" title="statement not covered" >* @returns {void}</span>
+<span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  showCreateBudgetModal() {</span>
-<span class="cstat-no" title="statement not covered" >    const t = (key) =&gt; getI18n(key)</span>
+<span class="cstat-no" title="statement not covered" >    const t = key =&gt; getI18n(key)</span>
 <span class="cstat-no" title="statement not covered" >    const modalContent = `</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div class="p-6"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;h3 class="text-2xl font-bold mb-4"&gt;${t("app.screens.budgets.modal.create.title")}&lt;/h3&gt;</span>
@@ -9207,7 +9256,7 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  showAddTransactionModal(budgetId) {</span>
-<span class="cstat-no" title="statement not covered" >    const t = (key) =&gt; getI18n(key)</span>
+<span class="cstat-no" title="statement not covered" >    const t = key =&gt; getI18n(key)</span>
 <span class="cstat-no" title="statement not covered" >    const modalContent = `</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div class="p-6"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;h3 class="text-2xl font-bold mb-4"&gt;${t("app.screens.budgets.modal.addTransaction.title")}&lt;/h3&gt;</span>
@@ -9251,7 +9300,7 @@
 <span class="cstat-no" title="statement not covered" >  addTransaction(event, budgetId) {</span>
 <span class="cstat-no" title="statement not covered" >    event.preventDefault()</span>
 <span class="cstat-no" title="statement not covered" >    const formData = new FormData(event.target)</span>
-<span class="cstat-no" title="statement not covered" >    const budget = app.budgets.find((b) =&gt; b.id === budgetId)</span>
+<span class="cstat-no" title="statement not covered" >    const budget = app.budgets.find(b =&gt; b.id === budgetId)</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    if (budget) {</span>
 <span class="cstat-no" title="statement not covered" >      const transaction = {</span>
@@ -9276,10 +9325,10 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  showBudgetDetails(budgetId) {</span>
-<span class="cstat-no" title="statement not covered" >    const budget = app.budgets.find((b) =&gt; b.id === budgetId)</span>
+<span class="cstat-no" title="statement not covered" >    const budget = app.budgets.find(b =&gt; b.id === budgetId)</span>
 <span class="cstat-no" title="statement not covered" >    if (!budget) return</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    const t = (key) =&gt; getI18n(key)</span>
+<span class="cstat-no" title="statement not covered" >    const t = key =&gt; getI18n(key)</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const modalContent = `</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div class="p-6"&gt;</span>
@@ -9304,7 +9353,7 @@
 <span class="cstat-no" title="statement not covered" >                    &lt;div class="space-y-2"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        ${budget.items</span>
 <span class="cstat-no" title="statement not covered" >                          .map(</span>
-<span class="cstat-no" title="statement not covered" >                            (item) =&gt; `</span>
+<span class="cstat-no" title="statement not covered" >                            item =&gt; `</span>
 <span class="cstat-no" title="statement not covered" >                            &lt;div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                &lt;div&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                    &lt;div class="font-semibold"&gt;${escapeHtml(</span>
@@ -9323,8 +9372,8 @@
 <span class="cstat-no" title="statement not covered" >                                      2</span>
 <span class="cstat-no" title="statement not covered" >                                    )}&lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                    &lt;button onclick="app.deleteBudgetItem('${budgetId}', '${</span>
-<span class="cstat-no" title="statement not covered" >                              item.id</span>
-<span class="cstat-no" title="statement not covered" >                            }')"</span>
+<span class="cstat-no" title="statement not covered" >                                      item.id</span>
+<span class="cstat-no" title="statement not covered" >                                    }')"</span>
 <span class="cstat-no" title="statement not covered" >                                            class="text-xs text-xp-danger hover:underline"&gt;${t("ui.common.delete")}&lt;/button&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >                            &lt;/div&gt;</span>
@@ -9344,7 +9393,7 @@
 <span class="cstat-no" title="statement not covered" >                    &lt;div class="space-y-2 max-h-64 overflow-y-auto"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        ${budget.transactions</span>
 <span class="cstat-no" title="statement not covered" >                          .map(</span>
-<span class="cstat-no" title="statement not covered" >                            (t) =&gt; `</span>
+<span class="cstat-no" title="statement not covered" >                            t =&gt; `</span>
 <span class="cstat-no" title="statement not covered" >                            &lt;div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                &lt;div&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                    &lt;div class="font-semibold"&gt;${escapeHtml(</span>
@@ -9360,8 +9409,8 @@
 <span class="cstat-no" title="statement not covered" >                                    : "text-xp-primary"</span>
 <span class="cstat-no" title="statement not covered" >                                }"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                    ${t.amount &lt; 0 ? "-" : "+"}$${Math.abs(</span>
-<span class="cstat-no" title="statement not covered" >                              t.amount</span>
-<span class="cstat-no" title="statement not covered" >                            ).toFixed(2)}</span>
+<span class="cstat-no" title="statement not covered" >                                      t.amount</span>
+<span class="cstat-no" title="statement not covered" >                                    ).toFixed(2)}</span>
 <span class="cstat-no" title="statement not covered" >                                &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >                            &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        `</span>
@@ -9385,7 +9434,7 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  showAddBudgetItemModal(budgetId) {</span>
-<span class="cstat-no" title="statement not covered" >    const t = (key) =&gt; getI18n(key)</span>
+<span class="cstat-no" title="statement not covered" >    const t = key =&gt; getI18n(key)</span>
 <span class="cstat-no" title="statement not covered" >    const modalContent = `</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div class="p-6"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;h3 class="text-2xl font-bold mb-4"&gt;${t("app.screens.budgets.modal.addItem.title")}&lt;/h3&gt;</span>
@@ -9435,7 +9484,7 @@
 <span class="cstat-no" title="statement not covered" >  addBudgetItem(event, budgetId) {</span>
 <span class="cstat-no" title="statement not covered" >    event.preventDefault()</span>
 <span class="cstat-no" title="statement not covered" >    const formData = new FormData(event.target)</span>
-<span class="cstat-no" title="statement not covered" >    const budget = app.budgets.find((b) =&gt; b.id === budgetId)</span>
+<span class="cstat-no" title="statement not covered" >    const budget = app.budgets.find(b =&gt; b.id === budgetId)</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    if (budget) {</span>
 <span class="cstat-no" title="statement not covered" >      const item = {</span>
@@ -9464,7 +9513,7 @@
 <span class="cstat-no" title="statement not covered" >        "Are you sure you want to delete this budget? This action cannot be undone."</span>
 <span class="cstat-no" title="statement not covered" >      )</span>
 <span class="cstat-no" title="statement not covered" >    ) {</span>
-<span class="cstat-no" title="statement not covered" >      const index = app.budgets.findIndex((b) =&gt; b.id === budgetId)</span>
+<span class="cstat-no" title="statement not covered" >      const index = app.budgets.findIndex(b =&gt; b.id === budgetId)</span>
 <span class="cstat-no" title="statement not covered" >      if (index !== -1) {</span>
 <span class="cstat-no" title="statement not covered" >        app.budgets.splice(index, 1)</span>
 <span class="cstat-no" title="statement not covered" >        store.save(app.budgets, "budgets")</span>
@@ -9481,18 +9530,21 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  deleteBudgetItem(budgetId, itemId) {</span>
-<span class="cstat-no" title="statement not covered" >    const budget = app.budgets.find((b) =&gt; b.id === budgetId)</span>
+<span class="cstat-no" title="statement not covered" >    const budget = app.budgets.find(b =&gt; b.id === budgetId)</span>
 <span class="cstat-no" title="statement not covered" >    if (budget) {</span>
-<span class="cstat-no" title="statement not covered" >      const index = budget.items.findIndex((i) =&gt; i.id === itemId)</span>
+<span class="cstat-no" title="statement not covered" >      const index = budget.items.findIndex(i =&gt; i.id === itemId)</span>
 <span class="cstat-no" title="statement not covered" >      if (index !== -1) {</span>
 <span class="cstat-no" title="statement not covered" >        const deleted = budget.items.splice(index, 1)[0]</span>
 <span class="cstat-no" title="statement not covered" >        store.save(app.budgets, "budgets")</span>
-<span class="cstat-no" title="statement not covered" >        this.showUndoToast(`${getI18n("ui.common.deleted")} ${deleted.title}`, () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          budget.items.splice(index, 0, deleted)</span>
-<span class="cstat-no" title="statement not covered" >          store.save(app.budgets, "budgets")</span>
-<span class="cstat-no" title="statement not covered" >          this.showBudgetDetails(budgetId)</span>
-<span class="cstat-no" title="statement not covered" >          budgets()</span>
-<span class="cstat-no" title="statement not covered" >        })</span>
+<span class="cstat-no" title="statement not covered" >        this.showUndoToast(</span>
+<span class="cstat-no" title="statement not covered" >          `${getI18n("ui.common.deleted")} ${deleted.title}`,</span>
+<span class="cstat-no" title="statement not covered" >          () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            budget.items.splice(index, 0, deleted)</span>
+<span class="cstat-no" title="statement not covered" >            store.save(app.budgets, "budgets")</span>
+<span class="cstat-no" title="statement not covered" >            this.showBudgetDetails(budgetId)</span>
+<span class="cstat-no" title="statement not covered" >            budgets()</span>
+<span class="cstat-no" title="statement not covered" >          }</span>
+<span class="cstat-no" title="statement not covered" >        )</span>
 <span class="cstat-no" title="statement not covered" >        this.showBudgetDetails(budgetId)</span>
 <span class="cstat-no" title="statement not covered" >        budgets()</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
@@ -9516,15 +9568,15 @@
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    // Filtrar notas que coincidan con el título, contenido o etiquetas</span>
 <span class="cstat-no" title="statement not covered" >    const filtered = app.notes.filter(</span>
-<span class="cstat-no" title="statement not covered" >      (note) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      note =&gt;</span>
 <span class="cstat-no" title="statement not covered" >        note.title.toLowerCase().includes(query.toLowerCase()) ||</span>
 <span class="cstat-no" title="statement not covered" >        note.bodyMarkdown.toLowerCase().includes(query.toLowerCase()) ||</span>
-<span class="cstat-no" title="statement not covered" >        note.tags.some((tag) =&gt; tag.toLowerCase().includes(query.toLowerCase()))</span>
+<span class="cstat-no" title="statement not covered" >        note.tags.some(tag =&gt; tag.toLowerCase().includes(query.toLowerCase()))</span>
 <span class="cstat-no" title="statement not covered" >    )</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const notesHtml = filtered</span>
 <span class="cstat-no" title="statement not covered" >      .map(</span>
-<span class="cstat-no" title="statement not covered" >        (note) =&gt; `</span>
+<span class="cstat-no" title="statement not covered" >        note =&gt; `</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div class="bg-white dark:bg-xp-card rounded-xl p-5 border-2 border-gray-200 dark:border-xp-primary/20 hover:border-xp-primary/40 transition-colors cursor-pointer"</span>
 <span class="cstat-no" title="statement not covered" >                 onclick="app.showNoteModal('${note.id}')"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;h4 class="font-bold text-lg mb-2"&gt;${escapeHtml(</span>
@@ -9532,14 +9584,14 @@
 <span class="cstat-no" title="statement not covered" >                )}&lt;/h4&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;div class="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    ${escapeHtml(note.bodyMarkdown.substring(0, 100))}${</span>
-<span class="cstat-no" title="statement not covered" >          note.bodyMarkdown.length &gt; 100 ? "..." : ""</span>
-<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >                      note.bodyMarkdown.length &gt; 100 ? "..." : ""</span>
+<span class="cstat-no" title="statement not covered" >                    }</span>
 <span class="cstat-no" title="statement not covered" >                &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;div class="flex items-center justify-between"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    &lt;div class="flex gap-1 flex-wrap"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        ${note.tags</span>
 <span class="cstat-no" title="statement not covered" >                          .map(</span>
-<span class="cstat-no" title="statement not covered" >                            (tag) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >                            tag =&gt;</span>
 <span class="cstat-no" title="statement not covered" >                              `&lt;span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-500 rounded"&gt;${tag}&lt;/span&gt;`</span>
 <span class="cstat-no" title="statement not covered" >                          )</span>
 <span class="cstat-no" title="statement not covered" >                          .join("")}</span>
@@ -9562,7 +9614,7 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  showCreateNoteModal() {</span>
-<span class="cstat-no" title="statement not covered" >    const t = (key) =&gt; getI18n(key)</span>
+<span class="cstat-no" title="statement not covered" >    const t = key =&gt; getI18n(key)</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const modalContent = `</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div class="p-6"&gt;</span>
@@ -9629,8 +9681,8 @@
 <span class="cstat-no" title="statement not covered" >        ? formData</span>
 <span class="cstat-no" title="statement not covered" >            .get("tags")</span>
 <span class="cstat-no" title="statement not covered" >            .split(",")</span>
-<span class="cstat-no" title="statement not covered" >            .map((t) =&gt; t.trim())</span>
-<span class="cstat-no" title="statement not covered" >            .filter((t) =&gt; t)</span>
+<span class="cstat-no" title="statement not covered" >            .map(t =&gt; t.trim())</span>
+<span class="cstat-no" title="statement not covered" >            .filter(t =&gt; t)</span>
 <span class="cstat-no" title="statement not covered" >        : [],</span>
 <span class="cstat-no" title="statement not covered" >      updatedAt: Date.now()</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -9647,10 +9699,10 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  showNoteModal(noteId) {</span>
-<span class="cstat-no" title="statement not covered" >    const note = app.notes.find((n) =&gt; n.id === noteId)</span>
+<span class="cstat-no" title="statement not covered" >    const note = app.notes.find(n =&gt; n.id === noteId)</span>
 <span class="cstat-no" title="statement not covered" >    if (!note) return</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >    const t = (key) =&gt; getI18n(key)</span>
+<span class="cstat-no" title="statement not covered" >    const t = key =&gt; getI18n(key)</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const modalContent = `</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div class="p-6"&gt;</span>
@@ -9741,7 +9793,7 @@
 <span class="cstat-no" title="statement not covered" >  updateNote(event, noteId) {</span>
 <span class="cstat-no" title="statement not covered" >    event.preventDefault()</span>
 <span class="cstat-no" title="statement not covered" >    const formData = new FormData(event.target)</span>
-<span class="cstat-no" title="statement not covered" >    const note = app.notes.find((n) =&gt; n.id === noteId)</span>
+<span class="cstat-no" title="statement not covered" >    const note = app.notes.find(n =&gt; n.id === noteId)</span>
 <span class="cstat-no" title="statement not covered" >    if (note) {</span>
 <span class="cstat-no" title="statement not covered" >      note.title = formData.get("title")</span>
 <span class="cstat-no" title="statement not covered" >      note.bodyMarkdown = formData.get("body") || ""</span>
@@ -9749,8 +9801,8 @@
 <span class="cstat-no" title="statement not covered" >        ? formData</span>
 <span class="cstat-no" title="statement not covered" >            .get("tags")</span>
 <span class="cstat-no" title="statement not covered" >            .split(",")</span>
-<span class="cstat-no" title="statement not covered" >            .map((t) =&gt; t.trim())</span>
-<span class="cstat-no" title="statement not covered" >            .filter((t) =&gt; t)</span>
+<span class="cstat-no" title="statement not covered" >            .map(t =&gt; t.trim())</span>
+<span class="cstat-no" title="statement not covered" >            .filter(t =&gt; t)</span>
 <span class="cstat-no" title="statement not covered" >        : []</span>
 <span class="cstat-no" title="statement not covered" >      note.updatedAt = Date.now()</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -9766,17 +9818,20 @@
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  deleteNote(noteId) {</span>
-<span class="cstat-no" title="statement not covered" >    const index = app.notes.findIndex((n) =&gt; n.id === noteId)</span>
+<span class="cstat-no" title="statement not covered" >    const index = app.notes.findIndex(n =&gt; n.id === noteId)</span>
 <span class="cstat-no" title="statement not covered" >    if (index !== -1) {</span>
 <span class="cstat-no" title="statement not covered" >      const deleted = app.notes.splice(index, 1)[0]</span>
 <span class="cstat-no" title="statement not covered" >      store.save(app.notes, "notes")</span>
 <span class="cstat-no" title="statement not covered" >      this.closeModal()</span>
 <span class="cstat-no" title="statement not covered" >      notes()</span>
-<span class="cstat-no" title="statement not covered" >      this.showUndoToast(`${getI18n("ui.common.deleted")} "${deleted.title}"`, () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        app.notes.splice(index, 0, deleted)</span>
-<span class="cstat-no" title="statement not covered" >        store.save(app.notes, "notes")</span>
-<span class="cstat-no" title="statement not covered" >        notes()</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
+<span class="cstat-no" title="statement not covered" >      this.showUndoToast(</span>
+<span class="cstat-no" title="statement not covered" >        `${getI18n("ui.common.deleted")} "${deleted.title}"`,</span>
+<span class="cstat-no" title="statement not covered" >        () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          app.notes.splice(index, 0, deleted)</span>
+<span class="cstat-no" title="statement not covered" >          store.save(app.notes, "notes")</span>
+<span class="cstat-no" title="statement not covered" >          notes()</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >      )</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  },</span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
@@ -9836,7 +9891,7 @@
 <span class="cstat-no" title="statement not covered" >    // Párrafos</span>
 <span class="cstat-no" title="statement not covered" >    html = html</span>
 <span class="cstat-no" title="statement not covered" >      .split("\n\n")</span>
-<span class="cstat-no" title="statement not covered" >      .map((para) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      .map(para =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (</span>
 <span class="cstat-no" title="statement not covered" >          para.startsWith("&lt;h") ||</span>
 <span class="cstat-no" title="statement not covered" >          para.startsWith("&lt;ul") ||</span>
@@ -9861,7 +9916,7 @@
 <span class="cstat-no" title="statement not covered" >    )</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    // Espacios múltiples</span>
-<span class="cstat-no" title="statement not covered" >    html = html.replace(/ {2,}/g, (match) =&gt; "&amp;nbsp;".repeat(match.length))</span>
+<span class="cstat-no" title="statement not covered" >    html = html.replace(/ {2,}/g, match =&gt; "&amp;nbsp;".repeat(match.length))</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    // Salto de lineas</span>
 <span class="cstat-no" title="statement not covered" >    html = html.replace(/\n/g, "&lt;br&gt;")</span>
@@ -9899,8 +9954,8 @@
 <span class="cstat-no" title="statement not covered" >      type === "success"</span>
 <span class="cstat-no" title="statement not covered" >        ? "bg-xp-primary text-xp-darker"</span>
 <span class="cstat-no" title="statement not covered" >        : type === "error"</span>
-<span class="cstat-no" title="statement not covered" >        ? "bg-xp-danger"</span>
-<span class="cstat-no" title="statement not covered" >        : "bg-xp-secondary"</span>
+<span class="cstat-no" title="statement not covered" >          ? "bg-xp-danger"</span>
+<span class="cstat-no" title="statement not covered" >          : "bg-xp-secondary"</span>
 <span class="cstat-no" title="statement not covered" >    }`</span>
 <span class="cstat-no" title="statement not covered" >    toast.textContent = message</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -10009,7 +10064,7 @@
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const reader = new FileReader()</span>
-<span class="cstat-no" title="statement not covered" >    reader.onload = (e) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    reader.onload = e =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
 <span class="cstat-no" title="statement not covered" >        const imported = JSON.parse(e.target.result)</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -10166,14 +10221,22 @@
 <span class="cstat-no" title="statement not covered" >   * @param {string} lang - Código del idioma a establecer (e.g., "es", "en")</span>
 <span class="cstat-no" title="statement not covered" >   * @returns {void}</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
+<span class="cstat-no" title="statement not covered" >  async invalidateLocaleCache(lang) {</span>
+<span class="cstat-no" title="statement not covered" >    if ("caches" in window) {</span>
+<span class="cstat-no" title="statement not covered" >      const cache = await caches.open("pwa-cache-v3")</span>
+<span class="cstat-no" title="statement not covered" >      await cache.delete(`/assets/locales/${lang}.json`)</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >  },</span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  setLanguage(lang) {</span>
 <span class="cstat-no" title="statement not covered" >    if (["es", "en"].includes(lang)) {</span>
 <span class="cstat-no" title="statement not covered" >      this.currentLanguage = lang</span>
 <span class="cstat-no" title="statement not covered" >      localStorage.setItem("userLanguage", lang)</span>
-<span class="cstat-no" title="statement not covered" >      this.loadMessages(lang).then(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        this.applyTranslations()</span>
-<span class="cstat-no" title="statement not covered" >        // Opcional: Volver a renderizar la pantalla actual si es necesario</span>
-<span class="cstat-no" title="statement not covered" >        app.init()</span>
+<span class="cstat-no" title="statement not covered" >      this.invalidateLocaleCache(lang).then(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        this.loadMessages(lang).then(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          this.applyTranslations()</span>
+<span class="cstat-no" title="statement not covered" >          app.init()</span>
+<span class="cstat-no" title="statement not covered" >        })</span>
 <span class="cstat-no" title="statement not covered" >      })</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  },</span>
@@ -10193,7 +10256,7 @@
 <span class="cstat-no" title="statement not covered" >      return key // Devolver la clave si no se encuentra la traducción</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >    if (params &amp;&amp; typeof params === "object") {</span>
-<span class="cstat-no" title="statement not covered" >      Object.keys(params).forEach((param) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      Object.keys(params).forEach(param =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        message = message.replace(new RegExp(`{${param}}`, "g"), params[param])</span>
 <span class="cstat-no" title="statement not covered" >      })</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -10207,7 +10270,7 @@
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  applyTranslations() {</span>
 <span class="cstat-no" title="statement not covered" >    // Aplica traducciones a elementos con data-i18n</span>
-<span class="cstat-no" title="statement not covered" >    document.querySelectorAll("[data-i18n]").forEach((element) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    document.querySelectorAll("[data-i18n]").forEach(element =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const key = element.getAttribute("data-i18n")</span>
 <span class="cstat-no" title="statement not covered" >      const translation = this.t(key)</span>
 <span class="cstat-no" title="statement not covered" >      // Soporta data-i18n-attr para traducir atributos como placeholder</span>
@@ -10219,13 +10282,13 @@
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
 <span class="cstat-no" title="statement not covered" >    // Aplica las traducciones placeholder con data-i18n-placeholder</span>
-<span class="cstat-no" title="statement not covered" >    document.querySelectorAll("[data-i18n-placeholder]").forEach((element) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    document.querySelectorAll("[data-i18n-placeholder]").forEach(element =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const key = element.getAttribute("data-i18n-placeholder")</span>
 <span class="cstat-no" title="statement not covered" >      const translation = this.t(key)</span>
 <span class="cstat-no" title="statement not covered" >      element.setAttribute("placeholder", translation)</span>
 <span class="cstat-no" title="statement not covered" >    })</span>
 <span class="cstat-no" title="statement not covered" >    // Aplica las traducciones aria-label con data-i18n-aria-label</span>
-<span class="cstat-no" title="statement not covered" >    document.querySelectorAll("[data-i18n-aria-label]").forEach((element) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    document.querySelectorAll("[data-i18n-aria-label]").forEach(element =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const key = element.getAttribute("data-i18n-aria-label")</span>
 <span class="cstat-no" title="statement not covered" >      const translation = this.t(key)</span>
 <span class="cstat-no" title="statement not covered" >      element.setAttribute("aria-label", translation)</span>
@@ -10246,7 +10309,7 @@
 <span class="cstat-no" title="statement not covered" >    const clone = template.content.cloneNode(true)</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    // Buscar todos los elementos con data-i18n dentro del clon</span>
-<span class="cstat-no" title="statement not covered" >    clone.querySelectorAll("[data-i18n]").forEach((el) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    clone.querySelectorAll("[data-i18n]").forEach(el =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      const key = el.getAttribute("data-i18n")</span>
 <span class="cstat-no" title="statement not covered" >      const translation = I18n.t(key)</span>
 <span class="cstat-no" title="statement not covered" >      el.textContent = translation</span>
@@ -10300,7 +10363,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-09T01:54:00.536Z
+                at 2026-05-06T23:20:42.650Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.92% </span>
+                <span class="strong">82.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>68/83</span>
+                <span class='fraction'>69/84</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.92% </span>
+                <span class="strong">82.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>68/83</span>
+                <span class='fraction'>69/84</span>
             </div>
         
             
@@ -146,7 +146,8 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -204,6 +205,7 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -230,36 +232,36 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Date utility functions
+ * Funciones de utilidad de fecha
  */
 &nbsp;
 /**
- * Formats a date to YYYY-MM-DD string
- * @param {Date|string} date - Date to format
+ * Formatea una fecha a una cadena YYYY-MM-DD
+ * @param {Date|string} date - Fecha a formatear
  * @returns {string} Formatted date string
  */
 export function formatDate(date) {
-  if (typeof date === 'string') <span class="branch-0 cbranch-no" title="branch not covered" >return date</span>
+  if (typeof date === "string") <span class="branch-0 cbranch-no" title="branch not covered" >return date</span>
   const d = new Date(date)
-  // Use UTC methods to avoid timezone issues
+  // Usar métodos UTC para evitar problemas de zona horaria
   const year = d.getUTCFullYear()
-  const month = String(d.getUTCMonth() + 1).padStart(2, '0')
-  const day = String(d.getUTCDate()).padStart(2, '0')
+  const month = String(d.getUTCMonth() + 1).padStart(2, "0")
+  const day = String(d.getUTCDate()).padStart(2, "0")
   return `${year}-${month}-${day}`
 }
 &nbsp;
 /**
- * Gets today's date as formatted string
- * @returns {string} Today's date in YYYY-MM-DD format
+ * Obtiene la fecha de hoy como cadena formateada
+ * @returns {string} Fecha de hoy en formato YYYY-MM-DD
  */
 export function getTodayString() {
   return formatDate(new Date())
 }
 &nbsp;
 /**
- * Gets the last N days as formatted strings
- * @param {number} days - Number of days
- * @returns {string[]} Array of date strings
+ * Obtiene los últimos N días como cadenas formateadas
+ * @param {number} days - Número de días
+ * @returns {string[]} Array de cadenas de fecha
  */
 export function getLastNDays(days) {
   const result = []
@@ -275,9 +277,9 @@ export function getLastNDays(days) {
 }
 &nbsp;
 /**
- * Gets relative time string from timestamp
- * @param {number} timestamp - Timestamp in milliseconds
- * @returns {string} Relative time string
+ * Obtiene la cadena de tiempo relativo desde el timestamp
+ * @param {number} timestamp - Timestamp en milisegundos
+ * @returns {string} Cadena de tiempo relativo
  */
 export function getRelativeTime(timestamp, i18n) {
   const now = Date.now()
@@ -286,18 +288,19 @@ export function getRelativeTime(timestamp, i18n) {
   const hours = Math.floor(diff / 3600000)
   const days = Math.floor(diff / 86400000)
 &nbsp;
-  if (minutes &lt; 1) return i18n?.getMessage('label.justNow') <span class="branch-0 cbranch-no" title="branch not covered" >|| 'Just now'</span>
-  if (minutes &lt; 60) return `${minutes}m ${i18n?.getMessage('label.ago') <span class="branch-0 cbranch-no" title="branch not covered" >|| 'ago'}</span>`
-  if (hours &lt; 24) return `${hours}h ${i18n?.getMessage('label.ago') <span class="branch-0 cbranch-no" title="branch not covered" >|| 'ago'}<span class="branch-0 cbranch-no" title="branch not covered" ></span>`</span>
-<span class="cstat-no" title="statement not covered" >  if (days &lt; 7) return `${days}d ${i18n?.getMessage('label.ago') || 'ago'}`</span>
+  if (minutes &lt; 1) return i18n?.getMessage("label.justNow") <span class="branch-0 cbranch-no" title="branch not covered" >|| "Just now"</span>
+  if (minutes &lt; 60)
+    return `${minutes}m ${i18n?.getMessage("label.ago") <span class="branch-0 cbranch-no" title="branch not covered" >|| "ago"}</span>`
+  if (hours &lt; 24) return `${hours}h ${i18n?.getMessage("label.ago") <span class="branch-0 cbranch-no" title="branch not covered" >|| "ago"}<span class="branch-0 cbranch-no" title="branch not covered" ></span>`</span>
+<span class="cstat-no" title="statement not covered" >  if (days &lt; 7) return `${days}d ${i18n?.getMessage("label.ago") || "ago"}`</span>
 <span class="cstat-no" title="statement not covered" >  return new Date(timestamp).toLocaleDateString()</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 /**
- * Generates past records with success rate
- * @param {number} days - Number of days
- * @param {number} successRate - Success rate (0-1)
- * @returns {Object} Records object with date keys
+ * Genera registros pasados con tasa de éxito
+ * @param {number} days - Número de días
+ * @param {number} successRate - Tasa de éxito (0-1)
+ * @returns {Object} Objeto de registros con claves de fecha
  */
 export <span class="fstat-no" title="function not covered" >function generatePastRecords(days, successRate) {</span>
 <span class="cstat-no" title="statement not covered" >  const records = {}</span>
@@ -319,7 +322,7 @@ export <span class="fstat-no" title="function not covered" >function generatePas
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-09T01:54:00.536Z
+                at 2026-05-06T23:20:42.650Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

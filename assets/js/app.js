@@ -135,6 +135,27 @@ function getLast7Days() {
 }
 
 /**
+ * Obtiene las fechas de la semana calendario de referencia.
+ * La semana inicia en lunes por defecto.
+ * @param {Date} referenceDate - Fecha dentro de la semana
+ * @param {number} firstDayOfWeek - Día inicial: 0 domingo, 1 lunes
+ * @returns {string[]} - Array con fechas AAAA-MM-DD
+ */
+function getCurrentWeekDates(referenceDate = new Date(), firstDayOfWeek = 1) {
+  const reference = new Date(referenceDate)
+  const dayOffset = (reference.getDay() - firstDayOfWeek + 7) % 7
+  const startDate = new Date(reference)
+  startDate.setHours(0, 0, 0, 0)
+  startDate.setDate(reference.getDate() - dayOffset)
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(startDate)
+    date.setDate(startDate.getDate() + index)
+    return formatDate(date)
+  })
+}
+
+/**
  * Formatea una fecha en formato AAAA-MM-DD
  * @param {Date|string} date - Fecha a formatear
  * @returns {string} - Fecha formateada
@@ -146,6 +167,16 @@ function formatDate(date) {
   const month = String(d.getMonth() + 1).padStart(2, "0")
   const day = String(d.getDate()).padStart(2, "0")
   return `${year}-${month}-${day}`
+}
+
+/**
+ * Parsea una cadena AAAA-MM-DD como fecha local.
+ * @param {string} dateString - Fecha a parsear
+ * @returns {Date} - Fecha local
+ */
+function parseDateStringLocal(dateString) {
+  const [year, month, day] = dateString.split("-").map(Number)
+  return new Date(year, month - 1, day)
 }
 
 /**
@@ -780,7 +811,7 @@ function habits() {
   const habitsHtml = app.habits
     .map(habit => {
       const isDoneToday = habit.dailyRecords[todayStr]
-      const last7Days = getLast7Days()
+      const currentWeekDates = getCurrentWeekDates(new Date())
 
       return `
                 <div class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20">
@@ -837,7 +868,7 @@ function habits() {
                     </div>
 
                     <div class="flex gap-2">
-                        ${last7Days
+                        ${currentWeekDates
                           .map(date => {
                             const done = habit.dailyRecords[date]
                             const isToday = date === todayStr
@@ -860,9 +891,9 @@ function habits() {
                           .join("")}
                     </div>
                     <div class="flex justify-between mt-2 text-xs text-gray-600 dark:text-gray-400">
-                        ${last7Days
+                        ${currentWeekDates
                           .map(date => {
-                            const d = new Date(date)
+                            const d = parseDateStringLocal(date)
                             return `<div class="flex-1 text-center">${d
                               .toLocaleDateString("en-US", { weekday: "short" })
                               .substr(0, 1)}</div>`
@@ -3033,6 +3064,11 @@ const app = {
     toast.textContent = message
 
     const container = document.getElementById("toast-container")
+    if (!container) {
+      console.warn("Toast container not found")
+      return
+    }
+
     container.appendChild(toast)
 
     setTimeout(() => {
@@ -3049,6 +3085,10 @@ const app = {
   showUndoToast: function (message, undoCallback) {
     const undoToast = document.getElementById("undo-toast")
     const undoMessage = document.getElementById("undo-message")
+    if (!undoToast || !undoMessage) {
+      console.warn("Undo toast elements not found")
+      return
+    }
 
     undoMessage.textContent = message
     undoToast.classList.remove("hidden")
@@ -3069,7 +3109,7 @@ const app = {
       this.undoCallback()
       this.undoCallback = null
     }
-    document.getElementById("undo-toast").classList.add("hidden")
+    document.getElementById("undo-toast")?.classList.add("hidden")
   },
   /**
    * Exporta los datos actuales a un archivo JSON descargable

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.48% </span>
+                <span class="strong">82.88% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>179/217</span>
+                <span class='fraction'>184/222</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.48% </span>
+                <span class="strong">82.88% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>179/217</span>
+                <span class='fraction'>184/222</span>
             </div>
         
             
@@ -280,7 +280,15 @@
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
 <a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -471,7 +479,9 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -498,22 +508,25 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Storage Service - Handles localStorage operations with data migration support
+ * Storage Service - Maneja las operaciones de localStorage con soporte de migración de datos
  */
 &nbsp;
-import { generateId } from '../utils/id.js'
-import { formatDate } from '../utils/date.js'
-&nbsp;
 export class StorageService {
-  static STORAGE_KEY = 'dos-app-data-v2'
-  static LEGACY_KEYS = ['tasks', 'habits', 'budgets', 'notes', 'dos-app-data-v1']
+  static STORAGE_KEY = "dos-app-data-v2"
+  static LEGACY_KEYS = [
+    "tasks",
+    "habits",
+    "budgets",
+    "notes",
+    "dos-app-data-v1"
+  ]
 &nbsp;
   constructor() {
     this.cache = null
   }
 &nbsp;
   /**
-   * Initialize storage and migrate legacy data if needed
+   * Inicializa el almacenamiento y migra datos heredados si es necesario
    */
   init() {
     const data = this._loadRaw()
@@ -522,22 +535,22 @@ export class StorageService {
       return
     }
 &nbsp;
-    // Try to migrate from legacy format
+    // Intenta migrar desde el formato heredado
     const migrated = this._migrateLegacyData()
     if (migrated) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >      this.cache = migrated</span>
 <span class="cstat-no" title="statement not covered" >      this.save(migrated)</span>
-<span class="cstat-no" title="statement not covered" >      console.log('Data migrated from legacy format')</span>
+<span class="cstat-no" title="statement not covered" >      console.log("Data migrated from legacy format")</span>
     } else {
-      // Initialize with empty data
+      // Inicializa con datos vacíos
       this.cache = this._getEmptyData()
       this.save(this.cache)
     }
   }
 &nbsp;
   /**
-   * Get all data
-   * @returns {Object} Complete app data
+   * Obtiene todos los datos
+   * @returns {Object} Datos completos de la aplicación
    */
   getAll() {
     if (!this.cache) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
@@ -547,9 +560,9 @@ export class StorageService {
   }
 &nbsp;
   /**
-   * Get specific namespace data
-   * @param {string} namespace - Data namespace (tasks, habits, budgets, notes)
-   * @returns {Array} Data array
+   * Obtiene datos específicos del namespace
+   * @param {string} namespace - Namespace de datos (tasks, habits, budgets, notes)
+   * @returns {Array} Array de datos
    */
   get(namespace) {
     if (!this.cache) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
@@ -559,9 +572,9 @@ export class StorageService {
   }
 &nbsp;
   /**
-   * Save data to a namespace
-   * @param {string} namespace - Data namespace
-   * @param {Array} data - Data to save
+   * Guarda datos en un namespace
+   * @param {string} namespace - Namespace de datos
+   * @param {Array} data - Datos a guardar
    */
   set(namespace, data) {
     if (!this.cache) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
@@ -572,30 +585,30 @@ export class StorageService {
   }
 &nbsp;
   /**
-   * Save complete data object
-   * @param {Object} data - Complete data object
+   * Guarda el objeto de datos completo
+   * @param {Object} data - Objeto de datos completo
    */
   save(data) {
     try {
       localStorage.setItem(StorageService.STORAGE_KEY, JSON.stringify(data))
       this.cache = data
     } <span class="branch-0 cbranch-no" title="branch not covered" >catch (e) {</span>
-<span class="cstat-no" title="statement not covered" >      console.error('Error saving to localStorage:', e)</span>
+<span class="cstat-no" title="statement not covered" >      console.error("Error saving to localStorage:", e)</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
   }
 &nbsp;
   /**
-   * Export data as JSON string
-   * @returns {string} JSON data
+   * Exporta los datos como una cadena JSON
+   * @returns {string} Datos JSON
    */
   exportData() {
     return JSON.stringify(this.getAll(), null, 2)
   }
 &nbsp;
   /**
-   * Import data from JSON string
-   * @param {string} json - JSON data
-   * @returns {boolean} Success status
+   * Importa datos desde una cadena JSON
+   * @param {string} json - Datos JSON
+   * @returns {boolean} Estado de éxito
    */
   importData(json) {
     try {
@@ -606,13 +619,13 @@ export class StorageService {
       }
       return false
     } <span class="branch-0 cbranch-no" title="branch not covered" >catch (e) {</span>
-<span class="cstat-no" title="statement not covered" >      console.error('Error importing data:', e)</span>
+<span class="cstat-no" title="statement not covered" >      console.error("Error importing data:", e)</span>
 <span class="cstat-no" title="statement not covered" >      return false</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
   }
 &nbsp;
   /**
-   * Clear all data
+   * Limpia todos los datos
    */
 <span class="fstat-no" title="function not covered" >  clear() {</span>
 <span class="cstat-no" title="statement not covered" >    this.cache = this._getEmptyData()</span>
@@ -620,15 +633,15 @@ export class StorageService {
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   /**
-   * Reset to demo data
-   * @param {Object} demoData - Demo data object
+   * Restablece a los datos de demostración
+   * @param {Object} demoData - Objeto de datos de demostración
    */
 <span class="fstat-no" title="function not covered" >  resetToDemo(demoData) {</span>
 <span class="cstat-no" title="statement not covered" >    this.save(demoData)</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   /**
-   * Load raw data from storage
+   * Carga los datos crudos del almacenamiento
    * @private
    */
   _loadRaw() {
@@ -636,21 +649,21 @@ export class StorageService {
       const data = localStorage.getItem(StorageService.STORAGE_KEY)
       return data ? JSON.parse(data) : null
     } <span class="branch-0 cbranch-no" title="branch not covered" >catch (e) {</span>
-<span class="cstat-no" title="statement not covered" >      console.error('Error loading from localStorage:', e)</span>
+<span class="cstat-no" title="statement not covered" >      console.error("Error loading from localStorage:", e)</span>
 <span class="cstat-no" title="statement not covered" >      return null</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
   }
 &nbsp;
   /**
-   * Migrate from legacy separate keys
+   * Migra desde claves separadas heredadas
    * @private
    */
   _migrateLegacyData() {
     const legacyData = {}
     let hasLegacy = false
 &nbsp;
-    // Try v1 format first
-    const v1Data = localStorage.getItem('dos-app-data-v1')
+    // Intenta con el formato v1 primero
+    const v1Data = localStorage.getItem("dos-app-data-v1")
     if (v1Data) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >      try {</span>
 <span class="cstat-no" title="statement not covered" >        const parsed = JSON.parse(v1Data)</span>
@@ -658,12 +671,12 @@ export class StorageService {
 <span class="cstat-no" title="statement not covered" >          return parsed</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" >      } catch (e) {</span>
-<span class="cstat-no" title="statement not covered" >        console.warn('Failed to parse v1 data')</span>
+<span class="cstat-no" title="statement not covered" >        console.warn("Failed to parse v1 data")</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
-    // Try separate keys
-    const keys = ['tasks', 'habits', 'budgets', 'notes']
+    // Intenta con claves separadas
+    const keys = ["tasks", "habits", "budgets", "notes"]
     keys.forEach(key =&gt; {
       const data = localStorage.getItem(key)
       if (data) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
@@ -680,19 +693,21 @@ export class StorageService {
   }
 &nbsp;
   /**
-   * Validate data structure
+   * Valida la estructura de datos
    * @private
    */
   _validateData(data) {
-    return data &amp;&amp;
+    return (
+      data &amp;&amp;
       Array.isArray(data.budgets) &amp;&amp;
       Array.isArray(data.tasks) &amp;&amp;
       Array.isArray(data.notes) &amp;&amp;
       Array.isArray(data.habits)
+    )
   }
 &nbsp;
   /**
-   * Get empty data structure
+   * Obtiene la estructura de datos vacía
    * @private
    */
   _getEmptyData() {
@@ -702,17 +717,17 @@ export class StorageService {
       notes: [],
       habits: [],
       settings: {
-        theme: 'dark',
-        currency: 'MXN',
+        theme: "dark",
+        currency: "MXN",
         firstDayOfWeek: 1,
         notificationsEnabled: false
       },
-      version: '2.0.0'
+      version: "2.0.0"
     }
   }
 }
 &nbsp;
-// Singleton instance
+// Instancia singleton
 export const storage = new StorageService()
 &nbsp;</pre></td></tr></table></pre>
 
@@ -721,7 +736,7 @@ export const storage = new StorageService()
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-09T01:54:00.536Z
+                at 2026-05-06T23:20:42.650Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
