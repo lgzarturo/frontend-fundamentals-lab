@@ -303,6 +303,79 @@ No requiere entorno de desarrollo ni servidor:
 
 3. ¡Listo! Todo funciona directamente en el navegador, incluso offline.
 
+### Makefile
+
+Para ejecutar los comandos del proyecto de forma consistente en Windows 11 con
+PowerShell y en sistemas POSIX, usa el `Makefile` de la raíz.
+
+```bash
+make help
+make install
+make open
+make dev
+make test
+make coverage
+```
+
+Comandos disponibles:
+
+| Comando | Equivalente |
+|---|---|
+| `make install` | `npm install` |
+| `make open` | Abre `index.html` directamente |
+| `make dev` | `npm run dev` |
+| `make test` | `npm run test:run` |
+| `make test-ui` | `npm run test:ui` |
+| `make coverage` | `npm run test:coverage` |
+| `make version-sync` | `npm run version:sync` |
+| `make version-patch` | `npm run version:patch` |
+| `make version-minor` | `npm run version:minor` |
+| `make version-major` | `npm run version:major` |
+| `make clean-coverage` | Elimina `coverage/` |
+
+El archivo detecta el sistema operativo con `$(OS)` en Windows y `uname` en
+POSIX para usar el shell y comandos de apertura/limpieza adecuados.
+
+---
+
+## 🏷️ Gestión de versiones
+
+La versión del proyecto vive en un único lugar: `package.json`. El script
+`scripts/version-sync.js` propaga ese valor automáticamente a todos los archivos
+que lo necesitan.
+
+**Archivos sincronizados automáticamente:**
+
+| Archivo | Campo |
+|---|---|
+| `assets/locales/es.json` | `app.screens.settings.about.version` |
+| `assets/locales/en.json` | `app.screens.settings.about.version` |
+| `index.html` | texto fallback del span `about.version` |
+| `CHANGELOG.md` | nueva sección con commits desde el tag anterior |
+
+**Comandos:**
+
+```bash
+# Subir versión patch (0.0.15 → 0.0.16)
+npm run version:patch
+
+# Subir versión minor (0.0.15 → 0.1.0)
+npm run version:minor
+
+# Subir versión major (0.0.15 → 1.0.0)
+npm run version:major
+
+# Solo sincronizar sin cambiar versión (idempotente)
+npm run version:sync
+```
+
+Cada comando sincroniza automáticamente los locales, el fallback en `index.html`
+y agrega una nueva entrada en `CHANGELOG.md` con los commits desde el tag
+anterior. Al terminar, npm crea un commit y un tag con la nueva versión.
+
+> **Regla:** nunca editar manualmente la versión en `index.html`, los archivos
+> de locale ni el `CHANGELOG.md`. Siempre usar `npm version`.
+
 ---
 
 ## 🔄 Persistencia y exportación
