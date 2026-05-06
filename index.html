@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es" id="html-root">
   <head>
     <meta charset="UTF-8" />
@@ -664,7 +664,7 @@
               <span data-i18n="app.screens.notes.title">Markdown Notes</span>
             </h2>
             <button
-              onclick="app.showCreateNoteModal();"
+              onclick="app.showCreateNoteModal()"
               class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
             >
               <span data-i18n="app.screens.notes.newButton">+ New Note</span>
@@ -703,7 +703,7 @@
               <span data-i18n="app.screens.habits.title">Habit Tracker</span>
             </h2>
             <button
-              onclick="app.showHabitTemplatesModal();"
+              onclick="app.showHabitTemplatesModal()"
               class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
             >
               <span data-i18n="app.screens.habits.newButton">+ Add Habit</span>
@@ -939,7 +939,51 @@
             </p>
             <div class="text-sm text-gray-500 dark:text-gray-500">
               <span data-i18n="app.screens.settings.about.version"
-                >Version 0.0.16 | Built with ❤️ and ☕ by</span>
+                >Version 0.0.16 | Built with ❤️ and ☕ by</span
+              >
+              <a
+                href="https://www.lgzarturo.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xp-primary hover:underline"
+                >Arturo López</a
+              >.
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End: Settings screen -->
+    </main>
+    <!-- End: main content -->
+
+    <!-- Begin: Modal Backdrop -->
+    <div
+      id="modal-backdrop"
+      class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      onclick="app.closeModal()"
+    >
+      <div
+        id="modal-content"
+        class="bg-white dark:bg-xp-card rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        onclick="event.stopPropagation()"
+      >
+        <!-- Modal content will be injected here -->
+      </div>
+    </div>
+    <!-- End: Modal Backdrop -->
+
+    <!-- Begin: Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2">
+      <!-- Toast messages will appear here -->
+    </div>
+    <!-- End: Toast Container -->
+
+    <!-- Begin: Undo Toast -->
+    <div
+      id="undo-toast"
+      class="hidden fixed bottom-24 md:bottom-8 left-1/2 transform -translate-x-1/2 bg-xp-card border-2 border-xp-primary px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-4"
+    >
+      <span id="undo-message"></span>
       <button
         onclick="app.performUndo()"
         class="bg-xp-primary text-xp-darker px-4 py-1 rounded font-semibold"
