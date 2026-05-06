@@ -1,6 +1,6 @@
 {
   "name": "frontend-fundamentals-lab",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Daily Operating System - Productivity App with modular architecture",
   "type": "module",
   "scripts": {

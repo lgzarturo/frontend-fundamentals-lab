@@ -2,6 +2,12 @@
 
 ## Historial de cambios
 
+### v0.0.16
+
+- chore: agregar Makefile y comandos de automatización de versión
+- chore: implementar sincronización de versión y plan de hábitos
+- docs(plans): actualizar auditoría de rendimiento Lighthouse
+
 ### v0.0.15
 
 - fix: cambiar estrategia de cache en service worker para archivos JSON de
