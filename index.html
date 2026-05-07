@@ -198,36 +198,24 @@
     <!-- Preconnect y Preload para performance de fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap&display=swap"
-      rel="stylesheet"
-    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <!-- TailwindCSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/assets/css/tailwind.min.css" />
 
     <!-- Estilos CSS -->
     <link rel="stylesheet" href="/assets/css/styles.css" />
 
-    <!-- Google Tag Manager -->
-    <script async>
-      ;(function (w, d, s, l, i) {
-        w[l] = w[l] || []
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" })
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : ""
-        j.async = true
-        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl
-        f.parentNode.insertBefore(j, f)
-      })(window, document, "script", "dataLayer", "GTM-N9PXJX8V")
-    </script>
-    <!-- End Google Tag Manager -->
   </head>
   <body
     class="bg-gray-50 dark:bg-xp-darker text-gray-900 dark:text-gray-100 transition-colors duration-300"
@@ -297,7 +285,7 @@
       class="hidden md:block fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-xp-card border-r-2 border-gray-200 dark:border-xp-primary/20 z-40"
     >
       <div class="p-6">
-        <h1 class="text-2xl font-bold text-xp-primary flex items-center gap-2">
+        <h1 class="text-2xl font-bold text-xp-primary-text flex items-center gap-2">
           <span>⚡</span> <span data-i18n="app.name">Productivity XP</span>
         </h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -364,15 +352,24 @@
       <div
         class="md:hidden bg-white dark:bg-xp-card border-b-2 border-gray-200 dark:border-xp-primary/20 px-4 py-3 flex items-center justify-between sticky top-0 z-30"
       >
-        <h1 class="text-xl font-bold text-xp-primary flex items-center gap-2">
+        <h1 class="text-xl font-bold text-xp-primary-text flex items-center gap-2">
           <span>⚡</span> <span data-i18n="app.name">Productivity XP</span>
         </h1>
-        <button
-          onclick="app.navigateTo('settings')"
-          class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-xp-darker"
-        >
-          <span class="text-xl">⚙️</span>
-        </button>
+        <div class="flex items-center gap-1">
+          <button
+            id="pwa-install-btn"
+            class="hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-xp-darker"
+            aria-label="Instalar aplicación"
+          >
+            <span class="text-xl">📲</span>
+          </button>
+          <button
+            onclick="app.navigateTo('settings')"
+            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-xp-darker"
+          >
+            <span class="text-xl">⚙️</span>
+          </button>
+        </div>
       </div>
       <!-- End: top bar (mobile) -->
 
@@ -548,9 +545,9 @@
             >
               <div
                 class="text-sm text-gray-600 dark:text-gray-400 mb-1"
-                data-i18n="app.screens.budgets.overview.totalBudget"
+                data-i18n="app.screens.budgets.overview.totalSaved"
               >
-                Total Budget
+                Total Saved
               </div>
               <div class="text-3xl font-bold text-xp-primary" id="budget-total">
                 $0
@@ -561,11 +558,11 @@
             >
               <div
                 class="text-sm text-gray-600 dark:text-gray-400 mb-1"
-                data-i18n="app.screens.budgets.overview.totalSpent"
+                data-i18n="app.screens.budgets.overview.totalAvailable"
               >
-                Total Spent
+                Total Available
               </div>
-              <div class="text-3xl font-bold text-xp-danger" id="budget-spent">
+              <div class="text-3xl font-bold text-xp-secondary" id="budget-spent">
                 $0
               </div>
             </div>
@@ -574,12 +571,12 @@
             >
               <div
                 class="text-sm text-gray-600 dark:text-gray-400 mb-1"
-                data-i18n="app.screens.budgets.overview.remaining"
+                data-i18n="app.screens.budgets.overview.savingsGoals"
               >
-                Remaining
+                Savings Goals
               </div>
               <div
-                class="text-3xl font-bold text-xp-secondary"
+                class="text-3xl font-bold text-xp-primary"
                 id="budget-remaining"
               >
                 $0
@@ -1025,7 +1022,7 @@
     </template>
     <template id="home-component-tag">
       <span
-        class="text-xs px-2 py-1 bg-xp-primary/20 text-xp-primary rounded"
+        class="text-xs px-2 py-1 bg-xp-primary/20 text-green-800 rounded"
         data-tag-name
       >
         <!--Tag Name-->
@@ -1108,6 +1105,12 @@
               <!-- View Details -->
             </button>
             <button
+              class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors"
+              data-budget-delete-button
+            >
+              <!-- Delete -->
+            </button>
+            <button
               class="px-4 py-2 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker rounded-lg transition-colors"
               data-budget-add-transaction-button
             >
@@ -1182,8 +1185,53 @@
     <!-- End Template budgets -->
 
     <script src="/assets/js/app.js" defer></script>
-    <script src="/assets/js/tailwindcss.js" defer></script>
     <script src="/assets/js/theme.js" defer></script>
     <script src="/assets/js/analytics.js" defer></script>
+    <!-- Google Tag Manager -->
+    <script>
+      window.addEventListener("load", function () {
+        ;(function (w, d, s, l, i) {
+          w[l] = w[l] || []
+          w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" })
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != "dataLayer" ? "&l=" + l : ""
+          j.async = true
+          j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl
+          f.parentNode.insertBefore(j, f)
+        })(window, document, "script", "dataLayer", "GTM-N9PXJX8V")
+      })
+    </script>
+    <!-- End Google Tag Manager -->
+    <!-- PWA Install Button -->
+    <script>
+      ;(function () {
+        var btn = document.getElementById('pwa-install-btn')
+        var deferred = null
+
+        if (window.matchMedia('(display-mode: standalone)').matches) return
+
+        window.addEventListener('beforeinstallprompt', function (e) {
+          e.preventDefault()
+          deferred = e
+          btn.classList.remove('hidden')
+        })
+
+        btn.addEventListener('click', function () {
+          if (!deferred) return
+          deferred.prompt()
+          deferred.userChoice.then(function () {
+            deferred = null
+            btn.classList.add('hidden')
+          })
+        })
+
+        window.addEventListener('appinstalled', function () {
+          deferred = null
+          btn.classList.add('hidden')
+        })
+      })()
+    </script>
+    <!-- End PWA Install Button -->
   </body>
 </html>

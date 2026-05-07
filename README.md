@@ -40,7 +40,9 @@ en proyectos funcionales. A través de cada entrega se busca:
 ## 🧩 Proyecto principal: Productivity Toolbox SPA
 
 Aplicación web de una sola página construida con **HTML**, **Tailwind CSS v3** y
-**JavaScript puro**, orientada a la productividad personal. Incluye un gestor de
+**JavaScript puro**, orientada a la productividad personal. Tailwind se compila
+a CSS estático de producción para evitar el compilador JIT en el navegador.
+Incluye un gestor de
 presupuesto, tareas, notas en markdown y seguimiento de hábitos, con
 almacenamiento en `localStorage`.
 
@@ -70,8 +72,8 @@ Documentación técnica y educativa para desarrolladores y programadores juniors
 
 ### 2. CSS y Diseño
 
-- [Integración TailwindCSS](/docs/tailwind-css.md) — Framework utility-first via
-  CDN
+- [Integración TailwindCSS](/docs/tailwind-css.md) — Framework utility-first con
+  CSS estático generado por CLI
 - [Estilo StandardJS](/docs/standardjs-best-practices.md) — Convenciones de
   código
 
@@ -131,7 +133,9 @@ frontend-fundamentals-lab/
 │
 ├── assets/
 │   ├── css/
-│   │   └── styles.css
+│   │   ├── styles.css
+│   │   ├── tailwind.input.css
+│   │   └── tailwind.min.css
 │   ├── images/
 │   │   ├── favicon/
 │   │   │   ├── about.txt
@@ -313,6 +317,7 @@ make help
 make install
 make open
 make dev
+make build-css
 make test
 make coverage
 ```
@@ -324,6 +329,7 @@ Comandos disponibles:
 | `make install` | `npm install` |
 | `make open` | Abre `index.html` directamente |
 | `make dev` | `npm run dev` |
+| `make build-css` | `npm run build:css` |
 | `make test` | `npm run test:run` |
 | `make test-ui` | `npm run test:ui` |
 | `make coverage` | `npm run test:coverage` |
@@ -335,6 +341,18 @@ Comandos disponibles:
 
 El archivo detecta el sistema operativo con `$(OS)` en Windows y `uname` en
 POSIX para usar el shell y comandos de apertura/limpieza adecuados.
+
+### Tailwind CSS
+
+La app no carga Tailwind desde CDN. El CSS de utilidades se genera en
+`assets/css/tailwind.min.css` desde `tailwind.config.cjs`.
+
+Ejecuta este comando después de agregar o modificar clases Tailwind en
+`index.html` o `assets/js/**/*.js`:
+
+```bash
+npm run build:css
+```
 
 ---
 

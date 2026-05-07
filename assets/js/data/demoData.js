@@ -11,51 +11,44 @@ export const demoData = {
   budgets: [
     {
       id: generateId(),
-      name: "Monthly Personal Budget",
-      currency: "USD",
-      items: [
-        {
-          id: generateId(),
-          title: "Groceries",
-          amount: 500,
-          date: todayStr,
-          notes: "Weekly shopping"
-        },
-        {
-          id: generateId(),
-          title: "Tech & Software",
-          amount: 200,
-          date: todayStr,
-          notes: "Subscriptions and tools"
-        },
-        {
-          id: generateId(),
-          title: "Learning",
-          amount: 100,
-          date: todayStr,
-          notes: "Books and courses"
-        },
-        {
-          id: generateId(),
-          title: "Entertainment",
-          amount: 150,
-          date: todayStr,
-          notes: "Games and movies"
-        }
-      ],
+      name: "Xbox Series X",
+      currency: "MXN",
+      type: "savings",
+      goalAmount: 11000,
+      initialAmount: 0,
       transactions: [
         {
           id: generateId(),
-          itemId: null,
-          amount: -45,
-          description: "Weekly groceries",
+          amount: 2500,
+          description: "Initial savings",
           date: todayStr
         },
         {
           id: generateId(),
-          itemId: null,
-          amount: -15,
-          description: "GitHub Pro subscription",
+          amount: 2000,
+          description: "Biweekly deposit",
+          date: todayStr
+        }
+      ]
+    },
+    {
+      id: generateId(),
+      name: "Cash available",
+      currency: "MXN",
+      type: "spending",
+      goalAmount: 0,
+      initialAmount: 5000,
+      transactions: [
+        {
+          id: generateId(),
+          amount: -850,
+          description: "Groceries",
+          date: todayStr
+        },
+        {
+          id: generateId(),
+          amount: -350,
+          description: "Transport",
           date: todayStr
         }
       ]
@@ -106,7 +99,7 @@ export const demoData = {
       schedule: "daily",
       dailyRecords: generatePastRecords(7, 0.9),
       streak: 7,
-      color: "#0099ff"
+      color: "#007acc"
     }
   ],
   notes: [

@@ -209,6 +209,101 @@ function escapeHtml(text) {
   return div.innerHTML
 }
 
+const BUDGET_CURRENCIES = ["MXN", "USD", "EUR"]
+
+function normalizeBudget(budget) {
+  const transactions = Array.isArray(budget.transactions)
+    ? budget.transactions
+    : []
+
+  if (budget.type === "savings" || budget.type === "spending") {
+    return {
+      ...budget,
+      currency: BUDGET_CURRENCIES.includes(budget.currency)
+        ? budget.currency
+        : "MXN",
+      goalAmount: parseFloat(budget.goalAmount) || 0,
+      initialAmount: parseFloat(budget.initialAmount) || 0,
+      transactions
+    }
+  }
+
+  const initialAmount = Array.isArray(budget.items)
+    ? budget.items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0)
+    : 0
+
+  return {
+    id: budget.id || generateId(),
+    name: budget.name || "",
+    currency: BUDGET_CURRENCIES.includes(budget.currency)
+      ? budget.currency
+      : "MXN",
+    type: "spending",
+    goalAmount: 0,
+    initialAmount,
+    transactions
+  }
+}
+
+function getBudgetTransactionSum(budget) {
+  return (budget.transactions || []).reduce(
+    (sum, transaction) => sum + (parseFloat(transaction.amount) || 0),
+    0
+  )
+}
+
+function getBudgetBalance(budget) {
+  const transactionSum = getBudgetTransactionSum(budget)
+  if (budget.type === "spending") {
+    return (parseFloat(budget.initialAmount) || 0) + transactionSum
+  }
+  return transactionSum
+}
+
+function getBudgetProgress(budget) {
+  if (budget.type === "savings") {
+    const goalAmount = parseFloat(budget.goalAmount) || 0
+    if (goalAmount <= 0) return 0
+    return Math.min((getBudgetBalance(budget) / goalAmount) * 100, 100)
+  }
+
+  const initialAmount = parseFloat(budget.initialAmount) || 0
+  if (initialAmount <= 0) return 0
+  return Math.max((getBudgetBalance(budget) / initialAmount) * 100, 0)
+}
+
+function getBudgetStatus(budget) {
+  const progress = getBudgetProgress(budget)
+  if (budget.type === "savings") {
+    if (progress >= 100) return "reached"
+    if (progress >= 75) return "safe"
+    if (progress >= 40) return "warning"
+    return "danger"
+  }
+
+  if (progress <= 10) return "danger"
+  if (progress <= 30) return "warning"
+  return "safe"
+}
+
+function getBudgetStatusClass(budget) {
+  const status = getBudgetStatus(budget)
+  if (status === "danger") return "bg-xp-danger"
+  if (status === "warning") return "bg-xp-warning"
+  return "bg-xp-primary"
+}
+
+function getBudgetExpenseTotal(budget) {
+  return (budget.transactions || []).reduce((sum, transaction) => {
+    const amount = parseFloat(transaction.amount) || 0
+    return amount < 0 ? sum + Math.abs(amount) : sum
+  }, 0)
+}
+
+function getBudgetMoney(amount, currency = "MXN") {
+  return `$${(parseFloat(amount) || 0).toFixed(2)} ${currency}`
+}
+
 /**
  * Lanza una animación de confeti en la pantalla
  * @returns {void}
@@ -236,9 +331,9 @@ function launchConfetti() {
   const particles = []
   const colors = [
     "#0acc71",
-    "#0099ff",
+    "#007acc",
     "#ff0055",
-    "#ffaa00",
+    "#b57800",
     "#ffffff",
     "#888888",
     "#4526b6ff",
@@ -377,18 +472,12 @@ function home() {
   document.getElementById("home-tasks-done").textContent =
     `${doneTasks}/${totalTasks}`
 
-  const totalBudget = app.budgets.reduce(
-    (sum, b) => sum + b.items.reduce((s, i) => s + i.amount, 0),
-    0
-  )
-  const totalSpent = app.budgets.reduce(
-    (sum, b) =>
-      sum + b.transactions.reduce((s, t) => s + Math.abs(t.amount), 0),
-    0
-  )
-  document.getElementById("home-budget-remaining").textContent = `$${(
-    totalBudget - totalSpent
-  ).toFixed(0)}`
+  const totalAvailable = app.budgets
+    .map(normalizeBudget)
+    .filter(budget => budget.type === "spending")
+    .reduce((sum, budget) => sum + getBudgetBalance(budget), 0)
+  document.getElementById("home-budget-remaining").textContent =
+    `$${totalAvailable.toFixed(0)}`
   document.getElementById("home-notes-count").textContent = app.notes.length
 
   const mits = app.tasks
@@ -409,6 +498,10 @@ function home() {
       const node = template.content.cloneNode(true)
       // Submit action
       const btn = node.querySelector("[data-done-button]")
+      btn.setAttribute(
+        "aria-label",
+        I18n.t("accessibility.markTaskDone", { task: task.title })
+      )
       btn.onclick = () => app.toggleTask(task.id)
       // Título
       node.querySelector("[data-title]").textContent = task.title
@@ -470,6 +563,10 @@ function home() {
         I18n.getMessage("app.screens.home.habits.dayStreak")
       // Estado completado
       const doneButton = node.querySelector("[data-habit-done-button]")
+      doneButton.setAttribute(
+        "aria-label",
+        I18n.t("accessibility.markHabitDone", { habit: habit.title })
+      )
       doneButton.onclick = () => app.toggleHabit(habit.id)
       if (habit.isDone) {
         doneButton.classList.remove("border-gray-400")
@@ -546,80 +643,85 @@ function home() {
  * @returns {void}
  */
 function budgets() {
-  const totalBudget = app.budgets.reduce(
-    (sum, b) => sum + b.items.reduce((s, i) => s + i.amount, 0),
-    0
-  )
-  const totalSpent = app.budgets.reduce(
-    (sum, b) =>
-      sum + b.transactions.reduce((s, t) => s + Math.abs(t.amount), 0),
-    0
-  )
-  const remaining = totalBudget - totalSpent
+  app.budgets = app.budgets.map(normalizeBudget)
 
-  document.getElementById("budget-total").textContent = `$${totalBudget.toFixed(
-    2
-  )}`
-  document.getElementById("budget-spent").textContent = `$${totalSpent.toFixed(
-    2
-  )}`
+  const totals = app.budgets.reduce(
+    (acc, budget) => {
+      if (budget.type === "savings") {
+        acc.saved += getBudgetBalance(budget)
+        acc.savingsGoal += budget.goalAmount
+      } else {
+        acc.available += getBudgetBalance(budget)
+      }
+      return acc
+    },
+    { saved: 0, savingsGoal: 0, available: 0 }
+  )
+
+  document.getElementById("budget-total").textContent =
+    `$${totals.saved.toFixed(2)}`
+  document.getElementById("budget-spent").textContent =
+    `$${totals.available.toFixed(2)}`
   document.getElementById("budget-remaining").textContent =
-    `$${remaining.toFixed(2)}`
-
-  const budgetList = []
-  app.budgets.forEach(budget => {
-    const budgetTotal = budget.items.reduce((sum, item) => sum + item.amount, 0)
-    const budgetSpent = budget.transactions.reduce(
-      (sum, t) => sum + Math.abs(t.amount),
-      0
-    )
-    const budgetRemaining = budgetTotal - budgetSpent
-    const percentage = budgetTotal > 0 ? (budgetSpent / budgetTotal) * 100 : 0
-
-    budgetList.push({
-      name: escapeHtml(budget.name),
-      showBudgetAction: () => app.showBudgetDetails(budget.id),
-      addTransactionAction: () => app.showAddTransactionModal(budget.id),
-      total: budgetTotal.toFixed(2),
-      spent: budgetSpent.toFixed(2),
-      remaining: budgetRemaining.toFixed(1),
-      percentage
-    })
-  })
+    `$${totals.savingsGoal.toFixed(2)}`
 
   const budgetElementList = document.getElementById("budgets-list")
   budgetElementList.innerHTML = ""
-  if (budgetList.length > 0) {
+  if (app.budgets.length > 0) {
     const template = document.getElementById("budget-card-template")
-    budgetList.forEach(budget => {
-      console.log("Rendering budget:", budget)
+    app.budgets.forEach(budget => {
       const node = template.content.cloneNode(true)
-      node.querySelector("[data-budget-name]").textContent = budget.name
+      const isSavings = budget.type === "savings"
+      const balance = getBudgetBalance(budget)
+      const progress = getBudgetProgress(budget)
+      const remaining = Math.max((budget.goalAmount || 0) - balance, 0)
+      const spent = getBudgetExpenseTotal(budget)
+
+      node.querySelector("[data-budget-name]").textContent =
+        `${isSavings ? "🎯" : "💸"} ${budget.name}`
       node.querySelector("[data-budget-total-label]").textContent =
-        I18n.getMessage("app.screens.budgets.overview.totalBudget")
-      node.querySelector("[data-budget-total]").textContent = `$${budget.total}`
+        I18n.getMessage(isSavings
+          ? "app.screens.budgets.card.goal"
+          : "app.screens.budgets.card.initial")
+      node.querySelector("[data-budget-total]").textContent = getBudgetMoney(
+        isSavings ? budget.goalAmount : budget.initialAmount,
+        budget.currency
+      )
       node.querySelector("[data-budget-spent-label]").textContent =
-        I18n.getMessage("app.screens.budgets.overview.totalSpent")
-      node.querySelector("[data-budget-spent]").textContent = `$${budget.spent}`
+        I18n.getMessage(isSavings
+          ? "app.screens.budgets.card.saved"
+          : "app.screens.budgets.card.available")
+      const budgetSpentValue = node.querySelector("[data-budget-spent]")
+      budgetSpentValue.classList.remove("text-xp-danger")
+      budgetSpentValue.classList.add("text-xp-primary")
+      budgetSpentValue.textContent = getBudgetMoney(
+        balance,
+        budget.currency
+      )
       node.querySelector("[data-budget-remaining-label]").textContent =
-        I18n.getMessage("app.screens.budgets.overview.remaining")
-      node.querySelector("[data-budget-remaining]").textContent =
-        `$${budget.remaining}`
+        I18n.getMessage(isSavings
+          ? "app.screens.budgets.card.remaining"
+          : "app.screens.budgets.card.spent")
+      const budgetRemainingValue = node.querySelector(
+        "[data-budget-remaining]"
+      )
+      budgetRemainingValue.classList.remove("text-xp-primary")
+      budgetRemainingValue.classList.add(isSavings ? "text-xp-warning" : "text-xp-danger")
+      budgetRemainingValue.textContent = getBudgetMoney(
+        isSavings ? remaining : spent,
+        budget.currency
+      )
       const percentageBar = node.querySelector("[data-budget-bar-fill]")
-      percentageBar.style.width = `${Math.min(budget.percentage, 100)}%`
-      if (budget.percentage > 90) {
-        percentageBar.classList.add("bg-xp-danger")
-      } else if (budget.percentage > 70) {
-        percentageBar.classList.add("bg-xp-warning")
-      } else {
-        percentageBar.classList.add("bg-xp-primary")
-      }
+      percentageBar.style.width = `${Math.min(Math.max(progress, 0), 100)}%`
+      percentageBar.classList.add(getBudgetStatusClass(budget))
       const percentageLabel = node.querySelector(
         "[data-budget-percentage-used]"
       )
-      percentageLabel.textContent = `${budget.percentage.toFixed(
-        1
-      )}% ${I18n.getMessage("app.screens.budgets.used")}`
+      percentageLabel.textContent = `${progress.toFixed(1)}% ${I18n.getMessage(
+        isSavings
+          ? "app.screens.budgets.card.completed"
+          : "app.screens.budgets.card.remainingPct"
+      )}`
       const showBudgetBtn = node.querySelector(
         "[data-budget-view-details-button]"
       )
@@ -631,9 +733,16 @@ function budgets() {
         "[data-budget-add-transaction-button]"
       )
       addTransactionBtn.textContent = I18n.getMessage(
-        "app.screens.budgets.overview.addTransaction"
+        isSavings
+          ? "app.screens.budgets.overview.addDeposit"
+          : "app.screens.budgets.overview.addExpense"
       )
-      addTransactionBtn.onclick = () => budget.addTransactionAction()
+      addTransactionBtn.onclick = () => app.showAddTransactionModal(budget.id)
+      const deleteBudgetBtn = node.querySelector(
+        "[data-budget-delete-button]"
+      )
+      deleteBudgetBtn.textContent = I18n.getMessage("ui.common.delete")
+      deleteBudgetBtn.onclick = () => app.deleteBudget(budget.id)
       budgetElementList.appendChild(node)
     })
   } else {
@@ -757,7 +866,7 @@ function tasks() {
                                 ${task.tags
                                   .map(
                                     tag =>
-                                      `<span class="text-xs px-2 py-1 bg-xp-primary/20 text-xp-primary rounded">${tag}</span>`
+                                      `<span class="text-xs px-2 py-1 bg-xp-primary/20 text-green-800 rounded">${tag}</span>`
                                   )
                                   .join("")}
                                 ${
@@ -1136,7 +1245,8 @@ const store = {
               app.habits = JSON.parse(data)
               break
             case "budgets":
-              app.budgets = JSON.parse(data)
+              app.budgets = JSON.parse(data).map(normalizeBudget)
+              this.save(app.budgets, "budgets")
               break
             case "notes":
               app.notes = JSON.parse(data)
@@ -1244,7 +1354,7 @@ const store = {
       schedule: "daily",
       dailyRecords: generatePastRecords(7, 0.9),
       streak: 7,
-      color: "#0099ff"
+      color: "#007acc"
     },
     {
       id: generateId(),
@@ -1326,51 +1436,44 @@ const store = {
   dummyBudget: [
     {
       id: generateId(),
-      name: "Monthly Personal Budget",
-      currency: "USD",
-      items: [
-        {
-          id: generateId(),
-          title: "Groceries",
-          amount: 500,
-          date: todayStr,
-          notes: "Weekly shopping"
-        },
-        {
-          id: generateId(),
-          title: "Tech & Software",
-          amount: 200,
-          date: todayStr,
-          notes: "Subscriptions and tools"
-        },
-        {
-          id: generateId(),
-          title: "Learning",
-          amount: 100,
-          date: todayStr,
-          notes: "Books and courses"
-        },
-        {
-          id: generateId(),
-          title: "Entertainment",
-          amount: 150,
-          date: todayStr,
-          notes: "Games and movies"
-        }
-      ],
+      name: "Xbox Series X",
+      currency: "MXN",
+      type: "savings",
+      goalAmount: 11000,
+      initialAmount: 0,
       transactions: [
         {
           id: generateId(),
-          itemId: null,
-          amount: -45,
-          description: "Weekly groceries",
+          amount: 2500,
+          description: "Ahorro inicial",
           date: todayStr
         },
         {
           id: generateId(),
-          itemId: null,
-          amount: -15,
-          description: "GitHub Pro subscription",
+          amount: 2000,
+          description: "Depósito quincenal",
+          date: todayStr
+        }
+      ]
+    },
+    {
+      id: generateId(),
+      name: "Efectivo disponible",
+      currency: "MXN",
+      type: "spending",
+      goalAmount: 0,
+      initialAmount: 5000,
+      transactions: [
+        {
+          id: generateId(),
+          amount: -850,
+          description: "Supermercado",
+          date: todayStr
+        },
+        {
+          id: generateId(),
+          amount: -350,
+          description: "Transporte",
           date: todayStr
         }
       ]
@@ -2296,33 +2399,60 @@ const app = {
     const t = key => getI18n(key)
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.create.title")}</h3>
+                <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modals.create.title")}</h3>
                 <form onsubmit="app.createBudget(event)">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.create.name")}</label>
-                            <input type="text" name="name" required
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="${t("app.screens.budgets.modal.create.namePlaceholder")}">
+                            <div class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modals.create.typeLabel")}</div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="block p-4 border-2 border-gray-200 dark:border-xp-primary/20 rounded-lg cursor-pointer has-[:checked]:border-xp-primary has-[:checked]:bg-xp-primary/10">
+                                    <input type="radio" name="type" value="savings" class="sr-only" onchange="app.toggleBudgetTypeFields(this.value)">
+                                    <span class="block text-lg font-bold">🎯 ${t("app.screens.budgets.types.savings")}</span>
+                                    <span class="block text-sm text-gray-600 dark:text-gray-400">${t("app.screens.budgets.types.savingsHint")}</span>
+                                </label>
+                                <label class="block p-4 border-2 border-gray-200 dark:border-xp-primary/20 rounded-lg cursor-pointer has-[:checked]:border-xp-primary has-[:checked]:bg-xp-primary/10">
+                                    <input type="radio" name="type" value="spending" class="sr-only" checked onchange="app.toggleBudgetTypeFields(this.value)">
+                                    <span class="block text-lg font-bold">💸 ${t("app.screens.budgets.types.spending")}</span>
+                                    <span class="block text-sm text-gray-600 dark:text-gray-400">${t("app.screens.budgets.types.spendingHint")}</span>
+                                </label>
+                            </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.create.currency")}</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modals.create.name")}</label>
+                            <input type="text" name="name" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="${t("app.screens.budgets.modals.create.namePlaceholder")}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modals.create.currency")}</label>
                             <select name="currency"
                                     class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
+                                <option value="MXN">MXN ($)</option>
                                 <option value="USD">USD ($)</option>
                                 <option value="EUR">EUR (€)</option>
-                                <option value="GBP">GBP (£)</option>
                             </select>
+                        </div>
+                        <div id="budget-goal-field" class="hidden">
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modals.create.goalAmountLabel")}</label>
+                            <input type="number" step="0.01" min="0.01" name="goalAmount"
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="11000">
+                        </div>
+                        <div id="budget-initial-field">
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modals.create.initialAmountLabel")}</label>
+                            <input type="number" step="0.01" min="0.01" name="initialAmount" required
+                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                                   placeholder="5000">
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            ${t("app.screens.budgets.modal.create.cancel")}
+                            ${t("app.screens.budgets.modals.create.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            ${t("app.screens.budgets.modal.create.create")}
+                            ${t("app.screens.budgets.modals.create.create")}
                         </button>
                     </div>
                 </form>
@@ -2330,6 +2460,18 @@ const app = {
         `
 
     app.showModal(modalContent)
+  },
+  toggleBudgetTypeFields(type) {
+    const goalField = document.getElementById("budget-goal-field")
+    const initialField = document.getElementById("budget-initial-field")
+    const goalInput = goalField?.querySelector("input")
+    const initialInput = initialField?.querySelector("input")
+    const isSavings = type === "savings"
+
+    goalField?.classList.toggle("hidden", !isSavings)
+    initialField?.classList.toggle("hidden", isSavings)
+    if (goalInput) goalInput.required = isSavings
+    if (initialInput) initialInput.required = !isSavings
   },
   /**
    * Crea un nuevo presupuesto a partir del formulario
@@ -2339,12 +2481,35 @@ const app = {
   createBudget(event) {
     event.preventDefault()
     const formData = new FormData(event.target)
+    const type = formData.get("type")
+    const currency = formData.get("currency")
+    const goalAmount = parseFloat(formData.get("goalAmount")) || 0
+    const initialAmount = parseFloat(formData.get("initialAmount")) || 0
+
+    if (!BUDGET_CURRENCIES.includes(currency)) {
+      this.showToast("Currency must be MXN, USD or EUR", "error")
+      return
+    }
+    if (!["savings", "spending"].includes(type)) {
+      this.showToast("Type must be savings or spending", "error")
+      return
+    }
+    if (type === "savings" && goalAmount <= 0) {
+      this.showToast("Savings budget requires a goal amount", "error")
+      return
+    }
+    if (type === "spending" && initialAmount <= 0) {
+      this.showToast("Spending budget requires an initial amount", "error")
+      return
+    }
 
     const budget = {
       id: generateId(),
-      name: formData.get("name"),
-      currency: formData.get("currency"),
-      items: [],
+      name: formData.get("name").trim(),
+      currency,
+      type,
+      goalAmount: type === "savings" ? goalAmount : 0,
+      initialAmount: type === "spending" ? initialAmount : 0,
       transactions: []
     }
 
@@ -2361,32 +2526,35 @@ const app = {
    */
   showAddTransactionModal(budgetId) {
     const t = key => getI18n(key)
+    const budget = app.budgets.find(b => b.id === budgetId)
+    if (!budget) return
+    const isSavings = budget.type === "savings"
     const modalContent = `
             <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.addTransaction.title")}</h3>
+                <h3 class="text-2xl font-bold mb-4">${t(isSavings ? "app.screens.budgets.modals.deposit.title" : "app.screens.budgets.modals.expense.title")}</h3>
                 <form onsubmit="app.addTransaction(event, '${budgetId}')">
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addTransaction.description")}</label>
+                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modals.transaction.descriptionLabel")}</label>
                             <input type="text" name="description" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="${t("app.screens.budgets.modal.addTransaction.descriptionPlaceholder")}">
+                                   placeholder="${t("app.screens.budgets.modals.transaction.descriptionPlaceholder")}">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addTransaction.amount")}</label>
-                            <input type="number" step="0.01" name="amount" required
+                            <label class="block text-sm font-semibold mb-2">${t(isSavings ? "app.screens.budgets.modals.deposit.amountLabel" : "app.screens.budgets.modals.expense.amountLabel")}</label>
+                            <input type="number" step="0.01" min="0.01" name="amount" required
                                    class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="${t("app.screens.budgets.modal.addTransaction.amountPlaceholder")}">
+                                   placeholder="0.00">
                         </div>
                     </div>
                     <div class="flex gap-3 mt-6">
                         <button type="button" onclick="app.closeModal()"
                                 class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            ${t("app.screens.budgets.modal.addTransaction.cancel")}
+                            ${t("app.screens.budgets.modals.create.cancel")}
                         </button>
                         <button type="submit"
                                 class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            ${t("app.screens.budgets.modal.addTransaction.add")}
+                            ${t(isSavings ? "app.screens.budgets.modals.deposit.submit" : "app.screens.budgets.modals.expense.submit")}
                         </button>
                     </div>
                 </form>
@@ -2407,11 +2575,16 @@ const app = {
     const budget = app.budgets.find(b => b.id === budgetId)
 
     if (budget) {
+      const rawAmount = parseFloat(formData.get("amount"))
+      if (!Number.isFinite(rawAmount) || rawAmount <= 0) {
+        this.showToast("Amount must be greater than 0", "error")
+        return
+      }
+
       const transaction = {
         id: generateId(),
-        itemId: null,
-        amount: parseFloat(formData.get("amount")),
-        description: formData.get("description"),
+        amount: budget.type === "spending" ? -rawAmount : rawAmount,
+        description: formData.get("description").trim(),
         date: formatDate(new Date())
       }
 
@@ -2433,98 +2606,66 @@ const app = {
     if (!budget) return
 
     const t = key => getI18n(key)
+    const isSavings = budget.type === "savings"
+    const balance = getBudgetBalance(budget)
+    const pct = getBudgetProgress(budget)
+    const remaining = Math.max((budget.goalAmount || 0) - balance, 0)
+    const spent = getBudgetExpenseTotal(budget)
 
     const modalContent = `
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-2xl font-bold">${escapeHtml(
-                      budget.name
-                    )}</h3>
+                    <h3 class="text-2xl font-bold">${isSavings ? "🎯" : "💸"} ${escapeHtml(budget.name)}</h3>
                     <button onclick="app.deleteBudget('${budgetId}')"
                             class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
                         ${t("ui.common.delete")}
                     </button>
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                        <div class="text-xs text-gray-500">${t(isSavings ? "app.screens.budgets.card.goal" : "app.screens.budgets.card.initial")}</div>
+                        <div class="font-bold">${getBudgetMoney(isSavings ? budget.goalAmount : budget.initialAmount, budget.currency)}</div>
+                    </div>
+                    <div class="p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                        <div class="text-xs text-gray-500">${t(isSavings ? "app.screens.budgets.card.saved" : "app.screens.budgets.card.available")}</div>
+                        <div class="font-bold text-xp-primary">${getBudgetMoney(balance, budget.currency)}</div>
+                    </div>
+                    <div class="p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                        <div class="text-xs text-gray-500">${t(isSavings ? "app.screens.budgets.card.remaining" : "app.screens.budgets.card.spent")}</div>
+                        <div class="font-bold ${isSavings ? "text-xp-warning" : "text-xp-danger"}">${getBudgetMoney(isSavings ? remaining : spent, budget.currency)}</div>
+                    </div>
+                </div>
+
                 <div class="mb-6">
-                    <h4 class="font-bold mb-3 flex items-center justify-between">
-                        <span>${t("app.screens.budgets.details.addItem").replace("+ ", "")}</span>
-                        <button onclick="app.showAddBudgetItemModal('${budgetId}')"
-                                class="text-sm px-3 py-1 bg-xp-primary text-xp-darker rounded-lg">
-                            ${t("app.screens.budgets.details.addItem")}
-                        </button>
-                    </h4>
-                    <div class="space-y-2">
-                        ${budget.items
-                          .map(
-                            item => `
-                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
-                                <div>
-                                    <div class="font-semibold">${escapeHtml(
-                                      item.title
-                                    )}</div>
-                                    ${
-                                      item.notes
-                                        ? `<div class="text-sm text-gray-600 dark:text-gray-400">${escapeHtml(
-                                            item.notes
-                                          )}</div>`
-                                        : ""
-                                    }
-                                </div>
-                                <div class="text-right">
-                                    <div class="font-bold text-xp-primary">$${item.amount.toFixed(
-                                      2
-                                    )}</div>
-                                    <button onclick="app.deleteBudgetItem('${budgetId}', '${
-                                      item.id
-                                    }')"
-                                            class="text-xs text-xp-danger hover:underline">${t("ui.common.delete")}</button>
-                                </div>
-                            </div>
-                        `
-                          )
-                          .join("")}
-                        ${
-                          budget.items.length === 0
-                            ? `<div class="text-gray-500 dark:text-gray-400 text-center py-4">${t("app.screens.budgets.details.noItems")}</div>`
-                            : ""
-                        }
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>${pct.toFixed(1)}% ${t(isSavings ? "app.screens.budgets.card.completed" : "app.screens.budgets.card.remainingPct")}</span>
+                    </div>
+                    <div class="w-full h-3 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden">
+                        <div class="h-full ${getBudgetStatusClass(budget)} transition-all duration-300" style="width: ${Math.min(Math.max(pct, 0), 100)}%"></div>
                     </div>
                 </div>
 
                 <div>
-                    <h4 class="font-bold mb-3">${t("app.screens.budgets.details.transactions") || "Transactions"}</h4>
+                    <h4 class="font-bold mb-3">${t("app.screens.budgets.details.transactionsTitle") || "Transacciones"}</h4>
                     <div class="space-y-2 max-h-64 overflow-y-auto">
-                        ${budget.transactions
-                          .map(
-                            t => `
-                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
-                                <div>
-                                    <div class="font-semibold">${escapeHtml(
-                                      t.description
-                                    )}</div>
-                                    <div class="text-xs text-gray-600 dark:text-gray-400">${
-                                      t.date
-                                    }</div>
+                        ${budget.transactions.length === 0
+                          ? `<div class="text-gray-500 dark:text-gray-400 text-center py-4">${t("app.screens.budgets.details.noTransactions") || "No hay transacciones aún"}</div>`
+                          : budget.transactions
+                              .map(
+                                tx => `
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                                    <div>
+                                        <div class="font-semibold">${escapeHtml(tx.description)}</div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-400">${tx.date}</div>
+                                    </div>
+                                    <div class="font-bold ${tx.amount < 0 ? "text-xp-danger" : "text-xp-primary"}">
+                                        ${tx.amount < 0 ? "-" : "+"}$${Math.abs(tx.amount).toFixed(2)}
+                                    </div>
                                 </div>
-                                <div class="font-bold ${
-                                  t.amount < 0
-                                    ? "text-xp-danger"
-                                    : "text-xp-primary"
-                                }">
-                                    ${t.amount < 0 ? "-" : "+"}$${Math.abs(
-                                      t.amount
-                                    ).toFixed(2)}
-                                </div>
-                            </div>
-                        `
-                          )
-                          .join("")}
-                        ${
-                          budget.transactions.length === 0
-                            ? `<div class="text-gray-500 dark:text-gray-400 text-center py-4">${t("app.screens.budgets.details.noTransactions")}</div>`
-                            : ""
-                        }
+                            `
+                              )
+                              .join("")}
                     </div>
                 </div>
             </div>
@@ -2538,46 +2679,7 @@ const app = {
    * @returns {void}
    */
   showAddBudgetItemModal(budgetId) {
-    const t = key => getI18n(key)
-    const modalContent = `
-            <div class="p-6">
-                <h3 class="text-2xl font-bold mb-4">${t("app.screens.budgets.modal.addItem.title")}</h3>
-                <form onsubmit="app.addBudgetItem(event, '${budgetId}')">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addItem.category")}</label>
-                            <input type="text" name="title" required
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="${t("app.screens.budgets.modal.addItem.categoryPlaceholder")}">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addItem.amount")}</label>
-                            <input type="number" step="0.01" name="amount" required
-                                   class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                   placeholder="${t("app.screens.budgets.modal.addItem.amountPlaceholder")}">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">${t("app.screens.budgets.modal.addItem.notes")}</label>
-                            <textarea name="notes" rows="2"
-                                      class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-                                      placeholder="${t("app.screens.budgets.modal.addItem.notesPlaceholder")}"></textarea>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 mt-6">
-                        <button type="button" onclick="app.showBudgetDetails('${budgetId}')"
-                                class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
-                            ${t("app.screens.budgets.modal.addItem.back")}
-                        </button>
-                        <button type="submit"
-                                class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
-                            ${t("app.screens.budgets.modal.addItem.add")}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        `
-
-    this.showModal(modalContent)
+    this.showToast(getI18n("ui.common.toast.notImplemented"), "info")
   },
   /**
    * Agrega un nuevo ítem al presupuesto
@@ -2587,24 +2689,7 @@ const app = {
    */
   addBudgetItem(event, budgetId) {
     event.preventDefault()
-    const formData = new FormData(event.target)
-    const budget = app.budgets.find(b => b.id === budgetId)
-
-    if (budget) {
-      const item = {
-        id: generateId(),
-        title: formData.get("title"),
-        amount: parseFloat(formData.get("amount")),
-        date: formatDate(new Date()),
-        notes: formData.get("notes") || ""
-      }
-
-      budget.items.push(item)
-      store.save(app.budgets, "budgets")
-      this.showToast(getI18n("ui.common.toast.itemAdded"), "success")
-      this.showBudgetDetails(budgetId)
-      budgets()
-    }
+    this.showToast(getI18n("ui.common.toast.notImplemented"), "info")
   },
   /**
    * Elimina un presupuesto
@@ -2628,31 +2713,13 @@ const app = {
     }
   },
   /**
-   * Elimina un ítem de un presupuesto
+   * Elimina un ítem de un presupuesto (deprecated - items removed)
    * @param {number} budgetId - ID del presupuesto
    * @param {number} itemId - ID del ítem
    * @returns {void}
    */
   deleteBudgetItem(budgetId, itemId) {
-    const budget = app.budgets.find(b => b.id === budgetId)
-    if (budget) {
-      const index = budget.items.findIndex(i => i.id === itemId)
-      if (index !== -1) {
-        const deleted = budget.items.splice(index, 1)[0]
-        store.save(app.budgets, "budgets")
-        this.showUndoToast(
-          `${getI18n("ui.common.deleted")} ${deleted.title}`,
-          () => {
-            budget.items.splice(index, 0, deleted)
-            store.save(app.budgets, "budgets")
-            this.showBudgetDetails(budgetId)
-            budgets()
-          }
-        )
-        this.showBudgetDetails(budgetId)
-        budgets()
-      }
-    }
+    this.showToast(getI18n("ui.common.toast.notImplemented"), "info")
   },
   /**
    * Estado inicial de las notas

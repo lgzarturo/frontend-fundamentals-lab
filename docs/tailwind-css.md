@@ -3,8 +3,8 @@
 ## Introducción
 
 Para modernizar y agilizar el desarrollo del proyecto, he decidido implementar
-TailwindCSS. La integración la hago utilizando el CDN oficial de Tailwind,
-evitando complicaciones iniciales con dependencias y build tools.
+TailwindCSS. La integración usa Tailwind CLI para generar un CSS estático de
+producción, evitando ejecutar el compilador JIT en el navegador.
 
 > **Ojo:** no soy novato en Tailwind, pero tampoco un experto. La configuración
 > y organización aquí presentada es una solución práctica y funcional para este
@@ -13,11 +13,10 @@ evitando complicaciones iniciales con dependencias y build tools.
 
 ## Cambios realizados
 
-- **Uso del CDN de Tailwind:** Se incluyó
-  `<script src="https://cdn.tailwindcss.com"></script>` en el `<head>` de
-  `index.html`, permitiendo el uso inmediato de utilidades Tailwind en todo el
-  proyecto.
-- **Tema base personalizado:** Se configuró el tema en `app.js` extendiendo la
+- **CSS estático de Tailwind:** Se genera `assets/css/tailwind.min.css` con
+  `npm run build:css` y se carga desde `index.html`.
+- **Tema base personalizado:** Se configuró el tema en `tailwind.config.cjs`
+  extendiendo la
   paleta de colores con variantes como `xp-primary`, `xp-secondary`, `xp-card`,
   entre otros, para mantener coherencia visual y facilitar la personalización.
 - **Componentes adaptados:** El hero, footer, sidebar y navegación móvil fueron
@@ -34,9 +33,17 @@ evitando complicaciones iniciales con dependencias y build tools.
   uniformes en todos los componentes.
 - **Flexibilidad:** Es fácil modificar o extender el diseño conforme evoluciona
   el proyecto.
-- **Sin dependencias iniciales:** Usar el CDN evita problemas de configuración y
-  permite que cualquier persona clone y trabaje el proyecto sin instalar nada
-  extra.
+- **Mejor rendimiento:** El navegador descarga CSS ya compilado en lugar del
+  runtime de Tailwind.
+
+## Regenerar CSS
+
+Ejecuta este comando después de agregar o modificar clases Tailwind en
+`index.html` o `assets/js/**/*.js`:
+
+```bash
+npm run build:css
+```
 
 ## Disclaimers
 

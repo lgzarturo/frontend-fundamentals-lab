@@ -34,10 +34,14 @@ for (const { path, versionStr } of locales) {
 // index.html: update fallback text inside the about.version span
 const indexPath = resolve(root, 'index.html')
 let html = readFileSync(indexPath, 'utf-8')
-html = html.replace(
-  /(data-i18n="app\.screens\.settings\.about\.version"[^>]*>)[\s\S]*?(<\/span>)/,
-  `$1Version ${version} | Built with ❤️ and ☕ by$2`
+const updatedHtml = html.replace(
+  /(data-i18n="app\.screens\.settings\.about\.version"[^>]*>\s*)Version \d+\.\d+\.\d+/,
+  `$1Version ${version}`
 )
+if (updatedHtml === html) {
+  throw new Error('Version text not found in index.html')
+}
+html = updatedHtml
 writeFileSync(indexPath, html)
 console.log('  ✓ index.html')
 

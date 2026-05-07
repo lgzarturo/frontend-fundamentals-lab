@@ -22,6 +22,7 @@ export class StorageService {
   init() {
     const data = this._loadRaw()
     if (data) {
+      data.budgets = this._migrateBudgets(data.budgets || [])
       this.cache = data
       return
     }
@@ -159,6 +160,7 @@ export class StorageService {
       try {
         const parsed = JSON.parse(v1Data)
         if (parsed.budgets || parsed.tasks || parsed.notes || parsed.habits) {
+          parsed.budgets = this._migrateBudgets(parsed.budgets || [])
           return parsed
         }
       } catch (e) {
@@ -180,7 +182,30 @@ export class StorageService {
       }
     })
 
+    if (hasLegacy) {
+      legacyData.budgets = this._migrateBudgets(legacyData.budgets || [])
+    }
+
     return hasLegacy ? legacyData : null
+  }
+
+  /**
+   * Migra presupuestos del formato viejo (con items) al nuevo (type/goalAmount/initialAmount)
+   * @private
+   */
+  _migrateBudgets(budgets) {
+    return budgets.map(budget => {
+      if (budget.type) return budget
+      const items = budget.items || []
+      const initialAmount = items.reduce((sum, item) => sum + (item.amount || 0), 0)
+      const { items: _, ...rest } = budget
+      return {
+        ...rest,
+        type: "spending",
+        initialAmount,
+        goalAmount: 0
+      }
+    })
   }
 
   /**

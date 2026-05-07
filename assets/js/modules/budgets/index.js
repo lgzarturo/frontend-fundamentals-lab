@@ -1,6 +1,5 @@
-import { Budget, BudgetItem, Transaction } from "./models.js"
+import { Budget, Transaction } from "./models.js"
 import {
-  addBudgetItemModalTemplate,
   addTransactionModalTemplate,
   budgetCardTemplate,
   budgetDetailsModalTemplate,
@@ -30,14 +29,14 @@ export class BudgetsModule {
     if (!this.container) return
 
     if (this.budgets.length === 0) {
-      this.container.innerHTML = emptyBudgetsTemplate()
+      this.container.innerHTML = emptyBudgetsTemplate(this.i18n)
       return
     }
 
     const totals = this.getTotals()
-    const overviewHtml = budgetOverviewTemplate(totals)
+    const overviewHtml = budgetOverviewTemplate(totals, this.i18n)
     const cardsHtml = this.budgets
-      .map(budget => budgetCardTemplate(budget))
+      .map(budget => budgetCardTemplate(budget, this.i18n))
       .join("")
 
     this.container.innerHTML = `
@@ -49,18 +48,15 @@ export class BudgetsModule {
   }
 
   createBudget(data) {
-    if (!data.name || !data.period || !data.startDate) {
-      throw new Error(
-        "Invalid budget data: name, period, and startDate are required"
-      )
-    }
+    const errors = Budget.validate(data)
+    if (errors.length) throw new Error(errors.join(", "))
 
     const budget = new Budget({
       name: data.name,
-      period: data.period,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      currency: data.currency || "USD"
+      currency: data.currency,
+      type: data.type,
+      goalAmount: data.type === "savings" ? data.goalAmount : 0,
+      initialAmount: data.type === "spending" ? data.initialAmount : 0
     })
 
     this.budgets.push(budget)
@@ -83,118 +79,78 @@ export class BudgetsModule {
     return deleted
   }
 
-  addItem(budgetId, itemData) {
-    const budget = this.budgets.find(b => b.id === budgetId)
-    if (!budget) {
-      throw new Error(`Budget not found: ${budgetId}`)
-    }
-
-    if (!itemData.name || itemData.planned === undefined) {
-      throw new Error("Invalid item data: name and planned are required")
-    }
-
-    const item = new BudgetItem({
-      name: itemData.name,
-      planned: itemData.planned,
-      category: itemData.category || "other"
-    })
-
-    budget.items.push(item)
-    this._saveBudgets()
-    this.render()
-    this.eventBus.emit("budget:itemAdded", { budget, item })
-    return item
-  }
-
-  removeItem(budgetId, itemId) {
-    const budget = this.budgets.find(b => b.id === budgetId)
-    if (!budget) {
-      throw new Error(`Budget not found: ${budgetId}`)
-    }
-
-    const index = budget.items.findIndex(i => i.id === itemId)
-    if (index === -1) {
-      throw new Error(`Item not found: ${itemId}`)
-    }
-
-    const deleted = budget.items.splice(index, 1)[0]
-    this._saveBudgets()
-    this.render()
-    this.eventBus.emit("budget:itemRemoved", { budget, item: deleted })
-    return deleted
-  }
-
   addTransaction(budgetId, transactionData) {
     const budget = this.budgets.find(b => b.id === budgetId)
-    if (!budget) {
-      throw new Error(`Budget not found: ${budgetId}`)
-    }
+    if (!budget) throw new Error(`Budget not found: ${budgetId}`)
 
-    if (!transactionData.amount || !transactionData.description) {
-      throw new Error(
-        "Invalid transaction data: amount and description are required"
-      )
-    }
+    const errors = Transaction.validate(transactionData, budget.type)
+    if (errors.length) throw new Error(errors.join(", "))
 
-    const transaction = new Transaction({
-      amount: transactionData.amount,
-      description: transactionData.description,
-      date: transactionData.date || new Date().toISOString().split("T")[0],
-      itemId: transactionData.itemId || null
-    })
-
+    const transaction = new Transaction(transactionData)
     budget.transactions.push(transaction)
-
-    if (transaction.itemId) {
-      const item = budget.items.find(i => i.id === transaction.itemId)
-      if (item) {
-        item.actual += transaction.amount
-      }
-    }
-
     this._saveBudgets()
     this.render()
     this.eventBus.emit("budget:transactionAdded", { budget, transaction })
     return transaction
   }
 
+  removeTransaction(budgetId, transactionId) {
+    const budget = this.budgets.find(b => b.id === budgetId)
+    if (!budget) throw new Error(`Budget not found: ${budgetId}`)
+
+    const result = budget.removeTransaction(transactionId)
+    if (!result) throw new Error(`Transaction not found: ${transactionId}`)
+
+    this._saveBudgets()
+    this.render()
+    this.eventBus.emit("budget:transactionRemoved", { budget, transaction: result.removed })
+    return result.removed
+  }
+
   getTotals() {
     return this.budgets.reduce(
-      (totals, budget) => {
-        const budgetPlanned = budget.items.reduce(
-          (sum, item) => sum + item.planned,
-          0
-        )
-        const budgetActual = budget.items.reduce(
-          (sum, item) => sum + item.actual,
-          0
-        )
-
-        totals.planned += budgetPlanned
-        totals.actual += budgetActual
-        totals.remaining += budgetPlanned - budgetActual
-
-        return totals
+      (acc, budget) => {
+        if (budget.type === "savings") {
+          acc.saved += budget.getBalance()
+          acc.savingsGoal += budget.goalAmount
+        } else {
+          acc.available += budget.getBalance()
+          acc.initialTotal += budget.initialAmount
+        }
+        return acc
       },
-      { planned: 0, actual: 0, remaining: 0 }
+      { saved: 0, savingsGoal: 0, available: 0, initialTotal: 0 }
     )
   }
 
   showCreateModal() {
     if (!this.modalContainer) return
-    this.modalContainer.innerHTML = createBudgetModalTemplate()
+    this.modalContainer.innerHTML = createBudgetModalTemplate(this.i18n)
     this._showModal()
 
     const form = document.getElementById("create-budget-form")
+    const typeInputs = form.querySelectorAll('input[name="type"]')
+
+    typeInputs.forEach(input => {
+      input.addEventListener("change", () => {
+        const isSavings = input.value === "savings"
+        const goalGroup = document.getElementById("goal-amount-group")
+        const initialGroup = document.getElementById("initial-amount-group")
+        if (goalGroup) goalGroup.classList.toggle("hidden", !isSavings)
+        if (initialGroup) initialGroup.classList.toggle("hidden", isSavings)
+      })
+    })
+
     form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
+      const type = formData.get("type")
       this.createBudget({
         name: formData.get("name"),
-        period: formData.get("period"),
-        startDate: formData.get("startDate"),
-        endDate: formData.get("endDate"),
-        currency: formData.get("currency")
+        currency: formData.get("currency"),
+        type,
+        goalAmount: type === "savings" ? formData.get("goalAmount") : 0,
+        initialAmount: type === "spending" ? formData.get("initialAmount") : 0
       })
       this._closeModal()
     })
@@ -204,7 +160,7 @@ export class BudgetsModule {
     const budget = this.budgets.find(b => b.id === budgetId)
     if (!budget || !this.modalContainer) return
 
-    this.modalContainer.innerHTML = budgetDetailsModalTemplate(budget)
+    this.modalContainer.innerHTML = budgetDetailsModalTemplate(budget, this.i18n)
     this._showModal()
   }
 
@@ -212,36 +168,19 @@ export class BudgetsModule {
     const budget = this.budgets.find(b => b.id === budgetId)
     if (!budget || !this.modalContainer) return
 
-    this.modalContainer.innerHTML = addTransactionModalTemplate(budget)
+    this.modalContainer.innerHTML = addTransactionModalTemplate(budget, this.i18n)
     this._showModal()
 
     const form = document.getElementById("add-transaction-form")
     form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
+      const rawAmount = parseFloat(formData.get("amount"))
+      const amount = budget.type === "spending" ? -Math.abs(rawAmount) : Math.abs(rawAmount)
       this.addTransaction(budgetId, {
-        amount: parseFloat(formData.get("amount")),
+        amount,
         description: formData.get("description"),
-        date: formData.get("date"),
-        itemId: formData.get("itemId") || null
-      })
-      this._closeModal()
-    })
-  }
-
-  showAddItemModal(budgetId) {
-    if (!this.modalContainer) return
-    this.modalContainer.innerHTML = addBudgetItemModalTemplate(budgetId)
-    this._showModal()
-
-    const form = document.getElementById("add-item-form")
-    form.addEventListener("submit", e => {
-      e.preventDefault()
-      const formData = new FormData(form)
-      this.addItem(budgetId, {
-        name: formData.get("name"),
-        planned: parseFloat(formData.get("planned")),
-        category: formData.get("category")
+        date: formData.get("date")
       })
       this._closeModal()
     })
@@ -269,9 +208,6 @@ export class BudgetsModule {
     this.eventBus.on("budget:showAddTransaction", budgetId =>
       this.showAddTransactionModal(budgetId)
     )
-    this.eventBus.on("budget:showAddItem", budgetId =>
-      this.showAddItemModal(budgetId)
-    )
 
     if (this.container) {
       this.container.addEventListener("click", e => {
@@ -291,7 +227,7 @@ export class BudgetsModule {
           case "delete-budget":
             if (
               confirm(
-                this.i18n.getMessage("budgets.confirmDelete") ||
+                this.i18n?.getMessage("budgets.confirmDelete") ||
                   "Delete this budget?"
               )
             ) {
@@ -300,9 +236,6 @@ export class BudgetsModule {
             break
           case "add-transaction":
             this.showAddTransactionModal(budgetId)
-            break
-          case "add-item":
-            this.showAddItemModal(budgetId)
             break
         }
       })

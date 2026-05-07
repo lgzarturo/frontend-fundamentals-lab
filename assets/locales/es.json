@@ -44,15 +44,42 @@
           "totalBudget": "Presupuesto Total",
           "totalSpent": "Total Gastado",
           "remaining": "Restante",
+          "totalSaved": "Total Ahorrado",
+          "totalAvailable": "Total Disponible",
+          "savingsGoals": "Metas de Ahorro",
           "viewDetails": "Ver Detalles",
-          "addTransaction": "+ Transacción"
+          "addTransaction": "+ Transacción",
+          "addDeposit": "+ Depósito",
+          "addExpense": "+ Egreso"
+        },
+        "types": {
+          "savings": "Ahorro",
+          "savingsHint": "Quiero llegar a una meta",
+          "spending": "Gasto",
+          "spendingHint": "Tengo dinero disponible"
+        },
+        "card": {
+          "goal": "Meta",
+          "initial": "Inicial",
+          "saved": "Ahorrado",
+          "available": "Disponible",
+          "remaining": "Faltan",
+          "spent": "Gastado",
+          "completed": "completado",
+          "remainingPct": "restante"
         },
         "details": {
           "addItem": "+ Artículo",
           "delete": "Eliminar",
           "noItems": "No hay artículos aún",
           "noTransactions": "No hay transacciones aún",
+          "transactionsTitle": "Transacciones",
           "transactions": "Transacciones"
+        },
+        "empty": {
+          "title": "No hay presupuestos aún",
+          "description": "Crea tu primer presupuesto para empezar a controlar tus finanzas.",
+          "action": "Crear Presupuesto"
         },
         "modal": {
           "create": {
@@ -62,6 +89,56 @@
             "currency": "Moneda",
             "cancel": "Cancelar",
             "create": "Crear Presupuesto"
+          },
+          "addTransaction": {
+            "title": "Agregar Transacción",
+            "description": "Descripción",
+            "descriptionPlaceholder": "ej., Compras semanales",
+            "amount": "Monto (negativo para gastos)",
+            "amountPlaceholder": "-50.00",
+            "cancel": "Cancelar",
+            "add": "Agregar Transacción"
+          },
+          "addItem": {
+            "title": "Agregar Artículo",
+            "category": "Categoría/Título",
+            "categoryPlaceholder": "ej., Comestibles",
+            "amount": "Monto",
+            "amountPlaceholder": "0.00",
+            "notes": "Notas (opcional)",
+            "notesPlaceholder": "Notas adicionales...",
+            "back": "Volver",
+            "add": "Agregar Artículo"
+          }
+        },
+        "modals": {
+          "create": {
+            "title": "Crear Nuevo Presupuesto",
+            "typeLabel": "Tipo de Presupuesto",
+            "nameLabel": "Nombre",
+            "name": "Nombre del Presupuesto",
+            "namePlaceholder": "ej., Xbox Series X",
+            "currencyLabel": "Moneda",
+            "currency": "Moneda",
+            "goalAmountLabel": "Monto Objetivo (meta)",
+            "initialAmountLabel": "Monto Inicial Disponible",
+            "cancel": "Cancelar",
+            "create": "Crear"
+          },
+          "transaction": {
+            "descriptionLabel": "Descripción",
+            "descriptionPlaceholder": "ej., Compras semanales",
+            "dateLabel": "Fecha"
+          },
+          "deposit": {
+            "title": "Agregar Depósito",
+            "amountLabel": "Monto del depósito",
+            "submit": "Agregar Depósito"
+          },
+          "expense": {
+            "title": "Registrar Egreso",
+            "amountLabel": "Monto del egreso",
+            "submit": "Registrar Egreso"
           },
           "addTransaction": {
             "title": "Agregar Transacción",
@@ -312,5 +389,9 @@
         "dataCleared": "Todos los datos eliminados"
       }
     }
+  },
+  "accessibility": {
+    "markTaskDone": "Marcar tarea {task} como completada",
+    "markHabitDone": "Marcar hábito {habit} como completado"
   }
 }

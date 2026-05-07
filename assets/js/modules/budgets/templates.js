@@ -1,12 +1,9 @@
 /**
- * Budget Templates - Plantillas de etiquetas para la generación de HTML
+ * Budget Templates - Plantillas para la generación de HTML de presupuestos
  */
 
 import { escapeHtml } from "../../utils/html.js"
 
-/**
- * Etiqueta de plantilla literal para cadenas HTML
- */
 export function html(strings, ...values) {
   return strings.reduce((result, string, i) => {
     const value = values[i]
@@ -20,234 +17,190 @@ export function html(strings, ...values) {
   }, "")
 }
 
-/**
- * Plantilla de tarjeta de presupuesto
- */
+const STATUS_COLORS = {
+  safe: "bg-xp-primary",
+  warning: "bg-xp-warning",
+  danger: "bg-xp-danger",
+  reached: "bg-green-500"
+}
+
+const CURRENCY_SYMBOLS = { MXN: "$", USD: "$", EUR: "\u20AC" }
+
+function currencySymbol(currency) {
+  return CURRENCY_SYMBOLS[currency] || "$"
+}
+
 export function budgetCardTemplate(budget, i18n) {
-  const percentage = budget.getUsagePercentage()
+  const pct = budget.getProgress()
   const status = budget.getStatus()
-  const statusColors = {
-    safe: "bg-xp-primary",
-    warning: "bg-xp-warning",
-    danger: "bg-xp-danger"
-  }
+  const sym = currencySymbol(budget.currency)
+  const isSavings = budget.type === "savings"
+
+  const primaryLabel = isSavings ? "Meta" : "Inicial"
+  const primaryValue = isSavings ? budget.goalAmount : budget.initialAmount
+  const secondaryLabel = isSavings ? "Ahorrado" : "Disponible"
+  const secondaryValue = budget.getBalance()
+  const tertiaryLabel = isSavings ? "Faltan" : "Gastado"
+  const tertiaryValue = isSavings
+    ? Math.max(budget.goalAmount - budget.getBalance(), 0)
+    : budget.initialAmount - budget.getBalance()
+
+  const actionLabel = isSavings
+    ? (i18n?.getMessage("app.screens.budgets.overview.addDeposit") || "+ Dep\u00F3sito")
+    : (i18n?.getMessage("app.screens.budgets.overview.addExpense") || "+ Egreso")
 
   return html`
-    <div
-      class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20"
-    >
+    <div class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl font-bold">${budget.name}</h3>
+        <h3 class="text-xl font-bold">${isSavings ? "\uD83C\uDFAF" : "\uD83D\uDCB8"} ${budget.name}</h3>
         <span class="text-sm text-gray-500">${budget.currency}</span>
       </div>
 
       <div class="space-y-3 mb-4">
         <div class="flex justify-between">
-          <span class="text-gray-600 dark:text-gray-400"
-            >${i18n?.getMessage("app.screens.budgets.overview.totalBudget") ||
-            "Total Budget"}</span
-          >
-          <span class="font-semibold"
-            >$${budget.getTotalAllocated().toFixed(2)}</span
-          >
+          <span class="text-gray-600 dark:text-gray-400">${primaryLabel}</span>
+          <span class="font-semibold">${sym}${primaryValue.toFixed(2)}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-gray-600 dark:text-gray-400"
-            >${i18n?.getMessage("app.screens.budgets.overview.totalSpent") ||
-            "Total Spent"}</span
-          >
-          <span class="font-semibold text-xp-danger"
-            >$${budget.getTotalSpent().toFixed(2)}</span
-          >
+          <span class="text-gray-600 dark:text-gray-400">${secondaryLabel}</span>
+          <span class="font-semibold text-xp-primary">${sym}${secondaryValue.toFixed(2)}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-gray-600 dark:text-gray-400"
-            >${i18n?.getMessage("app.screens.budgets.overview.remaining") ||
-            "Remaining"}</span
-          >
-          <span class="font-semibold text-xp-primary"
-            >$${budget.getRemaining().toFixed(2)}</span
-          >
+          <span class="text-gray-600 dark:text-gray-400">${tertiaryLabel}</span>
+          <span class="font-semibold ${tertiaryValue <= 0 ? "text-xp-primary" : "text-xp-danger"}">${sym}${tertiaryValue.toFixed(2)}</span>
         </div>
       </div>
 
       <div class="mb-4">
         <div class="flex justify-between text-sm mb-1">
-          <span
-            >${percentage.toFixed(1)}%
-            ${i18n?.getMessage("app.screens.budgets.used") || "used"}</span
-          >
+          <span>${pct.toFixed(1)}% ${isSavings ? "completado" : "restante"}</span>
         </div>
-        <div
-          class="w-full h-2 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden"
-        >
-          <div
-            class="h-full ${statusColors[status]} transition-all duration-300"
-            style="width: ${Math.min(percentage, 100)}%"
-          ></div>
+        <div class="w-full h-2 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden">
+          <div class="h-full ${STATUS_COLORS[status]} transition-all duration-300" style="width: ${Math.min(pct, 100)}%"></div>
         </div>
       </div>
 
       <div class="flex gap-2">
-        <button
-          data-action="view-details"
-          data-budget-id="${budget.id}"
-          class="flex-1 px-4 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30 transition-colors"
-        >
-          ${i18n?.getMessage("app.screens.budgets.overview.viewDetails") ||
-          "View Details"}
+        <button data-action="view-details" data-budget-id="${budget.id}" class="flex-1 px-4 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30 transition-colors">
+          ${i18n?.getMessage("app.screens.budgets.overview.viewDetails") || "Ver Detalles"}
         </button>
-        <button
-          data-action="add-transaction"
-          data-budget-id="${budget.id}"
-          class="flex-1 px-4 py-2 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30 transition-colors"
-        >
-          ${i18n?.getMessage("app.screens.budgets.overview.addTransaction") ||
-          "Add Transaction"}
+        <button data-action="add-transaction" data-budget-id="${budget.id}" class="flex-1 px-4 py-2 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30 transition-colors">
+          ${actionLabel}
         </button>
       </div>
     </div>
   `
 }
 
-/**
- * Plantilla de estado vacío
- */
 export function emptyBudgetsTemplate(i18n) {
   return html`
     <div class="col-span-full text-center py-12">
-      <div class="text-6xl mb-4">💰</div>
+      <div class="text-6xl mb-4">\uD83D\uDCB0</div>
       <h3 class="text-xl font-bold mb-2">
-        ${i18n?.getMessage("app.screens.budgets.empty.title") ||
-        "No budgets yet"}
+        ${i18n?.getMessage("app.screens.budgets.empty.title") || "\u00A1No hay presupuestos a\u00FAn!"}
       </h3>
       <p class="text-gray-600 dark:text-gray-400 mb-4">
-        ${i18n?.getMessage("app.screens.budgets.empty.description") ||
-        "Create your first budget to start tracking your finances."}
+        ${i18n?.getMessage("app.screens.budgets.empty.description") || "Crea tu primer presupuesto para empezar a controlar tus finanzas."}
       </p>
-      <button
-        data-action="create-budget"
-        class="px-6 py-3 bg-xp-primary text-xp-darker font-bold rounded-lg hover:bg-xp-primary/80 transition-colors"
-      >
-        ${i18n?.getMessage("app.screens.budgets.empty.action") ||
-        "Create Budget"}
+      <button data-action="create-budget" class="px-6 py-3 bg-xp-primary text-xp-darker font-bold rounded-lg hover:bg-xp-primary/80 transition-colors">
+        ${i18n?.getMessage("app.screens.budgets.empty.action") || "Crear Presupuesto"}
       </button>
     </div>
   `
 }
 
-/**
- * Budget overview template
- */
-export function budgetOverviewTemplate(budgets, i18n) {
-  const totalAllocated = budgets.reduce(
-    (sum, b) => sum + b.getTotalAllocated(),
-    0
-  )
-  const totalSpent = budgets.reduce((sum, b) => sum + b.getTotalSpent(), 0)
-  const totalRemaining = totalAllocated - totalSpent
-
+export function budgetOverviewTemplate(totals, i18n) {
   return html`
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div
-        class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20"
-      >
+      <div class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20">
         <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
-          ${i18n?.getMessage("app.screens.budgets.overview.totalBudget") ||
-          "Total Budget"}
+          ${i18n?.getMessage("app.screens.budgets.overview.totalSaved") || "Total Ahorrado"}
         </div>
-        <div class="text-2xl font-bold text-xp-primary">
-          $${totalAllocated.toFixed(2)}
-        </div>
+        <div class="text-2xl font-bold text-xp-primary">$${totals.saved.toFixed(2)}</div>
       </div>
-      <div
-        class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20"
-      >
+      <div class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20">
         <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
-          ${i18n?.getMessage("app.screens.budgets.overview.totalSpent") ||
-          "Total Spent"}
+          ${i18n?.getMessage("app.screens.budgets.overview.totalAvailable") || "Total Disponible"}
         </div>
-        <div class="text-2xl font-bold text-xp-danger">
-          $${totalSpent.toFixed(2)}
-        </div>
+        <div class="text-2xl font-bold text-xp-primary">$${totals.available.toFixed(2)}</div>
       </div>
-      <div
-        class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20"
-      >
+      <div class="bg-white dark:bg-xp-card rounded-xl p-4 border-2 border-gray-200 dark:border-xp-primary/20">
         <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
-          ${i18n?.getMessage("app.screens.budgets.overview.remaining") ||
-          "Remaining"}
+          ${i18n?.getMessage("app.screens.budgets.overview.savingsGoals") || "Metas de Ahorro"}
         </div>
-        <div
-          class="text-2xl font-bold ${totalRemaining >= 0
-            ? "text-xp-primary"
-            : "text-xp-danger"}"
-        >
-          $${totalRemaining.toFixed(2)}
-        </div>
+        <div class="text-2xl font-bold text-xp-secondary">$${totals.savingsGoal.toFixed(2)}</div>
       </div>
     </div>
   `
 }
 
-/**
- * Create budget modal template
- */
 export function createBudgetModalTemplate(i18n) {
   return html`
     <div class="p-6">
       <h3 class="text-2xl font-bold mb-4">
-        ${i18n?.getMessage("app.screens.budgets.modals.create.title") ||
-        "Create New Budget"}
+        ${i18n?.getMessage("app.screens.budgets.modals.create.title") || "Crear Nuevo Presupuesto"}
       </h3>
       <form id="create-budget-form">
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-semibold mb-2"
-              >${i18n?.getMessage(
-                "app.screens.budgets.modals.create.nameLabel"
-              ) || "Budget Name"}</label
-            >
-            <input
-              type="text"
-              name="name"
-              required
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-              placeholder="${i18n?.getMessage(
-                "app.screens.budgets.modals.create.namePlaceholder"
-              ) || "e.g., Monthly Personal Budget"}"
-            />
+            <label class="block text-sm font-semibold mb-2">
+              ${i18n?.getMessage("app.screens.budgets.modals.create.typeLabel") || "Tipo de Presupuesto"}
+            </label>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="flex flex-col items-center p-4 border-2 border-gray-200 dark:border-xp-primary/20 rounded-xl cursor-pointer hover:border-xp-primary transition-colors has-[:checked]:border-xp-primary has-[:checked]:bg-xp-primary/10">
+                <input type="radio" name="type" value="savings" class="sr-only" checked />
+                <span class="text-2xl mb-1">\uD83C\uDFAF</span>
+                <span class="font-semibold text-sm">Ahorro</span>
+                <span class="text-xs text-gray-500 text-center">Quiero llegar a una meta</span>
+              </label>
+              <label class="flex flex-col items-center p-4 border-2 border-gray-200 dark:border-xp-primary/20 rounded-xl cursor-pointer hover:border-xp-primary transition-colors has-[:checked]:border-xp-primary has-[:checked]:bg-xp-primary/10">
+                <input type="radio" name="type" value="spending" class="sr-only" />
+                <span class="text-2xl mb-1">\uD83D\uDCB8</span>
+                <span class="font-semibold text-sm">Gasto</span>
+                <span class="text-xs text-gray-500 text-center">Tengo dinero disponible</span>
+              </label>
+            </div>
           </div>
+
           <div>
-            <label class="block text-sm font-semibold mb-2"
-              >${i18n?.getMessage(
-                "app.screens.budgets.modals.create.currencyLabel"
-              ) || "Currency"}</label
-            >
-            <select
-              name="currency"
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-            >
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="GBP">GBP (£)</option>
+            <label class="block text-sm font-semibold mb-2">
+              ${i18n?.getMessage("app.screens.budgets.modals.create.nameLabel") || "Nombre"}
+            </label>
+            <input type="text" name="name" required class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary" placeholder="${i18n?.getMessage("app.screens.budgets.modals.create.namePlaceholder") || "ej., Xbox Series X"}" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold mb-2">
+              ${i18n?.getMessage("app.screens.budgets.modals.create.currencyLabel") || "Moneda"}
+            </label>
+            <select name="currency" class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary">
               <option value="MXN">MXN ($)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (\u20AC)</option>
             </select>
           </div>
+
+          <div id="goal-amount-group">
+            <label class="block text-sm font-semibold mb-2">
+              ${i18n?.getMessage("app.screens.budgets.modals.create.goalAmountLabel") || "Monto Objetivo (meta)"}
+            </label>
+            <input type="number" step="0.01" min="0.01" name="goalAmount" class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary" placeholder="11000" />
+          </div>
+
+          <div id="initial-amount-group" class="hidden">
+            <label class="block text-sm font-semibold mb-2">
+              ${i18n?.getMessage("app.screens.budgets.modals.create.initialAmountLabel") || "Monto Inicial Disponible"}
+            </label>
+            <input type="number" step="0.01" min="0.01" name="initialAmount" class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary" placeholder="5000" />
+          </div>
         </div>
+
         <div class="flex gap-3 mt-6">
-          <button
-            type="button"
-            data-action="close-modal"
-            class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors"
-          >
-            ${i18n?.getMessage("app.common.cancel") || "Cancel"}
+          <button type="button" data-action="close-modal" class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+            ${i18n?.getMessage("app.common.cancel") || "Cancelar"}
           </button>
-          <button
-            type="submit"
-            class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors"
-          >
-            ${i18n?.getMessage("app.common.create") || "Create"}
+          <button type="submit" class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+            ${i18n?.getMessage("app.common.create") || "Crear"}
           </button>
         </div>
       </form>
@@ -255,121 +208,66 @@ export function createBudgetModalTemplate(i18n) {
   `
 }
 
-/**
- * Budget details modal template
- */
 export function budgetDetailsModalTemplate(budget, i18n) {
+  const isSavings = budget.type === "savings"
+  const sym = currencySymbol(budget.currency)
+  const balance = budget.getBalance()
+  const pct = budget.getProgress()
+
+  const headerLabel = isSavings ? "Meta" : "Inicial"
+  const headerValue = isSavings ? budget.goalAmount : budget.initialAmount
+  const balanceLabel = isSavings ? "Ahorrado" : "Disponible"
+
   return html`
     <div class="p-6">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-2xl font-bold">${budget.name}</h3>
-        <button
-          data-action="delete-budget"
-          data-budget-id="${budget.id}"
-          class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors"
-        >
-          ${i18n?.getMessage("app.common.delete") || "Delete"}
+        <h3 class="text-2xl font-bold">${isSavings ? "\uD83C\uDFAF" : "\uD83D\uDCB8"} ${budget.name}</h3>
+        <button data-action="delete-budget" data-budget-id="${budget.id}" class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors">
+          ${i18n?.getMessage("app.common.delete") || "Eliminar"}
         </button>
       </div>
 
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+          <div class="text-xs text-gray-500">${headerLabel}</div>
+          <div class="font-bold">${sym}${headerValue.toFixed(2)}</div>
+        </div>
+        <div class="p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+          <div class="text-xs text-gray-500">${balanceLabel}</div>
+          <div class="font-bold text-xp-primary">${sym}${balance.toFixed(2)}</div>
+        </div>
+      </div>
+
       <div class="mb-6">
-        <h4 class="font-bold mb-3 flex items-center justify-between">
-          <span
-            >${i18n?.getMessage("app.screens.budgets.details.itemsTitle") ||
-            "Budget Items"}</span
-          >
-          <button
-            data-action="add-item"
-            data-budget-id="${budget.id}"
-            class="text-sm px-3 py-1 bg-xp-primary text-xp-darker rounded-lg"
-          >
-            +
-            ${i18n?.getMessage("app.screens.budgets.details.addItem") ||
-            "Add Item"}
-          </button>
-        </h4>
-        <div class="space-y-2 max-h-48 overflow-y-auto">
-          ${budget.items.length === 0
-            ? html`<div
-                class="text-gray-500 dark:text-gray-400 text-center py-4"
-              >
-                ${i18n?.getMessage("app.screens.budgets.details.noItems") ||
-                "No items yet"}
-              </div>`
-            : budget.items
-                .map(
-                  item => html`
-                    <div
-                      class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg"
-                    >
-                      <div>
-                        <div class="font-semibold">${item.title}</div>
-                        ${item.notes
-                          ? html`<div
-                              class="text-sm text-gray-600 dark:text-gray-400"
-                            >
-                              ${item.notes}
-                            </div>`
-                          : ""}
-                      </div>
-                      <div class="text-right">
-                        <div class="font-bold text-xp-primary">
-                          $${item.amount.toFixed(2)}
-                        </div>
-                        <button
-                          data-action="delete-item"
-                          data-budget-id="${budget.id}"
-                          data-item-id="${item.id}"
-                          class="text-xs text-xp-danger hover:underline"
-                        >
-                          ${i18n?.getMessage("app.common.delete") || "Delete"}
-                        </button>
-                      </div>
-                    </div>
-                  `
-                )
-                .join("")}
+        <div class="flex justify-between text-sm mb-1">
+          <span>${pct.toFixed(1)}% ${isSavings ? "completado" : "restante"}</span>
+        </div>
+        <div class="w-full h-3 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden">
+          <div class="h-full ${STATUS_COLORS[budget.getStatus()]} transition-all duration-300" style="width: ${Math.min(pct, 100)}%"></div>
         </div>
       </div>
 
       <div>
         <h4 class="font-bold mb-3">
-          ${i18n?.getMessage("app.screens.budgets.details.transactionsTitle") ||
-          "Transactions"}
+          ${i18n?.getMessage("app.screens.budgets.details.transactionsTitle") || "Transacciones"}
         </h4>
         <div class="space-y-2 max-h-64 overflow-y-auto">
           ${budget.transactions.length === 0
-            ? html`<div
-                class="text-gray-500 dark:text-gray-400 text-center py-4"
-              >
-                ${i18n?.getMessage(
-                  "app.screens.budgets.details.noTransactions"
-                ) || "No transactions yet"}
+            ? html`<div class="text-gray-500 dark:text-gray-400 text-center py-4">
+                ${i18n?.getMessage("app.screens.budgets.details.noTransactions") || "No hay transacciones a\u00FAn"}
               </div>`
             : budget.transactions
-                .map(
-                  t => html`
-                    <div
-                      class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg"
-                    >
-                      <div>
-                        <div class="font-semibold">${t.description}</div>
-                        <div class="text-xs text-gray-600 dark:text-gray-400">
-                          ${t.date}
-                        </div>
-                      </div>
-                      <div
-                        class="font-bold ${t.isExpense()
-                          ? "text-xp-danger"
-                          : "text-xp-primary"}"
-                      >
-                        ${t.isExpense() ? "-" : "+"}$${t
-                          .getAbsoluteAmount()
-                          .toFixed(2)}
-                      </div>
+                .map(t => html`
+                  <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+                    <div>
+                      <div class="font-semibold">${t.description}</div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">${t.date}</div>
                     </div>
-                  `
-                )
+                    <div class="font-bold ${t.isExpense() ? "text-xp-danger" : "text-xp-primary"}">
+                      ${t.isExpense() ? "-" : "+"}$${t.getAbsoluteAmount().toFixed(2)}
+                    </div>
+                  </div>
+                `)
                 .join("")}
         </div>
       </div>
@@ -377,142 +275,46 @@ export function budgetDetailsModalTemplate(budget, i18n) {
   `
 }
 
-/**
- * Add transaction modal template
- */
-export function addTransactionModalTemplate(budgetId, i18n) {
-  return html`
-    <div class="p-6">
-      <h3 class="text-2xl font-bold mb-4">
-        ${i18n?.getMessage("app.screens.budgets.modals.transaction.title") ||
-        "Add Transaction"}
-      </h3>
-      <form id="add-transaction-form" data-budget-id="${budgetId}">
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-semibold mb-2"
-              >${i18n?.getMessage(
-                "app.screens.budgets.modals.transaction.descriptionLabel"
-              ) || "Description"}</label
-            >
-            <input
-              type="text"
-              name="description"
-              required
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-              placeholder="${i18n?.getMessage(
-                "app.screens.budgets.modals.transaction.descriptionPlaceholder"
-              ) || "e.g., Weekly groceries"}"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-semibold mb-2"
-              >${i18n?.getMessage(
-                "app.screens.budgets.modals.transaction.amountLabel"
-              ) || "Amount (negative for expenses)"}</label
-            >
-            <input
-              type="number"
-              step="0.01"
-              name="amount"
-              required
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-              placeholder="-50.00"
-            />
-          </div>
-        </div>
-        <div class="flex gap-3 mt-6">
-          <button
-            type="button"
-            data-action="close-modal"
-            class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors"
-          >
-            ${i18n?.getMessage("app.common.cancel") || "Cancel"}
-          </button>
-          <button
-            type="submit"
-            class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors"
-          >
-            ${i18n?.getMessage("app.common.add") || "Add"}
-          </button>
-        </div>
-      </form>
-    </div>
-  `
-}
+export function addTransactionModalTemplate(budget, i18n) {
+  const isSavings = budget.type === "savings"
+  const title = isSavings
+    ? (i18n?.getMessage("app.screens.budgets.modals.deposit.title") || "Agregar Dep\u00F3sito")
+    : (i18n?.getMessage("app.screens.budgets.modals.expense.title") || "Registrar Egreso")
+  const amountLabel = isSavings
+    ? (i18n?.getMessage("app.screens.budgets.modals.deposit.amountLabel") || "Monto del dep\u00F3sito")
+    : (i18n?.getMessage("app.screens.budgets.modals.expense.amountLabel") || "Monto del egreso")
+  const submitLabel = isSavings
+    ? (i18n?.getMessage("app.screens.budgets.modals.deposit.submit") || "Agregar Dep\u00F3sito")
+    : (i18n?.getMessage("app.screens.budgets.modals.expense.submit") || "Registrar Egreso")
 
-/**
- * Add budget item modal template
- */
-export function addBudgetItemModalTemplate(budgetId, i18n) {
   return html`
     <div class="p-6">
-      <h3 class="text-2xl font-bold mb-4">
-        ${i18n?.getMessage("app.screens.budgets.modals.item.title") ||
-        "Add Budget Item"}
-      </h3>
-      <form id="add-budget-item-form" data-budget-id="${budgetId}">
+      <h3 class="text-2xl font-bold mb-4">${title}</h3>
+      <form id="add-transaction-form" data-budget-id="${budget.id}">
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-semibold mb-2"
-              >${i18n?.getMessage(
-                "app.screens.budgets.modals.item.categoryLabel"
-              ) || "Category/Title"}</label
-            >
-            <input
-              type="text"
-              name="title"
-              required
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-              placeholder="${i18n?.getMessage(
-                "app.screens.budgets.modals.item.categoryPlaceholder"
-              ) || "e.g., Groceries"}"
-            />
+            <label class="block text-sm font-semibold mb-2">
+              ${i18n?.getMessage("app.screens.budgets.modals.transaction.descriptionLabel") || "Descripci\u00F3n"}
+            </label>
+            <input type="text" name="description" required class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary" placeholder="${i18n?.getMessage("app.screens.budgets.modals.transaction.descriptionPlaceholder") || "ej., Compras semanales"}" />
           </div>
           <div>
-            <label class="block text-sm font-semibold mb-2"
-              >${i18n?.getMessage(
-                "app.screens.budgets.modals.item.amountLabel"
-              ) || "Amount"}</label
-            >
-            <input
-              type="number"
-              step="0.01"
-              name="amount"
-              required
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-              placeholder="0.00"
-            />
+            <label class="block text-sm font-semibold mb-2">${amountLabel}</label>
+            <input type="number" step="0.01" min="0.01" name="amount" required class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary" placeholder="0.00" />
           </div>
           <div>
-            <label class="block text-sm font-semibold mb-2"
-              >${i18n?.getMessage(
-                "app.screens.budgets.modals.item.notesLabel"
-              ) || "Notes (optional)"}</label
-            >
-            <textarea
-              name="notes"
-              rows="2"
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-              placeholder="${i18n?.getMessage(
-                "app.screens.budgets.modals.item.notesPlaceholder"
-              ) || "Additional notes..."}"
-            ></textarea>
+            <label class="block text-sm font-semibold mb-2">
+              ${i18n?.getMessage("app.screens.budgets.modals.transaction.dateLabel") || "Fecha"}
+            </label>
+            <input type="date" name="date" required class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary" />
           </div>
         </div>
         <div class="flex gap-3 mt-6">
-          <button
-            type="button"
-            data-action="close-modal"
-            class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors"
-          >
-            ${i18n?.getMessage("app.common.cancel") || "Cancel"}
+          <button type="button" data-action="close-modal" class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors">
+            ${i18n?.getMessage("app.common.cancel") || "Cancelar"}
           </button>
-          <button
-            type="submit"
-            class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors"
-          >
-            ${i18n?.getMessage("app.common.add") || "Add"}
+          <button type="submit" class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors">
+            ${submitLabel}
           </button>
         </div>
       </form>

@@ -44,15 +44,42 @@
           "totalBudget": "Total Budget",
           "totalSpent": "Total Spent",
           "remaining": "Remaining",
+          "totalSaved": "Total Saved",
+          "totalAvailable": "Total Available",
+          "savingsGoals": "Savings Goals",
           "viewDetails": "View Details",
-          "addTransaction": "+ Transaction"
+          "addTransaction": "+ Transaction",
+          "addDeposit": "+ Deposit",
+          "addExpense": "+ Expense"
+        },
+        "types": {
+          "savings": "Savings",
+          "savingsHint": "I want to reach a goal",
+          "spending": "Spending",
+          "spendingHint": "I have money available"
+        },
+        "card": {
+          "goal": "Goal",
+          "initial": "Initial",
+          "saved": "Saved",
+          "available": "Available",
+          "remaining": "Remaining",
+          "spent": "Spent",
+          "completed": "completed",
+          "remainingPct": "remaining"
         },
         "details": {
           "addItem": "+ Item",
           "delete": "Delete",
           "noItems": "No items yet",
           "noTransactions": "No transactions yet",
+          "transactionsTitle": "Transactions",
           "transactions": "Transactions"
+        },
+        "empty": {
+          "title": "No budgets yet",
+          "description": "Create your first budget to start tracking your finances.",
+          "action": "Create Budget"
         },
         "modal": {
           "create": {
@@ -62,6 +89,56 @@
             "currency": "Currency",
             "cancel": "Cancel",
             "create": "Create Budget"
+          },
+          "addTransaction": {
+            "title": "Add Transaction",
+            "description": "Description",
+            "descriptionPlaceholder": "e.g., Weekly groceries",
+            "amount": "Amount (negative for expenses)",
+            "amountPlaceholder": "-50.00",
+            "cancel": "Cancel",
+            "add": "Add Transaction"
+          },
+          "addItem": {
+            "title": "Add Budget Item",
+            "category": "Category/Title",
+            "categoryPlaceholder": "e.g., Groceries",
+            "amount": "Amount",
+            "amountPlaceholder": "0.00",
+            "notes": "Notes (optional)",
+            "notesPlaceholder": "Additional notes...",
+            "back": "Back",
+            "add": "Add Item"
+          }
+        },
+        "modals": {
+          "create": {
+            "title": "Create New Budget",
+            "typeLabel": "Budget Type",
+            "nameLabel": "Name",
+            "name": "Budget Name",
+            "namePlaceholder": "e.g., Xbox Series X",
+            "currencyLabel": "Currency",
+            "currency": "Currency",
+            "goalAmountLabel": "Goal Amount",
+            "initialAmountLabel": "Initial Amount Available",
+            "cancel": "Cancel",
+            "create": "Create"
+          },
+          "transaction": {
+            "descriptionLabel": "Description",
+            "descriptionPlaceholder": "e.g., Weekly groceries",
+            "dateLabel": "Date"
+          },
+          "deposit": {
+            "title": "Add Deposit",
+            "amountLabel": "Deposit amount",
+            "submit": "Add Deposit"
+          },
+          "expense": {
+            "title": "Record Expense",
+            "amountLabel": "Expense amount",
+            "submit": "Record Expense"
           },
           "addTransaction": {
             "title": "Add Transaction",
@@ -312,5 +389,9 @@
         "dataCleared": "All data cleared"
       }
     }
+  },
+  "accessibility": {
+    "markTaskDone": "Mark task {task} as completed",
+    "markHabitDone": "Mark habit {habit} as completed"
   }
 }
