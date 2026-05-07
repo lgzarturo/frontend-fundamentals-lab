@@ -103,7 +103,10 @@ export class BudgetsModule {
 
     this._saveBudgets()
     this.render()
-    this.eventBus.emit("budget:transactionRemoved", { budget, transaction: result.removed })
+    this.eventBus.emit("budget:transactionRemoved", {
+      budget,
+      transaction: result.removed
+    })
     return result.removed
   }
 
@@ -130,16 +133,25 @@ export class BudgetsModule {
 
     const form = document.getElementById("create-budget-form")
     const typeInputs = form.querySelectorAll('input[name="type"]')
+    const syncTypeFields = type => {
+      const isSavings = type === "savings"
+      const goalGroup = document.getElementById("goal-amount-group")
+      const initialGroup = document.getElementById("initial-amount-group")
+      const goalInput = goalGroup?.querySelector("input")
+      const initialInput = initialGroup?.querySelector("input")
+
+      goalGroup?.classList.toggle("hidden", !isSavings)
+      initialGroup?.classList.toggle("hidden", isSavings)
+      if (goalInput) goalInput.required = isSavings
+      if (initialInput) initialInput.required = !isSavings
+    }
 
     typeInputs.forEach(input => {
       input.addEventListener("change", () => {
-        const isSavings = input.value === "savings"
-        const goalGroup = document.getElementById("goal-amount-group")
-        const initialGroup = document.getElementById("initial-amount-group")
-        if (goalGroup) goalGroup.classList.toggle("hidden", !isSavings)
-        if (initialGroup) initialGroup.classList.toggle("hidden", isSavings)
+        syncTypeFields(input.value)
       })
     })
+    syncTypeFields(form.querySelector('input[name="type"]:checked')?.value)
 
     form.addEventListener("submit", e => {
       e.preventDefault()
@@ -160,7 +172,10 @@ export class BudgetsModule {
     const budget = this.budgets.find(b => b.id === budgetId)
     if (!budget || !this.modalContainer) return
 
-    this.modalContainer.innerHTML = budgetDetailsModalTemplate(budget, this.i18n)
+    this.modalContainer.innerHTML = budgetDetailsModalTemplate(
+      budget,
+      this.i18n
+    )
     this._showModal()
   }
 
@@ -168,7 +183,10 @@ export class BudgetsModule {
     const budget = this.budgets.find(b => b.id === budgetId)
     if (!budget || !this.modalContainer) return
 
-    this.modalContainer.innerHTML = addTransactionModalTemplate(budget, this.i18n)
+    this.modalContainer.innerHTML = addTransactionModalTemplate(
+      budget,
+      this.i18n
+    )
     this._showModal()
 
     const form = document.getElementById("add-transaction-form")
@@ -176,10 +194,14 @@ export class BudgetsModule {
       e.preventDefault()
       const formData = new FormData(form)
       const rawAmount = parseFloat(formData.get("amount"))
-      const amount = budget.type === "spending" ? -Math.abs(rawAmount) : Math.abs(rawAmount)
+      if (!Number.isFinite(rawAmount) || rawAmount <= 0) {
+        throw new Error("Amount must be greater than 0")
+      }
+      const amount =
+        budget.type === "spending" ? -Math.abs(rawAmount) : Math.abs(rawAmount)
       this.addTransaction(budgetId, {
         amount,
-        description: formData.get("description"),
+        description: formData.get("description")?.trim(),
         date: formData.get("date")
       })
       this._closeModal()
@@ -246,6 +268,11 @@ export class BudgetsModule {
     const modal = document.getElementById("modal")
     if (modal) {
       modal.classList.remove("hidden")
+      modal.querySelectorAll('[data-action="close-modal"]').forEach(button => {
+        button.addEventListener("click", () => this._closeModal(), {
+          once: true
+        })
+      })
     }
   }
 

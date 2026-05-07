@@ -43,16 +43,17 @@ export class Transaction {
 
   static validate(data, budgetType) {
     const errors = []
+    const amount = parseFloat(data.amount)
     if (!data.description?.trim()) {
       errors.push("Description is required")
     }
-    if (isNaN(data.amount) || data.amount === 0) {
+    if (!Number.isFinite(amount) || amount === 0) {
       errors.push("Amount cannot be zero")
     }
-    if (budgetType === "savings" && data.amount < 0) {
+    if (budgetType === "savings" && amount < 0) {
       errors.push("Savings transactions must be positive (deposits)")
     }
-    if (budgetType === "spending" && data.amount > 0) {
+    if (budgetType === "spending" && amount > 0) {
       errors.push("Spending transactions must be negative (expenses)")
     }
     return errors
@@ -64,13 +65,14 @@ export class Transaction {
  */
 export class Budget {
   constructor(data = {}) {
+    const normalized = Budget.normalizeData(data)
     this.id = data.id || generateId()
-    this.name = data.name || ""
-    this.currency = data.currency || "MXN"
-    this.type = data.type || "spending"
-    this.goalAmount = parseFloat(data.goalAmount) || 0
-    this.initialAmount = parseFloat(data.initialAmount) || 0
-    this.transactions = (data.transactions || []).map(t =>
+    this.name = normalized.name
+    this.currency = normalized.currency
+    this.type = normalized.type
+    this.goalAmount = normalized.goalAmount
+    this.initialAmount = normalized.initialAmount
+    this.transactions = normalized.transactions.map(t =>
       t instanceof Transaction ? t : Transaction.fromJSON(t)
     )
   }
@@ -143,6 +145,44 @@ export class Budget {
 
   static fromJSON(data) {
     return new Budget(data)
+  }
+
+  static normalizeData(data = {}) {
+    const transactions = Array.isArray(data.transactions)
+      ? data.transactions
+      : []
+
+    if (data.type === "savings" || data.type === "spending") {
+      return {
+        ...data,
+        name: data.name || "",
+        currency: ["MXN", "USD", "EUR"].includes(data.currency)
+          ? data.currency
+          : "MXN",
+        goalAmount: parseFloat(data.goalAmount) || 0,
+        initialAmount: parseFloat(data.initialAmount) || 0,
+        transactions
+      }
+    }
+
+    const initialAmount = Array.isArray(data.items)
+      ? data.items.reduce(
+          (sum, item) => sum + (parseFloat(item.amount) || 0),
+          0
+        )
+      : 0
+
+    return {
+      id: data.id,
+      name: data.name || "",
+      currency: ["MXN", "USD", "EUR"].includes(data.currency)
+        ? data.currency
+        : "MXN",
+      type: "spending",
+      goalAmount: 0,
+      initialAmount,
+      transactions
+    }
   }
 
   static validate(data) {

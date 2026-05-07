@@ -237,5 +237,20 @@ describe("Budget Models", () => {
       expect(restored.goalAmount).toBe(10000)
       expect(restored.transactions.length).toBe(1)
     })
+
+    it("debería migrar presupuestos legacy con items a spending", () => {
+      const restored = Budget.fromJSON({
+        name: "Legacy",
+        currency: "GBP",
+        items: [{ amount: 500 }, { amount: 250 }],
+        transactions: [{ description: "Gasto", amount: -100 }]
+      })
+
+      expect(restored.type).toBe("spending")
+      expect(restored.currency).toBe("MXN")
+      expect(restored.initialAmount).toBe(750)
+      expect(restored.getBalance()).toBe(650)
+      expect(restored.toJSON()).not.toHaveProperty("items")
+    })
   })
 })
