@@ -2,6 +2,13 @@
 
 ## Historial de cambios
 
+### v0.0.17
+
+- refactor: implementar migración de datos y validación en presupuestos
+- chore: add coverage/ to .gitignore and remove from tracking
+- chore: actualizar a v0.0.16 y optimizar infraestructura
+- fix: corregir la version
+
 ### v0.0.16
 
 - chore: agregar Makefile y comandos de automatización de versión

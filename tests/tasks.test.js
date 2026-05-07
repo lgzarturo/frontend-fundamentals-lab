@@ -1,0 +1,305 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { Subtask, Task } from '../assets/js/modules/tasks/models.js'
+import { TasksModule } from '../assets/js/modules/tasks/index.js'
+
+// Mock de document.createElement para escapeHtml (jsdom lo provee, pero html.js lo usa)
+// getTodayString depende de Date, la controlamos donde sea necesario
+
+describe('Subtask', () => {
+  it('debería crear con valores predeterminados', () => {
+    const s = new Subtask({ text: 'Hacer algo' })
+    expect(s.text).toBe('Hacer algo')
+    expect(s.done).toBe(false)
+    expect(s.id).toBeDefined()
+  })
+
+  it('debería serializar a JSON y restaurar', () => {
+    const s = new Subtask({ text: 'Paso 1', done: true })
+    const json = s.toJSON()
+    const restored = Subtask.fromJSON(json)
+    expect(restored.text).toBe('Paso 1')
+    expect(restored.done).toBe(true)
+    expect(restored.id).toBe(s.id)
+  })
+})
+
+describe('Task - constructor', () => {
+  it('debería crear con valores predeterminados', () => {
+    const t = new Task({ title: 'Mi tarea' })
+    expect(t.title).toBe('Mi tarea')
+    expect(t.description).toBe('')
+    expect(t.priority).toBe('medium')
+    expect(t.done).toBe(false)
+    expect(t.order).toBe(0)
+    expect(t.tags).toEqual([])
+    expect(t.subtasks).toEqual([])
+    expect(t.id).toBeDefined()
+    expect(t.createdAt).toBeTypeOf('number')
+    expect(t.updatedAt).toBeTypeOf('number')
+  })
+
+  it('debería mapear subtasks crudos a instancias Subtask', () => {
+    const t = new Task({
+      title: 'T',
+      subtasks: [{ id: 'x', text: 'sub', done: false }]
+    })
+    expect(t.subtasks[0]).toBeInstanceOf(Subtask)
+  })
+})
+
+describe('Task - isToday()', () => {
+  it('debería retornar true cuando dueDate es hoy', () => {
+    // Usamos getTodayString() para que coincida con la implementación (fecha local)
+    const d = new Date()
+    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+    const t = new Task({ title: 'T', dueDate: today })
+    expect(t.isToday()).toBe(true)
+  })
+
+  it('debería retornar false cuando dueDate no es hoy', () => {
+    const t = new Task({ title: 'T', dueDate: '2000-01-01' })
+    expect(t.isToday()).toBe(false)
+  })
+})
+
+describe('Task - isMIT()', () => {
+  const d = new Date()
+  const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
+  it('done=true + priority=high → NO es MIT', () => {
+    const t = new Task({ title: 'T', priority: 'high', done: true })
+    expect(t.isMIT()).toBe(false)
+  })
+
+  it('done=false + priority=high → ES MIT', () => {
+    const t = new Task({ title: 'T', priority: 'high', done: false })
+    expect(t.isMIT()).toBe(true)
+  })
+
+  it('done=false + dueDate=hoy → ES MIT', () => {
+    const t = new Task({ title: 'T', priority: 'low', dueDate: today, done: false })
+    expect(t.isMIT()).toBe(true)
+  })
+
+  it('done=true + dueDate=hoy → NO es MIT', () => {
+    const t = new Task({ title: 'T', priority: 'low', dueDate: today, done: true })
+    expect(t.isMIT()).toBe(false)
+  })
+})
+
+describe('Task - toggle()', () => {
+  it('debería invertir done y actualizar updatedAt', () => {
+    const t = new Task({ title: 'T' })
+    const before = t.updatedAt
+    t.toggle()
+    expect(t.done).toBe(true)
+    expect(t.updatedAt).toBeGreaterThanOrEqual(before)
+    t.toggle()
+    expect(t.done).toBe(false)
+  })
+})
+
+describe('Task - subtask operations', () => {
+  let task
+
+  beforeEach(() => {
+    task = new Task({ title: 'T' })
+  })
+
+  it('addSubtask() agrega y retorna Subtask', () => {
+    const s = task.addSubtask('paso 1')
+    expect(s).toBeInstanceOf(Subtask)
+    expect(task.subtasks).toHaveLength(1)
+    expect(task.subtasks[0].text).toBe('paso 1')
+  })
+
+  it('toggleSubtask() invierte done de la subtarea', () => {
+    const s = task.addSubtask('paso 1')
+    task.toggleSubtask(s.id)
+    expect(task.subtasks[0].done).toBe(true)
+    task.toggleSubtask(s.id)
+    expect(task.subtasks[0].done).toBe(false)
+  })
+
+  it('removeSubtask() elimina y retorna la subtarea', () => {
+    const s = task.addSubtask('paso 1')
+    const removed = task.removeSubtask(s.id)
+    expect(removed.id).toBe(s.id)
+    expect(task.subtasks).toHaveLength(0)
+  })
+
+  it('removeSubtask() con ID inexistente retorna null', () => {
+    expect(task.removeSubtask('nope')).toBeNull()
+  })
+
+  it('getSubtaskProgress() retorna 0 sin subtareas', () => {
+    expect(task.getSubtaskProgress()).toBe(0)
+  })
+
+  it('getSubtaskProgress() retorna % correcto', () => {
+    const s1 = task.addSubtask('a')
+    task.addSubtask('b')
+    task.toggleSubtask(s1.id)
+    expect(task.getSubtaskProgress()).toBe(50)
+  })
+})
+
+describe('Task.validate()', () => {
+  it('debería rechazar título vacío', () => {
+    const errors = Task.validate({ title: '', priority: 'medium' })
+    expect(errors).toContain('Title is required')
+  })
+
+  it('debería aceptar prioridades válidas', () => {
+    for (const p of ['low', 'medium', 'high']) {
+      const errors = Task.validate({ title: 'T', priority: p })
+      expect(errors).not.toContain('Priority must be low, medium or high')
+    }
+  })
+
+  it('debería rechazar prioridad inválida', () => {
+    const errors = Task.validate({ title: 'T', priority: 'critical' })
+    expect(errors).toContain('Priority must be low, medium or high')
+  })
+
+  it('debería rechazar dueDate con formato incorrecto', () => {
+    const errors = Task.validate({ title: 'T', priority: 'low', dueDate: '01/01/2025' })
+    expect(errors.length).toBeGreaterThan(0)
+  })
+
+  it('debería aceptar dueDate vacío', () => {
+    const errors = Task.validate({ title: 'T', priority: 'low', dueDate: '' })
+    expect(errors).toHaveLength(0)
+  })
+})
+
+describe('Task - serialización round-trip', () => {
+  it('toJSON → fromJSON conserva todos los campos', () => {
+    const original = new Task({
+      title: 'Test',
+      description: 'desc',
+      dueDate: '2025-12-31',
+      priority: 'high',
+      tags: ['trabajo', 'urgente'],
+      done: true,
+      order: 3,
+      createdAt: 1000
+    })
+    original.addSubtask('sub 1')
+    // capturo updatedAt después de addSubtask porque muta el campo
+    const expectedUpdatedAt = original.updatedAt
+
+    const json = original.toJSON()
+    const restored = Task.fromJSON(json)
+
+    expect(restored.id).toBe(original.id)
+    expect(restored.title).toBe('Test')
+    expect(restored.description).toBe('desc')
+    expect(restored.dueDate).toBe('2025-12-31')
+    expect(restored.priority).toBe('high')
+    expect(restored.tags).toEqual(['trabajo', 'urgente'])
+    expect(restored.done).toBe(true)
+    expect(restored.order).toBe(3)
+    expect(restored.createdAt).toBe(1000)
+    expect(restored.updatedAt).toBe(expectedUpdatedAt)
+    expect(restored.subtasks).toHaveLength(1)
+    expect(restored.subtasks[0]).toBeInstanceOf(Subtask)
+  })
+})
+
+describe('TasksModule', () => {
+  let storage
+  let eventBus
+  let module
+
+  beforeEach(() => {
+    const store = {}
+    storage = {
+      get: vi.fn(key => store[key] ?? null),
+      set: vi.fn((key, val) => { store[key] = val })
+    }
+
+    const listeners = {}
+    eventBus = {
+      on: vi.fn((event, cb) => {
+        listeners[event] = listeners[event] || []
+        listeners[event].push(cb)
+      }),
+      emit: vi.fn((event, data) => {
+        (listeners[event] || []).forEach(cb => cb(data))
+      })
+    }
+
+    module = new TasksModule(storage, eventBus, null)
+    // init sin DOM: cargamos manualmente
+    module._loadTasks()
+  })
+
+  it('debería iniciar con lista vacía', () => {
+    expect(module.tasks).toHaveLength(0)
+  })
+
+  it('createTask() crea y persiste la tarea', () => {
+    const task = module.createTask({ title: 'Nueva', priority: 'low' })
+    expect(task.title).toBe('Nueva')
+    expect(module.tasks).toHaveLength(1)
+    expect(storage.set).toHaveBeenCalled()
+  })
+
+  it('createTask() emite task:created', () => {
+    module.createTask({ title: 'T', priority: 'medium' })
+    expect(eventBus.emit).toHaveBeenCalledWith('task:created', expect.any(Task))
+  })
+
+  it('createTask() lanza error si la validación falla', () => {
+    expect(() => module.createTask({ title: '', priority: 'medium' })).toThrow()
+  })
+
+  it('toggleTask() invierte done y emite task:toggled', () => {
+    const task = module.createTask({ title: 'T', priority: 'low' })
+    module.toggleTask(task.id)
+    expect(module.tasks[0].done).toBe(true)
+    expect(eventBus.emit).toHaveBeenCalledWith('task:toggled', expect.any(Task))
+  })
+
+  it('deleteTask() elimina la tarea y emite task:deleted', () => {
+    const task = module.createTask({ title: 'T', priority: 'low' })
+    module.deleteTask(task.id)
+    expect(module.tasks).toHaveLength(0)
+    expect(eventBus.emit).toHaveBeenCalledWith('task:deleted', expect.any(Task))
+  })
+
+  it('getFilteredTasks("completed") retorna solo done', () => {
+    module.createTask({ title: 'A', priority: 'low' })
+    const b = module.createTask({ title: 'B', priority: 'low' })
+    module.toggleTask(b.id)
+    const completed = module.getFilteredTasks('completed')
+    expect(completed).toHaveLength(1)
+    expect(completed[0].id).toBe(b.id)
+  })
+
+  it('getFilteredTasks("high") retorna solo high+!done', () => {
+    const a = module.createTask({ title: 'A', priority: 'high' })
+    module.createTask({ title: 'B', priority: 'low' })
+    const high = module.getFilteredTasks('high')
+    expect(high).toHaveLength(1)
+    expect(high[0].id).toBe(a.id)
+  })
+
+  it('getMITs() retorna hasta limit tareas MIT', () => {
+    module.createTask({ title: 'A', priority: 'high' })
+    module.createTask({ title: 'B', priority: 'high' })
+    module.createTask({ title: 'C', priority: 'high' })
+    module.createTask({ title: 'D', priority: 'high' })
+    const mits = module.getMITs(3)
+    expect(mits).toHaveLength(3)
+  })
+
+  it('reorderTasks() actualiza el campo order', () => {
+    const a = module.createTask({ title: 'A', priority: 'low' })
+    const b = module.createTask({ title: 'B', priority: 'low' })
+    module.reorderTasks([b.id, a.id])
+    expect(module.tasks.find(t => t.id === b.id).order).toBe(0)
+    expect(module.tasks.find(t => t.id === a.id).order).toBe(1)
+  })
+})

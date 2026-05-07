@@ -20,7 +20,7 @@ else
   CLEAN_COVERAGE := rm -rf coverage
 endif
 
-.PHONY: help os install open dev test test-ui coverage version-sync \
+.PHONY: help os install open dev build-css test test-ui coverage version-sync \
 	version-patch version-minor version-major clean-coverage
 
 help:
@@ -29,6 +29,7 @@ help:
 	@echo "  make install         Instala dependencias de desarrollo"
 	@echo "  make open            Abre index.html directamente"
 	@echo "  make dev             Ejecuta servidor local con npx serve ."
+	@echo "  make build-css       Regenera Tailwind CSS de producción"
 	@echo "  make test            Ejecuta pruebas unitarias"
 	@echo "  make test-ui         Abre Vitest UI"
 	@echo "  make coverage        Ejecuta pruebas con coverage"
@@ -49,6 +50,9 @@ open:
 
 dev:
 	npm run dev
+
+build-css:
+	npm run build:css
 
 test:
 	npm run test:run

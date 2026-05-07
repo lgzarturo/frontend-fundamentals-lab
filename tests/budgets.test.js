@@ -2,37 +2,18 @@
  * Pruebas para modelos de presupuesto
  */
 import { beforeEach, describe, expect, it } from "vitest"
-import {
-  Budget,
-  BudgetItem,
-  Transaction
-} from "../assets/js/modules/budgets/models.js"
+import { Budget, Transaction } from "../assets/js/modules/budgets/models.js"
 
 describe("Budget Models", () => {
-  describe("BudgetItem", () => {
-    it("debería crear un item de presupuesto con valores predeterminados", () => {
-      const item = new BudgetItem({ title: "Test Item", amount: 100 })
-      expect(item.title).toBe("Test Item")
-      expect(item.amount).toBe(100)
-      expect(item.id).toBeDefined()
-      expect(item.date).toBeDefined()
-    })
-
-    it("debería validar los datos del item", () => {
-      const errors = BudgetItem.validate({ title: "", amount: 0 })
-      expect(errors.length).toBeGreaterThan(0)
-    })
-
-    it("debería convertir a JSON y de vuelta", () => {
-      const item = new BudgetItem({ title: "Test", amount: 50 })
-      const json = item.toJSON()
-      const restored = BudgetItem.fromJSON(json)
-      expect(restored.title).toBe(item.title)
-      expect(restored.amount).toBe(item.amount)
-    })
-  })
-
   describe("Transaction", () => {
+    it("debería crear una transacción con valores predeterminados", () => {
+      const t = new Transaction({ description: "Test", amount: 50 })
+      expect(t.description).toBe("Test")
+      expect(t.amount).toBe(50)
+      expect(t.id).toBeDefined()
+      expect(t.date).toBeDefined()
+    })
+
     it("debería identificar transacciones de gastos", () => {
       const expense = new Transaction({ description: "Test", amount: -50 })
       const income = new Transaction({ description: "Test", amount: 50 })
@@ -41,58 +22,235 @@ describe("Budget Models", () => {
     })
 
     it("debería devolver el monto absoluto", () => {
-      const transaction = new Transaction({
-        description: "Test",
-        amount: -75.5
-      })
-      expect(transaction.getAbsoluteAmount()).toBe(75.5)
+      const t = new Transaction({ description: "Test", amount: -75.5 })
+      expect(t.getAbsoluteAmount()).toBe(75.5)
+    })
+
+    it("debería convertir a JSON y de vuelta", () => {
+      const t = new Transaction({ description: "Test", amount: 50 })
+      const json = t.toJSON()
+      const restored = Transaction.fromJSON(json)
+      expect(restored.description).toBe(t.description)
+      expect(restored.amount).toBe(t.amount)
+    })
+
+    it("debería rechazar negativos en savings", () => {
+      const errors = Transaction.validate(
+        { description: "Test", amount: -50 },
+        "savings"
+      )
+      expect(errors.length).toBeGreaterThan(0)
+      expect(errors[0]).toContain("positive")
+    })
+
+    it("debería rechazar positivos en spending", () => {
+      const errors = Transaction.validate(
+        { description: "Test", amount: 50 },
+        "spending"
+      )
+      expect(errors.length).toBeGreaterThan(0)
+      expect(errors[0]).toContain("negative")
+    })
+
+    it("debería aceptar positivos en savings", () => {
+      const errors = Transaction.validate(
+        { description: "Test", amount: 50 },
+        "savings"
+      )
+      expect(errors.length).toBe(0)
+    })
+
+    it("debería aceptar negativos en spending", () => {
+      const errors = Transaction.validate(
+        { description: "Test", amount: -50 },
+        "spending"
+      )
+      expect(errors.length).toBe(0)
     })
   })
 
-  describe("Budget", () => {
+  describe("Budget - savings", () => {
     let budget
 
     beforeEach(() => {
-      budget = new Budget({ name: "Test Budget", currency: "USD" })
+      budget = new Budget({
+        name: "Xbox",
+        currency: "MXN",
+        type: "savings",
+        goalAmount: 11000
+      })
     })
 
-    it("debería calcular el total asignado", () => {
-      budget.addItem({ title: "Item 1", amount: 100 })
-      budget.addItem({ title: "Item 2", amount: 200 })
-      expect(budget.getTotalAllocated()).toBe(300)
+    it("debería crear un presupuesto de ahorro", () => {
+      expect(budget.type).toBe("savings")
+      expect(budget.goalAmount).toBe(11000)
+      expect(budget.initialAmount).toBe(0)
     })
 
-    it("debería calcular el total gastado", () => {
-      budget.addTransaction({ description: "Expense", amount: -50 })
-      budget.addTransaction({ description: "Expense 2", amount: -25 })
-      expect(budget.getTotalSpent()).toBe(75)
+    it("debería acumular depósitos en getBalance()", () => {
+      budget.addTransaction({ description: "Depósito", amount: 4500 })
+      expect(budget.getBalance()).toBe(4500)
     })
 
-    it("debería calcular el restante correctamente", () => {
-      budget.addItem({ title: "Item", amount: 500 })
-      budget.addTransaction({ description: "Expense", amount: -100 })
-      expect(budget.getRemaining()).toBe(400)
+    it("debería calcular progreso correcto", () => {
+      expect(budget.getProgress()).toBe(0)
+      budget.addTransaction({ description: "Depósito", amount: 5500 })
+      expect(budget.getProgress()).toBe(50)
     })
 
-    it("debería devolver el estado correcto según el uso", () => {
-      budget.addItem({ title: "Item", amount: 100 })
-      budget.addTransaction({ description: "Expense", amount: -50 })
-      expect(budget.getStatus()).toBe("safe")
+    it("debería limitar progreso a 100%", () => {
+      budget.addTransaction({ description: "Depósito", amount: 15000 })
+      expect(budget.getProgress()).toBe(100)
+    })
 
-      budget.addTransaction({ description: "Expense", amount: -30 })
+    it("debería detectar meta alcanzada", () => {
+      expect(budget.isGoalReached()).toBe(false)
+      budget.addTransaction({ description: "Depósito", amount: 11000 })
+      expect(budget.isGoalReached()).toBe(true)
+    })
+
+    it("debería devolver estado correcto", () => {
+      expect(budget.getStatus()).toBe("danger")
+      budget.addTransaction({ description: "Depósito", amount: 5000 })
       expect(budget.getStatus()).toBe("warning")
+      budget.addTransaction({ description: "Depósito", amount: 3500 })
+      expect(budget.getStatus()).toBe("safe")
+      budget.addTransaction({ description: "Depósito", amount: 2500 })
+      expect(budget.getStatus()).toBe("reached")
+    })
+  })
+
+  describe("Budget - spending", () => {
+    let budget
+
+    beforeEach(() => {
+      budget = new Budget({
+        name: "Efectivo",
+        currency: "MXN",
+        type: "spending",
+        initialAmount: 5000
+      })
     })
 
-    it("debería eliminar items correctamente", () => {
-      const item = budget.addItem({ title: "Item", amount: 100 })
-      const result = budget.removeItem(item.id)
-      expect(result).not.toBeNull()
-      expect(budget.items.length).toBe(0)
+    it("debería crear un presupuesto de gasto", () => {
+      expect(budget.type).toBe("spending")
+      expect(budget.initialAmount).toBe(5000)
+      expect(budget.goalAmount).toBe(0)
     })
 
-    it("debería validar los datos del presupuesto", () => {
-      const errors = Budget.validate({ name: "", currency: "INVALID" })
+    it("debería restar egresos del saldo", () => {
+      budget.addTransaction({ description: "Comida", amount: -1200 })
+      expect(budget.getBalance()).toBe(3800)
+    })
+
+    it("debería calcular porcentaje restante", () => {
+      expect(budget.getProgress()).toBe(100)
+      budget.addTransaction({ description: "Comida", amount: -1200 })
+      expect(budget.getProgress()).toBe(76)
+    })
+
+    it("debería detectar cuando se agota", () => {
+      expect(budget.isExhausted()).toBe(false)
+      budget.addTransaction({ description: "Gasto", amount: -5000 })
+      expect(budget.isExhausted()).toBe(true)
+    })
+
+    it("debería devolver estado correcto", () => {
+      expect(budget.getStatus()).toBe("safe")
+      budget.addTransaction({ description: "Gasto", amount: -3750 })
+      expect(budget.getStatus()).toBe("warning")
+      budget.addTransaction({ description: "Gasto", amount: -750 })
+      expect(budget.getStatus()).toBe("danger")
+    })
+  })
+
+  describe("Budget.validate()", () => {
+    it("debería rechazar GBP", () => {
+      const errors = Budget.validate({
+        name: "Test",
+        currency: "GBP",
+        type: "spending",
+        initialAmount: 100
+      })
       expect(errors.length).toBeGreaterThan(0)
+      expect(errors[0]).toContain("MXN, USD or EUR")
+    })
+
+    it("debería aceptar MXN, USD y EUR", () => {
+      for (const currency of ["MXN", "USD", "EUR"]) {
+        const errors = Budget.validate({
+          name: "Test",
+          currency,
+          type: "spending",
+          initialAmount: 100
+        })
+        expect(errors.length).toBe(0)
+      }
+    })
+
+    it("debería rechazar savings sin goalAmount", () => {
+      const errors = Budget.validate({
+        name: "Test",
+        currency: "MXN",
+        type: "savings",
+        goalAmount: 0
+      })
+      expect(errors.length).toBeGreaterThan(0)
+      expect(errors[0]).toContain("goal amount")
+    })
+
+    it("debería rechazar spending sin initialAmount", () => {
+      const errors = Budget.validate({
+        name: "Test",
+        currency: "MXN",
+        type: "spending",
+        initialAmount: 0
+      })
+      expect(errors.length).toBeGreaterThan(0)
+      expect(errors[0]).toContain("initial amount")
+    })
+
+    it("debería rechazar nombre vacío", () => {
+      const errors = Budget.validate({
+        name: "",
+        currency: "MXN",
+        type: "spending",
+        initialAmount: 100
+      })
+      expect(errors.length).toBeGreaterThan(0)
+    })
+  })
+
+  describe("Budget - serialización", () => {
+    it("debería convertir a JSON y de vuelta", () => {
+      const budget = new Budget({
+        name: "Test",
+        currency: "MXN",
+        type: "savings",
+        goalAmount: 10000
+      })
+      budget.addTransaction({ description: "Depósito", amount: 5000 })
+      const json = budget.toJSON()
+      const restored = Budget.fromJSON(json)
+      expect(restored.name).toBe("Test")
+      expect(restored.type).toBe("savings")
+      expect(restored.goalAmount).toBe(10000)
+      expect(restored.transactions.length).toBe(1)
+    })
+
+    it("debería migrar presupuestos legacy con items a spending", () => {
+      const restored = Budget.fromJSON({
+        name: "Legacy",
+        currency: "GBP",
+        items: [{ amount: 500 }, { amount: 250 }],
+        transactions: [{ description: "Gasto", amount: -100 }]
+      })
+
+      expect(restored.type).toBe("spending")
+      expect(restored.currency).toBe("MXN")
+      expect(restored.initialAmount).toBe(750)
+      expect(restored.getBalance()).toBe(650)
+      expect(restored.toJSON()).not.toHaveProperty("items")
     })
   })
 })

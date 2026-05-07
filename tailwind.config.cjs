@@ -1,9 +1,6 @@
-/**
- * Configuración de TailwindCSS para el tema personalizado XP
- * @type {object}
- */
-tailwind.config = {
+module.exports = {
   darkMode: "class",
+  content: ["./index.html", "./assets/js/**/*.js"],
   theme: {
     extend: {
       colors: {
