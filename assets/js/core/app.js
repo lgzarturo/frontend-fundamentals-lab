@@ -11,7 +11,7 @@ export class DOSApp {
   constructor() {
     this.storage = new StorageService()
     this.eventBus = new EventBus()
-    this.i18n = null // Se establecerá cuando se cargue I18n
+    this.i18n = null // Se inyecta desde main.js antes de init()
     this.modules = {}
     this.currentScreen = "home"
   }
@@ -37,6 +37,9 @@ export class DOSApp {
 
     // Contador de visitas
     this._visitCounter()
+
+    // Fecha en el header
+    this.updateDateTime()
 
     console.log("DOSApp initialized")
   }
@@ -94,6 +97,29 @@ export class DOSApp {
     this.eventBus.on("habit:allCompleted", () => {
       launchConfetti()
     })
+
+    // Cambio de idioma: actualiza fecha y re-renderiza la pantalla actual
+    this.eventBus.on("i18n:languageChanged", () => {
+      this.updateDateTime()
+      this._renderScreen(this.currentScreen)
+    })
+  }
+
+  /**
+   * Actualiza la fecha mostrada en el header según el idioma activo
+   */
+  updateDateTime() {
+    const now = new Date()
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    }
+    const language = localStorage.getItem("userLanguage") || "es"
+    const locale = language === "es" ? "es-ES" : "en-US"
+    const dateEl = document.getElementById("current-date")
+    if (dateEl) dateEl.textContent = now.toLocaleDateString(locale, options)
   }
 
   /**
