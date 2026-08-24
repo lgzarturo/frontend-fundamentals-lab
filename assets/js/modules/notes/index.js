@@ -75,6 +75,14 @@ export class NotesModule {
     const deleted = this.notes.splice(index, 1)[0]
     this._saveNotes()
     this.render()
+    this.eventBus.emit("undo:show", {
+      message: `${this.i18n?.getMessage("ui.common.deleted")} "${deleted.title}"`,
+      undoCallback: () => {
+        this.notes.splice(index, 0, deleted)
+        this._saveNotes()
+        this.render()
+      }
+    })
     this.eventBus.emit("note:deleted", deleted)
     return deleted
   }

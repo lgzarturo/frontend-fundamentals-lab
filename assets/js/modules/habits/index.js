@@ -57,6 +57,14 @@ export class HabitsModule {
     const deleted = this.habits.splice(index, 1)[0]
     this._saveHabits()
     this.render()
+    this.eventBus.emit("undo:show", {
+      message: `${this.i18n?.getMessage("ui.common.deleted")} "${deleted.title}"`,
+      undoCallback: () => {
+        this.habits.splice(index, 0, deleted)
+        this._saveHabits()
+        this.render()
+      }
+    })
     this.eventBus.emit("habit:deleted", deleted)
     return deleted
   }

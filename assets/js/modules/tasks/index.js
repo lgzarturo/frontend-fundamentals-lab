@@ -14,7 +14,6 @@ export class TasksModule {
     this.container = null
     this.modalContainer = null
     this.activeFilter = "all"
-    this._undoStack = []
   }
 
   init() {
@@ -74,9 +73,16 @@ export class TasksModule {
     if (index === -1) throw new Error(`Task not found: ${taskId}`)
 
     const deleted = this.tasks.splice(index, 1)[0]
-    this._undoStack.push({ task: deleted, index })
     this._saveTasks()
     this.render()
+    this.eventBus.emit("undo:show", {
+      message: `${this.i18n?.getMessage("ui.common.deleted")} "${deleted.title}"`,
+      undoCallback: () => {
+        this.tasks.splice(index, 0, deleted)
+        this._saveTasks()
+        this.render()
+      }
+    })
     this.eventBus.emit("task:deleted", deleted)
     return deleted
   }
@@ -249,6 +255,8 @@ export class TasksModule {
     )
 
     if (this.container) {
+      this._bindDragEvents()
+
       this.container.addEventListener("click", e => {
         const target = e.target.closest("[data-action]")
         if (!target) return
@@ -283,5 +291,70 @@ export class TasksModule {
         }
       })
     }
+  }
+
+  /**
+   * Reordenamiento por drag & drop con delegación en el contenedor
+   * @private
+   */
+  _bindDragEvents() {
+    this.container.addEventListener("dragstart", e => {
+      const item = e.target.closest("[data-task-id]")
+      if (!item) return
+      item.classList.add("dragging")
+      e.dataTransfer.effectAllowed = "move"
+      e.dataTransfer.setData("text/plain", item.dataset.taskId)
+    })
+
+    this.container.addEventListener("dragover", e => {
+      e.preventDefault()
+      e.dataTransfer.dropEffect = "move"
+      const dragging = this.container.querySelector(".dragging")
+      if (!dragging) return
+      const afterElement = this._getDragAfterElement(e.clientY)
+      if (afterElement == null) {
+        this.container.appendChild(dragging)
+      } else {
+        this.container.insertBefore(dragging, afterElement)
+      }
+    })
+
+    this.container.addEventListener("drop", e => {
+      e.preventDefault()
+      const orderedIds = [
+        ...this.container.querySelectorAll("[data-task-id]")
+      ].map(el => el.dataset.taskId)
+      this.reorderTasks(orderedIds)
+    })
+
+    this.container.addEventListener("dragend", e => {
+      const item = e.target.closest("[data-task-id]")
+      if (item) item.classList.remove("dragging")
+    })
+  }
+
+  /**
+   * Obtiene el elemento después del cual insertar la tarea arrastrada
+   * @param {number} y - Posición Y del cursor
+   * @returns {HTMLElement|null} Elemento de referencia o null si va al final
+   * @private
+   */
+  _getDragAfterElement(y) {
+    const draggableElements = [
+      ...this.container.querySelectorAll("[data-task-id]:not(.dragging)")
+    ]
+
+    return draggableElements.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect()
+        const offset = y - box.top - box.height / 2
+
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child }
+        }
+        return closest
+      },
+      { offset: Number.NEGATIVE_INFINITY }
+    ).element
   }
 }
