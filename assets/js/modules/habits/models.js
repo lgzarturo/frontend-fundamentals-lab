@@ -1,15 +1,15 @@
-import { formatDate, getLastNDays, getTodayString } from '../../utils/date.js'
-import { generateId } from '../../utils/id.js'
+import { formatDate, getLastNDays, getTodayString } from "../../utils/date.js"
+import { generateId } from "../../utils/id.js"
 
 export class Habit {
   constructor(data = {}) {
     this.id = data.id || generateId()
-    this.title = data.title || ''
-    this.description = data.description || ''
-    this.schedule = data.schedule || 'daily'
+    this.title = data.title || ""
+    this.description = data.description || ""
+    this.schedule = data.schedule || "daily"
     this.dailyRecords = data.dailyRecords || {}
     this.streak = data.streak || 0
-    this.color = data.color || '#00ff88'
+    this.color = data.color || "#00ff88"
     this.createdAt = data.createdAt || Date.now()
   }
 
@@ -73,13 +73,16 @@ export class Habit {
   static validate(data) {
     const errors = []
     if (!data.title?.trim()) {
-      errors.push('Title is required')
+      errors.push("Title is required")
     }
-    if (data.schedule && data.schedule !== 'daily') {
-      errors.push('Schedule must be daily')
+    if (data.schedule && data.schedule !== "daily") {
+      errors.push("Schedule must be daily")
     }
-    if (data.color !== undefined && (typeof data.color !== 'string' || !data.color.trim())) {
-      errors.push('Color must be a non-empty string')
+    if (
+      data.color !== undefined &&
+      (typeof data.color !== "string" || !data.color.trim())
+    ) {
+      errors.push("Color must be a non-empty string")
     }
     return errors
   }

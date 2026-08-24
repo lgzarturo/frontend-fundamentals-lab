@@ -1,10 +1,10 @@
-import { Habit } from './models.js'
+import { Habit } from "./models.js"
 import {
   emptyHabitsTemplate,
   habitCardTemplate,
   habitListTemplate,
   habitTemplatesModalTemplate
-} from './templates.js'
+} from "./templates.js"
 
 export class HabitsModule {
   constructor(storage, eventBus, i18n) {
@@ -18,8 +18,8 @@ export class HabitsModule {
 
   init() {
     this._loadHabits()
-    this.container = document.getElementById('habits-list')
-    this.modalContainer = document.getElementById('modal-content')
+    this.container = document.getElementById("habits-list")
+    this.modalContainer = document.getElementById("modal-content")
     this._bindEvents()
   }
 
@@ -30,19 +30,19 @@ export class HabitsModule {
 
   createHabit(data) {
     const errors = Habit.validate(data)
-    if (errors.length) throw new Error(errors.join(', '))
+    if (errors.length) throw new Error(errors.join(", "))
 
     const habit = new Habit({
       title: data.title,
       description: data.description,
-      schedule: data.schedule || 'daily',
-      color: data.color || '#00ff88'
+      schedule: data.schedule || "daily",
+      color: data.color || "#00ff88"
     })
 
     this.habits.push(habit)
     this._saveHabits()
     this.render()
-    this.eventBus.emit('habit:created', habit)
+    this.eventBus.emit("habit:created", habit)
     return habit
   }
 
@@ -57,7 +57,7 @@ export class HabitsModule {
     const deleted = this.habits.splice(index, 1)[0]
     this._saveHabits()
     this.render()
-    this.eventBus.emit('habit:deleted', deleted)
+    this.eventBus.emit("habit:deleted", deleted)
     return deleted
   }
 
@@ -68,11 +68,11 @@ export class HabitsModule {
     const completed = habit.toggle(dateStr)
     this._saveHabits()
     this.render()
-    this.eventBus.emit('habit:toggled', { habit, completed })
+    this.eventBus.emit("habit:toggled", { habit, completed })
 
     const allDone = this.habits.every(h => h.isCompletedToday())
     if (allDone && this.habits.length > 0) {
-      this.eventBus.emit('habit:allCompleted', this.habits)
+      this.eventBus.emit("habit:allCompleted", this.habits)
     }
 
     return completed
@@ -91,86 +91,86 @@ export class HabitsModule {
 
   showTemplatesModal() {
     if (!this.modalContainer) return
-    this.modalContainer.innerHTML = habitTemplatesModalTemplate(this.i18n)
-    this._showModal()
+    this.eventBus.emit("modal:open", {
+      contentHtml: habitTemplatesModalTemplate(this.i18n)
+    })
 
-    const form = document.getElementById('create-habit-form')
+    const form = document.getElementById("create-habit-form")
     if (form) {
-      form.addEventListener('submit', e => {
+      form.addEventListener("submit", e => {
         e.preventDefault()
         const formData = new FormData(form)
         this.createHabit({
-          title: formData.get('title'),
-          description: formData.get('description'),
-          color: formData.get('color') || '#00ff88'
+          title: formData.get("title"),
+          description: formData.get("description"),
+          color: formData.get("color") || "#00ff88"
         })
-        this._closeModal()
+        this.eventBus.emit("modal:close")
       })
     }
-
-    // template clicks are handled via event delegation on modalContainer
-    this.modalContainer.addEventListener('click', e => {
-      const card = e.target.closest('[data-action="use-template"]')
-      if (!card) return
-      const title = card.dataset.title
-      const description = card.dataset.description
-      const color = card.dataset.color
-      this.createFromTemplate({ title, description, color })
-      this._closeModal()
-    })
   }
 
   _loadHabits() {
-    const data = this.storage.get('habits')
+    const data = this.storage.get("habits")
     if (data && Array.isArray(data)) {
       this.habits = data.map(h => Habit.fromJSON(h))
     }
   }
 
   _saveHabits() {
-    this.storage.set('habits', this.habits.map(h => h.toJSON()))
+    this.storage.set(
+      "habits",
+      this.habits.map(h => h.toJSON())
+    )
   }
 
   _bindEvents() {
-    this.eventBus.on('habit:create', () => this.showTemplatesModal())
-    this.eventBus.on('habit:delete', habitId => this.deleteHabit(habitId))
-    this.eventBus.on('habit:toggle', ({ habitId, dateStr }) =>
+    this.eventBus.on("habit:create", () => this.showTemplatesModal())
+    this.eventBus.on("habit:delete", habitId => this.deleteHabit(habitId))
+    this.eventBus.on("habit:toggle", ({ habitId, dateStr }) =>
       this.toggleHabit(habitId, dateStr)
     )
 
+    // Delegación única para las plantillas dentro del modal
+    if (this.modalContainer) {
+      this.modalContainer.addEventListener("click", e => {
+        const card = e.target.closest('[data-action="use-template"]')
+        if (!card) return
+        const title = card.dataset.title
+        const description = card.dataset.description
+        const color = card.dataset.color
+        this.createFromTemplate({ title, description, color })
+        this.eventBus.emit("modal:close")
+      })
+    }
+
     if (this.container) {
-      this.container.addEventListener('click', e => {
-        const target = e.target.closest('[data-action]')
+      this.container.addEventListener("click", e => {
+        const target = e.target.closest("[data-action]")
         if (!target) return
 
         const action = target.dataset.action
         const habitId = target.dataset.habitId
 
         switch (action) {
-          case 'toggle-habit':
+          case "toggle-habit":
             this.toggleHabit(habitId)
             break
-          case 'delete-habit':
-            if (confirm(this.i18n?.getMessage('habits.confirmDelete') || 'Delete this habit?')) {
+          case "delete-habit":
+            if (
+              confirm(
+                this.i18n?.getMessage("ui.common.confirmDelete") ||
+                  "Delete this habit?"
+              )
+            ) {
               this.deleteHabit(habitId)
             }
             break
-          case 'create-habit':
+          case "create-habit":
             this.showTemplatesModal()
             break
         }
       })
     }
-  }
-
-  _showModal() {
-    const modal = document.getElementById('modal')
-    if (modal) modal.classList.remove('hidden')
-  }
-
-  _closeModal() {
-    const modal = document.getElementById('modal')
-    if (modal) modal.classList.add('hidden')
-    if (this.modalContainer) this.modalContainer.innerHTML = ''
   }
 }

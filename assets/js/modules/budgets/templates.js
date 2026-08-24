@@ -125,9 +125,9 @@ export function budgetCardTemplate(budget, i18n) {
         <div class="flex justify-between">
           <span class="text-gray-600 dark:text-gray-400">${tertiaryLabel}</span>
           <span
-            class="font-semibold ${isSavings
-              ? "text-xp-warning"
-              : "text-xp-danger"}"
+            class="font-semibold ${
+              isSavings ? "text-xp-warning" : "text-xp-danger"
+            }"
             >${money(tertiaryValue, budget.currency)}</span
           >
         </div>
@@ -491,9 +491,9 @@ export function budgetDetailsModalTemplate(budget, i18n) {
                   </div>
                 </div>
                 <div
-                  class="font-bold ${t.isExpense()
-                    ? "text-xp-danger"
-                    : "text-xp-primary"}"
+                  class="font-bold ${
+                    t.isExpense() ? "text-xp-danger" : "text-xp-primary"
+                  }"
                 >
                   ${t.isExpense() ? "-" : "+"}${money(
                     t.getAbsoluteAmount(),
@@ -534,9 +534,9 @@ export function budgetDetailsModalTemplate(budget, i18n) {
         <div class="p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
           <div class="text-xs text-gray-500">${tertiaryLabel}</div>
           <div
-            class="font-bold ${isSavings
-              ? "text-xp-warning"
-              : "text-xp-danger"}"
+            class="font-bold ${
+              isSavings ? "text-xp-warning" : "text-xp-danger"
+            }"
           >
             ${money(isSavings ? remaining : spent, budget.currency)}
           </div>
@@ -551,9 +551,9 @@ export function budgetDetailsModalTemplate(budget, i18n) {
           class="w-full h-3 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden"
         >
           <div
-            class="h-full ${STATUS_COLORS[
-              budget.getStatus()
-            ]} transition-all duration-300"
+            class="h-full ${
+              STATUS_COLORS[budget.getStatus()]
+            } transition-all duration-300"
             style="width: ${Math.min(pct, 100)}%"
           ></div>
         </div>
@@ -561,8 +561,10 @@ export function budgetDetailsModalTemplate(budget, i18n) {
 
       <div>
         <h4 class="font-bold mb-3">
-          ${i18n?.getMessage("app.screens.budgets.details.transactionsTitle") ||
-          "Transacciones"}
+          ${
+            i18n?.getMessage("app.screens.budgets.details.transactionsTitle") ||
+            "Transacciones"
+          }
         </h4>
         <div class="space-y-2 max-h-64 overflow-y-auto">
           ${raw(transactionsHtml)}
@@ -598,18 +600,22 @@ export function addTransactionModalTemplate(budget, i18n) {
         <div class="space-y-4">
           <div>
             <label class="block text-sm font-semibold mb-2">
-              ${i18n?.getMessage(
-                "app.screens.budgets.modals.transaction.descriptionLabel"
-              ) || "Descripci\u00F3n"}
+              ${
+                i18n?.getMessage(
+                  "app.screens.budgets.modals.transaction.descriptionLabel"
+                ) || "Descripci\u00F3n"
+              }
             </label>
             <input
               type="text"
               name="description"
               required
               class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-              placeholder="${i18n?.getMessage(
-                "app.screens.budgets.modals.transaction.descriptionPlaceholder"
-              ) || "ej., Compras semanales"}"
+              placeholder="${
+                i18n?.getMessage(
+                  "app.screens.budgets.modals.transaction.descriptionPlaceholder"
+                ) || "ej., Compras semanales"
+              }"
             />
           </div>
           <div>
@@ -628,9 +634,11 @@ export function addTransactionModalTemplate(budget, i18n) {
           </div>
           <div>
             <label class="block text-sm font-semibold mb-2">
-              ${i18n?.getMessage(
-                "app.screens.budgets.modals.transaction.dateLabel"
-              ) || "Fecha"}
+              ${
+                i18n?.getMessage(
+                  "app.screens.budgets.modals.transaction.dateLabel"
+                ) || "Fecha"
+              }
             </label>
             <input
               type="date"

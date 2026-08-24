@@ -190,6 +190,7 @@
             "title": "Edit Task",
             "update": "Update Task",
             "subtasks": "Subtasks",
+            "subtaskPlaceholder": "New subtask...",
             "addSubtask": "+ Add Subtask"
           }
         },
@@ -212,7 +213,13 @@
         "noHabits": "No habits yet. Add habits to start tracking! 🎯",
         "completedToday": "✓ Completed Today",
         "markComplete": "○ Mark Complete",
+        "markIncomplete": "✓ Mark Incomplete",
         "streakLabel": "streak",
+        "empty": {
+          "title": "No habits yet",
+          "description": "Create your first habit to start building routines.",
+          "action": "+ Create Habit"
+        },
         "templates": {
           "title": "Programmer Routine Templates",
           "custom": "Or create custom habit",
@@ -267,6 +274,7 @@
             "titlePlaceholder": "e.g., Morning run",
             "description": "Description",
             "descriptionPlaceholder": "Brief description...",
+            "colorLabel": "Color",
             "cancel": "Cancel",
             "create": "Create Habit"
           }
@@ -277,6 +285,11 @@
         "newButton": "+ Note",
         "searchPlaceholder": "🔍 Search notes...",
         "noNotes": "No notes yet. Start writing! 📝",
+        "empty": {
+          "title": "No notes yet",
+          "description": "Create your first note to capture ideas and knowledge.",
+          "action": "+ Create Note"
+        },
         "modal": {
           "create": {
             "title": "Create New Note",

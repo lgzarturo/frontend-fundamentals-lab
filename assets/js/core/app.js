@@ -22,6 +22,9 @@ export class DOSApp {
     // Inicializa el almacenamiento y migra datos antiguos
     this.storage.init()
 
+    // Enlaza el modal centralizado
+    this._bindModalEvents()
+
     // Inicializa los módulos
     this._initModules()
 
@@ -65,6 +68,10 @@ export class DOSApp {
     })
 
     // Eventos de modal
+    this.eventBus.on("modal:open", ({ contentHtml }) => {
+      this.showModal(contentHtml)
+    })
+
     this.eventBus.on("modal:close", () => {
       this.closeModal()
     })
@@ -176,6 +183,23 @@ export class DOSApp {
       toast.style.opacity = "0"
       setTimeout(() => toast.remove(), 300)
     }, 3000)
+  }
+
+  /**
+   * Enlaza el cierre del modal por delegación (backdrop y botones close)
+   * @private
+   */
+  _bindModalEvents() {
+    const backdrop = document.getElementById("modal-backdrop")
+    if (!backdrop) return
+
+    backdrop.addEventListener("click", e => {
+      const isBackdropClick = e.target === backdrop
+      const isCloseButton = e.target.closest('[data-action="close-modal"]')
+      if (isBackdropClick || isCloseButton) {
+        this.closeModal()
+      }
+    })
   }
 
   /**

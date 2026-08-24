@@ -128,8 +128,9 @@ export class BudgetsModule {
 
   showCreateModal() {
     if (!this.modalContainer) return
-    this.modalContainer.innerHTML = createBudgetModalTemplate(this.i18n)
-    this._showModal()
+    this.eventBus.emit("modal:open", {
+      contentHtml: createBudgetModalTemplate(this.i18n)
+    })
 
     const form = document.getElementById("create-budget-form")
     const typeInputs = form.querySelectorAll('input[name="type"]')
@@ -164,7 +165,7 @@ export class BudgetsModule {
         goalAmount: type === "savings" ? formData.get("goalAmount") : 0,
         initialAmount: type === "spending" ? formData.get("initialAmount") : 0
       })
-      this._closeModal()
+      this.eventBus.emit("modal:close")
     })
   }
 
@@ -172,22 +173,18 @@ export class BudgetsModule {
     const budget = this.budgets.find(b => b.id === budgetId)
     if (!budget || !this.modalContainer) return
 
-    this.modalContainer.innerHTML = budgetDetailsModalTemplate(
-      budget,
-      this.i18n
-    )
-    this._showModal()
+    this.eventBus.emit("modal:open", {
+      contentHtml: budgetDetailsModalTemplate(budget, this.i18n)
+    })
   }
 
   showAddTransactionModal(budgetId) {
     const budget = this.budgets.find(b => b.id === budgetId)
     if (!budget || !this.modalContainer) return
 
-    this.modalContainer.innerHTML = addTransactionModalTemplate(
-      budget,
-      this.i18n
-    )
-    this._showModal()
+    this.eventBus.emit("modal:open", {
+      contentHtml: addTransactionModalTemplate(budget, this.i18n)
+    })
 
     const form = document.getElementById("add-transaction-form")
     form.addEventListener("submit", e => {
@@ -204,7 +201,7 @@ export class BudgetsModule {
         description: formData.get("description")?.trim(),
         date: formData.get("date")
       })
-      this._closeModal()
+      this.eventBus.emit("modal:close")
     })
   }
 
@@ -249,7 +246,7 @@ export class BudgetsModule {
           case "delete-budget":
             if (
               confirm(
-                this.i18n?.getMessage("budgets.confirmDelete") ||
+                this.i18n?.getMessage("ui.common.confirmDelete") ||
                   "Delete this budget?"
               )
             ) {
@@ -261,28 +258,6 @@ export class BudgetsModule {
             break
         }
       })
-    }
-  }
-
-  _showModal() {
-    const modal = document.getElementById("modal")
-    if (modal) {
-      modal.classList.remove("hidden")
-      modal.querySelectorAll('[data-action="close-modal"]').forEach(button => {
-        button.addEventListener("click", () => this._closeModal(), {
-          once: true
-        })
-      })
-    }
-  }
-
-  _closeModal() {
-    const modal = document.getElementById("modal")
-    if (modal) {
-      modal.classList.add("hidden")
-    }
-    if (this.modalContainer) {
-      this.modalContainer.innerHTML = ""
     }
   }
 }

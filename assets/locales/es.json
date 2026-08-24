@@ -190,6 +190,7 @@
             "title": "Editar Tarea",
             "update": "Actualizar Tarea",
             "subtasks": "Subtareas",
+            "subtaskPlaceholder": "Nueva subtarea...",
             "addSubtask": "+ Agregar Subtarea"
           }
         },
@@ -212,7 +213,13 @@
         "noHabits": "No hay hábitos aún. ¡Añade hábitos para empezar! 🎯",
         "completedToday": "✓ Completado Hoy",
         "markComplete": "○ Marcar Completo",
+        "markIncomplete": "✓ Marcar Incompleto",
         "streakLabel": "racha",
+        "empty": {
+          "title": "Sin hábitos todavía",
+          "description": "Crea tu primer hábito para empezar a construir rutinas.",
+          "action": "+ Crear Hábito"
+        },
         "templates": {
           "title": "Plantillas de Rutina de Programador",
           "custom": "O crear hábito personalizado",
@@ -267,6 +274,7 @@
             "titlePlaceholder": "ej., Corrida matutina",
             "description": "Descripción",
             "descriptionPlaceholder": "Breve descripción...",
+            "colorLabel": "Color",
             "cancel": "Cancelar",
             "create": "Crear Hábito"
           }
@@ -277,6 +285,11 @@
         "newButton": "+ Nota",
         "searchPlaceholder": "🔍 Buscar notas...",
         "noNotes": "No hay notas aún. ¡Empieza a escribir! 📝",
+        "empty": {
+          "title": "Sin notas todavía",
+          "description": "Crea tu primera nota para capturar ideas y conocimientos.",
+          "action": "+ Crear Nota"
+        },
         "modal": {
           "create": {
             "title": "Crear Nueva Nota",
