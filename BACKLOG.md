@@ -75,4 +75,17 @@
   - [ ] Se retira la referencia a `<script src="./assets/js/app.js"></script>` en `index.html`.
   - [ ] Las funciones globales remanentes (como helpers de DOM, UI o utils menores) están ubicadas en el directorio `utils/` o en `DOSApp`.
 
+### BC-006 | Dashboard de telemetría y resumen de uso
+- Priority: P2
+- Status: PLANNED
+- Type: feature
+- Depends on: None
+- Description: Agregar un contador de uso y métricas locales para mostrar un panel/dashboard. Este panel resumirá en prosa el estado de los hábitos, los objetivos de presupuestos, las tareas pendientes y la telemetría (uso) de la aplicación.
+- Scope: assets/js/modules/home/*, assets/js/services/storage.js
+- Out of scope: Guardado en servidores remotos o analíticas de terceros.
+- Acceptance:
+  - [ ] El storage persiste localmente contadores de uso (visitas e interacciones).
+  - [ ] Una nueva sección en la interfaz muestra un resumen narrativo de las métricas (tareas, presupuestos, hábitos).
+  - [ ] La prosa de resumen responde dinámicamente al estado actual de los datos (e.g., "Tienes 3 tareas hoy", "Tu ahorro va al 50%").
+
 ## Archive
