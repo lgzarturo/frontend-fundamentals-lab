@@ -7,6 +7,7 @@ import {
   notePreviewTemplate,
   parseMarkdown
 } from "./templates.js"
+import { TagInput } from "../../components/tagInput.js"
 
 export class NotesModule {
   constructor(storage, eventBus, i18n) {
@@ -16,6 +17,7 @@ export class NotesModule {
     this.notes = []
     this.container = null
     this.modalContainer = null
+    this.activeTagInput = null
   }
 
   init() {
@@ -34,6 +36,28 @@ export class NotesModule {
     }
 
     this.container.innerHTML = noteListTemplate(this.notes, this.i18n)
+  }
+
+  getAllTags() {
+    const tagsSet = new Set()
+    this.notes.forEach(note => {
+      if (Array.isArray(note.tags)) {
+        note.tags.forEach(t => t && tagsSet.add(t.trim()))
+      }
+    })
+    try {
+      const storedTasks = this.storage?.get("tasks")
+      if (Array.isArray(storedTasks)) {
+        storedTasks.forEach(task => {
+          if (Array.isArray(task.tags)) {
+            task.tags.forEach(t => t && tagsSet.add(t.trim()))
+          }
+        })
+      }
+    } catch {
+      // Ignora errores si no hay almacenamiento
+    }
+    return Array.from(tagsSet).sort()
   }
 
   createNote(data) {
@@ -98,6 +122,19 @@ export class NotesModule {
     })
 
     const form = document.getElementById("create-note-form")
+    const tagsContainer = document.getElementById("note-tags-input-container")
+    let tagInputInstance = null
+
+    if (tagsContainer) {
+      tagInputInstance = new TagInput({
+        container: tagsContainer,
+        initialTags: [],
+        availableTags: () => this.getAllTags(),
+        name: "tags",
+        i18n: this.i18n
+      })
+      this.activeTagInput = tagInputInstance
+    }
 
     form
       .querySelector('[data-action="preview-note"]')
@@ -111,11 +148,17 @@ export class NotesModule {
     form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
+      const tags = tagInputInstance
+        ? tagInputInstance.getTags()
+        : this._parseTags(formData.get("tags"))
+
       this.createNote({
         title: formData.get("title"),
         bodyMarkdown: formData.get("bodyMarkdown"),
-        tags: formData.get("tags")
+        tags
       })
+      tagInputInstance?.destroy()
+      this.activeTagInput = null
       this.eventBus.emit("modal:close")
     })
   }
@@ -129,6 +172,19 @@ export class NotesModule {
     })
 
     const form = document.getElementById("edit-note-form")
+    const tagsContainer = document.getElementById("note-tags-input-container")
+    let tagInputInstance = null
+
+    if (tagsContainer) {
+      tagInputInstance = new TagInput({
+        container: tagsContainer,
+        initialTags: note.tags,
+        availableTags: () => this.getAllTags(),
+        name: "tags",
+        i18n: this.i18n
+      })
+      this.activeTagInput = tagInputInstance
+    }
 
     form
       .querySelector('[data-action="preview-note"]')
@@ -142,11 +198,17 @@ export class NotesModule {
     form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
+      const tags = tagInputInstance
+        ? tagInputInstance.getTags()
+        : this._parseTags(formData.get("tags"))
+
       this.updateNote(noteId, {
         title: formData.get("title"),
         bodyMarkdown: formData.get("bodyMarkdown"),
-        tags: formData.get("tags")
+        tags
       })
+      tagInputInstance?.destroy()
+      this.activeTagInput = null
       this.eventBus.emit("modal:close")
     })
   }
@@ -199,7 +261,11 @@ export class NotesModule {
     this.eventBus.on("note:search", query => {
       if (!this.container) return
       const results = this.searchNotes(query)
-      this.container.innerHTML = noteListTemplate(results, this.i18n)
+      this.container.innerHTML = noteListTemplate(
+        results,
+        this.i18n,
+        query?.trim()
+      )
     })
 
     if (this.container) {
@@ -214,10 +280,8 @@ export class NotesModule {
           case "create-note":
             this.showCreateModal()
             break
-          case "view-note":
-            this.showEditModal(noteId)
-            break
           case "delete-note":
+            e.stopPropagation()
             if (
               confirm(
                 this.i18n?.getMessage("ui.common.confirmDelete") ||
@@ -227,8 +291,12 @@ export class NotesModule {
               this.deleteNote(noteId)
             }
             break
+          case "view-note":
+            this.showEditModal(noteId)
+            break
         }
       })
     }
   }
 }
+

@@ -4,6 +4,7 @@ import {
   createTaskModalTemplate,
   editTaskModalTemplate
 } from "./templates.js"
+import { TagInput } from "../../components/tagInput.js"
 
 export class TasksModule {
   constructor(storage, eventBus, i18n) {
@@ -145,6 +146,28 @@ export class TasksModule {
       .slice(0, limit)
   }
 
+  getAllTags() {
+    const tagsSet = new Set()
+    this.tasks.forEach(task => {
+      if (Array.isArray(task.tags)) {
+        task.tags.forEach(t => t && tagsSet.add(t.trim()))
+      }
+    })
+    try {
+      const storedNotes = this.storage?.get("notes")
+      if (Array.isArray(storedNotes)) {
+        storedNotes.forEach(note => {
+          if (Array.isArray(note.tags)) {
+            note.tags.forEach(t => t && tagsSet.add(t.trim()))
+          }
+        })
+      }
+    } catch {
+      // Ignora errores si no hay almacenamiento
+    }
+    return Array.from(tagsSet).sort()
+  }
+
   showCreateModal() {
     if (!this.modalContainer) return
     this.eventBus.emit("modal:open", {
@@ -152,20 +175,37 @@ export class TasksModule {
     })
 
     const form = document.getElementById("create-task-form")
+    const tagsContainer = document.getElementById("task-tags-input-container")
+    let tagInputInstance = null
+
+    if (tagsContainer) {
+      tagInputInstance = new TagInput({
+        container: tagsContainer,
+        initialTags: [],
+        availableTags: () => this.getAllTags(),
+        name: "tags",
+        i18n: this.i18n
+      })
+    }
+
     form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
-      const tagsRaw = formData.get("tags") || ""
+      const tags = tagInputInstance
+        ? tagInputInstance.getTags()
+        : (formData.get("tags") || "")
+            .split(",")
+            .map(t => t.trim())
+            .filter(Boolean)
+
       this.createTask({
         title: formData.get("title"),
         description: formData.get("description"),
         dueDate: formData.get("dueDate"),
         priority: formData.get("priority"),
-        tags: tagsRaw
-          .split(",")
-          .map(t => t.trim())
-          .filter(Boolean)
+        tags
       })
+      tagInputInstance?.destroy()
       this.eventBus.emit("modal:close")
     })
   }
@@ -179,20 +219,37 @@ export class TasksModule {
     })
 
     const form = document.getElementById("edit-task-form")
+    const tagsContainer = document.getElementById("task-tags-input-container")
+    let tagInputInstance = null
+
+    if (tagsContainer) {
+      tagInputInstance = new TagInput({
+        container: tagsContainer,
+        initialTags: task.tags,
+        availableTags: () => this.getAllTags(),
+        name: "tags",
+        i18n: this.i18n
+      })
+    }
+
     form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
-      const tagsRaw = formData.get("tags") || ""
+      const tags = tagInputInstance
+        ? tagInputInstance.getTags()
+        : (formData.get("tags") || "")
+            .split(",")
+            .map(t => t.trim())
+            .filter(Boolean)
+
       this.updateTask(taskId, {
         title: formData.get("title"),
         description: formData.get("description"),
         dueDate: formData.get("dueDate"),
         priority: formData.get("priority"),
-        tags: tagsRaw
-          .split(",")
-          .map(t => t.trim())
-          .filter(Boolean)
+        tags
       })
+      tagInputInstance?.destroy()
       this.eventBus.emit("modal:close")
     })
 
@@ -206,6 +263,7 @@ export class TasksModule {
         task.addSubtask(text)
         this._saveTasks()
         input.value = ""
+        tagInputInstance?.destroy()
         this.showEditModal(taskId)
       })
     }
@@ -219,12 +277,14 @@ export class TasksModule {
 
         if (toggleBtn) {
           this.toggleSubtask(taskId, toggleBtn.dataset.subtaskId)
+          tagInputInstance?.destroy()
           this.showEditModal(taskId)
         }
         if (removeBtn) {
           task.removeSubtask(removeBtn.dataset.subtaskId)
           this._saveTasks()
           this.render()
+          tagInputInstance?.destroy()
           this.showEditModal(taskId)
         }
       })

@@ -302,4 +302,67 @@ describe('TasksModule', () => {
     expect(module.tasks.find(t => t.id === b.id).order).toBe(0)
     expect(module.tasks.find(t => t.id === a.id).order).toBe(1)
   })
+
+  describe("getAllTags()", () => {
+    it("debería retornar todas las etiquetas únicas ordenadas de las tareas", () => {
+      module.createTask({ title: "T1", priority: "medium", tags: ["backend", "api"] })
+      module.createTask({ title: "T2", priority: "medium", tags: ["api", "devops"] })
+      expect(module.getAllTags()).toEqual(["api", "backend", "devops"])
+    })
+
+    it("debería incluir etiquetas de notas almacenadas si existen", () => {
+      storage.get = vi.fn(key => {
+        if (key === "notes") return [{ tags: ["nota-tag"] }]
+        return null
+      })
+      module.createTask({ title: "T1", priority: "medium", tags: ["tarea-tag"] })
+      expect(module.getAllTags()).toEqual(["nota-tag", "tarea-tag"])
+    })
+  })
+
+  describe("Modales con TagInput", () => {
+    let modalRoot
+
+    beforeEach(() => {
+      modalRoot = document.createElement("div")
+      modalRoot.id = "modal-content"
+      document.body.appendChild(modalRoot)
+      module.modalContainer = modalRoot
+      eventBus.on("modal:open", ({ contentHtml }) => {
+        modalRoot.innerHTML = contentHtml
+      })
+    })
+
+    it("showCreateModal debería inicializar TagInput y procesar etiquetas", () => {
+      module.showCreateModal()
+      const widget = modalRoot.querySelector(".tag-input-widget")
+      expect(widget).not.toBeNull()
+
+      const input = modalRoot.querySelector(".tag-text-input")
+      input.value = "nueva-tarea-tag"
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }))
+
+      const form = modalRoot.querySelector("#create-task-form")
+      form.querySelector('input[name="title"]').value = "Tarea con tag"
+      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }))
+
+      expect(module.tasks[0].title).toBe("Tarea con tag")
+      expect(module.tasks[0].tags).toContain("nueva-tarea-tag")
+    })
+
+    it("showEditModal debería cargar las etiquetas existentes en TagInput", () => {
+      const task = module.createTask({ title: "Tarea editable", priority: "medium", tags: ["tarea-existente"] })
+      module.showEditModal(task.id)
+
+      const chip = modalRoot.querySelector('.tag-chip[data-tag="tarea-existente"]')
+      expect(chip).not.toBeNull()
+
+      const form = modalRoot.querySelector("#edit-task-form")
+      form.querySelector('input[name="title"]').value = "Tarea actualizada"
+      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }))
+
+      expect(module.tasks[0].title).toBe("Tarea actualizada")
+      expect(module.tasks[0].tags).toEqual(["tarea-existente"])
+    })
+  })
 })

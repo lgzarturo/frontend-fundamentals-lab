@@ -242,8 +242,71 @@ describe('NotesModule', () => {
       expect(module.searchNotes('CSS')).toHaveLength(1)
     })
 
-    it('debería retornar todas las notas con query vacía', () => {
-      expect(module.searchNotes('')).toHaveLength(3)
+    it("debería retornar todas las notas con query vacía", () => {
+      expect(module.searchNotes("")).toHaveLength(3)
+    })
+  })
+
+  describe("getAllTags()", () => {
+    it("debería retornar todas las etiquetas únicas ordenadas", () => {
+      module.createNote({ title: "N1", tags: ["zebra", "apple"] })
+      module.createNote({ title: "N2", tags: ["apple", "banana"] })
+      expect(module.getAllTags()).toEqual(["apple", "banana", "zebra"])
+    })
+
+    it("debería incluir etiquetas de tareas almacenadas si existen", () => {
+      storage.get = vi.fn(key => {
+        if (key === "tasks") return [{ tags: ["tarea-tag"] }]
+        return null
+      })
+      module.createNote({ title: "N1", tags: ["nota-tag"] })
+      expect(module.getAllTags()).toEqual(["nota-tag", "tarea-tag"])
+    })
+  })
+
+  describe("Modales con TagInput", () => {
+    let modalRoot
+
+    beforeEach(() => {
+      modalRoot = document.createElement("div")
+      modalRoot.id = "modal-content"
+      document.body.appendChild(modalRoot)
+      module.modalContainer = modalRoot
+      eventBus.on("modal:open", ({ contentHtml }) => {
+        modalRoot.innerHTML = contentHtml
+      })
+    })
+
+    it("showCreateModal debería inicializar TagInput y procesar etiquetas", () => {
+      module.showCreateModal()
+      const widget = modalRoot.querySelector(".tag-input-widget")
+      expect(widget).not.toBeNull()
+
+      const input = modalRoot.querySelector(".tag-text-input")
+      input.value = "nueva-tag"
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }))
+
+      const form = modalRoot.querySelector("#create-note-form")
+      form.querySelector('input[name="title"]').value = "Nota creada"
+      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }))
+
+      expect(module.notes[0].title).toBe("Nota creada")
+      expect(module.notes[0].tags).toContain("nueva-tag")
+    })
+
+    it("showEditModal debería cargar las etiquetas existentes en TagInput", () => {
+      const note = module.createNote({ title: "Original", tags: ["existente"] })
+      module.showEditModal(note.id)
+
+      const chip = modalRoot.querySelector('.tag-chip[data-tag="existente"]')
+      expect(chip).not.toBeNull()
+
+      const form = modalRoot.querySelector("#edit-note-form")
+      form.querySelector('input[name="title"]').value = "Nota modificada"
+      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }))
+
+      expect(module.notes[0].title).toBe("Nota modificada")
+      expect(module.notes[0].tags).toEqual(["existente"])
     })
   })
 })

@@ -1,4 +1,5 @@
 import { escapeHtml, html, raw } from "../../utils/html.js"
+import { tagInputTemplate } from "../../components/tagInput.js"
 
 export { html, raw }
 
@@ -254,14 +255,18 @@ export function createTaskModalTemplate(i18n) {
 
           <div>
             <label class="block text-sm font-semibold mb-2">
-              ${i18n?.getMessage("app.screens.tasks.modal.create.tags") || "Etiquetas (separadas por coma)"}
+              ${i18n?.getMessage("app.screens.tasks.modal.create.tags") || "Etiquetas"}
             </label>
-            <input
-              type="text"
-              name="tags"
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-              placeholder="${i18n?.getMessage("app.screens.tasks.modal.create.tagsPlaceholder") || "trabajo, urgente, personal"}"
-            />
+            <div id="task-tags-input-container">
+              ${raw(
+                tagInputTemplate({
+                  id: "task-tags-widget",
+                  name: "tags",
+                  initialTags: [],
+                  i18n
+                })
+              )}
+            </div>
           </div>
         </div>
 
@@ -286,8 +291,6 @@ export function createTaskModalTemplate(i18n) {
 }
 
 export function editTaskModalTemplate(task, i18n) {
-  const tagsValue = task.tags.join(", ")
-
   const subtaskItemsHtml = task.subtasks
     .map(
       s => `
@@ -386,14 +389,18 @@ ${task.description}</textarea>
 
           <div>
             <label class="block text-sm font-semibold mb-2">
-              ${i18n?.getMessage("app.screens.tasks.modal.create.tags") || "Etiquetas (separadas por coma)"}
+              ${i18n?.getMessage("app.screens.tasks.modal.create.tags") || "Etiquetas"}
             </label>
-            <input
-              type="text"
-              name="tags"
-              value="${tagsValue}"
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-            />
+            <div id="task-tags-input-container">
+              ${raw(
+                tagInputTemplate({
+                  id: "task-tags-widget",
+                  name: "tags",
+                  initialTags: task.tags,
+                  i18n
+                })
+              )}
+            </div>
           </div>
 
           <div>

@@ -1,5 +1,6 @@
 import { escapeHtml, html, raw } from "../../utils/html.js"
 import { getRelativeTime } from "../../utils/date.js"
+import { tagInputTemplate } from "../../components/tagInput.js"
 
 export { html, raw }
 
@@ -15,61 +16,91 @@ export function parseMarkdown(markdown) {
 }
 
 export function noteCardTemplate(note, i18n) {
-  const preview = note.getPreview(100)
+  const preview = note.getPreview(120)
   const tagsHtml = note.tags.length
     ? note.tags
         .map(
           tag =>
             html`<span
-              class="px-2 py-0.5 text-xs rounded-full bg-xp-primary/20 text-xp-primary"
-              >${tag}</span
+              class="px-2.5 py-0.5 text-xs rounded-full bg-xp-primary/20 text-xp-primary font-medium"
+              >#${tag}</span
             >`
         )
         .join("")
     : ""
   const relativeTime = getRelativeTime(note.updatedAt, i18n)
+  const deleteLabel = i18n?.getMessage("ui.common.delete") || "Eliminar"
 
   return html`
     <div
-      class="bg-white dark:bg-xp-card rounded-xl p-5 border-2 border-gray-200 dark:border-xp-primary/20 flex flex-col gap-3 cursor-pointer hover:border-xp-primary transition-colors"
+      class="group relative bg-white dark:bg-xp-card rounded-xl p-5 border-2 border-gray-200 dark:border-xp-primary/20 flex flex-col justify-between hover:border-xp-primary hover:shadow-lg transition-all duration-200 cursor-pointer min-h-[160px]"
       data-action="view-note"
       data-note-id="${note.id}"
     >
-      <div class="flex items-start justify-between gap-2">
-        <h3 class="font-bold text-base leading-snug">${note.title}</h3>
-        <button
-          data-action="delete-note"
-          data-note-id="${note.id}"
-          class="text-gray-400 hover:text-xp-danger transition-colors shrink-0"
-          aria-label="Eliminar nota"
-        >
-          &#x2715;
-        </button>
+      <div>
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <h3
+            class="font-bold text-base md:text-lg leading-snug text-gray-900 dark:text-gray-100 group-hover:text-xp-primary transition-colors break-words flex-1"
+          >
+            ${note.title}
+          </h3>
+          <button
+            type="button"
+            data-action="delete-note"
+            data-note-id="${note.id}"
+            class="btn-icon w-8 h-8 rounded-lg text-gray-400 hover:text-xp-danger hover:bg-xp-danger/10 transition-colors flex items-center justify-center shrink-0 text-sm"
+            aria-label="${deleteLabel} nota"
+            title="${deleteLabel}"
+          >
+            &#x2715;
+          </button>
+        </div>
+        ${
+          preview
+            ? raw(
+                html`<p
+                  class="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 leading-relaxed mb-4 break-words"
+                >
+                  ${preview}
+                </p>`
+              )
+            : ""
+        }
       </div>
-      ${
-        preview
-          ? raw(
-              html`<p
-                class="text-sm text-gray-600 dark:text-gray-400 line-clamp-3"
-              >
-                ${preview}
-              </p>`
-            )
-          : ""
-      }
-      <div class="flex items-center justify-between gap-2 flex-wrap">
-        <div class="flex flex-wrap gap-1">${raw(tagsHtml)}</div>
-        <span class="text-xs text-gray-500">${relativeTime}</span>
+      <div
+        class="flex items-center justify-between gap-2 pt-3 border-t border-gray-100 dark:border-gray-800/60 mt-auto flex-wrap"
+      >
+        <div class="flex flex-wrap gap-1 max-w-[70%]">${raw(tagsHtml)}</div>
+        <span class="text-xs text-gray-500 whitespace-nowrap">${relativeTime}</span>
       </div>
     </div>
   `
 }
 
-export function noteListTemplate(notes, i18n) {
-  if (!notes.length) return emptyNotesTemplate(i18n)
+export function emptySearchNotesTemplate(query, i18n) {
+  return html`
+    <div class="col-span-full text-center py-12">
+      <div class="text-5xl mb-3">🔍</div>
+      <h3 class="text-lg font-bold mb-1">
+        ${i18n?.getMessage("app.screens.notes.searchEmptyTitle", "Sin resultados") || "Sin resultados"}
+      </h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        ${i18n?.getMessage("app.screens.notes.searchEmptyDescription", "No se encontraron notas que coincidan con la búsqueda.") || "No se encontraron notas que coincidan con la búsqueda."}
+      </p>
+    </div>
+  `
+}
+
+export function noteListTemplate(notes, i18n, query = "") {
+  if (!notes.length) {
+    if (query) {
+      return emptySearchNotesTemplate(query, i18n)
+    }
+    return emptyNotesTemplate(i18n)
+  }
   const cards = notes.map(note => noteCardTemplate(note, i18n)).join("")
   return html`
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       ${raw(cards)}
     </div>
   `
@@ -108,14 +139,18 @@ export function createNoteModalTemplate(i18n) {
           </div>
           <div>
             <label class="block text-sm font-semibold mb-2">
-              ${i18n?.getMessage("app.screens.notes.modal.create.tags") || "Etiquetas (separadas por coma)"}
+              ${i18n?.getMessage("app.screens.notes.modal.create.tags") || "Etiquetas"}
             </label>
-            <input
-              type="text"
-              name="tags"
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-              placeholder="trabajo, personal, ideas"
-            />
+            <div id="note-tags-input-container">
+              ${raw(
+                tagInputTemplate({
+                  id: "note-tags-widget",
+                  name: "tags",
+                  initialTags: [],
+                  i18n
+                })
+              )}
+            </div>
           </div>
           <div>
             <button
@@ -152,7 +187,6 @@ export function createNoteModalTemplate(i18n) {
 }
 
 export function editNoteModalTemplate(note, i18n) {
-  const tagsValue = note.tags.join(", ")
   return html`
     <div class="p-6">
       <h3 class="text-2xl font-bold mb-4">
@@ -185,14 +219,18 @@ ${note.bodyMarkdown}</textarea>
           </div>
           <div>
             <label class="block text-sm font-semibold mb-2">
-              ${i18n?.getMessage("app.screens.notes.modal.create.tags") || "Etiquetas (separadas por coma)"}
+              ${i18n?.getMessage("app.screens.notes.modal.create.tags") || "Etiquetas"}
             </label>
-            <input
-              type="text"
-              name="tags"
-              value="${tagsValue}"
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
-            />
+            <div id="note-tags-input-container">
+              ${raw(
+                tagInputTemplate({
+                  id: "note-tags-widget",
+                  name: "tags",
+                  initialTags: note.tags,
+                  i18n
+                })
+              )}
+            </div>
           </div>
           <div>
             <button
@@ -259,3 +297,4 @@ export function emptyNotesTemplate(i18n) {
     </div>
   `
 }
+

@@ -20,6 +20,7 @@ import {
 } from "../assets/js/modules/home/templates.js"
 import { Note } from "../assets/js/modules/notes/models.js"
 import {
+  emptySearchNotesTemplate,
   noteCardTemplate,
   noteListTemplate,
   notePreviewTemplate
@@ -211,6 +212,24 @@ describe("Templates renderizado HTML", () => {
 
       expect(container.querySelector("h1")).not.toBeNull()
       expect(container.querySelector("strong")).not.toBeNull()
+    })
+
+    it("debería renderizar emptySearchNotesTemplate cuando no hay notas para la búsqueda", () => {
+      const htmlOutput = emptySearchNotesTemplate("inexistente", i18nStub)
+      expect(htmlOutput).not.toContain("&lt;div")
+
+      const container = document.createElement("div")
+      container.innerHTML = htmlOutput
+
+      expect(container.textContent).toContain("Sin resultados")
+    })
+
+    it("noteListTemplate debería mostrar plantilla de búsqueda vacía si se pasa query", () => {
+      const htmlOutput = noteListTemplate([], i18nStub, "prueba")
+      const container = document.createElement("div")
+      container.innerHTML = htmlOutput
+
+      expect(container.textContent).toContain("Sin resultados")
     })
   })
 

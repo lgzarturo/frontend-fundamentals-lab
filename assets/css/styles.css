@@ -69,7 +69,7 @@ img {
   }
 }
 
-/* Asegurando que los elementos interactivos sean lo suficientemente grandes */
+/* Asegurando que los elementos interactivos sean lo suficientemente grandes por defecto */
 button,
 a,
 input,
@@ -77,3 +77,15 @@ select {
   min-height: 44px;
   min-width: 44px;
 }
+
+/* Excepciones para botones de icono, etiquetas y controles compactos */
+button.btn-icon,
+button.btn-compact,
+.btn-icon,
+.btn-compact,
+.tag-input-widget input,
+.tag-input-widget button {
+  min-height: unset;
+  min-width: unset;
+}
+

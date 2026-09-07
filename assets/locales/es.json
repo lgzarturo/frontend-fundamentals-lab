@@ -285,6 +285,9 @@
         "newButton": "+ Nota",
         "searchPlaceholder": "🔍 Buscar notas...",
         "noNotes": "No hay notas aún. ¡Empieza a escribir! 📝",
+        "searchEmptyTitle": "Sin resultados",
+        "searchEmptyDescription": "No se encontraron notas que coincidan con la búsqueda.",
+        "noContent": "Sin contenido adicional",
         "empty": {
           "title": "Sin notas todavía",
           "description": "Crea tu primera nota para capturar ideas y conocimientos.",
@@ -404,6 +407,15 @@
         "dataReset": "Datos restablecidos a demo",
         "dataCleared": "Todos los datos eliminados"
       }
+    },
+    "tags": {
+      "placeholder": "Escribe una etiqueta y presiona Enter...",
+      "add": "Agregar",
+      "remove": "Quitar etiqueta {tag}",
+      "suggestions": "Etiquetas sugeridas",
+      "noSuggestions": "Sin etiquetas coincidentes",
+      "createNew": "Crear etiqueta \"{tag}\"",
+      "clickToAdd": "Añadir"
     }
   },
   "accessibility": {
