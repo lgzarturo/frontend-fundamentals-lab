@@ -165,9 +165,15 @@
       "tasks": {
         "title": "Tareas",
         "newButton": "+ Tarea",
-        "noTasks": "No hay tareas para hoy. ¡Crea algunas MITs! 🎯",
+        "noTasks": "No hay tareas pendientes. ¡Crea una nueva! 🎯",
+        "emptyPending": "¡Todo al día! No hay tareas pendientes.",
+        "emptyToday": "Sin tareas pendientes para hoy.",
+        "emptyHigh": "No hay tareas de alta prioridad pendientes.",
+        "emptyCompleted": "Aún no has completado ninguna tarea.",
+        "completedToast": "Tarea completada:",
+        "reopenedToast": "Tarea reactivada:",
         "filters": {
-          "all": "Todas",
+          "all": "Pendientes",
           "today": "Hoy",
           "high": "Urgentes",
           "completed": "Acabadas"
@@ -179,7 +185,7 @@
             "titlePlaceholder": "ej., Completar implementación de feature",
             "description": "Descripción",
             "descriptionPlaceholder": "Detalles de la tarea...",
-            "dueDate": "Fecha de Vencimiento",
+            "dueDate": "Fecha límite",
             "priority": "Prioridad",
             "tags": "Etiquetas (separadas por coma)",
             "tagsPlaceholder": "coding, important, review",
@@ -188,7 +194,7 @@
           },
           "edit": {
             "title": "Editar Tarea",
-            "update": "Actualizar Tarea",
+            "update": "Guardar Cambios",
             "subtasks": "Subtareas",
             "subtaskPlaceholder": "Nueva subtarea...",
             "addSubtask": "+ Agregar Subtarea"
@@ -203,7 +209,19 @@
           "edit": "Editar",
           "delete": "Eliminar"
         },
-        "dueDate": "Vence: "
+        "dueDate": "Vence: ",
+        "datePicker": {
+          "today": "Hoy",
+          "tomorrow": "Mañana",
+          "nextWeek": "+7 días",
+          "clear": "Sin fecha",
+          "dueToday": "Vence hoy",
+          "dueTomorrow": "Vence mañana",
+          "dueInDays": "Vence en {days} días",
+          "overdue": "Vencida hace {days} días",
+          "overdueYesterday": "Vencida ayer",
+          "noDate": "Sin fecha límite"
+        }
       },
       "habits": {
         "title": "Seguimiento",
@@ -293,6 +311,16 @@
           "description": "Crea tu primera nota para capturar ideas y conocimientos.",
           "action": "+ Crear Nota"
         },
+        "preview": {
+          "title": "Vista Previa",
+          "edit": "Editar Nota",
+          "close": "Cerrar",
+          "tabWrite": "Escribir",
+          "tabPreview": "Vista Previa",
+          "emptyContent": "Esta nota no tiene contenido aún.",
+          "created": "Creada",
+          "updated": "Actualizada"
+        },
         "modal": {
           "create": {
             "title": "Crear Nueva Nota",
@@ -307,8 +335,8 @@
             "create": "Crear Nota"
           },
           "edit": {
-            "title": "Ver/Editar Nota",
-            "update": "Actualizar Nota"
+            "title": "Editar Nota",
+            "update": "Guardar Cambios"
           }
         }
       },

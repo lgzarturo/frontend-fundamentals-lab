@@ -5,6 +5,7 @@ import {
   editTaskModalTemplate
 } from "./templates.js"
 import { TagInput } from "../../components/tagInput.js"
+import { DueDatePicker } from "../../components/dueDatePicker.js"
 
 export class TasksModule {
   constructor(storage, eventBus, i18n) {
@@ -33,6 +34,7 @@ export class TasksModule {
       this.activeFilter,
       this.i18n
     )
+    this._updateFilterCounts()
   }
 
   createTask(data) {
@@ -95,6 +97,21 @@ export class TasksModule {
     task.toggle()
     this._saveTasks()
     this.render()
+
+    const actionMsg = task.done
+      ? `${this.i18n?.getMessage("app.screens.tasks.completedToast") || "Tarea completada:"} "${task.title}"`
+      : `${this.i18n?.getMessage("app.screens.tasks.reopenedToast") || "Tarea reactivada:"} "${task.title}"`
+
+    this.eventBus.emit("undo:show", {
+      message: actionMsg,
+      undoCallback: () => {
+        task.toggle()
+        this._saveTasks()
+        this.render()
+        this.eventBus.emit("task:toggled", task)
+      }
+    })
+
     this.eventBus.emit("task:toggled", task)
     return task
   }
@@ -124,7 +141,7 @@ export class TasksModule {
 
     switch (filter) {
       case "today":
-        result = this.tasks.filter(t => t.dueDate === today)
+        result = this.tasks.filter(t => t.dueDate === today && !t.done)
         break
       case "high":
         result = this.tasks.filter(t => t.priority === "high" && !t.done)
@@ -132,8 +149,9 @@ export class TasksModule {
       case "completed":
         result = this.tasks.filter(t => t.done)
         break
+      case "all":
       default:
-        result = [...this.tasks]
+        result = this.tasks.filter(t => !t.done)
     }
 
     return result.sort((a, b) => a.order - b.order)
@@ -188,6 +206,20 @@ export class TasksModule {
       })
     }
 
+    const dueDateContainer = document.getElementById("task-due-date-container")
+    let dueDatePickerInstance = null
+    if (dueDateContainer) {
+      dueDatePickerInstance = new DueDatePicker({
+        container: dueDateContainer,
+        initialDate: "",
+        name: "dueDate",
+        i18n: this.i18n
+      })
+    }
+
+    const priorityContainer = document.getElementById("task-priority-container")
+    this._bindPrioritySelectorEvents(priorityContainer)
+
     form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
@@ -198,14 +230,19 @@ export class TasksModule {
             .map(t => t.trim())
             .filter(Boolean)
 
+      const dueDate = dueDatePickerInstance
+        ? dueDatePickerInstance.getDate()
+        : formData.get("dueDate")
+
       this.createTask({
         title: formData.get("title"),
         description: formData.get("description"),
-        dueDate: formData.get("dueDate"),
-        priority: formData.get("priority"),
+        dueDate: dueDate || "",
+        priority: formData.get("priority") || "medium",
         tags
       })
       tagInputInstance?.destroy()
+      dueDatePickerInstance?.destroy()
       this.eventBus.emit("modal:close")
     })
   }
@@ -232,6 +269,20 @@ export class TasksModule {
       })
     }
 
+    const dueDateContainer = document.getElementById("task-due-date-container")
+    let dueDatePickerInstance = null
+    if (dueDateContainer) {
+      dueDatePickerInstance = new DueDatePicker({
+        container: dueDateContainer,
+        initialDate: task.dueDate,
+        name: "dueDate",
+        i18n: this.i18n
+      })
+    }
+
+    const priorityContainer = document.getElementById("task-priority-container")
+    this._bindPrioritySelectorEvents(priorityContainer)
+
     form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
@@ -242,14 +293,19 @@ export class TasksModule {
             .map(t => t.trim())
             .filter(Boolean)
 
+      const dueDate = dueDatePickerInstance
+        ? dueDatePickerInstance.getDate()
+        : formData.get("dueDate")
+
       this.updateTask(taskId, {
         title: formData.get("title"),
         description: formData.get("description"),
-        dueDate: formData.get("dueDate"),
-        priority: formData.get("priority"),
+        dueDate: dueDate || "",
+        priority: formData.get("priority") || "medium",
         tags
       })
       tagInputInstance?.destroy()
+      dueDatePickerInstance?.destroy()
       this.eventBus.emit("modal:close")
     })
 
@@ -264,6 +320,7 @@ export class TasksModule {
         this._saveTasks()
         input.value = ""
         tagInputInstance?.destroy()
+        dueDatePickerInstance?.destroy()
         this.showEditModal(taskId)
       })
     }
@@ -278,6 +335,7 @@ export class TasksModule {
         if (toggleBtn) {
           this.toggleSubtask(taskId, toggleBtn.dataset.subtaskId)
           tagInputInstance?.destroy()
+          dueDatePickerInstance?.destroy()
           this.showEditModal(taskId)
         }
         if (removeBtn) {
@@ -285,10 +343,77 @@ export class TasksModule {
           this._saveTasks()
           this.render()
           tagInputInstance?.destroy()
+          dueDatePickerInstance?.destroy()
           this.showEditModal(taskId)
         }
       })
     }
+  }
+
+  _bindPrioritySelectorEvents(container) {
+    if (!container) return
+    container.addEventListener("change", e => {
+      if (e.target.name !== "priority") return
+      const selected = e.target.value
+      container.querySelectorAll(".priority-card").forEach(card => {
+        const p = card.dataset.priority
+        const isSelected = p === selected
+        card.classList.toggle("shadow-sm", isSelected)
+
+        if (p === "low") {
+          card.classList.toggle("border-gray-400", isSelected)
+          card.classList.toggle("bg-gray-100", isSelected)
+          card.classList.toggle("dark:bg-gray-800", isSelected)
+          card.classList.toggle("text-gray-800", isSelected)
+          card.classList.toggle("dark:text-gray-100", isSelected)
+          card.classList.toggle("border-gray-200", !isSelected)
+          card.classList.toggle("dark:border-xp-primary/20", !isSelected)
+          card.classList.toggle("text-gray-500", !isSelected)
+        } else if (p === "medium") {
+          card.classList.toggle("border-yellow-500", isSelected)
+          card.classList.toggle("bg-yellow-50", isSelected)
+          card.classList.toggle("dark:bg-yellow-900/20", isSelected)
+          card.classList.toggle("text-yellow-700", isSelected)
+          card.classList.toggle("dark:text-yellow-400", isSelected)
+          card.classList.toggle("border-gray-200", !isSelected)
+          card.classList.toggle("dark:border-xp-primary/20", !isSelected)
+          card.classList.toggle("text-gray-500", !isSelected)
+        } else if (p === "high") {
+          card.classList.toggle("border-red-500", isSelected)
+          card.classList.toggle("bg-red-50", isSelected)
+          card.classList.toggle("dark:bg-red-900/20", isSelected)
+          card.classList.toggle("text-red-700", isSelected)
+          card.classList.toggle("dark:text-red-400", isSelected)
+          card.classList.toggle("border-gray-200", !isSelected)
+          card.classList.toggle("dark:border-xp-primary/20", !isSelected)
+          card.classList.toggle("text-gray-500", !isSelected)
+        }
+      })
+    })
+  }
+
+  _updateFilterCounts() {
+    const today = new Date().toISOString().slice(0, 10)
+    const counts = {
+      all: this.tasks.filter(t => !t.done).length,
+      today: this.tasks.filter(t => t.dueDate === today && !t.done).length,
+      high: this.tasks.filter(t => t.priority === "high" && !t.done).length,
+      completed: this.tasks.filter(t => t.done).length
+    }
+
+    document.querySelectorAll(".task-filter-btn").forEach(btn => {
+      const filter = btn.dataset.filter
+      if (filter && counts[filter] !== undefined) {
+        let badge = btn.querySelector(".filter-count-badge")
+        if (!badge) {
+          badge = document.createElement("span")
+          badge.className =
+            "filter-count-badge ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-black/10 dark:bg-white/10 font-bold"
+          btn.appendChild(badge)
+        }
+        badge.textContent = counts[filter]
+      }
+    })
   }
 
   /**

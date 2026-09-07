@@ -165,9 +165,15 @@
       "tasks": {
         "title": "Tasks",
         "newButton": "+ Task",
-        "noTasks": "No tasks for today. Create some MITs! 🎯",
+        "noTasks": "No pending tasks. Create a new one! 🎯",
+        "emptyPending": "All caught up! No pending tasks.",
+        "emptyToday": "No pending tasks for today.",
+        "emptyHigh": "No high-priority tasks pending.",
+        "emptyCompleted": "You haven't completed any tasks yet.",
+        "completedToast": "Task completed:",
+        "reopenedToast": "Task reopened:",
         "filters": {
-          "all": "All",
+          "all": "Pending",
           "today": "Today",
           "high": "High Priority",
           "completed": "Completed"
@@ -188,7 +194,7 @@
           },
           "edit": {
             "title": "Edit Task",
-            "update": "Update Task",
+            "update": "Save Changes",
             "subtasks": "Subtasks",
             "subtaskPlaceholder": "New subtask...",
             "addSubtask": "+ Add Subtask"
@@ -203,7 +209,19 @@
           "edit": "Edit",
           "delete": "Delete"
         },
-        "dueDate": "Due: "
+        "dueDate": "Due: ",
+        "datePicker": {
+          "today": "Today",
+          "tomorrow": "Tomorrow",
+          "nextWeek": "+7 days",
+          "clear": "No date",
+          "dueToday": "Due today",
+          "dueTomorrow": "Due tomorrow",
+          "dueInDays": "Due in {days} days",
+          "overdue": "Overdue by {days} days",
+          "overdueYesterday": "Overdue yesterday",
+          "noDate": "No due date"
+        }
       },
       "habits": {
         "title": "Tracking",
@@ -293,6 +311,16 @@
           "description": "Create your first note to capture ideas and knowledge.",
           "action": "+ Create Note"
         },
+        "preview": {
+          "title": "Preview Note",
+          "edit": "Edit Note",
+          "close": "Close",
+          "tabWrite": "Write",
+          "tabPreview": "Preview",
+          "emptyContent": "This note does not have any content yet.",
+          "created": "Created",
+          "updated": "Updated"
+        },
         "modal": {
           "create": {
             "title": "Create New Note",
@@ -307,8 +335,8 @@
             "create": "Create Note"
           },
           "edit": {
-            "title": "View/Edit Note",
-            "update": "Update Note"
+            "title": "Edit Note",
+            "update": "Save Changes"
           }
         }
       },
