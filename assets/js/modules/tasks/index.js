@@ -231,6 +231,15 @@ export class TasksModule {
     }
   }
 
+  /**
+   * Recarga los datos desde el almacenamiento y re-renderiza
+   * Útil tras importar/limpiar datos sin duplicar listeners
+   */
+  reload() {
+    this._loadTasks()
+    this.render()
+  }
+
   _loadTasks() {
     const data = this.storage.get("tasks")
     if (data && Array.isArray(data)) {

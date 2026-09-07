@@ -335,11 +335,13 @@
           },
           "reset": {
             "title": "🔄 Restablecer a Datos de Demostración",
-            "description": "Restaurar datos de ejemplo (sobrescribirá los datos actuales)"
+            "description": "Restaurar datos de ejemplo (sobrescribirá los datos actuales)",
+            "confirm": "Esto reemplazará todos tus datos actuales con datos de demostración. ¿Estás seguro?"
           },
           "clear": {
             "title": "🗑️ Borrar Todos los Datos",
-            "description": "Eliminar todos los datos almacenados (no se puede deshacer)"
+            "description": "Eliminar todos los datos almacenados (no se puede deshacer)",
+            "confirm": "Esto eliminará permanentemente todos tus datos. Esta acción no se puede deshacer. ¿Estás seguro?"
           }
         },
         "about": {
@@ -398,6 +400,7 @@
         "notImplemented": "Aún no está implementado 🚧",
         "dataExported": "¡Datos exportados! 📥",
         "dataImported": "¡Datos importados! 📤",
+        "dataImportError": "Error al importar datos. Formato de archivo inválido.",
         "dataReset": "Datos restablecidos a demo",
         "dataCleared": "Todos los datos eliminados"
       }

@@ -169,6 +169,15 @@ export class NotesModule {
       .filter(Boolean)
   }
 
+  /**
+   * Recarga los datos desde el almacenamiento y re-renderiza
+   * Útil tras importar/limpiar datos sin duplicar listeners
+   */
+  reload() {
+    this._loadNotes()
+    this.render()
+  }
+
   _loadNotes() {
     const data = this.storage.get("notes")
     if (data && Array.isArray(data)) {

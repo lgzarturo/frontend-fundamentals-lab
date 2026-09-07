@@ -8,12 +8,19 @@ import { i18n } from "./services/i18n.js"
 window.addEventListener("load", () => {
   i18n.init(app.eventBus).then(() => {
     const languageSelector = document.getElementById("language-selector")
-    languageSelector.value = i18n.currentLanguage
-    languageSelector.addEventListener("change", function () {
-      i18n.setLanguage(this.value)
-    })
+    if (languageSelector) {
+      languageSelector.value = i18n.currentLanguage
+      languageSelector.addEventListener("change", function () {
+        i18n.setLanguage(this.value)
+      })
+    }
 
+    // Inyecta el servicio i18n en la app para que los módulos lo reciban
+    app.i18n = i18n
     app.init()
+
+    // Fachada global para los handlers inline (onclick="app...") del HTML
+    window.app = app
   })
 
   if ("serviceWorker" in navigator) {

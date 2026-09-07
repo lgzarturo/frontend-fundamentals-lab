@@ -7,7 +7,7 @@
  * Clave de caché del service worker para los locales
  * @constant {string}
  */
-const PWA_CACHE_NAME = "pwa-cache-v3"
+const PWA_CACHE_NAME = "pwa-cache-v4"
 
 /**
  * Idiomas soportados por la aplicación

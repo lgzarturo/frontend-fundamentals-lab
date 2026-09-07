@@ -8,6 +8,8 @@ export function launchConfetti() {
   const height = window.innerHeight
   const canvas = document.createElement("canvas")
   const context = canvas.getContext("2d")
+  // Guarda: entornos sin soporte de canvas 2d (p. ej. jsdom en tests)
+  if (!context) return
   canvas.width = width
   canvas.height = height
   canvas.style.position = "fixed"

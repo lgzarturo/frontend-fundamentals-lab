@@ -205,6 +205,15 @@ export class BudgetsModule {
     })
   }
 
+  /**
+   * Recarga los datos desde el almacenamiento y re-renderiza
+   * Útil tras importar/limpiar datos sin duplicar listeners
+   */
+  reload() {
+    this._loadBudgets()
+    this.render()
+  }
+
   _loadBudgets() {
     const data = this.storage.get("budgets")
     if (data && Array.isArray(data)) {
@@ -240,7 +249,7 @@ export class BudgetsModule {
           case "create-budget":
             this.showCreateModal()
             break
-          case "view-budget":
+          case "view-details":
             this.showDetailsModal(budgetId)
             break
           case "delete-budget":

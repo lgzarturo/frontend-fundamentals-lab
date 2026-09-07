@@ -335,11 +335,13 @@
           },
           "reset": {
             "title": "🔄 Reset to Demo Data",
-            "description": "Restore sample data (will overwrite current data)"
+            "description": "Restore sample data (will overwrite current data)",
+            "confirm": "This will replace all your current data with demo data. Are you sure?"
           },
           "clear": {
             "title": "🗑️ Clear All Data",
-            "description": "Delete all stored data (cannot be undone)"
+            "description": "Delete all stored data (cannot be undone)",
+            "confirm": "This will permanently delete all your data. This action cannot be undone. Are you sure?"
           }
         },
         "about": {
@@ -398,6 +400,7 @@
         "notImplemented": "Not implemented yet 🚧",
         "dataExported": "Data exported! 📥",
         "dataImported": "Data imported! 📤",
+        "dataImportError": "Failed to import data. Invalid file format.",
         "dataReset": "Data reset to demo",
         "dataCleared": "All data cleared"
       }
