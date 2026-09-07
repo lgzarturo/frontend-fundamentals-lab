@@ -5,12 +5,13 @@
 import { BudgetsModule } from "../modules/budgets/index.js"
 import { StorageService } from "../services/storage.js"
 import { EventBus } from "./eventBus.js"
+import { launchConfetti } from "../utils/confetti.js"
 
 export class DOSApp {
   constructor() {
     this.storage = new StorageService()
     this.eventBus = new EventBus()
-    this.i18n = null // Se establecerá cuando se cargue I18n
+    this.i18n = null // Se inyecta desde main.js antes de init()
     this.modules = {}
     this.currentScreen = "home"
   }
@@ -22,6 +23,9 @@ export class DOSApp {
     // Inicializa el almacenamiento y migra datos antiguos
     this.storage.init()
 
+    // Enlaza el modal centralizado
+    this._bindModalEvents()
+
     // Inicializa los módulos
     this._initModules()
 
@@ -30,6 +34,12 @@ export class DOSApp {
 
     // Navega a la pantalla inicial
     this.navigateTo(this._getInitialScreen())
+
+    // Contador de visitas
+    this._visitCounter()
+
+    // Fecha en el header
+    this.updateDateTime()
 
     console.log("DOSApp initialized")
   }
@@ -65,6 +75,10 @@ export class DOSApp {
     })
 
     // Eventos de modal
+    this.eventBus.on("modal:open", ({ contentHtml }) => {
+      this.showModal(contentHtml)
+    })
+
     this.eventBus.on("modal:close", () => {
       this.closeModal()
     })
@@ -73,6 +87,39 @@ export class DOSApp {
     this.eventBus.on("screen:change", ({ screen }) => {
       this.navigateTo(screen)
     })
+
+    // Toast con opción de deshacer
+    this.eventBus.on("undo:show", ({ message, undoCallback }) => {
+      this.showUndoToast(message, undoCallback)
+    })
+
+    // Confeti cuando todos los hábitos del día están completos
+    this.eventBus.on("habit:allCompleted", () => {
+      launchConfetti()
+    })
+
+    // Cambio de idioma: actualiza fecha y re-renderiza la pantalla actual
+    this.eventBus.on("i18n:languageChanged", () => {
+      this.updateDateTime()
+      this._renderScreen(this.currentScreen)
+    })
+  }
+
+  /**
+   * Actualiza la fecha mostrada en el header según el idioma activo
+   */
+  updateDateTime() {
+    const now = new Date()
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    }
+    const language = localStorage.getItem("userLanguage") || "es"
+    const locale = language === "es" ? "es-ES" : "en-US"
+    const dateEl = document.getElementById("current-date")
+    if (dateEl) dateEl.textContent = now.toLocaleDateString(locale, options)
   }
 
   /**
@@ -179,6 +226,23 @@ export class DOSApp {
   }
 
   /**
+   * Enlaza el cierre del modal por delegación (backdrop y botones close)
+   * @private
+   */
+  _bindModalEvents() {
+    const backdrop = document.getElementById("modal-backdrop")
+    if (!backdrop) return
+
+    backdrop.addEventListener("click", e => {
+      const isBackdropClick = e.target === backdrop
+      const isCloseButton = e.target.closest('[data-action="close-modal"]')
+      if (isBackdropClick || isCloseButton) {
+        this.closeModal()
+      }
+    })
+  }
+
+  /**
    * Muestra un modal con contenido
    * @param {string} contentHtml - Contenido HTML
    */
@@ -198,6 +262,54 @@ export class DOSApp {
     const backdrop = document.getElementById("modal-backdrop")
     if (backdrop) {
       backdrop.classList.add("hidden")
+    }
+  }
+
+  /**
+   * Muestra un toast con opción de deshacer (5 segundos)
+   * @param {string} message - Mensaje a mostrar
+   * @param {Function} undoCallback - Función a ejecutar al deshacer
+   */
+  showUndoToast(message, undoCallback) {
+    const undoToast = document.getElementById("undo-toast")
+    const undoMessage = document.getElementById("undo-message")
+    if (!undoToast || !undoMessage) return
+
+    undoMessage.textContent = message
+    undoToast.classList.remove("hidden")
+    this._undoCallback = undoCallback
+
+    clearTimeout(this._undoTimeout)
+    this._undoTimeout = setTimeout(() => {
+      undoToast.classList.add("hidden")
+      this._undoCallback = null
+    }, 5000)
+  }
+
+  /**
+   * Ejecuta la acción de deshacer pendiente
+   */
+  performUndo() {
+    if (this._undoCallback) {
+      this._undoCallback()
+      this._undoCallback = null
+    }
+    clearTimeout(this._undoTimeout)
+    document.getElementById("undo-toast")?.classList.add("hidden")
+  }
+
+  /**
+   * Incrementa y muestra el contador de visitas; confeti cada 10 visitas
+   * @private
+   */
+  _visitCounter() {
+    const count = parseInt(localStorage.getItem("visit_counter"), 10) || 0
+    const next = count + 1
+    localStorage.setItem("visit_counter", String(next))
+    const el = document.getElementById("hit-counter")
+    if (el) el.textContent = next
+    if (next % 10 === 0) {
+      launchConfetti()
     }
   }
 

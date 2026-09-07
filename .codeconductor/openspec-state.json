@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "activeItemId": "BC-006",
+  "taskCards": [
+    {
+      "id": "BC-006-discover",
+      "backlogId": "BC-006",
+      "phase": "discover",
+      "title": "BC-006: Discover scope and impact",
+      "prompt": "Backlog item BC-006 — Dashboard de telemetría y resumen de uso\n\nDescription: Agregar un contador de uso y métricas locales para mostrar un panel/dashboard. Este panel resumirá en prosa el estado de los hábitos, los objetivos de presupuestos, las tareas pendientes y la telemetría (uso) de la aplicación.\nScope: assets/js/modules/home/*, assets/js/services/storage.js\n\nMap repository structure, conventions, and impact radius for this change.",
+      "agent": "repo-explorer",
+      "modelHint": "repo-explorer",
+      "dependsOn": [],
+      "acceptanceCriteria": [
+        "Repo map identifies relevant files and impact radius"
+      ],
+      "status": "pending",
+      "itemHash": "b86902a53fd70653"
+    },
+    {
+      "id": "BC-006-design",
+      "backlogId": "BC-006",
+      "phase": "design",
+      "title": "BC-006: Technical design",
+      "prompt": "Backlog item BC-006 — Dashboard de telemetría y resumen de uso\n\nDescription: Agregar un contador de uso y métricas locales para mostrar un panel/dashboard. Este panel resumirá en prosa el estado de los hábitos, los objetivos de presupuestos, las tareas pendientes y la telemetría (uso) de la aplicación.\nScope: assets/js/modules/home/*, assets/js/services/storage.js\n\nProduce a Technical Plan with approach, files affected, risks, and edge cases.",
+      "agent": "architect",
+      "modelHint": "architect",
+      "dependsOn": [
+        "BC-006-discover"
+      ],
+      "acceptanceCriteria": [
+        "Technical plan lists files affected and approach"
+      ],
+      "status": "pending",
+      "itemHash": "b86902a53fd70653"
+    },
+    {
+      "id": "BC-006-implement",
+      "backlogId": "BC-006",
+      "phase": "implement",
+      "title": "BC-006: Implementation",
+      "prompt": "Backlog item BC-006 — Dashboard de telemetría y resumen de uso\n\nDescription: Agregar un contador de uso y métricas locales para mostrar un panel/dashboard. Este panel resumirá en prosa el estado de los hábitos, los objetivos de presupuestos, las tareas pendientes y la telemetría (uso) de la aplicación.\nScope: assets/js/modules/home/*, assets/js/services/storage.js\n\nImplement the minimal diff to satisfy tests and acceptance criteria.",
+      "agent": "implementer",
+      "modelHint": "implementer",
+      "dependsOn": [
+        "BC-006-design"
+      ],
+      "acceptanceCriteria": [
+        "El storage persiste localmente contadores de uso (visitas e interacciones).",
+        "Una nueva sección en la interfaz muestra un resumen narrativo de las métricas (tareas, presupuestos, hábitos).",
+        "La prosa de resumen responde dinámicamente al estado actual de los datos (e.g., \"Tienes 3 tareas hoy\", \"Tu ahorro va al 50%\")."
+      ],
+      "status": "pending",
+      "itemHash": "b86902a53fd70653"
+    },
+    {
+      "id": "BC-006-test",
+      "backlogId": "BC-006",
+      "phase": "test",
+      "title": "BC-006: Test coverage",
+      "prompt": "Backlog item BC-006 — Dashboard de telemetría y resumen de uso\n\nDescription: Agregar un contador de uso y métricas locales para mostrar un panel/dashboard. Este panel resumirá en prosa el estado de los hábitos, los objetivos de presupuestos, las tareas pendientes y la telemetría (uso) de la aplicación.\nScope: assets/js/modules/home/*, assets/js/services/storage.js\n\nWrite TDD tests covering acceptance criteria before or after implementation per project policy.",
+      "agent": "tester",
+      "modelHint": "tester",
+      "dependsOn": [
+        "BC-006-implement"
+      ],
+      "acceptanceCriteria": [
+        "Test covers: El storage persiste localmente contadores de uso (visitas e interacciones).",
+        "Test covers: Una nueva sección en la interfaz muestra un resumen narrativo de las métricas (tareas, presupuestos, hábitos).",
+        "Test covers: La prosa de resumen responde dinámicamente al estado actual de los datos (e.g., \"Tienes 3 tareas hoy\", \"Tu ahorro va al 50%\")."
+      ],
+      "status": "pending",
+      "itemHash": "b86902a53fd70653"
+    },
+    {
+      "id": "BC-006-review",
+      "backlogId": "BC-006",
+      "phase": "review",
+      "title": "BC-006: Review and validation",
+      "prompt": "Backlog item BC-006 — Dashboard de telemetría y resumen de uso\n\nDescription: Agregar un contador de uso y métricas locales para mostrar un panel/dashboard. Este panel resumirá en prosa el estado de los hábitos, los objetivos de presupuestos, las tareas pendientes y la telemetría (uso) de la aplicación.\nScope: assets/js/modules/home/*, assets/js/services/storage.js\n\nVerify acceptance criteria, test coverage, scope alignment, and code quality.",
+      "agent": "reviewer",
+      "modelHint": "reviewer",
+      "dependsOn": [
+        "BC-006-test"
+      ],
+      "acceptanceCriteria": [
+        "All acceptance criteria verified",
+        "Tests pass",
+        "No scope creep beyond backlog item"
+      ],
+      "status": "pending",
+      "itemHash": "b86902a53fd70653"
+    }
+  ],
+  "changePaths": {
+    "BC-001": "openspec/changes/bc-001-migrar-m-dulo-tasks",
+    "BC-002": "openspec/changes/bc-002-migrar-m-dulo-habits",
+    "BC-003": "openspec/changes/bc-003-migrar-m-dulo-notes",
+    "BC-006": "openspec/changes/bc-006-dashboard-de-telemetr-a-y-resumen-de-uso"
+  },
+  "itemSnapshots": {
+    "BC-001": "{\"status\":\"READY\",\"progress\":0,\"title\":\"Migrar módulo Tasks\",\"description\":\"Extraer la lógica de tareas (creación, edición, completado, reordenamiento, filtrado) de assets/js/app.js al TasksModule (assets/js/modules/tasks/).\",\"scope\":\"assets/js/app.js, assets/js/modules/tasks/*\",\"type\":\"refactor\",\"priority\":\"P1\",\"acceptanceCriteria\":[\"La lógica de la pantalla y el estado de las tareas está encapsulada en `TasksModule`.\",\"La función global heredada `tasks()` y sus funciones auxiliares relacionadas a tareas son eliminadas de `app.js`.\",\"Crear, borrar, editar y el drag & drop de tareas funciona exactamente igual usando la clase del módulo.\"]}",
+    "BC-002": "{\"status\":\"READY\",\"progress\":0,\"title\":\"Migrar módulo Habits\",\"description\":\"Extraer la lógica de hábitos (lista de hábitos, racha, marcas diarias) de assets/js/app.js al HabitsModule (assets/js/modules/habits/).\",\"scope\":\"assets/js/app.js, assets/js/modules/habits/*\",\"type\":\"refactor\",\"priority\":\"P1\",\"acceptanceCriteria\":[\"La lógica de hábitos se maneja a través de la clase `HabitsModule`.\",\"Las funciones globales relacionadas a hábitos como `habits()` son eliminadas de `app.js`.\",\"La creación de hábitos, eliminación y el chequeo diario (junto con rachas y la animación de confeti) funcionan correctamente.\"]}",
+    "BC-003": "{\"status\":\"READY\",\"progress\":0,\"title\":\"Migrar módulo Notes\",\"description\":\"Extraer la lógica de notas (editor, listado, auto-guardado, borrado) de assets/js/app.js al NotesModule (assets/js/modules/notes/).\",\"scope\":\"assets/js/app.js, assets/js/modules/notes/*\",\"type\":\"refactor\",\"priority\":\"P2\",\"acceptanceCriteria\":[\"El módulo de notas está completamente manejado por la clase `NotesModule`.\",\"La función global `notes()` se remueve de `app.js`.\",\"El CRUD de notas, además de su correcta visualización y ordenamiento, es migrado a `NotesModule` y funciona correctamente.\"]}",
+    "BC-006": "{\"status\":\"READY\",\"progress\":0,\"title\":\"Dashboard de telemetría y resumen de uso\",\"description\":\"Agregar un contador de uso y métricas locales para mostrar un panel/dashboard. Este panel resumirá en prosa el estado de los hábitos, los objetivos de presupuestos, las tareas pendientes y la telemetría (uso) de la aplicación.\",\"scope\":\"assets/js/modules/home/*, assets/js/services/storage.js\",\"type\":\"feature\",\"priority\":\"P2\",\"acceptanceCriteria\":[\"El storage persiste localmente contadores de uso (visitas e interacciones).\",\"Una nueva sección en la interfaz muestra un resumen narrativo de las métricas (tareas, presupuestos, hábitos).\",\"La prosa de resumen responde dinámicamente al estado actual de los datos (e.g., \\\"Tienes 3 tareas hoy\\\", \\\"Tu ahorro va al 50%\\\").\"]}"
+  }
+}

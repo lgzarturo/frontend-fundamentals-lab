@@ -1,9 +1,9 @@
-import { Task } from './models.js'
+import { Task } from "./models.js"
 import {
   taskListTemplate,
   createTaskModalTemplate,
   editTaskModalTemplate
-} from './templates.js'
+} from "./templates.js"
 
 export class TasksModule {
   constructor(storage, eventBus, i18n) {
@@ -13,14 +13,13 @@ export class TasksModule {
     this.tasks = []
     this.container = null
     this.modalContainer = null
-    this.activeFilter = 'all'
-    this._undoStack = []
+    this.activeFilter = "all"
   }
 
   init() {
     this._loadTasks()
-    this.container = document.getElementById('tasks-list')
-    this.modalContainer = document.getElementById('modal-content')
+    this.container = document.getElementById("tasks-list")
+    this.modalContainer = document.getElementById("modal-content")
     this._bindEvents()
   }
 
@@ -28,18 +27,22 @@ export class TasksModule {
     if (!this.container) return
 
     const filtered = this.getFilteredTasks(this.activeFilter)
-    this.container.innerHTML = taskListTemplate(filtered, this.activeFilter, this.i18n)
+    this.container.innerHTML = taskListTemplate(
+      filtered,
+      this.activeFilter,
+      this.i18n
+    )
   }
 
   createTask(data) {
     const errors = Task.validate(data)
-    if (errors.length) throw new Error(errors.join(', '))
+    if (errors.length) throw new Error(errors.join(", "))
 
     const task = new Task({
       title: data.title,
-      description: data.description || '',
-      dueDate: data.dueDate || '',
-      priority: data.priority || 'medium',
+      description: data.description || "",
+      dueDate: data.dueDate || "",
+      priority: data.priority || "medium",
       tags: data.tags || [],
       order: this.tasks.length
     })
@@ -47,7 +50,7 @@ export class TasksModule {
     this.tasks.push(task)
     this._saveTasks()
     this.render()
-    this.eventBus.emit('task:created', task)
+    this.eventBus.emit("task:created", task)
     return task
   }
 
@@ -56,12 +59,12 @@ export class TasksModule {
     if (!task) throw new Error(`Task not found: ${taskId}`)
 
     const errors = Task.validate({ ...task, ...data })
-    if (errors.length) throw new Error(errors.join(', '))
+    if (errors.length) throw new Error(errors.join(", "))
 
     Object.assign(task, data, { updatedAt: Date.now() })
     this._saveTasks()
     this.render()
-    this.eventBus.emit('task:updated', task)
+    this.eventBus.emit("task:updated", task)
     return task
   }
 
@@ -70,10 +73,17 @@ export class TasksModule {
     if (index === -1) throw new Error(`Task not found: ${taskId}`)
 
     const deleted = this.tasks.splice(index, 1)[0]
-    this._undoStack.push({ task: deleted, index })
     this._saveTasks()
     this.render()
-    this.eventBus.emit('task:deleted', deleted)
+    this.eventBus.emit("undo:show", {
+      message: `${this.i18n?.getMessage("ui.common.deleted")} "${deleted.title}"`,
+      undoCallback: () => {
+        this.tasks.splice(index, 0, deleted)
+        this._saveTasks()
+        this.render()
+      }
+    })
+    this.eventBus.emit("task:deleted", deleted)
     return deleted
   }
 
@@ -84,7 +94,7 @@ export class TasksModule {
     task.toggle()
     this._saveTasks()
     this.render()
-    this.eventBus.emit('task:toggled', task)
+    this.eventBus.emit("task:toggled", task)
     return task
   }
 
@@ -107,18 +117,18 @@ export class TasksModule {
     this.render()
   }
 
-  getFilteredTasks(filter = 'all') {
+  getFilteredTasks(filter = "all") {
     const today = new Date().toISOString().slice(0, 10)
     let result
 
     switch (filter) {
-      case 'today':
+      case "today":
         result = this.tasks.filter(t => t.dueDate === today)
         break
-      case 'high':
-        result = this.tasks.filter(t => t.priority === 'high' && !t.done)
+      case "high":
+        result = this.tasks.filter(t => t.priority === "high" && !t.done)
         break
-      case 'completed':
+      case "completed":
         result = this.tasks.filter(t => t.done)
         break
       default:
@@ -137,22 +147,26 @@ export class TasksModule {
 
   showCreateModal() {
     if (!this.modalContainer) return
-    this.modalContainer.innerHTML = createTaskModalTemplate(this.i18n)
-    this._showModal()
+    this.eventBus.emit("modal:open", {
+      contentHtml: createTaskModalTemplate(this.i18n)
+    })
 
-    const form = document.getElementById('create-task-form')
-    form.addEventListener('submit', e => {
+    const form = document.getElementById("create-task-form")
+    form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
-      const tagsRaw = formData.get('tags') || ''
+      const tagsRaw = formData.get("tags") || ""
       this.createTask({
-        title: formData.get('title'),
-        description: formData.get('description'),
-        dueDate: formData.get('dueDate'),
-        priority: formData.get('priority'),
-        tags: tagsRaw.split(',').map(t => t.trim()).filter(Boolean)
+        title: formData.get("title"),
+        description: formData.get("description"),
+        dueDate: formData.get("dueDate"),
+        priority: formData.get("priority"),
+        tags: tagsRaw
+          .split(",")
+          .map(t => t.trim())
+          .filter(Boolean)
       })
-      this._closeModal()
+      this.eventBus.emit("modal:close")
     })
   }
 
@@ -160,42 +174,46 @@ export class TasksModule {
     const task = this.tasks.find(t => t.id === taskId)
     if (!task || !this.modalContainer) return
 
-    this.modalContainer.innerHTML = editTaskModalTemplate(task, this.i18n)
-    this._showModal()
+    this.eventBus.emit("modal:open", {
+      contentHtml: editTaskModalTemplate(task, this.i18n)
+    })
 
-    const form = document.getElementById('edit-task-form')
-    form.addEventListener('submit', e => {
+    const form = document.getElementById("edit-task-form")
+    form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
-      const tagsRaw = formData.get('tags') || ''
+      const tagsRaw = formData.get("tags") || ""
       this.updateTask(taskId, {
-        title: formData.get('title'),
-        description: formData.get('description'),
-        dueDate: formData.get('dueDate'),
-        priority: formData.get('priority'),
-        tags: tagsRaw.split(',').map(t => t.trim()).filter(Boolean)
+        title: formData.get("title"),
+        description: formData.get("description"),
+        dueDate: formData.get("dueDate"),
+        priority: formData.get("priority"),
+        tags: tagsRaw
+          .split(",")
+          .map(t => t.trim())
+          .filter(Boolean)
       })
-      this._closeModal()
+      this.eventBus.emit("modal:close")
     })
 
     // subtask add
-    const addSubtaskBtn = document.getElementById('add-subtask-btn')
+    const addSubtaskBtn = document.getElementById("add-subtask-btn")
     if (addSubtaskBtn) {
-      addSubtaskBtn.addEventListener('click', () => {
-        const input = document.getElementById('new-subtask-input')
+      addSubtaskBtn.addEventListener("click", () => {
+        const input = document.getElementById("new-subtask-input")
         const text = input?.value.trim()
         if (!text) return
         task.addSubtask(text)
         this._saveTasks()
-        input.value = ''
+        input.value = ""
         this.showEditModal(taskId)
       })
     }
 
     // subtask toggle / remove delegation
-    const subtaskList = document.getElementById('subtask-list')
+    const subtaskList = document.getElementById("subtask-list")
     if (subtaskList) {
-      subtaskList.addEventListener('click', e => {
+      subtaskList.addEventListener("click", e => {
         const toggleBtn = e.target.closest('[data-action="toggle-subtask"]')
         const removeBtn = e.target.closest('[data-action="remove-subtask"]')
 
@@ -214,48 +232,60 @@ export class TasksModule {
   }
 
   _loadTasks() {
-    const data = this.storage.get('tasks')
+    const data = this.storage.get("tasks")
     if (data && Array.isArray(data)) {
       this.tasks = data.map(t => Task.fromJSON(t))
     }
   }
 
   _saveTasks() {
-    this.storage.set('tasks', this.tasks.map(t => t.toJSON()))
+    this.storage.set(
+      "tasks",
+      this.tasks.map(t => t.toJSON())
+    )
   }
 
   _bindEvents() {
-    this.eventBus.on('task:create', () => this.showCreateModal())
-    this.eventBus.on('task:update', taskId => this.showEditModal(taskId))
-    this.eventBus.on('task:delete', taskId => this.deleteTask(taskId))
-    this.eventBus.on('task:toggle', taskId => this.toggleTask(taskId))
-    this.eventBus.on('task:reorder', orderedIds => this.reorderTasks(orderedIds))
+    this.eventBus.on("task:create", () => this.showCreateModal())
+    this.eventBus.on("task:update", taskId => this.showEditModal(taskId))
+    this.eventBus.on("task:delete", taskId => this.deleteTask(taskId))
+    this.eventBus.on("task:toggle", taskId => this.toggleTask(taskId))
+    this.eventBus.on("task:reorder", orderedIds =>
+      this.reorderTasks(orderedIds)
+    )
 
     if (this.container) {
-      this.container.addEventListener('click', e => {
-        const target = e.target.closest('[data-action]')
+      this._bindDragEvents()
+
+      this.container.addEventListener("click", e => {
+        const target = e.target.closest("[data-action]")
         if (!target) return
 
         const action = target.dataset.action
         const taskId = target.dataset.taskId
 
         switch (action) {
-          case 'create-task':
+          case "create-task":
             this.showCreateModal()
             break
-          case 'toggle-task':
+          case "toggle-task":
             this.toggleTask(taskId)
             break
-          case 'edit-task':
+          case "edit-task":
             this.showEditModal(taskId)
             break
-          case 'delete-task':
-            if (confirm(this.i18n?.getMessage('tasks.confirmDelete') || 'Delete this task?')) {
+          case "delete-task":
+            if (
+              confirm(
+                this.i18n?.getMessage("ui.common.confirmDelete") ||
+                  "Delete this task?"
+              )
+            ) {
               this.deleteTask(taskId)
             }
             break
-          case 'set-filter':
-            this.activeFilter = target.dataset.filter || 'all'
+          case "set-filter":
+            this.activeFilter = target.dataset.filter || "all"
             this.render()
             break
         }
@@ -263,14 +293,68 @@ export class TasksModule {
     }
   }
 
-  _showModal() {
-    const modal = document.getElementById('modal')
-    if (modal) modal.classList.remove('hidden')
+  /**
+   * Reordenamiento por drag & drop con delegación en el contenedor
+   * @private
+   */
+  _bindDragEvents() {
+    this.container.addEventListener("dragstart", e => {
+      const item = e.target.closest("[data-task-id]")
+      if (!item) return
+      item.classList.add("dragging")
+      e.dataTransfer.effectAllowed = "move"
+      e.dataTransfer.setData("text/plain", item.dataset.taskId)
+    })
+
+    this.container.addEventListener("dragover", e => {
+      e.preventDefault()
+      e.dataTransfer.dropEffect = "move"
+      const dragging = this.container.querySelector(".dragging")
+      if (!dragging) return
+      const afterElement = this._getDragAfterElement(e.clientY)
+      if (afterElement == null) {
+        this.container.appendChild(dragging)
+      } else {
+        this.container.insertBefore(dragging, afterElement)
+      }
+    })
+
+    this.container.addEventListener("drop", e => {
+      e.preventDefault()
+      const orderedIds = [
+        ...this.container.querySelectorAll("[data-task-id]")
+      ].map(el => el.dataset.taskId)
+      this.reorderTasks(orderedIds)
+    })
+
+    this.container.addEventListener("dragend", e => {
+      const item = e.target.closest("[data-task-id]")
+      if (item) item.classList.remove("dragging")
+    })
   }
 
-  _closeModal() {
-    const modal = document.getElementById('modal')
-    if (modal) modal.classList.add('hidden')
-    if (this.modalContainer) this.modalContainer.innerHTML = ''
+  /**
+   * Obtiene el elemento después del cual insertar la tarea arrastrada
+   * @param {number} y - Posición Y del cursor
+   * @returns {HTMLElement|null} Elemento de referencia o null si va al final
+   * @private
+   */
+  _getDragAfterElement(y) {
+    const draggableElements = [
+      ...this.container.querySelectorAll("[data-task-id]:not(.dragging)")
+    ]
+
+    return draggableElements.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect()
+        const offset = y - box.top - box.height / 2
+
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child }
+        }
+        return closest
+      },
+      { offset: Number.NEGATIVE_INFINITY }
+    ).element
   }
 }

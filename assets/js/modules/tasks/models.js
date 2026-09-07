@@ -1,10 +1,10 @@
-import { getTodayString } from '../../utils/date.js'
-import { generateId } from '../../utils/id.js'
+import { getTodayString } from "../../utils/date.js"
+import { generateId } from "../../utils/id.js"
 
 export class Subtask {
   constructor(data = {}) {
     this.id = data.id || generateId()
-    this.text = data.text || ''
+    this.text = data.text || ""
     this.done = data.done ?? false
   }
 
@@ -24,10 +24,10 @@ export class Subtask {
 export class Task {
   constructor(data = {}) {
     this.id = data.id || generateId()
-    this.title = data.title || ''
-    this.description = data.description || ''
-    this.dueDate = data.dueDate || ''
-    this.priority = data.priority || 'medium'
+    this.title = data.title || ""
+    this.description = data.description || ""
+    this.dueDate = data.dueDate || ""
+    this.priority = data.priority || "medium"
     this.tags = Array.isArray(data.tags) ? data.tags : []
     this.subtasks = (data.subtasks || []).map(s =>
       s instanceof Subtask ? s : Subtask.fromJSON(s)
@@ -43,7 +43,7 @@ export class Task {
   }
 
   isMIT() {
-    return !this.done && (this.priority === 'high' || this.isToday())
+    return !this.done && (this.priority === "high" || this.isToday())
   }
 
   getSubtaskProgress() {
@@ -105,18 +105,18 @@ export class Task {
   static validate(data) {
     const errors = []
     if (!data.title?.trim()) {
-      errors.push('Title is required')
+      errors.push("Title is required")
     }
-    if (!['low', 'medium', 'high'].includes(data.priority)) {
-      errors.push('Priority must be low, medium or high')
+    if (!["low", "medium", "high"].includes(data.priority)) {
+      errors.push("Priority must be low, medium or high")
     }
     if (data.dueDate && !/^\d{4}-\d{2}-\d{2}$/.test(data.dueDate)) {
-      errors.push('Due date must be in YYYY-MM-DD format')
+      errors.push("Due date must be in YYYY-MM-DD format")
     }
     if (data.dueDate && /^\d{4}-\d{2}-\d{2}$/.test(data.dueDate)) {
       const parsed = new Date(data.dueDate)
       if (isNaN(parsed.getTime())) {
-        errors.push('Due date is not a valid date')
+        errors.push("Due date is not a valid date")
       }
     }
     return errors

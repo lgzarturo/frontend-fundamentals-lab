@@ -1,18 +1,20 @@
-import { generateId } from '../../utils/id.js'
+import { generateId } from "../../utils/id.js"
 
 export class Note {
   constructor(data = {}) {
     this.id = data.id || generateId()
-    this.title = data.title || ''
-    this.bodyMarkdown = data.bodyMarkdown || ''
+    this.title = data.title || ""
+    this.bodyMarkdown = data.bodyMarkdown || ""
     this.tags = Array.isArray(data.tags) ? [...data.tags] : []
     this.createdAt = data.createdAt || Date.now()
     this.updatedAt = data.updatedAt || Date.now()
   }
 
   getPreview(maxLength = 100) {
-    const stripped = this.bodyMarkdown.replace(/[#*_`[\]]/g, '')
-    return stripped.length > maxLength ? stripped.slice(0, maxLength) + '...' : stripped
+    const stripped = this.bodyMarkdown.replace(/[#*_`[\]]/g, "")
+    return stripped.length > maxLength
+      ? stripped.slice(0, maxLength) + "..."
+      : stripped
   }
 
   matchesSearch(query) {
@@ -47,7 +49,7 @@ export class Note {
   static validate(data) {
     const errors = []
     if (!data.title?.trim()) {
-      errors.push('Title is required')
+      errors.push("Title is required")
     }
     return errors
   }
