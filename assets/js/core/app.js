@@ -11,6 +11,12 @@ import { StorageService } from "../services/storage.js"
 import { EventBus } from "./eventBus.js"
 import { launchConfetti } from "../utils/confetti.js"
 import { demoData } from "../data/demoData.js"
+import { VisitTracker } from "../services/visitTracker.js"
+import { analytics } from "../analytics.js"
+import {
+  shareModalTemplate,
+  bindShareModalEvents
+} from "../components/shareModal.js"
 
 export class DOSApp {
   constructor() {
@@ -19,6 +25,8 @@ export class DOSApp {
     this.i18n = null // Se inyecta desde main.js antes de init()
     this.modules = {}
     this.currentScreen = "home"
+    this.visitTracker = null
+    this.visitStats = null
   }
 
   /**
@@ -27,6 +35,9 @@ export class DOSApp {
   async init() {
     // Inicializa el almacenamiento y migra datos antiguos
     this.storage.init()
+
+    // Conecta el servicio de analíticas y eventos de uso
+    analytics.connectEventBus(this.eventBus)
 
     // Enlaza el modal centralizado
     this._bindModalEvents()
@@ -40,7 +51,7 @@ export class DOSApp {
     // Navega a la pantalla inicial
     this.navigateTo(this._getInitialScreen())
 
-    // Contador de visitas
+    // Contador inteligente de visitas y rachas
     this._visitCounter()
 
     // Fecha en el header
@@ -133,6 +144,11 @@ export class DOSApp {
     this.eventBus.on("i18n:languageChanged", () => {
       this.updateDateTime()
       this._renderScreen(this.currentScreen)
+    })
+
+    // Evento para abrir modal de compartir
+    this.eventBus.on("share:open", () => {
+      this.openShareModal()
     })
   }
 
@@ -332,18 +348,69 @@ export class DOSApp {
   }
 
   /**
-   * Incrementa y muestra el contador de visitas; confeti cada 10 visitas
+   * Registra visitas inteligentes en ventana 24h y racha continua; confeti cada 10 días
    * @private
    */
   _visitCounter() {
-    const count = parseInt(localStorage.getItem("visit_counter"), 10) || 0
-    const next = count + 1
-    localStorage.setItem("visit_counter", String(next))
+    this.visitTracker = new VisitTracker()
+    const result = this.visitTracker.recordVisit()
+    this.visitStats = result
+
     const el = document.getElementById("hit-counter")
-    if (el) el.textContent = next
-    if (next % 10 === 0) {
-      launchConfetti()
+    if (el) el.textContent = result.totalVisits
+
+    const streakEl = document.getElementById("streak-counter")
+    if (streakEl) streakEl.textContent = result.currentStreak
+
+    const milestoneBadge = document.getElementById("streak-milestone-badge")
+    if (milestoneBadge) {
+      const template =
+        this.i18n?.t("ui.common.streakMilestoneNext", {
+          days: result.daysToNextMilestone
+        }) ||
+        `Faltan ${result.daysToNextMilestone} días para el próximo confeti`
+      milestoneBadge.textContent = template
     }
+
+    const progressBar = document.getElementById("streak-progress-bar")
+    if (progressBar) {
+      progressBar.style.width = `${result.progressPercentage}%`
+    }
+
+    if (result.milestoneReached) {
+      launchConfetti()
+      this.eventBus.emit("streak:milestone", {
+        streakDays: result.milestoneValue
+      })
+      const msg =
+        this.i18n?.t("ui.common.streakMilestoneHit", {
+          days: result.milestoneValue
+        }) ||
+        `¡Felicidades! ¡Alcanzaste una racha de ${result.milestoneValue} días seguidos! 🎉`
+      this.eventBus.emit("toast:show", { message: msg, type: "success" })
+    }
+  }
+
+  /**
+   * Abre el modal interactivo para compartir la aplicación en redes sociales
+   * @returns {void}
+   */
+  openShareModal() {
+    this.eventBus.emit("modal:open", {
+      contentHtml: shareModalTemplate(this.i18n)
+    })
+    const modalContent = document.getElementById("modal-content")
+    if (modalContent) {
+      bindShareModalEvents(modalContent, this.eventBus, this.i18n)
+    }
+  }
+
+  /**
+   * Fachada pública para compartir la aplicación
+   * @returns {void}
+   */
+  shareApp() {
+    this.openShareModal()
   }
 
   /**

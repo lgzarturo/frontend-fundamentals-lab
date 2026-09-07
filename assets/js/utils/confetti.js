@@ -1,13 +1,31 @@
+import { playCelebrationSound } from "./sound.js"
+
 /**
- * Lanza una animación de confeti en la pantalla
- * Extraído del monolito legacy (app.js) sin cambios de comportamiento
+ * Lanza una animación de confeti en la pantalla y reproduce sonido de recompensa
+ * @param {Object} [options={}]
+ * @param {boolean} [options.playSound=true] - Si reproduce el sonido de celebración
  * @returns {void}
  */
-export function launchConfetti() {
+export function launchConfetti({ playSound = true } = {}) {
+  if (playSound) {
+    playCelebrationSound()
+  }
   const width = window.innerWidth
   const height = window.innerHeight
+  if (
+    typeof navigator !== "undefined" &&
+    navigator.userAgent &&
+    navigator.userAgent.includes("jsdom")
+  ) {
+    return
+  }
   const canvas = document.createElement("canvas")
-  const context = canvas.getContext("2d")
+  let context = null
+  try {
+    context = canvas.getContext ? canvas.getContext("2d") : null
+  } catch {
+    return
+  }
   // Guarda: entornos sin soporte de canvas 2d (p. ej. jsdom en tests)
   if (!context) return
   canvas.width = width

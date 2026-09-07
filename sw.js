@@ -1,4 +1,4 @@
-const CACHE_NAME = "pwa-cache-v4"
+const CACHE_NAME = "pwa-cache-v5"
 const urlsToCache = [
   "/",
   "/index.html",
@@ -11,10 +11,14 @@ const urlsToCache = [
   "/assets/js/core/eventBus.js",
   "/assets/js/services/storage.js",
   "/assets/js/services/i18n.js",
+  "/assets/js/services/visitTracker.js",
   "/assets/js/utils/confetti.js",
+  "/assets/js/utils/sound.js",
   "/assets/js/utils/date.js",
   "/assets/js/utils/html.js",
   "/assets/js/utils/id.js",
+  "/assets/js/components/dueDatePicker.js",
+  "/assets/js/components/shareModal.js",
   "/assets/js/data/demoData.js",
   "/assets/js/modules/budgets/index.js",
   "/assets/js/modules/budgets/models.js",
@@ -31,7 +35,9 @@ const urlsToCache = [
   "/assets/js/modules/home/index.js",
   "/assets/js/modules/home/templates.js",
   "/assets/locales/en.json",
-  "/assets/locales/es.json"
+  "/assets/locales/es.json",
+  "/assets/sounds/celebration.mp3",
+  "/assets/images/og-daily-os.jpg"
 ]
 
 self.addEventListener("install", event => {
