@@ -89,52 +89,73 @@
     <meta name="copyright" content="&copy; 2025 Arturo López" />
     <meta name="generator" content="HTML5" />
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="Productividad XP: Tu rutina diaria" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="Daily OS" />
+    <meta
+      property="og:title"
+      content="Daily OS - Tu Sistema Operativo Personal"
+    />
     <meta
       property="og:description"
-      content="Mejora tu productividad diaria con nuestra guía práctica."
+      content="Suite de productividad 100% privada en tu navegador: tareas con prioridades, hábitos con rachas de uso continuo, notas en Markdown y finanzas personales."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://task-manager.lgzarturo.com/" />
     <meta
       property="og:image"
-      content="https://task-manager.lgzarturo.com/assets/images/web-works-with-html-css-javascript.webp"
+      content="https://task-manager.lgzarturo.com/assets/images/og-daily-os.jpg"
     />
+    <meta
+      property="og:image:secure_url"
+      content="https://task-manager.lgzarturo.com/assets/images/og-daily-os.jpg"
+    />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Frontend Fundamentals Lab - Aprende desarrollo web con JavaScript puro"
+      content="Daily OS - Tu Sistema Operativo Personal y Suite de Productividad"
     />
-    <meta property="og:site_name" content="Frontend Fundamentals Lab" />
     <meta property="og:locale" content="es_ES" />
     <meta property="og:locale:alternate" content="en_US" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Productividad XP: Tu rutina diaria" />
+    <meta
+      name="twitter:title"
+      content="Daily OS - Tu Sistema Operativo Personal"
+    />
     <meta
       name="twitter:description"
-      content="Mejora tu productividad diaria con nuestra guía práctica."
+      content="Suite de productividad 100% privada en tu navegador: tareas, hábitos con rachas, notas en Markdown y finanzas."
     />
     <meta
       name="twitter:image"
-      content="https://task-manager.lgzarturo.com/assets/images/web-works-with-html-css-javascript.webp"
+      content="https://task-manager.lgzarturo.com/assets/images/og-daily-os.jpg"
     />
-    <meta name="twitter:image:alt" content="Frontend Fundamentals Lab" />
+    <meta
+      name="twitter:image:alt"
+      content="Daily OS - Tu Sistema Operativo Personal"
+    />
     <meta name="twitter:site" content="@arturolgdev" />
     <meta name="twitter:creator" content="@arturolgdev" />
 
-    <!-- JSON-LD Structured Data -->
+    <!-- JSON-LD Structured Data: WebSite & WebApplication (Schema.org) -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Frontend Fundamentals Lab",
+        "@type": "WebApplication",
+        "name": "Daily OS",
+        "alternateName": "Daily Operating System",
         "url": "https://task-manager.lgzarturo.com/",
-        "description": "Proyecto educativo open source para aprender desarrollo web frontend con JavaScript puro, HTML semántico y CSS moderno",
-        "inLanguage": "es-ES",
+        "description": "Sistema operativo personal y suite de productividad diaria en el navegador: tareas con prioridades visuales, seguimiento de hábitos continuos con rachas y recompensas cada 10 días, notas enriquecidas en Markdown y finanzas personales sin recopilación de datos externos.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "softwareVersion": "0.0.17",
+        "inLanguage": ["es-ES", "en-US"],
+        "image": "https://task-manager.lgzarturo.com/assets/images/og-daily-os.jpg",
+        "screenshot": "https://task-manager.lgzarturo.com/assets/images/og-daily-os.jpg",
         "author": {
           "@type": "Person",
           "name": "Arturo López",
@@ -146,37 +167,34 @@
         },
         "publisher": {
           "@type": "Organization",
-          "name": "Frontend Fundamentals Lab",
+          "name": "Daily OS",
           "logo": {
             "@type": "ImageObject",
             "url": "https://task-manager.lgzarturo.com/assets/images/favicon/apple-touch-icon.png"
           }
-        }
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Gestión de tareas con prioridades visuales, fechas límite relativas y filtros dinámicos",
+          "Seguimiento de hábitos diarios y rachas continuas con confeti y sonido cada 10 días",
+          "Bloc de notas con vista previa en Markdown enriquecido, código y listas de tareas",
+          "Planificador financiero y presupuestos con metas de ahorro",
+          "100% privado en navegador, sin servidores externos ni rastreo invasivo"
+        ]
       }
     </script>
-
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Course",
-        "name": "Frontend Fundamentals Lab",
-        "description": "Curso práctico de desarrollo web frontend con JavaScript puro, HTML y CSS",
-        "provider": {
-          "@type": "Person",
-          "name": "Arturo López"
-        },
-        "educationalLevel": "Beginner to Intermediate",
-        "inLanguage": "es-ES",
-        "learningResourceType": "Hands-on Project",
-        "teaches": [
-          "JavaScript Vanilla",
-          "HTML5 Semántico",
-          "CSS3 Moderno",
-          "DOM Manipulation",
-          "Responsive Design",
-          "Web Performance",
-          "Accesibilidad Web"
-        ]
+        "@type": "WebSite",
+        "name": "Daily OS",
+        "url": "https://task-manager.lgzarturo.com/",
+        "description": "Suite de productividad personal y desarrollo con JavaScript moderno",
+        "inLanguage": "es-ES"
       }
     </script>
 
@@ -202,7 +220,10 @@
       rel="preload"
       as="style"
       href="https://fonts.googleapis.com/css2?family=Nova+Square&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      onload="
+        this.onload = null
+        this.rel = 'stylesheet'
+      "
     />
     <noscript>
       <link
@@ -215,7 +236,6 @@
 
     <!-- Estilos CSS -->
     <link rel="stylesheet" href="/assets/css/styles.css" />
-
   </head>
   <body
     class="bg-gray-50 dark:bg-xp-darker text-gray-900 dark:text-gray-100 transition-colors duration-300"
@@ -285,7 +305,9 @@
       class="hidden md:block fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-xp-card border-r-2 border-gray-200 dark:border-xp-primary/20 z-40"
     >
       <div class="p-6">
-        <h1 class="text-2xl font-bold text-xp-primary-text flex items-center gap-2">
+        <h1
+          class="text-2xl font-bold text-xp-primary-text flex items-center gap-2"
+        >
           <span>⚡</span> <span data-i18n="app.name">Productivity XP</span>
         </h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -342,6 +364,14 @@
           <span class="text-xl mr-3">⚙️</span>
           <span data-i18n="app.menu.settings">Settings</span>
         </button>
+        <button
+          type="button"
+          onclick="app.openShareModal()"
+          class="nav-btn w-full text-left px-4 py-3 rounded-lg hover:bg-xp-primary/10 pixel-corners dark:hover:bg-xp-darker text-xp-primary font-semibold transition-colors mt-1 flex items-center"
+        >
+          <span class="text-xl mr-3">🚀</span>
+          <span data-i18n="ui.common.share">Compartir</span>
+        </button>
       </nav>
     </aside>
     <!-- End: sidebar desktop -->
@@ -352,10 +382,21 @@
       <div
         class="md:hidden bg-white dark:bg-xp-card border-b-2 border-gray-200 dark:border-xp-primary/20 px-4 py-3 flex items-center justify-between sticky top-0 z-30"
       >
-        <h1 class="text-xl font-bold text-xp-primary-text flex items-center gap-2">
+        <h1
+          class="text-xl font-bold text-xp-primary-text flex items-center gap-2"
+        >
           <span>⚡</span> <span data-i18n="app.name">Productivity XP</span>
         </h1>
         <div class="flex items-center gap-1">
+          <button
+            type="button"
+            onclick="app.openShareModal()"
+            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-xp-darker text-xp-primary"
+            title="Compartir Daily OS"
+            aria-label="Compartir Daily OS"
+          >
+            <span class="text-xl">🚀</span>
+          </button>
           <button
             id="pwa-install-btn"
             class="hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-xp-darker"
@@ -384,17 +425,75 @@
               Welcome back, Developer! 🎮
             </h2>
             <p class="text-gray-600 dark:text-gray-400" id="current-date"></p>
-            <p class="text-2xl font-bold mb-4 mt-6">
-              <span data-i18n="ui.common.hitCounter">Hit counter:</span>
-              <span
-                id="hit-counter"
-                class="font-mono font-bold text-green-600"
-                data-i18n="ui.common.loading"
-              >
-                Cargando...
-              </span>
-              <span data-i18n="ui.common.visits">visits</span>
-            </p>
+
+            <!-- Begin: Smart Hit Counter & 24h Daily Streak Component -->
+            <div
+              class="mt-6 mb-6 p-4 md:p-5 rounded-2xl bg-gradient-to-r from-gray-50 to-emerald-50/40 dark:from-xp-card dark:to-emerald-950/20 border-2 border-gray-200 dark:border-xp-primary/20 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4"
+            >
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+                  <span class="text-xl">🔥</span>
+                  <span class="font-bold text-gray-900 dark:text-gray-100 text-lg">
+                    <span data-i18n="ui.common.streakTitle">Racha de uso continuo:</span>
+                    <span
+                      id="streak-counter"
+                      class="font-mono text-xp-primary font-extrabold text-2xl ml-1"
+                      >1</span
+                    >
+                    <span
+                      data-i18n="ui.common.streakDays"
+                      class="text-sm font-semibold text-gray-600 dark:text-gray-400"
+                      >días seguidos</span
+                    >
+                  </span>
+                  <span
+                    class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-300 dark:border-emerald-800"
+                    data-i18n="ui.common.verified24h"
+                  >
+                    ✓ Ventana 24h
+                  </span>
+                </div>
+                <p
+                  class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2 flex-wrap mb-2"
+                >
+                  <span data-i18n="ui.common.hitCounter">Hit counter:</span>
+                  <span
+                    id="hit-counter"
+                    class="font-mono font-bold text-gray-800 dark:text-gray-200"
+                    data-i18n="ui.common.loading"
+                    >1</span
+                  >
+                  <span data-i18n="ui.common.visits">visits</span>
+                  <span>•</span>
+                  <span
+                    id="streak-milestone-badge"
+                    class="font-medium text-xp-primary"
+                    >Faltan 9 días para el próximo confeti</span
+                  >
+                </p>
+                <!-- Barra de progreso hacia el hito de 10 días -->
+                <div
+                  class="w-full max-w-md h-2 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden"
+                >
+                  <div
+                    id="streak-progress-bar"
+                    class="h-full bg-gradient-to-r from-emerald-500 to-xp-primary transition-all duration-500 rounded-full"
+                    style="width: 10%"
+                  ></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onclick="app.openShareModal()"
+                  class="px-4 py-2.5 bg-xp-primary text-xp-darker font-bold rounded-xl hover:bg-xp-primary/80 transition-all text-sm flex items-center gap-2 shadow-sm"
+                >
+                  <span>🚀</span>
+                  <span data-i18n="ui.common.share">Compartir</span>
+                </button>
+              </div>
+            </div>
+            <!-- End: Smart Hit Counter & 24h Daily Streak Component -->
           </div>
           <!-- Begin: navigation quick access -->
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -538,51 +637,7 @@
             </button>
           </div>
 
-          <!-- Budget Overview -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div
-              class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-xp-primary/20"
-            >
-              <div
-                class="text-sm text-gray-600 dark:text-gray-400 mb-1"
-                data-i18n="app.screens.budgets.overview.totalSaved"
-              >
-                Total Saved
-              </div>
-              <div class="text-3xl font-bold text-xp-primary" id="budget-total">
-                $0
-              </div>
-            </div>
-            <div
-              class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-xp-danger/20"
-            >
-              <div
-                class="text-sm text-gray-600 dark:text-gray-400 mb-1"
-                data-i18n="app.screens.budgets.overview.totalAvailable"
-              >
-                Total Available
-              </div>
-              <div class="text-3xl font-bold text-xp-secondary" id="budget-spent">
-                $0
-              </div>
-            </div>
-            <div
-              class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-xp-secondary/20"
-            >
-              <div
-                class="text-sm text-gray-600 dark:text-gray-400 mb-1"
-                data-i18n="app.screens.budgets.overview.savingsGoals"
-              >
-                Savings Goals
-              </div>
-              <div
-                class="text-3xl font-bold text-xp-primary"
-                id="budget-remaining"
-              >
-                $0
-              </div>
-            </div>
-          </div>
+          <!-- Budget Overview y tarjetas renderizadas por BudgetsModule -->
 
           <!-- Budgets List -->
           <div id="budgets-list" class="space-y-4">
@@ -612,34 +667,34 @@
           <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
             <button
               onclick="app.filterTasks('all')"
-              class="task-filter-btn px-4 py-2 rounded-lg bg-xp-primary text-xp-darker font-semibold whitespace-nowrap"
+              class="task-filter-btn px-4 py-2 rounded-lg bg-xp-primary text-xp-darker font-semibold whitespace-nowrap inline-flex items-center gap-1.5"
               data-filter="all"
             >
-              <span data-i18n="app.screens.tasks.filters.all">All Tasks</span>
+              <span data-i18n="app.screens.tasks.filters.all">Pendientes</span>
             </button>
             <button
               onclick="app.filterTasks('today')"
-              class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
+              class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap inline-flex items-center gap-1.5"
               data-filter="today"
             >
-              <span data-i18n="app.screens.tasks.filters.today">Today</span>
+              <span data-i18n="app.screens.tasks.filters.today">Hoy</span>
             </button>
             <button
               onclick="app.filterTasks('high')"
-              class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
+              class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap inline-flex items-center gap-1.5"
               data-filter="high"
             >
               <span data-i18n="app.screens.tasks.filters.high"
-                >High Priority</span
+                >Urgentes</span
               >
             </button>
             <button
               onclick="app.filterTasks('completed')"
-              class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap"
+              class="task-filter-btn px-4 py-2 rounded-lg bg-gray-200 dark:bg-xp-card text-gray-700 dark:text-gray-300 whitespace-nowrap inline-flex items-center gap-1.5"
               data-filter="completed"
             >
               <span data-i18n="app.screens.tasks.filters.completed"
-                >Completed</span
+                >Acabadas</span
               >
             </button>
           </div>
@@ -680,11 +735,8 @@
             />
           </div>
 
-          <!-- Notes Grid -->
-          <div
-            id="notes-list"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-          >
+          <!-- Notes Grid Container -->
+          <div id="notes-list">
             <!-- Note cards will be rendered here -->
           </div>
         </div>
@@ -957,12 +1009,10 @@
     <div
       id="modal-backdrop"
       class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-      onclick="app.closeModal()"
     >
       <div
         id="modal-content"
         class="bg-white dark:bg-xp-card rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-        onclick="event.stopPropagation()"
       >
         <!-- Modal content will be injected here -->
       </div>
@@ -990,201 +1040,7 @@
     </div>
     <!-- End: Undo Toast -->
 
-    <!-- Template Home -->
-    <template id="home-content-template">
-      <div
-        class="flex items-start gap-3 p-3 bg-gray-50 dark:bg-xp-darker rounded-lg"
-      >
-        <button
-          class="mt-1 w-6 h-6 rounded border-2 border-xp-primary flex items-center justify-center flex-shrink-0 hover:bg-xp-primary/20 transition-colors"
-          data-done-button
-        >
-          <span class="text-xp-primary text-lg" data-done-icon
-            ><!--Done icon--></span
-          >
-        </button>
-        <div class="flex-1 min-w-0">
-          <div class="font-semibold" data-title><!--Title--></div>
-          <div
-            class="text-sm text-gray-600 dark:text-gray-400 mt-1"
-            data-description
-          >
-            <!--Description-->
-          </div>
-          <div class="flex gap-1 mt-2 flex-wrap" data-tags>
-            <!--Tags-->
-          </div>
-        </div>
-        <span class="text-xp-danger text-xl" data-priority-icon
-          ><!--Priority icon--></span
-        >
-      </div>
-    </template>
-    <template id="home-component-tag">
-      <span
-        class="text-xs px-2 py-1 bg-xp-primary/20 text-green-800 rounded"
-        data-tag-name
-      >
-        <!--Tag Name-->
-      </span>
-    </template>
-    <template id="home-no-content-template">
-      <div
-        class="text-gray-500 dark:text-gray-400 text-center py-8"
-        data-i18n="app.screens.tasks.noTasks"
-      >
-        No tasks for today. Create some MITs! 🎯
-      </div>
-    </template>
-
-    <template id="home-habit-template">
-      <div
-        class="flex items-center justify-between p-3 bg-gray-50 dark:bg-xp-darker rounded-lg"
-      >
-        <div class="flex items-center gap-3 flex-1">
-          <button
-            class="w-8 h-8 rounded-full border-2 flex items-center justify-center hover:scale-110 transition-transform"
-            data-habit-done-button
-          >
-            <!--isDone-->
-          </button>
-          <div>
-            <div class="font-semibold" data-habit-title>
-              <!-- habit.title -->
-            </div>
-            <div class="text-xs text-gray-600 dark:text-gray-400">
-              🔥
-              <span data-habit-streak-title><!-- habit.streak --></span>
-              <span data-habit-streak-label><!-- day streak --></span>
-            </div>
-          </div>
-        </div>
-        <span class="text-xp-primary font-bold hidden" data-xp-reward>
-          <!-- XP Reward -->
-        </span>
-      </div>
-    </template>
-
-    <template id="recent-activity-template">
-      <div
-        class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-xp-darker rounded-lg"
-      >
-        <span class="text-2xl" data-icon><!--item.icon--></span>
-        <div class="flex-1">
-          <div class="font-semibold" data-text><!--item.text--></div>
-          <div class="text-xs text-gray-600 dark:text-gray-400" data-time>
-            <!--item.time-->
-          </div>
-        </div>
-      </div>
-    </template>
-    <template id="home-no-activity-template">
-      <div
-        class="text-gray-500 dark:text-gray-400 text-center py-4"
-        data-i18n="app.screens.home.activity.noActivity"
-      >
-        No recent activity to show
-      </div>
-    </template>
-    <!-- End Template Home -->
-
-    <!-- Template budgets -->
-    <template id="budget-card-template">
-      <div
-        class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20"
-      >
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-xl font-bold" data-budget-name>
-            <!-- budget.name -->
-          </h3>
-          <div class="flex gap-2">
-            <button
-              class="px-4 py-2 bg-xp-secondary/20 hover:bg-xp-secondary/30 rounded-lg transition-colors"
-              data-budget-view-details-button
-            >
-              <!-- View Details -->
-            </button>
-            <button
-              class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors"
-              data-budget-delete-button
-            >
-              <!-- Delete -->
-            </button>
-            <button
-              class="px-4 py-2 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker rounded-lg transition-colors"
-              data-budget-add-transaction-button
-            >
-              <!-- + Transaction -->
-            </button>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-4 mb-4">
-          <div>
-            <div
-              class="text-sm text-gray-600 dark:text-gray-400"
-              data-budget-total-label
-            >
-              <!--Budget-->
-            </div>
-            <div class="text-lg font-bold" data-budget-total>
-              <!-- budgetTotal -->
-            </div>
-          </div>
-          <div>
-            <div
-              class="text-sm text-gray-600 dark:text-gray-400"
-              data-budget-spent-label
-            >
-              <!--Spent-->
-            </div>
-            <div class="text-lg font-bold text-xp-danger" data-budget-spent>
-              <!--budgetSpent-->
-            </div>
-          </div>
-          <div>
-            <div
-              class="text-sm text-gray-600 dark:text-gray-400"
-              data-budget-remaining-label
-            >
-              <!--Remaining-->
-            </div>
-            <div
-              class="text-lg font-bold text-xp-primary"
-              data-budget-remaining
-            >
-              <!--budgetRemaining-->
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="relative w-full h-4 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden"
-        >
-          <div
-            class="xp-bar-fill absolute top-0 left-0 h-full"
-            data-budget-bar-fill
-          ></div>
-        </div>
-        <div
-          class="text-sm text-gray-600 dark:text-gray-400 mt-2 text-right"
-          data-budget-percentage-used
-        >
-          <!--percentage used-->
-        </div>
-      </div>
-    </template>
-    <template id="no-budgets-template">
-      <div
-        class="text-gray-500 dark:text-gray-400 text-center py-8"
-        data-i18n="app.screens.budgets.noBudgets"
-      >
-        No budgets yet. Create your first budget to get started! 💰
-      </div>
-    </template>
-    <!-- End Template budgets -->
-
-    <script src="/assets/js/app.js" defer></script>
+    <script type="module" src="/assets/js/main.js"></script>
     <script src="/assets/js/theme.js" defer></script>
     <script src="/assets/js/analytics.js" defer></script>
     <!-- Google Tag Manager -->
@@ -1206,29 +1062,29 @@
     <!-- PWA Install Button -->
     <script>
       ;(function () {
-        var btn = document.getElementById('pwa-install-btn')
+        var btn = document.getElementById("pwa-install-btn")
         var deferred = null
 
-        if (window.matchMedia('(display-mode: standalone)').matches) return
+        if (window.matchMedia("(display-mode: standalone)").matches) return
 
-        window.addEventListener('beforeinstallprompt', function (e) {
+        window.addEventListener("beforeinstallprompt", function (e) {
           e.preventDefault()
           deferred = e
-          btn.classList.remove('hidden')
+          btn.classList.remove("hidden")
         })
 
-        btn.addEventListener('click', function () {
+        btn.addEventListener("click", function () {
           if (!deferred) return
           deferred.prompt()
           deferred.userChoice.then(function () {
             deferred = null
-            btn.classList.add('hidden')
+            btn.classList.add("hidden")
           })
         })
 
-        window.addEventListener('appinstalled', function () {
+        window.addEventListener("appinstalled", function () {
           deferred = null
-          btn.classList.add('hidden')
+          btn.classList.add("hidden")
         })
       })()
     </script>

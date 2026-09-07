@@ -11,7 +11,15 @@ export class Note {
   }
 
   getPreview(maxLength = 100) {
-    const stripped = this.bodyMarkdown.replace(/[#*_`[\]]/g, "")
+    if (!this.bodyMarkdown) return ""
+    const stripped = this.bodyMarkdown
+      .replace(/```[\s\S]*?```/g, "")
+      .replace(/!\[(.*?)\]\(.*?\)/g, "$1")
+      .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+      .replace(/[#*_`[\]>~-]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+
     return stripped.length > maxLength
       ? stripped.slice(0, maxLength) + "..."
       : stripped

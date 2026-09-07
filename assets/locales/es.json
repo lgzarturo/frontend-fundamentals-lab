@@ -165,9 +165,15 @@
       "tasks": {
         "title": "Tareas",
         "newButton": "+ Tarea",
-        "noTasks": "No hay tareas para hoy. ¡Crea algunas MITs! 🎯",
+        "noTasks": "No hay tareas pendientes. ¡Crea una nueva! 🎯",
+        "emptyPending": "¡Todo al día! No hay tareas pendientes.",
+        "emptyToday": "Sin tareas pendientes para hoy.",
+        "emptyHigh": "No hay tareas de alta prioridad pendientes.",
+        "emptyCompleted": "Aún no has completado ninguna tarea.",
+        "completedToast": "Tarea completada:",
+        "reopenedToast": "Tarea reactivada:",
         "filters": {
-          "all": "Todas",
+          "all": "Pendientes",
           "today": "Hoy",
           "high": "Urgentes",
           "completed": "Acabadas"
@@ -179,7 +185,7 @@
             "titlePlaceholder": "ej., Completar implementación de feature",
             "description": "Descripción",
             "descriptionPlaceholder": "Detalles de la tarea...",
-            "dueDate": "Fecha de Vencimiento",
+            "dueDate": "Fecha límite",
             "priority": "Prioridad",
             "tags": "Etiquetas (separadas por coma)",
             "tagsPlaceholder": "coding, important, review",
@@ -188,7 +194,7 @@
           },
           "edit": {
             "title": "Editar Tarea",
-            "update": "Actualizar Tarea",
+            "update": "Guardar Cambios",
             "subtasks": "Subtareas",
             "subtaskPlaceholder": "Nueva subtarea...",
             "addSubtask": "+ Agregar Subtarea"
@@ -203,7 +209,19 @@
           "edit": "Editar",
           "delete": "Eliminar"
         },
-        "dueDate": "Vence: "
+        "dueDate": "Vence: ",
+        "datePicker": {
+          "today": "Hoy",
+          "tomorrow": "Mañana",
+          "nextWeek": "+7 días",
+          "clear": "Sin fecha",
+          "dueToday": "Vence hoy",
+          "dueTomorrow": "Vence mañana",
+          "dueInDays": "Vence en {days} días",
+          "overdue": "Vencida hace {days} días",
+          "overdueYesterday": "Vencida ayer",
+          "noDate": "Sin fecha límite"
+        }
       },
       "habits": {
         "title": "Seguimiento",
@@ -285,10 +303,23 @@
         "newButton": "+ Nota",
         "searchPlaceholder": "🔍 Buscar notas...",
         "noNotes": "No hay notas aún. ¡Empieza a escribir! 📝",
+        "searchEmptyTitle": "Sin resultados",
+        "searchEmptyDescription": "No se encontraron notas que coincidan con la búsqueda.",
+        "noContent": "Sin contenido adicional",
         "empty": {
           "title": "Sin notas todavía",
           "description": "Crea tu primera nota para capturar ideas y conocimientos.",
           "action": "+ Crear Nota"
+        },
+        "preview": {
+          "title": "Vista Previa",
+          "edit": "Editar Nota",
+          "close": "Cerrar",
+          "tabWrite": "Escribir",
+          "tabPreview": "Vista Previa",
+          "emptyContent": "Esta nota no tiene contenido aún.",
+          "created": "Creada",
+          "updated": "Actualizada"
         },
         "modal": {
           "create": {
@@ -304,8 +335,8 @@
             "create": "Crear Nota"
           },
           "edit": {
-            "title": "Ver/Editar Nota",
-            "update": "Actualizar Nota"
+            "title": "Editar Nota",
+            "update": "Guardar Cambios"
           }
         }
       },
@@ -335,11 +366,13 @@
           },
           "reset": {
             "title": "🔄 Restablecer a Datos de Demostración",
-            "description": "Restaurar datos de ejemplo (sobrescribirá los datos actuales)"
+            "description": "Restaurar datos de ejemplo (sobrescribirá los datos actuales)",
+            "confirm": "Esto reemplazará todos tus datos actuales con datos de demostración. ¿Estás seguro?"
           },
           "clear": {
             "title": "🗑️ Borrar Todos los Datos",
-            "description": "Eliminar todos los datos almacenados (no se puede deshacer)"
+            "description": "Eliminar todos los datos almacenados (no se puede deshacer)",
+            "confirm": "Esto eliminará permanentemente todos tus datos. Esta acción no se puede deshacer. ¿Estás seguro?"
           }
         },
         "about": {
@@ -378,6 +411,19 @@
       "deleted": "Eliminado",
       "confirm": "Confirmar",
       "confirmDelete": "¿Estás seguro de que quieres eliminar esto? Esta acción no se puede deshacer.",
+      "streakDays": "días seguidos",
+      "streakTitle": "Racha de uso continuo",
+      "streakMilestoneNext": "Faltan {days} días para el próximo confeti",
+      "streakMilestoneHit": "¡Felicidades! ¡Alcanzaste una racha de {days} días seguidos! 🎉",
+      "verified24h": "Ventana 24h",
+      "activeDays": "días activos",
+      "share": "Compartir",
+      "shareTitle": "Compartir Daily OS",
+      "shareDescription": "Organiza tu productividad diaria: tareas, hábitos con rachas, notas en Markdown y finanzas en una sola app moderna y 100% privada. 🚀",
+      "shareCopy": "Copiar enlace",
+      "shareCopied": "¡Enlace copiado al portapapeles! 📋",
+      "shareNative": "Compartir en el dispositivo",
+      "shareSocial": "Compartir en redes",
       "toast": {
         "taskCreated": "¡Tarea creada! 📝",
         "taskUpdated": "¡Tarea actualizada! ✓",
@@ -398,9 +444,19 @@
         "notImplemented": "Aún no está implementado 🚧",
         "dataExported": "¡Datos exportados! 📥",
         "dataImported": "¡Datos importados! 📤",
+        "dataImportError": "Error al importar datos. Formato de archivo inválido.",
         "dataReset": "Datos restablecidos a demo",
         "dataCleared": "Todos los datos eliminados"
       }
+    },
+    "tags": {
+      "placeholder": "Escribe una etiqueta y presiona Enter...",
+      "add": "Agregar",
+      "remove": "Quitar etiqueta {tag}",
+      "suggestions": "Etiquetas sugeridas",
+      "noSuggestions": "Sin etiquetas coincidentes",
+      "createNew": "Crear etiqueta \"{tag}\"",
+      "clickToAdd": "Añadir"
     }
   },
   "accessibility": {

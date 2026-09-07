@@ -10,16 +10,30 @@ html {
 
 /* Estilos básicos */
 body {
-  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    "Open Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 18px;
 }
 
 h1 {
-  font-family: "Nova Square", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    "Nova Square",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
   font-weight: 700;
   font-size: 2.5rem;
   margin-bottom: 1rem;
@@ -69,11 +83,29 @@ img {
   }
 }
 
-/* Asegurando que los elementos interactivos sean lo suficientemente grandes */
+/* Asegurando que los elementos interactivos sean lo suficientemente grandes por defecto */
 button,
 a,
 input,
 select {
   min-height: 44px;
   min-width: 44px;
+}
+
+/* Excepciones para botones de icono, etiquetas y controles compactos */
+button.btn-icon,
+button.btn-compact,
+.btn-icon,
+.btn-compact,
+.tag-input-widget input,
+.tag-input-widget button {
+  min-height: unset;
+  min-width: unset;
+}
+
+/* Layout en columnas para prioridad de tareas y opciones de compartir */
+.priority-selector-widget .grid-cols-3,
+.share-modal-content .grid-cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }

@@ -26,6 +26,23 @@ export class HabitsModule {
   render() {
     if (!this.container) return
     this.container.innerHTML = habitListTemplate(this.habits, this.i18n)
+    this._renderStats()
+  }
+
+  /**
+   * Actualiza las estadísticas de racha y tasa de completado del encabezado
+   * @private
+   */
+  _renderStats() {
+    const streakEl = document.getElementById("habits-current-streak")
+    if (streakEl) {
+      const daysLabel = this.i18n?.getMessage("label.days") || "days"
+      streakEl.textContent = `${this.getMaxStreak()} ${daysLabel} 🔥`
+    }
+    const rateEl = document.getElementById("habits-completion-rate")
+    if (rateEl) {
+      rateEl.textContent = `${this.getTodayCompletionRate().toFixed(0)}%`
+    }
   }
 
   createHabit(data) {
@@ -116,6 +133,15 @@ export class HabitsModule {
         this.eventBus.emit("modal:close")
       })
     }
+  }
+
+  /**
+   * Recarga los datos desde el almacenamiento y re-renderiza
+   * Útil tras importar/limpiar datos sin duplicar listeners
+   */
+  reload() {
+    this._loadHabits()
+    this.render()
   }
 
   _loadHabits() {

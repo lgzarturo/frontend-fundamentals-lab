@@ -7,6 +7,7 @@ import {
   notePreviewTemplate,
   parseMarkdown
 } from "./templates.js"
+import { TagInput } from "../../components/tagInput.js"
 
 export class NotesModule {
   constructor(storage, eventBus, i18n) {
@@ -16,6 +17,7 @@ export class NotesModule {
     this.notes = []
     this.container = null
     this.modalContainer = null
+    this.activeTagInput = null
   }
 
   init() {
@@ -34,6 +36,28 @@ export class NotesModule {
     }
 
     this.container.innerHTML = noteListTemplate(this.notes, this.i18n)
+  }
+
+  getAllTags() {
+    const tagsSet = new Set()
+    this.notes.forEach(note => {
+      if (Array.isArray(note.tags)) {
+        note.tags.forEach(t => t && tagsSet.add(t.trim()))
+      }
+    })
+    try {
+      const storedTasks = this.storage?.get("tasks")
+      if (Array.isArray(storedTasks)) {
+        storedTasks.forEach(task => {
+          if (Array.isArray(task.tags)) {
+            task.tags.forEach(t => t && tagsSet.add(t.trim()))
+          }
+        })
+      }
+    } catch {
+      // Ignora errores si no hay almacenamiento
+    }
+    return Array.from(tagsSet).sort()
   }
 
   createNote(data) {
@@ -98,24 +122,36 @@ export class NotesModule {
     })
 
     const form = document.getElementById("create-note-form")
+    const tagsContainer = document.getElementById("note-tags-input-container")
+    let tagInputInstance = null
 
-    form
-      .querySelector('[data-action="preview-note"]')
-      .addEventListener("click", () => {
-        const body = form.querySelector('[name="bodyMarkdown"]').value
-        const previewArea = document.getElementById("note-preview-area")
-        previewArea.innerHTML = parseMarkdown(body)
-        previewArea.classList.toggle("hidden")
+    if (tagsContainer) {
+      tagInputInstance = new TagInput({
+        container: tagsContainer,
+        initialTags: [],
+        availableTags: () => this.getAllTags(),
+        name: "tags",
+        i18n: this.i18n
       })
+      this.activeTagInput = tagInputInstance
+    }
+
+    this._bindEditorTabs(form)
 
     form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
+      const tags = tagInputInstance
+        ? tagInputInstance.getTags()
+        : this._parseTags(formData.get("tags"))
+
       this.createNote({
         title: formData.get("title"),
         bodyMarkdown: formData.get("bodyMarkdown"),
-        tags: formData.get("tags")
+        tags
       })
+      tagInputInstance?.destroy()
+      this.activeTagInput = null
       this.eventBus.emit("modal:close")
     })
   }
@@ -129,25 +165,114 @@ export class NotesModule {
     })
 
     const form = document.getElementById("edit-note-form")
+    const tagsContainer = document.getElementById("note-tags-input-container")
+    let tagInputInstance = null
 
-    form
-      .querySelector('[data-action="preview-note"]')
-      .addEventListener("click", () => {
-        const body = form.querySelector('[name="bodyMarkdown"]').value
-        const previewArea = document.getElementById("note-preview-area")
-        previewArea.innerHTML = parseMarkdown(body)
-        previewArea.classList.toggle("hidden")
+    if (tagsContainer) {
+      tagInputInstance = new TagInput({
+        container: tagsContainer,
+        initialTags: note.tags,
+        availableTags: () => this.getAllTags(),
+        name: "tags",
+        i18n: this.i18n
       })
+      this.activeTagInput = tagInputInstance
+    }
+
+    this._bindEditorTabs(form)
 
     form.addEventListener("submit", e => {
       e.preventDefault()
       const formData = new FormData(form)
+      const tags = tagInputInstance
+        ? tagInputInstance.getTags()
+        : this._parseTags(formData.get("tags"))
+
       this.updateNote(noteId, {
         title: formData.get("title"),
         bodyMarkdown: formData.get("bodyMarkdown"),
-        tags: formData.get("tags")
+        tags
       })
+      tagInputInstance?.destroy()
+      this.activeTagInput = null
       this.eventBus.emit("modal:close")
+    })
+  }
+
+  _bindEditorTabs(form) {
+    if (!form) return
+    const writeBtn = form.querySelector('[data-note-tab="write"]')
+    const previewBtn = form.querySelector('[data-note-tab="preview"]')
+    const textarea = form.querySelector('[name="bodyMarkdown"]')
+    const previewArea = form.querySelector("#note-preview-area")
+
+    if (!previewBtn || !textarea || !previewArea) return
+
+    const switchToWrite = () => {
+      if (writeBtn) {
+        writeBtn.classList.add(
+          "active",
+          "bg-white",
+          "dark:bg-xp-card",
+          "text-xp-primary",
+          "shadow-sm"
+        )
+        writeBtn.classList.remove("text-gray-600", "dark:text-gray-400")
+      }
+      previewBtn.classList.remove(
+        "active",
+        "bg-white",
+        "dark:bg-xp-card",
+        "text-xp-primary",
+        "shadow-sm"
+      )
+      previewBtn.classList.add("text-gray-600", "dark:text-gray-400")
+
+      textarea.classList.remove("hidden")
+      previewArea.classList.add("hidden")
+    }
+
+    const switchToPreview = () => {
+      previewBtn.classList.add(
+        "active",
+        "bg-white",
+        "dark:bg-xp-card",
+        "text-xp-primary",
+        "shadow-sm"
+      )
+      previewBtn.classList.remove("text-gray-600", "dark:text-gray-400")
+      if (writeBtn) {
+        writeBtn.classList.remove(
+          "active",
+          "bg-white",
+          "dark:bg-xp-card",
+          "text-xp-primary",
+          "shadow-sm"
+        )
+        writeBtn.classList.add("text-gray-600", "dark:text-gray-400")
+      }
+
+      const parsed = parseMarkdown(textarea.value)
+      const emptyMsg =
+        this.i18n?.getMessage("app.screens.notes.preview.emptyContent") ||
+        "Esta nota no tiene contenido aún."
+      previewArea.innerHTML =
+        parsed ||
+        `<p class="italic text-gray-400 text-center py-4">${emptyMsg}</p>`
+
+      textarea.classList.add("hidden")
+      previewArea.classList.remove("hidden")
+    }
+
+    if (writeBtn) {
+      writeBtn.addEventListener("click", switchToWrite)
+    }
+    previewBtn.addEventListener("click", () => {
+      if (previewArea.classList.contains("hidden")) {
+        switchToPreview()
+      } else {
+        switchToWrite()
+      }
     })
   }
 
@@ -156,8 +281,34 @@ export class NotesModule {
     if (!note || !this.modalContainer) return
 
     this.eventBus.emit("modal:open", {
-      contentHtml: notePreviewTemplate(note)
+      contentHtml: notePreviewTemplate(note, this.i18n)
     })
+
+    const modal = this.modalContainer
+    const handlePreviewAction = e => {
+      const editBtn = e.target.closest('[data-action="open-edit-from-preview"]')
+      const deleteBtn = e.target.closest(
+        '[data-action="delete-note-from-preview"]'
+      )
+
+      if (editBtn && editBtn.dataset.noteId === noteId) {
+        modal.removeEventListener("click", handlePreviewAction)
+        this.showEditModal(noteId)
+      } else if (deleteBtn && deleteBtn.dataset.noteId === noteId) {
+        if (
+          confirm(
+            this.i18n?.getMessage("ui.common.confirmDelete") ||
+              "¿Eliminar esta nota?"
+          )
+        ) {
+          modal.removeEventListener("click", handlePreviewAction)
+          this.eventBus.emit("modal:close")
+          this.deleteNote(noteId)
+        }
+      }
+    }
+
+    modal.addEventListener("click", handlePreviewAction)
   }
 
   _parseTags(raw) {
@@ -167,6 +318,15 @@ export class NotesModule {
       .split(",")
       .map(t => t.trim())
       .filter(Boolean)
+  }
+
+  /**
+   * Recarga los datos desde el almacenamiento y re-renderiza
+   * Útil tras importar/limpiar datos sin duplicar listeners
+   */
+  reload() {
+    this._loadNotes()
+    this.render()
   }
 
   _loadNotes() {
@@ -190,7 +350,11 @@ export class NotesModule {
     this.eventBus.on("note:search", query => {
       if (!this.container) return
       const results = this.searchNotes(query)
-      this.container.innerHTML = noteListTemplate(results, this.i18n)
+      this.container.innerHTML = noteListTemplate(
+        results,
+        this.i18n,
+        query?.trim()
+      )
     })
 
     if (this.container) {
@@ -205,10 +369,12 @@ export class NotesModule {
           case "create-note":
             this.showCreateModal()
             break
-          case "view-note":
+          case "edit-note":
+            e.stopPropagation()
             this.showEditModal(noteId)
             break
           case "delete-note":
+            e.stopPropagation()
             if (
               confirm(
                 this.i18n?.getMessage("ui.common.confirmDelete") ||
@@ -217,6 +383,9 @@ export class NotesModule {
             ) {
               this.deleteNote(noteId)
             }
+            break
+          case "view-note":
+            this.showPreviewModal(noteId)
             break
         }
       })

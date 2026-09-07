@@ -10,7 +10,7 @@ import {
   getTodayString,
   parseDateStringLocal
 } from "../assets/js/utils/date.js"
-import { escapeHtml } from "../assets/js/utils/html.js"
+import { escapeHtml, html, raw } from "../assets/js/utils/html.js"
 import { generateId, isValidId } from "../assets/js/utils/id.js"
 
 describe("Utils", () => {
@@ -106,6 +106,37 @@ describe("Utils", () => {
     it("debería manejar cadenas vacías", () => {
       expect(escapeHtml("")).toBe("")
       expect(escapeHtml(null)).toBe("")
+    })
+
+    it("debería escapar texto interpolado en tagged template html", () => {
+      const malicious = '<script>alert("xss")</script>'
+      const result = html`<div>${malicious}</div>`
+      expect(result).toBe(
+        '<div>&lt;script&gt;alert("xss")&lt;/script&gt;</div>'
+      )
+    })
+
+    it("debería preservar cadenas marcadas con raw() sin escapar", () => {
+      const safe = raw("<span>seguro</span>")
+      const result = html`<div>${safe}</div>`
+      expect(result).toBe("<div><span>seguro</span></div>")
+    })
+
+    it("debería interpolar números y valores nulos/indefinidos correctamente", () => {
+      expect(html`<span>${42}</span>`).toBe("<span>42</span>")
+      expect(html`<span>${null}</span>`).toBe("<span></span>")
+      expect(html`<span>${undefined}</span>`).toBe("<span></span>")
+    })
+
+    it("debería manejar arrays de elementos seguros o cadenas", () => {
+      const items = [raw("<li>1</li>"), raw("<li>2</li>")]
+      const result = html`<ul>${items}</ul>`
+      expect(result).toBe("<ul><li>1</li><li>2</li></ul>")
+    })
+
+    it("debería envolver arrays con raw()", () => {
+      const rawList = raw(["<div>A</div>", "<div>B</div>"])
+      expect(rawList.__html).toBe("<div>A</div><div>B</div>")
     })
   })
 })

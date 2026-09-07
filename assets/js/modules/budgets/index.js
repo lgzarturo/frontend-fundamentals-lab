@@ -205,6 +205,15 @@ export class BudgetsModule {
     })
   }
 
+  /**
+   * Recarga los datos desde el almacenamiento y re-renderiza
+   * Útil tras importar/limpiar datos sin duplicar listeners
+   */
+  reload() {
+    this._loadBudgets()
+    this.render()
+  }
+
   _loadBudgets() {
     const data = this.storage.get("budgets")
     if (data && Array.isArray(data)) {
@@ -240,7 +249,7 @@ export class BudgetsModule {
           case "create-budget":
             this.showCreateModal()
             break
-          case "view-budget":
+          case "view-details":
             this.showDetailsModal(budgetId)
             break
           case "delete-budget":
@@ -256,6 +265,24 @@ export class BudgetsModule {
           case "add-transaction":
             this.showAddTransactionModal(budgetId)
             break
+        }
+      })
+    }
+
+    if (this.modalContainer) {
+      this.modalContainer.addEventListener("click", e => {
+        const target = e.target.closest('[data-action="delete-budget"]')
+        if (!target) return
+
+        const budgetId = target.dataset.budgetId
+        if (
+          confirm(
+            this.i18n?.getMessage("ui.common.confirmDelete") ||
+              "Delete this budget?"
+          )
+        ) {
+          this.deleteBudget(budgetId)
+          this.eventBus.emit("modal:close")
         }
       })
     }

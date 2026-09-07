@@ -2,27 +2,9 @@
  * Budget Templates - Plantillas para la generación de HTML de presupuestos
  */
 
-import { escapeHtml } from "../../utils/html.js"
+import { escapeHtml, html, raw } from "../../utils/html.js"
 
-export function html(strings, ...values) {
-  return strings.reduce((result, string, i) => {
-    const value = values[i]
-    if (value === undefined || value === null) {
-      return result + string
-    }
-    if (value && typeof value === "object" && value.__html !== undefined) {
-      return result + string + value.__html
-    }
-    if (typeof value === "string") {
-      return result + string + escapeHtml(value)
-    }
-    return result + string + String(value)
-  }, "")
-}
-
-function raw(value) {
-  return { __html: value }
-}
+export { html, raw }
 
 const STATUS_COLORS = {
   safe: "bg-xp-primary",

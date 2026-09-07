@@ -39,6 +39,14 @@ export class HomeModule {
     this._renderActivity(tasks, notes)
   }
 
+  /**
+   * Recarga los datos desde el almacenamiento y re-renderiza
+   * Útil tras importar/limpiar datos sin duplicar listeners
+   */
+  reload() {
+    this.render()
+  }
+
   _getMITs(tasks, limit = 3) {
     const today = getTodayString()
     return tasks
@@ -139,5 +147,24 @@ export class HomeModule {
     this.eventBus.on("habit:toggled", () => this.render())
     this.eventBus.on("budget:created", () => this.render())
     this.eventBus.on("note:created", () => this.render())
+
+    // Delegación para completar MITs y hábitos desde la vista de inicio
+    if (this.container) {
+      this.container.addEventListener("click", e => {
+        const target = e.target.closest("[data-action]")
+        if (!target) return
+
+        switch (target.dataset.action) {
+          case "toggle-task":
+            this.eventBus.emit("task:toggle", target.dataset.taskId)
+            break
+          case "toggle-habit":
+            this.eventBus.emit("habit:toggle", {
+              habitId: target.dataset.habitId
+            })
+            break
+        }
+      })
+    }
   }
 }
