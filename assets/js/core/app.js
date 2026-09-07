@@ -301,6 +301,7 @@ export class DOSApp {
     if (!backdrop || !modalContent) return
 
     modalContent.innerHTML = contentHtml
+    modalContent.scrollTop = 0
     backdrop.classList.remove("hidden")
   }
 

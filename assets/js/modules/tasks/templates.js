@@ -65,9 +65,9 @@ export function prioritySelectorTemplate({
 
   return `
     <div id="${escapeHtml(id)}" class="priority-selector-widget">
-      <div class="grid grid-cols-3 gap-2">
+      <div class="grid grid-cols-3 gap-2 sm:gap-3">
         <label
-          class="priority-card priority-low flex flex-col items-center justify-center p-2 rounded-lg border-2 cursor-pointer transition-all select-none ${
+          class="priority-card priority-low flex flex-row items-center justify-center gap-1.5 sm:gap-2 px-3 py-2.5 rounded-lg border-2 cursor-pointer transition-all select-none min-h-[44px] ${
             isLow
               ? "border-gray-400 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 shadow-sm"
               : "border-gray-200 dark:border-xp-primary/20 text-gray-500 hover:border-gray-400"
@@ -81,12 +81,12 @@ export function prioritySelectorTemplate({
             class="sr-only"
             ${isLow ? "checked" : ""}
           />
-          <span class="text-base">⚪</span>
-          <span class="text-xs font-semibold mt-0.5">${escapeHtml(lowLabel)}</span>
+          <span class="text-sm">⚪</span>
+          <span class="text-xs sm:text-sm font-semibold">${escapeHtml(lowLabel)}</span>
         </label>
 
         <label
-          class="priority-card priority-medium flex flex-col items-center justify-center p-2 rounded-lg border-2 cursor-pointer transition-all select-none ${
+          class="priority-card priority-medium flex flex-row items-center justify-center gap-1.5 sm:gap-2 px-3 py-2.5 rounded-lg border-2 cursor-pointer transition-all select-none min-h-[44px] ${
             isMed
               ? "border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 shadow-sm"
               : "border-gray-200 dark:border-xp-primary/20 text-gray-500 hover:border-yellow-500"
@@ -100,12 +100,12 @@ export function prioritySelectorTemplate({
             class="sr-only"
             ${isMed ? "checked" : ""}
           />
-          <span class="text-base">🟡</span>
-          <span class="text-xs font-semibold mt-0.5">${escapeHtml(medLabel)}</span>
+          <span class="text-sm">🟡</span>
+          <span class="text-xs sm:text-sm font-semibold">${escapeHtml(medLabel)}</span>
         </label>
 
         <label
-          class="priority-card priority-high flex flex-col items-center justify-center p-2 rounded-lg border-2 cursor-pointer transition-all select-none ${
+          class="priority-card priority-high flex flex-row items-center justify-center gap-1.5 sm:gap-2 px-3 py-2.5 rounded-lg border-2 cursor-pointer transition-all select-none min-h-[44px] ${
             isHigh
               ? "border-red-500 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 shadow-sm"
               : "border-gray-200 dark:border-xp-primary/20 text-gray-500 hover:border-red-500"
@@ -119,8 +119,8 @@ export function prioritySelectorTemplate({
             class="sr-only"
             ${isHigh ? "checked" : ""}
           />
-          <span class="text-base">🔴</span>
-          <span class="text-xs font-semibold mt-0.5">${escapeHtml(highLabel)}</span>
+          <span class="text-sm">🔴</span>
+          <span class="text-xs sm:text-sm font-semibold">${escapeHtml(highLabel)}</span>
         </label>
       </div>
     </div>

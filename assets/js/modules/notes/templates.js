@@ -240,30 +240,53 @@ export function createNoteModalTemplate(i18n) {
     i18n?.getMessage("app.screens.notes.preview.tabWrite") || "Escribir"
   const previewLabel =
     i18n?.getMessage("app.screens.notes.preview.tabPreview") || "Vista Previa"
+  const cancelLabel = i18n?.getMessage("ui.common.cancel") || "Cancelar"
+  const createLabel =
+    i18n?.getMessage("app.screens.notes.modal.create.create") || "Crear"
 
   return html`
-    <div class="p-6">
-      <h3 class="text-2xl font-bold mb-4">
-        ${i18n?.getMessage("app.screens.notes.modal.create.title") || "Nueva Nota"}
-      </h3>
-      <form id="create-note-form">
-        <div class="space-y-4">
+    <div class="p-6 flex flex-col max-h-[85vh]">
+      <div
+        class="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-xp-primary/20 shrink-0 mb-4"
+      >
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">📝</span>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            ${i18n?.getMessage("app.screens.notes.modal.create.title") || "Nueva Nota"}
+          </h3>
+        </div>
+        <button
+          type="button"
+          data-action="close-modal"
+          class="btn-icon w-8 h-8 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors flex items-center justify-center text-lg shrink-0 cursor-pointer"
+          aria-label="${cancelLabel}"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form id="create-note-form" class="flex flex-col flex-1 min-h-0">
+        <div class="space-y-4 flex-1 overflow-y-auto min-h-0 pr-1 pb-1">
           <div>
-            <label class="block text-sm font-semibold mb-2">
+            <label
+              class="block text-sm font-semibold mb-2 text-gray-800 dark:text-gray-200"
+            >
               ${i18n?.getMessage("app.screens.notes.modal.create.titleLabel") || "Título *"}
             </label>
             <input
               type="text"
               name="title"
               required
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+              class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 focus:outline-none focus:border-xp-primary transition-colors text-sm"
               placeholder="${i18n?.getMessage("app.screens.notes.modal.create.titlePlaceholder") || "Título de la nota"}"
             />
           </div>
 
           <div>
             <div class="flex items-center justify-between mb-2">
-              <label class="block text-sm font-semibold">
+              <label
+                class="block text-sm font-semibold text-gray-800 dark:text-gray-200"
+              >
                 ${i18n?.getMessage("app.screens.notes.modal.create.content") || "Contenido (Markdown)"}
               </label>
               <div
@@ -272,7 +295,7 @@ export function createNoteModalTemplate(i18n) {
                 <button
                   type="button"
                   data-note-tab="write"
-                  class="note-tab-btn active px-2.5 py-1 rounded-md bg-white dark:bg-xp-card text-xp-primary shadow-sm transition-all"
+                  class="note-tab-btn btn-compact active px-3 py-1.5 rounded-md bg-white dark:bg-xp-card text-xp-primary shadow-sm transition-all"
                 >
                   ✏️ ${writeLabel}
                 </button>
@@ -280,7 +303,7 @@ export function createNoteModalTemplate(i18n) {
                   type="button"
                   data-note-tab="preview"
                   data-action="preview-note"
-                  class="note-tab-btn px-2.5 py-1 rounded-md text-gray-600 dark:text-gray-400 hover:text-xp-primary transition-all"
+                  class="note-tab-btn btn-compact px-3 py-1.5 rounded-md text-gray-600 dark:text-gray-400 hover:text-xp-primary transition-all"
                 >
                   👁️ ${previewLabel}
                 </button>
@@ -290,7 +313,7 @@ export function createNoteModalTemplate(i18n) {
               name="bodyMarkdown"
               id="note-body-markdown-input"
               rows="8"
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary font-mono text-sm resize-y"
+              class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 focus:outline-none focus:border-xp-primary font-mono text-sm resize-y"
               placeholder="# Mi nota&#10;&#10;Escribe en **Markdown**..."
             ></textarea>
             <div
@@ -300,7 +323,9 @@ export function createNoteModalTemplate(i18n) {
           </div>
 
           <div>
-            <label class="block text-sm font-semibold mb-2">
+            <label
+              class="block text-sm font-semibold mb-2 text-gray-800 dark:text-gray-200"
+            >
               ${i18n?.getMessage("app.screens.notes.modal.create.tags") || "Etiquetas"}
             </label>
             <div id="note-tags-input-container">
@@ -315,19 +340,22 @@ export function createNoteModalTemplate(i18n) {
             </div>
           </div>
         </div>
-        <div class="flex gap-3 mt-6">
+
+        <div
+          class="flex gap-3 pt-4 mt-4 border-t border-gray-100 dark:border-gray-800 shrink-0"
+        >
           <button
             type="button"
             data-action="close-modal"
-            class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors"
+            class="flex-1 px-5 py-3 bg-gray-200 hover:bg-gray-300 dark:bg-xp-darker dark:hover:bg-xp-darker/80 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-xp-primary/30 rounded-lg font-semibold transition-colors text-sm cursor-pointer"
           >
-            ${i18n?.getMessage("ui.common.cancel") || "Cancelar"}
+            ${cancelLabel}
           </button>
           <button
             type="submit"
-            class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors"
+            class="flex-1 px-5 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-all text-sm shadow hover:shadow-md cursor-pointer"
           >
-            ${i18n?.getMessage("app.screens.notes.modal.create.create") || "Crear"}
+            ${createLabel}
           </button>
         </div>
       </form>
@@ -340,16 +368,43 @@ export function editNoteModalTemplate(note, i18n) {
     i18n?.getMessage("app.screens.notes.preview.tabWrite") || "Escribir"
   const previewLabel =
     i18n?.getMessage("app.screens.notes.preview.tabPreview") || "Vista Previa"
+  const cancelLabel = i18n?.getMessage("ui.common.cancel") || "Cancelar"
+  const saveLabel =
+    i18n?.getMessage("app.screens.notes.modal.edit.update") ||
+    i18n?.getMessage("ui.common.save") ||
+    "Guardar Cambios"
 
   return html`
-    <div class="p-6">
-      <h3 class="text-2xl font-bold mb-4">
-        ${i18n?.getMessage("app.screens.notes.modal.edit.title") || "Editar Nota"}
-      </h3>
-      <form id="edit-note-form" data-note-id="${note.id}">
-        <div class="space-y-4">
+    <div class="p-6 flex flex-col max-h-[85vh]">
+      <div
+        class="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-xp-primary/20 shrink-0 mb-4"
+      >
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">✏️</span>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            ${i18n?.getMessage("app.screens.notes.modal.edit.title") || "Editar Nota"}
+          </h3>
+        </div>
+        <button
+          type="button"
+          data-action="close-modal"
+          class="btn-icon w-8 h-8 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors flex items-center justify-center text-lg shrink-0 cursor-pointer"
+          aria-label="${cancelLabel}"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form
+        id="edit-note-form"
+        data-note-id="${note.id}"
+        class="flex flex-col flex-1 min-h-0"
+      >
+        <div class="space-y-4 flex-1 overflow-y-auto min-h-0 pr-1 pb-1">
           <div>
-            <label class="block text-sm font-semibold mb-2">
+            <label
+              class="block text-sm font-semibold mb-2 text-gray-800 dark:text-gray-200"
+            >
               ${i18n?.getMessage("app.screens.notes.modal.create.titleLabel") || "Título *"}
             </label>
             <input
@@ -357,13 +412,15 @@ export function editNoteModalTemplate(note, i18n) {
               name="title"
               required
               value="${note.title}"
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+              class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 focus:outline-none focus:border-xp-primary transition-colors text-sm"
             />
           </div>
 
           <div>
             <div class="flex items-center justify-between mb-2">
-              <label class="block text-sm font-semibold">
+              <label
+                class="block text-sm font-semibold text-gray-800 dark:text-gray-200"
+              >
                 ${i18n?.getMessage("app.screens.notes.modal.create.content") || "Contenido (Markdown)"}
               </label>
               <div
@@ -372,7 +429,7 @@ export function editNoteModalTemplate(note, i18n) {
                 <button
                   type="button"
                   data-note-tab="write"
-                  class="note-tab-btn active px-2.5 py-1 rounded-md bg-white dark:bg-xp-card text-xp-primary shadow-sm transition-all"
+                  class="note-tab-btn btn-compact active px-3 py-1.5 rounded-md bg-white dark:bg-xp-card text-xp-primary shadow-sm transition-all"
                 >
                   ✏️ ${writeLabel}
                 </button>
@@ -380,7 +437,7 @@ export function editNoteModalTemplate(note, i18n) {
                   type="button"
                   data-note-tab="preview"
                   data-action="preview-note"
-                  class="note-tab-btn px-2.5 py-1 rounded-md text-gray-600 dark:text-gray-400 hover:text-xp-primary transition-all"
+                  class="note-tab-btn btn-compact px-3 py-1.5 rounded-md text-gray-600 dark:text-gray-400 hover:text-xp-primary transition-all"
                 >
                   👁️ ${previewLabel}
                 </button>
@@ -390,7 +447,7 @@ export function editNoteModalTemplate(note, i18n) {
               name="bodyMarkdown"
               id="note-body-markdown-input"
               rows="8"
-              class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary font-mono text-sm resize-y"
+              class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 focus:outline-none focus:border-xp-primary font-mono text-sm resize-y"
             >
 ${note.bodyMarkdown}</textarea>
             <div
@@ -400,7 +457,9 @@ ${note.bodyMarkdown}</textarea>
           </div>
 
           <div>
-            <label class="block text-sm font-semibold mb-2">
+            <label
+              class="block text-sm font-semibold mb-2 text-gray-800 dark:text-gray-200"
+            >
               ${i18n?.getMessage("app.screens.notes.modal.create.tags") || "Etiquetas"}
             </label>
             <div id="note-tags-input-container">
@@ -415,19 +474,22 @@ ${note.bodyMarkdown}</textarea>
             </div>
           </div>
         </div>
-        <div class="flex gap-3 mt-6">
+
+        <div
+          class="flex gap-3 pt-4 mt-4 border-t border-gray-100 dark:border-gray-800 shrink-0"
+        >
           <button
             type="button"
             data-action="close-modal"
-            class="flex-1 px-4 py-3 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors"
+            class="flex-1 px-5 py-3 bg-gray-200 hover:bg-gray-300 dark:bg-xp-darker dark:hover:bg-xp-darker/80 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-xp-primary/30 rounded-lg font-semibold transition-colors text-sm cursor-pointer"
           >
-            ${i18n?.getMessage("ui.common.cancel") || "Cancelar"}
+            ${cancelLabel}
           </button>
           <button
             type="submit"
-            class="flex-1 px-4 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors"
+            class="flex-1 px-5 py-3 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-all text-sm shadow hover:shadow-md cursor-pointer"
           >
-            ${i18n?.getMessage("ui.common.save") || "Guardar"}
+            ${saveLabel}
           </button>
         </div>
       </form>
@@ -457,9 +519,9 @@ export function notePreviewTemplate(note, i18n = null) {
     : ""
 
   return html`
-    <div class="p-6">
+    <div class="p-6 flex flex-col max-h-[85vh]">
       <div
-        class="flex items-start justify-between gap-3 mb-4 pb-4 border-b border-gray-200 dark:border-xp-primary/20"
+        class="flex items-start justify-between gap-3 pb-4 border-b border-gray-200 dark:border-xp-primary/20 shrink-0"
       >
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 mb-1">
@@ -483,7 +545,7 @@ export function notePreviewTemplate(note, i18n = null) {
         <button
           type="button"
           data-action="close-modal"
-          class="btn-icon w-8 h-8 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors flex items-center justify-center text-lg shrink-0"
+          class="btn-icon w-8 h-8 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors flex items-center justify-center text-lg shrink-0 cursor-pointer"
           aria-label="${closeLabel}"
         >
           ✕
@@ -491,7 +553,7 @@ export function notePreviewTemplate(note, i18n = null) {
       </div>
 
       <div
-        class="note-preview-body prose prose-sm dark:prose-invert max-w-none p-5 bg-gray-50 dark:bg-xp-darker rounded-xl border border-gray-200 dark:border-xp-primary/20 min-h-[140px] max-h-[55vh] overflow-y-auto leading-relaxed text-gray-800 dark:text-gray-200"
+        class="note-preview-body prose prose-sm dark:prose-invert max-w-none my-4 p-5 bg-gray-50 dark:bg-xp-darker rounded-xl border border-gray-200 dark:border-xp-primary/20 flex-1 overflow-y-auto min-h-[140px] leading-relaxed text-gray-800 dark:text-gray-200"
       >
         ${
           parsedBody
@@ -503,23 +565,23 @@ export function notePreviewTemplate(note, i18n = null) {
       </div>
 
       <div
-        class="flex items-center justify-between gap-3 mt-6 pt-4 border-t border-gray-100 dark:border-gray-800"
+        class="flex items-center justify-between gap-3 pt-4 border-t border-gray-100 dark:border-gray-800 shrink-0"
       >
         <button
           type="button"
           data-action="delete-note-from-preview"
           data-note-id="${note.id}"
-          class="px-4 py-2.5 text-xp-danger hover:bg-xp-danger/10 rounded-lg transition-colors text-sm font-semibold inline-flex items-center gap-1.5"
+          class="px-4 py-2.5 bg-xp-danger/10 hover:bg-xp-danger/20 text-xp-danger border border-xp-danger/30 rounded-lg transition-colors text-sm font-semibold inline-flex items-center gap-2 cursor-pointer"
         >
           <span>🗑️</span>
           <span>${deleteLabel}</span>
         </button>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-3">
           <button
             type="button"
             data-action="close-modal"
-            class="px-4 py-2.5 bg-gray-200 dark:bg-xp-darker rounded-lg hover:bg-gray-300 dark:hover:bg-xp-darker/80 transition-colors text-sm font-semibold"
+            class="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-xp-darker dark:hover:bg-xp-darker/80 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-xp-primary/30 rounded-lg text-sm font-semibold transition-colors cursor-pointer"
           >
             ${closeLabel}
           </button>
@@ -527,7 +589,7 @@ export function notePreviewTemplate(note, i18n = null) {
             type="button"
             data-action="open-edit-from-preview"
             data-note-id="${note.id}"
-            class="px-5 py-2.5 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-colors text-sm inline-flex items-center gap-1.5 shadow"
+            class="px-6 py-2.5 bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold rounded-lg transition-all text-sm inline-flex items-center gap-2 shadow hover:shadow-md cursor-pointer"
           >
             <span>✏️</span>
             <span>${editLabel}</span>
