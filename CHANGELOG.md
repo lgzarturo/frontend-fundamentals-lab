@@ -2,6 +2,34 @@
 
 ## Historial de cambios
 
+### v1.0.0
+
+- Merge pull request #31 from lgzarturo/module-13-modules-refactor
+- docs: documentar el proceso de desarrollo
+- fix(ui): mejorar modales de notas, prioridad de tareas y compartir
+- Merge pull request #30 from lgzarturo/module-13-modules-refactor
+- fix: documentar el diseño de la app
+- feat(analytics,seo): mejorar analiticas, rachas, sonido y compartir
+- feat(tasks,notes): mejorar vista de notas, fechas y filtro de tareas
+- feat(notes,tasks): mejorar vista de notas y componente de etiquetas
+- fix: corregir escapado de fragmentos anidados y eventos de modal
+- feat(core): completar cutover a arquitectura modular ES6
+- docs(backlog): agregar ítem y plan OpenSpec para dashboard de telemetría
+- docs(backlog): agregar backlog y planes para la migración de módulos
+- feat: extraer servicio i18n y bootstrap principal de la app
+- feat: agregar undo, drag and drop y confeti a la arquitectura modular
+- refactor: centralizar modal y corregir claves i18n en módulos
+- Merge pull request #25 from lgzarturo/module-13-modules-refactor
+- refactor: implementar migración de datos y validación en presupuestos
+- chore: add coverage/ to .gitignore and remove from tracking
+- chore: actualizar a v0.0.16 y optimizar infraestructura
+- Merge pull request #23 from lgzarturo/module-13-modules-refactor
+- fix: corregir la version
+- chore: agregar Makefile y comandos de automatización de versión
+- chore: implementar sincronización de versión y plan de hábitos
+- docs(plans): actualizar auditoría de rendimiento Lighthouse
+- Merge pull request #20 from lgzarturo/module-13-modules-refactor
+
 ### v0.0.17
 
 - refactor: implementar migración de datos y validación en presupuestos
