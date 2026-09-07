@@ -1,17 +1,6 @@
-import { escapeHtml } from "../../utils/html.js"
+import { escapeHtml, html, raw } from "../../utils/html.js"
 
-export function html(strings, ...values) {
-  return strings.reduce((result, string, i) => {
-    const value = values[i]
-    if (value === undefined || value === null) {
-      return result + string
-    }
-    if (typeof value === "string") {
-      return result + string + escapeHtml(value)
-    }
-    return result + string + String(value)
-  }, "")
-}
+export { html, raw }
 
 export const HABIT_TEMPLATES = [
   {
@@ -88,7 +77,11 @@ export function habitCardTemplate(habit, i18n) {
             }"
             style="${record.completed ? `background-color: ${habit.color}` : ""}"
           >
-            ${record.completed ? html`<span class="text-xs text-xp-darker font-bold">✓</span>` : ""}
+            ${
+              record.completed
+                ? raw('<span class="text-xs text-xp-darker font-bold">✓</span>')
+                : ""
+            }
           </div>
         </div>
       `
@@ -102,7 +95,17 @@ export function habitCardTemplate(habit, i18n) {
       <div class="flex items-start justify-between mb-3">
         <div class="flex-1 min-w-0">
           <h3 class="text-base font-bold truncate">${habit.title}</h3>
-          ${habit.description ? html`<p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">${habit.description}</p>` : ""}
+          ${
+            habit.description
+              ? raw(
+                  html`<p
+                    class="text-sm text-gray-500 dark:text-gray-400 mt-0.5"
+                  >
+                    ${habit.description}
+                  </p>`
+                )
+              : ""
+          }
         </div>
         <button
           data-action="delete-habit"
@@ -126,7 +129,7 @@ export function habitCardTemplate(habit, i18n) {
         ></div>
       </div>
 
-      <div class="flex justify-between mb-4">${weekDots}</div>
+      <div class="flex justify-between mb-4">${raw(weekDots)}</div>
 
       <button
         data-action="toggle-habit"
@@ -152,7 +155,7 @@ export function habitListTemplate(habits, i18n) {
   const cards = habits.map(h => habitCardTemplate(h, i18n)).join("")
   return html`
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      ${cards}
+      ${raw(cards)}
     </div>
   `
 }
@@ -214,7 +217,7 @@ export function habitTemplatesModalTemplate(i18n) {
           ${i18n?.getMessage("app.screens.habits.templates.title") || "Plantillas"}
         </h4>
         <div class="grid grid-cols-1 gap-2 max-h-64 overflow-y-auto pr-1">
-          ${templateCards}
+          ${raw(templateCards)}
         </div>
       </div>
 

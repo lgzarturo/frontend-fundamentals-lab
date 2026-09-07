@@ -149,6 +149,66 @@ describe("DOSApp core", () => {
     )
   })
 
+  it("debería cerrar el modal al hacer click en el backdrop o en un botón close-modal", async () => {
+    const app = createApp()
+    await app.init()
+
+    app.showModal(
+      '<div><button data-action="close-modal">Cancelar</button><p id="modal-text">Contenido</p></div>'
+    )
+    const backdrop = document.getElementById("modal-backdrop")
+    const modalContent = document.getElementById("modal-content")
+    expect(backdrop.classList.contains("hidden")).toBe(false)
+
+    // Click dentro del contenido no debería cerrarlo
+    const modalText = document.getElementById("modal-text")
+    modalText.click()
+    expect(backdrop.classList.contains("hidden")).toBe(false)
+
+    // Click en close-modal dentro de modal-content debería cerrarlo
+    const closeBtn = modalContent.querySelector('[data-action="close-modal"]')
+    closeBtn.click()
+    expect(backdrop.classList.contains("hidden")).toBe(true)
+
+    // Abrir de nuevo y comprobar que click en el backdrop lo cierra
+    app.showModal("<div>Otro contenido</div>")
+    expect(backdrop.classList.contains("hidden")).toBe(false)
+    backdrop.click()
+    expect(backdrop.classList.contains("hidden")).toBe(true)
+  })
+
+  it("debería eliminar el presupuesto desde el botón del modal de detalles", async () => {
+    const app = createApp()
+    await app.init()
+    app.navigateTo("budgets")
+
+    const budget = app.modules.budgets.createBudget({
+      name: "Presupuesto Para Borrar",
+      currency: "MXN",
+      type: "savings",
+      goalAmount: 5000
+    })
+
+    const detailsBtn = document.querySelector('[data-action="view-details"]')
+    detailsBtn.click()
+
+    const backdrop = document.getElementById("modal-backdrop")
+    expect(backdrop.classList.contains("hidden")).toBe(false)
+
+    const modalContent = document.getElementById("modal-content")
+    const deleteBtn = modalContent.querySelector(
+      '[data-action="delete-budget"]'
+    )
+    expect(deleteBtn).not.toBeNull()
+
+    deleteBtn.click()
+
+    expect(backdrop.classList.contains("hidden")).toBe(true)
+    expect(
+      app.modules.budgets.budgets.find(b => b.id === budget.id)
+    ).toBeUndefined()
+  })
+
   it("debería filtrar tareas desde la fachada filterTasks", async () => {
     const app = createApp()
     await app.init()

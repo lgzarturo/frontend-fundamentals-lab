@@ -268,5 +268,23 @@ export class BudgetsModule {
         }
       })
     }
+
+    if (this.modalContainer) {
+      this.modalContainer.addEventListener("click", e => {
+        const target = e.target.closest('[data-action="delete-budget"]')
+        if (!target) return
+
+        const budgetId = target.dataset.budgetId
+        if (
+          confirm(
+            this.i18n?.getMessage("ui.common.confirmDelete") ||
+              "Delete this budget?"
+          )
+        ) {
+          this.deleteBudget(budgetId)
+          this.eventBus.emit("modal:close")
+        }
+      })
+    }
   }
 }

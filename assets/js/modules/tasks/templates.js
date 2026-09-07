@@ -1,17 +1,6 @@
-import { escapeHtml } from "../../utils/html.js"
+import { escapeHtml, html, raw } from "../../utils/html.js"
 
-export function html(strings, ...values) {
-  return strings.reduce((result, string, i) => {
-    const value = values[i]
-    if (value === undefined || value === null) {
-      return result + string
-    }
-    if (typeof value === "string") {
-      return result + string + escapeHtml(value)
-    }
-    return result + string + String(value)
-  }, "")
-}
+export { html, raw }
 
 const PRIORITY_COLORS = {
   high: "text-xp-danger",
@@ -52,6 +41,11 @@ function subtasksHtml(subtasks) {
   `
 }
 
+const CHECK_SVG =
+  '<svg class="w-3 h-3 text-xp-darker" fill="none" viewBox="0 0 24 24" stroke="currentColor">' +
+  '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>' +
+  "</svg>"
+
 export function taskCardTemplate(task, i18n) {
   const priorityColor = PRIORITY_COLORS[task.priority] || "text-gray-400"
   const priorityIcon = PRIORITY_ICONS[task.priority] || "⚪"
@@ -73,7 +67,7 @@ export function taskCardTemplate(task, i18n) {
           class="mt-0.5 flex-shrink-0 w-5 h-5 rounded border-2 ${task.done ? "bg-xp-primary border-xp-primary" : "border-gray-300 dark:border-gray-600"} flex items-center justify-center transition-colors"
           aria-label="${i18n?.getMessage("accessibility.markTaskDone", { task: task.title }) || "Toggle task"}"
         >
-          ${task.done ? '<svg class="w-3 h-3 text-xp-darker" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>' : ""}
+          ${task.done ? raw(CHECK_SVG) : ""}
         </button>
 
         <div class="flex-1 min-w-0">
@@ -88,24 +82,32 @@ export function taskCardTemplate(task, i18n) {
 
           ${
             task.description
-              ? html`<p
-                  class="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2"
-                >
-                  ${task.description}
-                </p>`
+              ? raw(
+                  html`<p
+                    class="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2"
+                  >
+                    ${task.description}
+                  </p>`
+                )
               : ""
           }
           ${
             task.dueDate
-              ? html`<div class="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                  📅 ${task.dueDate}
-                </div>`
+              ? raw(
+                  html`<div
+                    class="text-xs text-gray-500 dark:text-gray-400 mb-2"
+                  >
+                    📅 ${task.dueDate}
+                  </div>`
+                )
               : ""
           }
 
-          <div class="flex flex-wrap gap-1 mb-2">${tagsHtml(task.tags)}</div>
+          <div class="flex flex-wrap gap-1 mb-2">
+            ${raw(tagsHtml(task.tags))}
+          </div>
 
-          ${subtasksHtml(task.subtasks)}
+          ${raw(subtasksHtml(task.subtasks))}
         </div>
 
         <div class="flex gap-1 flex-shrink-0">
@@ -156,12 +158,17 @@ export function emptyTasksTemplate(filter, i18n) {
       </p>
       ${
         filter === "all"
-          ? html`<button
-              data-action="create-task"
-              class="px-6 py-3 bg-xp-primary text-xp-darker font-bold rounded-lg hover:bg-xp-primary/80 transition-colors"
-            >
-              ${i18n?.getMessage("app.screens.tasks.newButton") || "Crear Tarea"}
-            </button>`
+          ? raw(
+              html`<button
+                data-action="create-task"
+                class="px-6 py-3 bg-xp-primary text-xp-darker font-bold rounded-lg hover:bg-xp-primary/80 transition-colors"
+              >
+                ${
+                  i18n?.getMessage("app.screens.tasks.newButton") ||
+                  "Crear Tarea"
+                }
+              </button>`
+            )
           : ""
       }
     </div>
@@ -175,11 +182,7 @@ export function taskListTemplate(tasks, filter, i18n) {
 
   const cards = tasks.map(task => taskCardTemplate(task, i18n)).join("")
 
-  return `
-    <div class="space-y-3">
-      ${cards}
-    </div>
-  `
+  return html` <div class="space-y-3">${raw(cards)}</div> `
 }
 
 export function createTaskModalTemplate(i18n) {
@@ -401,7 +404,7 @@ ${task.description}</textarea>
               id="subtask-list"
               class="space-y-1 mb-2 max-h-40 overflow-y-auto"
             >
-              ${subtaskItemsHtml}
+              ${raw(subtaskItemsHtml)}
             </div>
             <div class="flex gap-2">
               <input

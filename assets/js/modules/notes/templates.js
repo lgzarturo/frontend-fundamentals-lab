@@ -1,18 +1,7 @@
-import { escapeHtml } from "../../utils/html.js"
+import { escapeHtml, html, raw } from "../../utils/html.js"
 import { getRelativeTime } from "../../utils/date.js"
 
-export function html(strings, ...values) {
-  return strings.reduce((result, string, i) => {
-    const value = values[i]
-    if (value === undefined || value === null) {
-      return result + string
-    }
-    if (typeof value === "string") {
-      return result + string + escapeHtml(value)
-    }
-    return result + string + String(value)
-  }, "")
-}
+export { html, raw }
 
 export function parseMarkdown(markdown) {
   return markdown
@@ -57,9 +46,19 @@ export function noteCardTemplate(note, i18n) {
           &#x2715;
         </button>
       </div>
-      ${preview ? html`<p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">${preview}</p>` : ""}
+      ${
+        preview
+          ? raw(
+              html`<p
+                class="text-sm text-gray-600 dark:text-gray-400 line-clamp-3"
+              >
+                ${preview}
+              </p>`
+            )
+          : ""
+      }
       <div class="flex items-center justify-between gap-2 flex-wrap">
-        <div class="flex flex-wrap gap-1">${tagsHtml}</div>
+        <div class="flex flex-wrap gap-1">${raw(tagsHtml)}</div>
         <span class="text-xs text-gray-500">${relativeTime}</span>
       </div>
     </div>
@@ -68,9 +67,10 @@ export function noteCardTemplate(note, i18n) {
 
 export function noteListTemplate(notes, i18n) {
   if (!notes.length) return emptyNotesTemplate(i18n)
-  return `
+  const cards = notes.map(note => noteCardTemplate(note, i18n)).join("")
+  return html`
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      ${notes.map(note => noteCardTemplate(note, i18n)).join("")}
+      ${raw(cards)}
     </div>
   `
 }
@@ -230,10 +230,12 @@ ${note.bodyMarkdown}</textarea>
 
 export function notePreviewTemplate(note) {
   const parsedBody = parseMarkdown(note.bodyMarkdown)
-  return `
+  return html`
     <div class="p-6">
-      <h2 class="text-2xl font-bold mb-4">${escapeHtml(note.title)}</h2>
-      <div class="prose prose-sm dark:prose-invert max-w-none">${parsedBody}</div>
+      <h2 class="text-2xl font-bold mb-4">${note.title}</h2>
+      <div class="prose prose-sm dark:prose-invert max-w-none">
+        ${raw(parsedBody)}
+      </div>
     </div>
   `
 }

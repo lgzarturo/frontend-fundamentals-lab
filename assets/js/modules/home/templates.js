@@ -1,18 +1,7 @@
-import { escapeHtml } from "../../utils/html.js"
+import { escapeHtml, html, raw } from "../../utils/html.js"
 import { getRelativeTime } from "../../utils/date.js"
 
-export function html(strings, ...values) {
-  return strings.reduce((result, string, i) => {
-    const value = values[i]
-    if (value === undefined || value === null) {
-      return result + string
-    }
-    if (typeof value === "string") {
-      return result + string + escapeHtml(value)
-    }
-    return result + string + String(value)
-  }, "")
-}
+export { html, raw }
 
 const PRIORITY_ICONS = { high: "🔴", medium: "🟡", low: "🟢" }
 
@@ -47,7 +36,11 @@ export function mitItemTemplate(task) {
             >${task.title}</span
           >
         </div>
-        ${tagsHtml ? `<div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div>` : ""}
+        ${
+          tagsHtml
+            ? raw(`<div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div>`)
+            : ""
+        }
       </div>
     </div>
   `
@@ -66,7 +59,11 @@ export function habitItemTemplate(habit, todayStr) {
           class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${completed ? "bg-xp-primary border-xp-primary" : "border-gray-400 dark:border-gray-600"}"
           aria-label="${completed ? "Desmarcar" : "Marcar"} hábito"
         >
-          ${completed ? '<span class="text-xp-darker text-xs font-bold">✓</span>' : ""}
+          ${
+            completed
+              ? raw('<span class="text-xp-darker text-xs font-bold">✓</span>')
+              : ""
+          }
         </button>
         <span
           class="text-sm font-medium ${completed ? "line-through text-gray-400" : ""}"

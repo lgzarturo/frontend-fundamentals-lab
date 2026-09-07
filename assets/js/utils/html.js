@@ -15,6 +15,65 @@ export function escapeHtml(text) {
 }
 
 /**
+ * Tagged template para HTML con escape automático
+ * Respeta fragmentos seguros marcados con raw() ({ __html })
+ * @param {TemplateStringsArray} strings - Partes estáticas del template
+ * @param {...any} values - Valores interpolados
+ * @returns {string} HTML generado
+ */
+export function html(strings, ...values) {
+  return strings.reduce((result, string, i) => {
+    const value = values[i]
+    if (value === undefined || value === null) {
+      return result + string
+    }
+    if (value && typeof value === "object" && value.__html !== undefined) {
+      return result + string + value.__html
+    }
+    if (Array.isArray(value)) {
+      const joined = value
+        .map(v => {
+          if (v === undefined || v === null) return ""
+          if (v && typeof v === "object" && v.__html !== undefined) {
+            return v.__html
+          }
+          if (typeof v === "string") return escapeHtml(v)
+          return String(v)
+        })
+        .join("")
+      return result + string + joined
+    }
+    if (typeof value === "string") {
+      return result + string + escapeHtml(value)
+    }
+    return result + string + String(value)
+  }, "")
+}
+
+/**
+ * Marca una cadena como HTML seguro sin escapar
+ * @param {any} value - Contenido a marcar como seguro
+ * @returns {{ __html: string }}
+ */
+export function raw(value) {
+  if (value && typeof value === "object" && value.__html !== undefined) {
+    return value
+  }
+  if (Array.isArray(value)) {
+    return {
+      __html: value
+        .map(v =>
+          v && typeof v === "object" && v.__html !== undefined
+            ? v.__html
+            : String(v ?? "")
+        )
+        .join("")
+    }
+  }
+  return { __html: value === null || value === undefined ? "" : String(value) }
+}
+
+/**
  * Crea un elemento HTML a partir de una cadena
  * @param {string} html - Cadena HTML
  * @returns {HTMLElement} Elemento creado
