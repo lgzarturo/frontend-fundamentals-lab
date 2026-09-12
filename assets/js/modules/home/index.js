@@ -7,6 +7,10 @@ import {
   habitItemTemplate,
   mitItemTemplate
 } from "./templates.js"
+import {
+  getExpandedSubtaskIds,
+  toggleSubtaskExpanded
+} from "../../utils/subtasksStorage.js"
 
 export class HomeModule {
   constructor(storage, eventBus, i18n) {
@@ -102,8 +106,11 @@ export class HomeModule {
   _renderMITs(mits) {
     const el = document.getElementById("home-mits-list")
     if (!el) return
+    const expandedIds = getExpandedSubtaskIds()
     el.innerHTML = mits.length
-      ? mits.map(t => mitItemTemplate(t)).join("")
+      ? mits
+          .map(t => mitItemTemplate(t, expandedIds.has(t.id)))
+          .join("")
       : emptyMITsTemplate()
   }
 
@@ -144,11 +151,13 @@ export class HomeModule {
   _bindEvents() {
     this.eventBus.on("task:created", () => this.render())
     this.eventBus.on("task:toggled", () => this.render())
+    this.eventBus.on("task:updated", () => this.render())
+    this.eventBus.on("task:subtask-toggled", () => this.render())
     this.eventBus.on("habit:toggled", () => this.render())
     this.eventBus.on("budget:created", () => this.render())
     this.eventBus.on("note:created", () => this.render())
 
-    // Delegación para completar MITs y hábitos desde la vista de inicio
+    // Delegación para completar MITs, subtareas y hábitos desde la vista de inicio
     if (this.container) {
       this.container.addEventListener("click", e => {
         const target = e.target.closest("[data-action]")
@@ -157,6 +166,16 @@ export class HomeModule {
         switch (target.dataset.action) {
           case "toggle-task":
             this.eventBus.emit("task:toggle", target.dataset.taskId)
+            break
+          case "toggle-subtask":
+            this.eventBus.emit("task:toggle-subtask", {
+              taskId: target.dataset.taskId,
+              subtaskId: target.dataset.subtaskId
+            })
+            break
+          case "toggle-subtasks-expand":
+            toggleSubtaskExpanded(target.dataset.taskId)
+            this.render()
             break
           case "toggle-habit":
             this.eventBus.emit("habit:toggle", {

@@ -208,14 +208,24 @@ export class DOSApp {
    * @private
    */
   _updateNavigation(activeScreen) {
-    document.querySelectorAll(".nav-btn").forEach(btn => {
+    document.querySelectorAll(".nav-btn[data-screen]").forEach(btn => {
       const isActive = btn.dataset.screen === activeScreen
       if (isActive) {
         btn.classList.add("bg-xp-primary", "text-xp-darker")
-        btn.classList.remove("bg-gray-200", "text-gray-700")
+        btn.classList.remove(
+          "bg-gray-200",
+          "text-gray-700",
+          "dark:bg-xp-card",
+          "dark:text-gray-400"
+        )
       } else {
         btn.classList.remove("bg-xp-primary", "text-xp-darker")
-        btn.classList.add("bg-gray-200", "text-gray-700")
+        btn.classList.add(
+          "bg-gray-200",
+          "text-gray-700",
+          "dark:bg-xp-card",
+          "dark:text-gray-400"
+        )
       }
     })
   }

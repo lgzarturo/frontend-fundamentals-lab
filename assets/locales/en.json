@@ -13,7 +13,7 @@
     "screens": {
       "home": {
         "title": "Dashboard",
-        "welcome": "Welcome back, Developer! 🎮",
+        "welcome": "Welcome back! 🎮",
         "description": "Welcome to your productivity dashboard! Here you can manage your tasks, budgets, notes, and habits all in one place.",
         "hitCounter": "visits",
         "quickAccess": {

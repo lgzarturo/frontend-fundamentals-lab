@@ -100,6 +100,31 @@ describe("DOSApp core", () => {
     expect(localStorage.getItem("currentScreen")).toBe("tasks")
   })
 
+  it("debería aplicar clases compatibles con dark mode a la navegación", async () => {
+    const app = createApp()
+    await app.init()
+
+    app.navigateTo("tasks")
+
+    const activeBtn = document.querySelector(".nav-btn[data-screen=\"tasks\"]")
+    const inactiveBtn = document.querySelector(".nav-btn[data-screen=\"home\"]")
+
+    expect(activeBtn.classList.contains("bg-xp-primary")).toBe(true)
+    expect(activeBtn.classList.contains("text-xp-darker")).toBe(true)
+    expect(activeBtn.classList.contains("bg-gray-200")).toBe(false)
+    expect(activeBtn.classList.contains("text-gray-700")).toBe(false)
+    expect(activeBtn.classList.contains("dark:bg-xp-card")).toBe(false)
+    expect(activeBtn.classList.contains("dark:text-gray-400")).toBe(false)
+
+    expect(inactiveBtn.classList.contains("bg-gray-200")).toBe(true)
+    expect(inactiveBtn.classList.contains("text-gray-700")).toBe(true)
+    expect(inactiveBtn.classList.contains("dark:bg-xp-card")).toBe(true)
+    expect(inactiveBtn.classList.contains("dark:text-gray-400")).toBe(true)
+    expect(inactiveBtn.classList.contains("bg-xp-primary")).toBe(false)
+    expect(inactiveBtn.classList.contains("text-xp-darker")).toBe(false)
+  })
+
+
   it("debería exponer la fachada usada por los handlers inline", async () => {
     const app = createApp()
     await app.init()

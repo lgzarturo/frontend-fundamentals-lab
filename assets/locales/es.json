@@ -13,7 +13,7 @@
     "screens": {
       "home": {
         "title": "Panel de Control",
-        "welcome": "¡Hola de nuevo, Desarrollador! 🎮",
+        "welcome": "¡Hola de nuevo! 🎮",
         "description": "Bienvenido a tu panel de productividad. Aquí puedes gestionar tus tareas, presupuestos, notas y hábitos en un solo lugar.",
         "hitCounter": "visitas",
         "quickAccess": {

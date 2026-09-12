@@ -6,6 +6,11 @@ import {
 } from "./templates.js"
 import { TagInput } from "../../components/tagInput.js"
 import { DueDatePicker } from "../../components/dueDatePicker.js"
+import { playCelebrationSound } from "../../utils/sound.js"
+import {
+  getExpandedSubtaskIds,
+  toggleSubtaskExpanded
+} from "../../utils/subtasksStorage.js"
 
 export class TasksModule {
   constructor(storage, eventBus, i18n) {
@@ -29,10 +34,12 @@ export class TasksModule {
     if (!this.container) return
 
     const filtered = this.getFilteredTasks(this.activeFilter)
+    const expandedIds = getExpandedSubtaskIds()
     this.container.innerHTML = taskListTemplate(
       filtered,
       this.activeFilter,
-      this.i18n
+      this.i18n,
+      expandedIds
     )
     this._updateFilterCounts()
   }
@@ -123,6 +130,14 @@ export class TasksModule {
     task.toggleSubtask(subtaskId)
     this._saveTasks()
     this.render()
+
+    const allDone = task.subtasks.length > 0 && task.subtasks.every(s => s.done)
+    if (allDone) {
+      playCelebrationSound()
+    }
+
+    this.eventBus.emit("task:subtask-toggled", { taskId, subtaskId, task })
+    this.eventBus.emit("task:updated", task)
     return task
   }
 
@@ -444,6 +459,9 @@ export class TasksModule {
     this.eventBus.on("task:update", taskId => this.showEditModal(taskId))
     this.eventBus.on("task:delete", taskId => this.deleteTask(taskId))
     this.eventBus.on("task:toggle", taskId => this.toggleTask(taskId))
+    this.eventBus.on("task:toggle-subtask", ({ taskId, subtaskId }) =>
+      this.toggleSubtask(taskId, subtaskId)
+    )
     this.eventBus.on("task:reorder", orderedIds =>
       this.reorderTasks(orderedIds)
     )
@@ -465,6 +483,16 @@ export class TasksModule {
           case "toggle-task":
             this.toggleTask(taskId)
             break
+          case "toggle-subtask": {
+            const subtaskId = target.dataset.subtaskId
+            this.toggleSubtask(taskId, subtaskId)
+            break
+          }
+          case "toggle-subtasks-expand": {
+            toggleSubtaskExpanded(taskId)
+            this.render()
+            break
+          }
           case "edit-task":
             this.showEditModal(taskId)
             break

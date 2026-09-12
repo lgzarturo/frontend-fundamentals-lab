@@ -137,19 +137,67 @@ function tagsHtml(tags) {
     .join("")
 }
 
-function subtasksHtml(subtasks) {
+function subtasksHtml(task, isExpanded = false) {
+  const subtasks = task?.subtasks || []
   if (!subtasks || subtasks.length === 0) return ""
   const done = subtasks.filter(s => s.done).length
   const pct = Math.round((done / subtasks.length) * 100)
+
+  const itemsHtml = subtasks
+    .map(
+      s => `
+        <div class="flex items-center gap-3 py-1 px-2 rounded-lg hover:bg-gray-100/70 dark:hover:bg-xp-darker/60 transition-colors">
+          <button
+            type="button"
+            data-action="toggle-subtask"
+            data-task-id="${task.id}"
+            data-subtask-id="${s.id}"
+            class="flex-shrink-0 w-3.5 h-3.5 rounded-[3px] border ${
+              s.done
+                ? "bg-xp-primary border-xp-primary"
+                : "border-gray-400 dark:border-gray-600 hover:border-xp-primary"
+            } flex items-center justify-center transition-colors cursor-pointer"
+            aria-label="${s.done ? "Desmarcar" : "Completar"} subtarea"
+          >
+            ${s.done ? '<span class="text-xp-darker text-[9px] font-bold leading-none">✓</span>' : ""}
+          </button>
+          <span class="text-xs ${
+            s.done
+              ? "line-through text-gray-400 dark:text-gray-500"
+              : "text-gray-700 dark:text-gray-300"
+          } select-none">
+            ${escapeHtml(s.text)}
+          </span>
+        </div>
+      `
+    )
+    .join("")
+
   return `
-    <div class="mt-2">
-      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-        <span>Subtareas ${done}/${subtasks.length}</span>
-        <span>${pct}%</span>
+    <div class="mt-2 pt-2 border-t border-gray-100 dark:border-xp-primary/10">
+      <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+        <button
+          type="button"
+          data-action="toggle-subtasks-expand"
+          data-task-id="${task.id}"
+          class="flex items-center gap-1.5 hover:text-xp-primary transition-colors cursor-pointer font-medium"
+          aria-expanded="${isExpanded}"
+        >
+          <span>📋 Subtareas ${done}/${subtasks.length}</span>
+          <span class="text-[10px] text-gray-400">${isExpanded ? "▲" : "▼"}</span>
+        </button>
+        <span class="font-mono text-[11px]">${pct}%</span>
       </div>
       <div class="w-full h-1 bg-gray-200 dark:bg-xp-darker rounded-full overflow-hidden">
         <div class="h-full bg-xp-primary transition-all duration-300" style="width: ${pct}%"></div>
       </div>
+      ${
+        isExpanded
+          ? `<div class="ml-2 pl-4 border-l-2 border-gray-200 dark:border-xp-primary/20 space-y-1 mt-2.5">
+              ${itemsHtml}
+            </div>`
+          : ""
+      }
     </div>
   `
 }
@@ -159,7 +207,7 @@ const CHECK_SVG =
   '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>' +
   "</svg>"
 
-export function taskCardTemplate(task, i18n) {
+export function taskCardTemplate(task, i18n, isExpanded = false) {
   const doneClass = task.done ? "opacity-60" : ""
   const titleClass = task.done
     ? "line-through text-gray-400 dark:text-gray-500"
@@ -216,7 +264,7 @@ export function taskCardTemplate(task, i18n) {
             ${raw(tagsHtml(task.tags))}
           </div>
 
-          ${raw(subtasksHtml(task.subtasks))}
+          ${raw(subtasksHtml(task, isExpanded))}
         </div>
 
         <div class="flex gap-1 flex-shrink-0">
@@ -289,12 +337,25 @@ export function emptyTasksTemplate(filter, i18n) {
   `
 }
 
-export function taskListTemplate(tasks, filter, i18n) {
+export function taskListTemplate(
+  tasks,
+  filter,
+  i18n,
+  expandedTaskIds = new Set()
+) {
   if (tasks.length === 0) {
     return emptyTasksTemplate(filter, i18n)
   }
 
-  const cards = tasks.map(task => taskCardTemplate(task, i18n)).join("")
+  const cards = tasks
+    .map(task =>
+      taskCardTemplate(
+        task,
+        i18n,
+        expandedTaskIds?.has ? expandedTaskIds.has(task.id) : false
+      )
+    )
+    .join("")
 
   return html` <div class="space-y-3">${raw(cards)}</div> `
 }
