@@ -2,6 +2,13 @@
 
 ## Historial de cambios
 
+### v1.0.1
+
+- feat: remove analytics.js script from index.html and add related test case
+- feat: implement subtask expansion and toggle functionality with localStorage persistence
+- feat: update project references to new domain and enhance SEO metadata
+- feat: soporte de codeconductor para agy
+
 ### v1.0.0
 
 - Merge pull request #31 from lgzarturo/module-13-modules-refactor
