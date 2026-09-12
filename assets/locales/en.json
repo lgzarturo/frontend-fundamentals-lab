@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "Productivity XP",
-    "tagline": "Level up your life",
+    "name": "Daily OS",
+    "tagline": "Your Personal Operating System",
     "menu": {
       "home": "Home",
       "budgets": "Budgets",
@@ -376,8 +376,8 @@
           }
         },
         "about": {
-          "title": "About Productivity XP",
-          "description": "A gamified productivity suite designed for developers and creators. Track your habits, manage budgets, organize tasks, and write notes - all with an XP-inspired aesthetic.",
+          "title": "About Daily OS",
+          "description": "Your personal operating system and daily productivity suite. Track habits with continuous streaks, manage budgets, organize tasks, and write Markdown notes with 100% browser privacy.",
           "version": "Version 1.0.0 | Built with ❤️ and ☕ by"
         }
       }

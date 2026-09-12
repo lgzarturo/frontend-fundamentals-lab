@@ -63,7 +63,7 @@ describe("AnalyticsTracker Service", () => {
   })
 
   it("trackSocialShare debería registrar compartir en redes sociales", () => {
-    tracker.trackSocialShare("twitter", "https://task-manager.lgzarturo.com/")
+    tracker.trackSocialShare("twitter", "https://task-manager.appsutiles.dev/")
 
     expect(window.dataLayer).toHaveLength(1)
     expect(window.dataLayer[0].event).toBe("share_app")

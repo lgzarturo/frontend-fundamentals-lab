@@ -1,1 +1,21 @@
-{"name":"Frontend Fundamentals Lab","short_name":"ff-lab","icons":[{"src":"/assets/images/favicon/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/assets/images/favicon/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+{
+  "name": "Daily OS - Tu Sistema Operativo Personal",
+  "short_name": "Daily OS",
+  "description": "Tu Sistema Operativo Personal - Suite de productividad diaria 100% privada en el navegador",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/assets/images/favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#1a1a1a",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

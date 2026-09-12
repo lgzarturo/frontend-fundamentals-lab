@@ -3,7 +3,7 @@
  */
 import { escapeHtml, html } from "../utils/html.js"
 
-export const DEFAULT_SHARE_URL = "https://task-manager.lgzarturo.com/"
+export const DEFAULT_SHARE_URL = "https://task-manager.appsutiles.dev/"
 export const DEFAULT_SHARE_TITLE = "Daily OS - Tu Sistema Operativo Personal"
 export const DEFAULT_SHARE_TEXT =
   "Organiza tu productividad diaria: tareas, hábitos con rachas, notas en Markdown y finanzas en una sola app moderna y 100% privada. 🚀"
@@ -66,7 +66,7 @@ export function shareModalTemplate(i18n = null, options = {}) {
           <div
             class="text-[11px] font-bold text-xp-primary uppercase tracking-wider mb-1"
           >
-            task-manager.lgzarturo.com
+            task-manager.appsutiles.dev
           </div>
           <h4
             class="font-bold text-sm text-gray-900 dark:text-gray-100 mb-1 line-clamp-1"

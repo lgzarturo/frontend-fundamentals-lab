@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "Productividad XP",
-    "tagline": "Sube de nivel tu vida",
+    "name": "Daily OS",
+    "tagline": "Tu Sistema Operativo Personal",
     "menu": {
       "home": "Inicio",
       "budgets": "Presupuestos",
@@ -376,8 +376,8 @@
           }
         },
         "about": {
-          "title": "Acerca de Productividad XP",
-          "description": "Una suite de productividad gamificada diseñada para desarrolladores y creadores. Seguimiento de hábitos, gestión de presupuestos, organización de tareas y escritura de notas - todo con un estilo inspirado en XP.",
+          "title": "Acerca de Daily OS",
+          "description": "Tu sistema operativo personal y suite de productividad diaria. Seguimiento de hábitos con rachas continuas, gestión de presupuestos, organización de tareas y notas en Markdown sin recopilación de datos externos.",
           "version": "Versión 1.0.0 | Hecho con ❤️ y ☕ por"
         }
       }
