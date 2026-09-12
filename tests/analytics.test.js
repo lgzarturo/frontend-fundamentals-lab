@@ -1,3 +1,5 @@
+import fs from "node:fs"
+import path from "node:path"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { AnalyticsTracker } from "../assets/js/analytics.js"
 
@@ -143,4 +145,11 @@ describe("AnalyticsTracker Service", () => {
       expect(window.dataLayer[1].platform).toBe("whatsapp")
     })
   })
+
+  it("index.html no debe cargar analytics.js como script clásico", () => {
+    const htmlPath = path.resolve(__dirname, "../index.html")
+    const html = fs.readFileSync(htmlPath, "utf-8")
+    expect(html).not.toMatch(/<script\s+src="[^"]*analytics\.js"[^>]*>/i)
+  })
 })
+
