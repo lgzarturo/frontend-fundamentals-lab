@@ -33,6 +33,25 @@
         "activity": {
           "title": "Recent Activity",
           "noActivity": "No recent activity to show"
+        },
+        "summary": {
+          "tasksToday": {
+            "one": "You have {n} task for today.",
+            "other": "You have {n} tasks for today."
+          },
+          "tasksPending": {
+            "one": "You have {n} pending task.",
+            "other": "You have {n} pending tasks."
+          },
+          "tasksNone": "You have no pending tasks.",
+          "budgetProgress": "Your savings “{name}” are at {percent}%.",
+          "budgetNone": "You have no savings goals yet.",
+          "habitsToday": {
+            "one": "Today you completed {done} of {total} habit.",
+            "other": "Today you completed {done} of {total} habits."
+          },
+          "habitsNone": "You have no habits yet.",
+          "usage": "You have visited the app {visits} times and performed {interactions} actions."
         }
       },
       "budgets": {

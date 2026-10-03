@@ -1,11 +1,14 @@
 import { getTodayString } from "../../utils/date.js"
+import { VisitTracker } from "../../services/visitTracker.js"
+import { buildSummary } from "./summary.js"
 import {
   activityItemTemplate,
   emptyActivityTemplate,
   emptyHabitsTemplate,
   emptyMITsTemplate,
   habitItemTemplate,
-  mitItemTemplate
+  mitItemTemplate,
+  summaryTemplate
 } from "./templates.js"
 import {
   getExpandedSubtaskIds,
@@ -22,6 +25,8 @@ export class HomeModule {
 
   init() {
     this.container = document.getElementById("home-screen")
+    const tracker = new VisitTracker()
+    this.storage.setVisits(tracker.getState().totalVisits)
     this._bindEvents()
   }
 
@@ -41,6 +46,7 @@ export class HomeModule {
     this._renderHabits(todayHabits, maxStreak)
     this._renderStats(taskStats, budgetStats, notes.length)
     this._renderActivity(tasks, notes)
+    this._renderSummary()
   }
 
   /**
@@ -148,14 +154,35 @@ export class HomeModule {
       : emptyActivityTemplate()
   }
 
+  _renderSummary() {
+    const el = document.getElementById("home-summary")
+    if (!el) return
+    this.storage.setVisits(new VisitTracker().getState().totalVisits)
+    const entries = buildSummary({
+      tasks: this.storage.get("tasks") || [],
+      habits: this.storage.get("habits") || [],
+      budgets: this.storage.get("budgets") || [],
+      usage: this.storage.getUsage(),
+      today: getTodayString()
+    })
+    el.innerHTML = summaryTemplate(
+      entries.map(({ key, params }) => this.i18n.t(key, params))
+    )
+  }
+
+  _countInteraction() {
+    this.storage.incrementInteractions()
+    this.render()
+  }
+
   _bindEvents() {
-    this.eventBus.on("task:created", () => this.render())
-    this.eventBus.on("task:toggled", () => this.render())
-    this.eventBus.on("task:updated", () => this.render())
+    this.eventBus.on("task:created", () => this._countInteraction())
+    this.eventBus.on("task:toggled", () => this._countInteraction())
+    this.eventBus.on("task:updated", () => this._countInteraction())
     this.eventBus.on("task:subtask-toggled", () => this.render())
-    this.eventBus.on("habit:toggled", () => this.render())
-    this.eventBus.on("budget:created", () => this.render())
-    this.eventBus.on("note:created", () => this.render())
+    this.eventBus.on("habit:toggled", () => this._countInteraction())
+    this.eventBus.on("budget:created", () => this._countInteraction())
+    this.eventBus.on("note:created", () => this._countInteraction())
 
     // Delegación para completar MITs, subtareas y hábitos desde la vista de inicio
     if (this.container) {

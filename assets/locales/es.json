@@ -33,6 +33,25 @@
         "activity": {
           "title": "Actividad Reciente",
           "noActivity": "No hay actividad reciente"
+        },
+        "summary": {
+          "tasksToday": {
+            "one": "Tienes {n} tarea para hoy.",
+            "other": "Tienes {n} tareas para hoy."
+          },
+          "tasksPending": {
+            "one": "Tienes {n} tarea pendiente.",
+            "other": "Tienes {n} tareas pendientes."
+          },
+          "tasksNone": "No tienes tareas pendientes.",
+          "budgetProgress": "Tu ahorro «{name}» va al {percent}%.",
+          "budgetNone": "Aún no tienes metas de ahorro.",
+          "habitsToday": {
+            "one": "Hoy completaste {done} de {total} hábito.",
+            "other": "Hoy completaste {done} de {total} hábitos."
+          },
+          "habitsNone": "Aún no tienes hábitos registrados.",
+          "usage": "Has visitado la app {visits} veces y realizado {interactions} acciones."
         }
       },
       "budgets": {

@@ -121,6 +121,7 @@ export const demoData = {
       updatedAt: Date.now()
     }
   ],
+  usage: { visits: 0, interactions: 0 },
   settings: {
     theme: "dark",
     currency: "MXN",

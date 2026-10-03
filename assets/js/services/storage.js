@@ -90,6 +90,42 @@ export class StorageService {
   }
 
   /**
+   * Obtiene los contadores locales de uso
+   * @returns {{visits: number, interactions: number}}
+   */
+  getUsage() {
+    if (!this.cache) {
+      this.init()
+    }
+    const usage = this.cache.usage || {}
+    return {
+      visits: Number(usage.visits) || 0,
+      interactions: Number(usage.interactions) || 0
+    }
+  }
+
+  /**
+   * Suma una interacción y persiste
+   */
+  incrementInteractions() {
+    const usage = this.getUsage()
+    this.cache.usage = { ...usage, interactions: usage.interactions + 1 }
+    this.save(this.cache)
+  }
+
+  /**
+   * Actualiza el contador de visitas; solo persiste si cambió
+   * @param {number} count - Total de visitas
+   */
+  setVisits(count) {
+    const n = Number(count) || 0
+    const usage = this.getUsage()
+    if (usage.visits === n) return
+    this.cache.usage = { ...usage, visits: n }
+    this.save(this.cache)
+  }
+
+  /**
    * Exporta los datos como una cadena JSON
    * @returns {string} Datos JSON
    */
@@ -232,6 +268,7 @@ export class StorageService {
       tasks: [],
       notes: [],
       habits: [],
+      usage: { visits: 0, interactions: 0 },
       settings: {
         theme: "dark",
         currency: "MXN",

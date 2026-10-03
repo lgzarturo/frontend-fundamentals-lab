@@ -190,3 +190,9 @@ export function emptyActivityTemplate() {
     </div>
   `
 }
+
+export function summaryTemplate(lines) {
+  return lines
+    .map(line => html`<p class="text-sm text-gray-700 dark:text-gray-300">${line}</p>`)
+    .join("")
+}
