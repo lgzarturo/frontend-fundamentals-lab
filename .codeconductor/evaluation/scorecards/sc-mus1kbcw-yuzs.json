@@ -1,0 +1,71 @@
+{
+  "id": "sc-mus1kbcw-yuzs",
+  "taskId": "BC-006",
+  "agent": "reviewer",
+  "model": "opencode-go/deepseek-v4.1-flash",
+  "contractVersion": "1.6.0",
+  "criteria": [
+    {
+      "id": "acceptance",
+      "label": "Acceptance criteria met",
+      "weight": 0.3,
+      "score": 2,
+      "notes": "FR coverage 100%, SC coverage 28.6%",
+      "autoSuggested": true
+    },
+    {
+      "id": "minimal_diff",
+      "label": "Minimal diff (no scope creep)",
+      "weight": 0.2,
+      "score": 0,
+      "notes": "Files outside scope: .codeconductor/openspec-state.json, BACKLOG.md, openspec/changes/bc-006-dashboard-de-telemetr-a-y-resumen-de-uso/design.md, openspec/changes/bc-006-dashboard-de-telemetr-a-y-resumen-de-uso/proposal.md, openspec/changes/bc-006-dashboard-de-telemetr-a-y-resumen-de-uso/specs/delta.md",
+      "autoSuggested": true
+    },
+    {
+      "id": "tests",
+      "label": "Tests present and passing",
+      "weight": 0.15,
+      "score": 2
+    },
+    {
+      "id": "regressions",
+      "label": "No regressions introduced",
+      "weight": 0.15,
+      "score": 2
+    },
+    {
+      "id": "conventions",
+      "label": "Code follows project conventions",
+      "weight": 0.05,
+      "score": 2
+    },
+    {
+      "id": "documentation",
+      "label": "Documentation updated if required",
+      "weight": 0.05,
+      "score": 2
+    },
+    {
+      "id": "context_discipline",
+      "label": "Context discipline",
+      "weight": 0.05,
+      "score": 2
+    },
+    {
+      "id": "cc_gain",
+      "label": "Complexity diffusion (cc-gain)",
+      "weight": 0.05,
+      "score": 2,
+      "notes": "cc-gain raw=6.800000000000001, verdict=positive",
+      "autoSuggested": true
+    }
+  ],
+  "weightedScore": 1.6,
+  "verdict": "REJECT",
+  "findings": [
+    "Scope creep detected in 6 file(s)."
+  ],
+  "createdAt": "2026-10-03T06:59:20.632Z",
+  "backlogId": "BC-006",
+  "source": "manual"
+}

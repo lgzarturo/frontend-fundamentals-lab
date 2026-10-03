@@ -1,0 +1,554 @@
+{
+  "schemaVersion": 1,
+  "harnessVersion": "1.6.0",
+  "cliVersion": "1.6.0",
+  "installedAt": "2026-10-03T06:11:54.290Z",
+  "updatedAt": "2026-10-03T06:11:54.290Z",
+  "targets": {
+    "claude": {
+      "version": "1.6.0"
+    }
+  },
+  "managedFiles": {
+    ".claude/CLAUDE.md": {
+      "installedHash": "sha256:5fdb05628ac1674d0b449f64802fb7c6f20555a95aa26b98ae574b8832cbc6da",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/settings.json": {
+      "installedHash": "sha256:a9aab42eaa4d1fc1612cd3d9b719f2893117afe53c5e59b5466066811c27099b",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/hooks/invoke-hook.cjs": {
+      "installedHash": "sha256:bfddcc68fa94b1b8edc2b8d586a4494e7e2d40c71908614ccc85ae72a05a79b4",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude.json": {
+      "installedHash": "sha256:5788997b2f5746fca0563105eca9ecc24b83d4f364c5707e3fa85ea260238c9f",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/api-contract.md": {
+      "installedHash": "sha256:a739ba709a1a2b13a6dbfe0ddfa33610725ae4280c4cd61cd80090bc2cc6a9eb",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/ask.md": {
+      "installedHash": "sha256:758e4da48fc8e8bfe7f926937e120e9953df1390e207cf7f6b1580e7495a2f7b",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/backlog.md": {
+      "installedHash": "sha256:ba8386b6fa17750bb5393133bbcfc1a65190f4929d5b1b67b0a92c8ecc5e0c3e",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/clarify.md": {
+      "installedHash": "sha256:7d8ba79984d2cfab5370d48f1ea3f5c3153517237326eb4bc61ea762cf9ceb52",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/council.md": {
+      "installedHash": "sha256:a2192ac8f30bbba54927e0a55e02482f0ec9acadb6e7f45c3de72cebf7024dfd",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/db-migration.md": {
+      "installedHash": "sha256:1d4d26f36350a1c58361de0ac4686cf97389b42b294f31365ca5044ba91dc4c1",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/explore.md": {
+      "installedHash": "sha256:7e569687c17e46f79be737bd7cb9b5a6368aae5b2b1bc69662d6ecef7130c1a7",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/feature.md": {
+      "installedHash": "sha256:d98dd2280629b7a81d4b5b8d66ed619a155416fea67868bdc87ca740a81b6e5f",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/fix.md": {
+      "installedHash": "sha256:e663763ab39389033224b968b76df8fb80c0eb22141d4716a3c6ba3a05482c37",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/handoff.md": {
+      "installedHash": "sha256:578cc8ce66eb0ea9670a347357d330884481b60fdafea1f1a471c9d8fe41508d",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/iterative.md": {
+      "installedHash": "sha256:95fc1463dd8cb61486390033fd0c2dc25b9708cdf86a45dc20f875382a076c5c",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/odd.md": {
+      "installedHash": "sha256:9b877902ecdd87b650519bd8c334a3b31ee920c552ef0ae6c12750ae6e125129",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/openspec.md": {
+      "installedHash": "sha256:f0acc57bac9299f069c43b04cf168c3b9a660b8f6da4cc2de5d24e642460546f",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/pagespeed.md": {
+      "installedHash": "sha256:32423a5a91cda49d6cc452962322732328848f401e2e918ff4539967a0afc103",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/prototype.md": {
+      "installedHash": "sha256:35800cb8b1dd050c91ce98dfafc63cd12f43e3c046ae5742811d903bbd10ba68",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/refactor.md": {
+      "installedHash": "sha256:97838fdfa84fd3e7888bc3a94b61e7fc530270a04215f80aef878eecc7266343",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/review.md": {
+      "installedHash": "sha256:4cab53c11d7a185678affe07739a11b0887f1bef11f961d8c89061643b929f74",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/scorecard.md": {
+      "installedHash": "sha256:406d8f87869ff111510992ef2c92f0795d5da81a08131aeac71ae3cad92e700c",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/security.md": {
+      "installedHash": "sha256:4ace04df46119c8e63869c31629c04d00d69de15c627f2970be243a720f6d1f8",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/spec-mutation.md": {
+      "installedHash": "sha256:4fb0a96dee836f0f3d64cb00de881e2d2cc112e4ba97518766eafa7bfd797eba",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/tdd-cycle.md": {
+      "installedHash": "sha256:7f28d3bdb13088706a2636f78f94bda4f77dae1e99164b7fa5630d4d5887b4f5",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/test-plan.md": {
+      "installedHash": "sha256:33138802f0f077700a09424af3dd35d594e1d4ef3da347496283be579ea950e1",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/commands/cc/triage.md": {
+      "installedHash": "sha256:bd521fd000cb22db78c924c06ecc3f7b6c51abd8f77f3fcd27b1781ad0d76745",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/android-ui-design/SKILL.md": {
+      "installedHash": "sha256:da2efe1df634e6aaa7456e7c254ab315d5d9dee9e71596c5c739d6e2c4283c3b",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/android/SKILL.md": {
+      "installedHash": "sha256:7d018d45381f0637e1ba125718f4707f7604ae98347c731bb4425b4027121932",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/api-versioning/SKILL.md": {
+      "installedHash": "sha256:a67e0d7c5984de9edf0bdb234b048a89748477de386407a1e4f9951477632528",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/astro/SKILL.md": {
+      "installedHash": "sha256:352f5d735d4ff1658f23ccc1af82771d366e878a54dfdde72adda1bb054e5919",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/auth-token-inspector/SKILL.md": {
+      "installedHash": "sha256:afcfebffe6ec27c6a97daf502b2ed7d702b88805a22aa966491c4063325058b5",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/backlog/SKILL.md": {
+      "installedHash": "sha256:a4e7d968f3e6f0c5a0d2d58a56c3544a1f0a5a4b0aa45005de44587c005ced33",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/code-review/SKILL.md": {
+      "installedHash": "sha256:ff32123a9bee5802b4f2d4d4dacfbbb7c79ffb24231d3505defed1d4e3234766",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/conductor-setup/SKILL.md": {
+      "installedHash": "sha256:dc97289668f4333ad3ad762672719867be411caf7abd74670f33efe8c6a7fc2e",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/django-orm/SKILL.md": {
+      "installedHash": "sha256:e9569d688eade008919692ee2ee1341eb5da85c646d4f4b2d5b2e35a789fe10a",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/django-testing/SKILL.md": {
+      "installedHash": "sha256:9712fdf72ef0f4a2a4582ff7551c8cd67994ff39e8cb547cd4fa7e64bd226904",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/django-uv/SKILL.md": {
+      "installedHash": "sha256:a3946cad42d4d21b528a3d3b5f236037665e414e3164ce1a6fbd756c43d05133",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/drizzle-schema-architect/SKILL.md": {
+      "installedHash": "sha256:73bc335e4e8d118e51600397215563b3e4d9ff771a1e472042b396f121d16a60",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/evaluation/SKILL.md": {
+      "installedHash": "sha256:d252a6c4f11d4de587fe0b00d0be4235bc634ad4f8f5f744f289c23e8f5b72e6",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/fastapi-pydantic-strict/SKILL.md": {
+      "installedHash": "sha256:44eec426c91212bf42fa3066a411a23330fc0a6b6391580450fc9c787b6aedf3",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/find-skills/SKILL.md": {
+      "installedHash": "sha256:1e85f6f9686e145aca4a124e3b704b9bbea9aa87e08515c1e352eee70f6e6e7a",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/jpa-nplusone-detector/SKILL.md": {
+      "installedHash": "sha256:19ce67c4f9116f1734f0af4428bdb22d70d4d1668a00337609865766e45bd3da",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/jpa-postgres/SKILL.md": {
+      "installedHash": "sha256:a77c94e1c852452522b91ada9b8372e39006803aa021c433b7b2cd47c97d5127",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/laravel-specialist/SKILL.md": {
+      "installedHash": "sha256:eb3c286d02b4a314a1ffd73b796fb433e94d7628783820e9fb6a5eb2f92eda2d",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/laravel-specialist/references/eloquent.md": {
+      "installedHash": "sha256:2b38872ceacd35e607d577dc26d58a7b8f5c740c4488c68c70b7e71e0be60b2b",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/laravel-specialist/references/livewire.md": {
+      "installedHash": "sha256:940d3fff5da545ed9f27027c80e1ec03109d6956dd85421d7d7b6ca50563b10c",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/laravel-specialist/references/queues.md": {
+      "installedHash": "sha256:2d949cc5d3a37a8ce8582186c7defc6afa1c9288ab96eb150dc77db720cfd134",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/laravel-specialist/references/routing.md": {
+      "installedHash": "sha256:108ebc7524de46262914bbfe3a754252858d5029dcc0b91be980fc15329986e1",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/laravel-specialist/references/testing.md": {
+      "installedHash": "sha256:ae6bb2b11e4a44146dbaaea437eeb91a3aa28e304139ad0308d5bfcc424d32da",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/livewire-alpine-bridge/SKILL.md": {
+      "installedHash": "sha256:00ca48d60e84ecffaf0df3a83004297999799f52294687419f94ac363a07eab1",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/multi-agent-orchestration/README.md": {
+      "installedHash": "sha256:290844aeeefdd38673d145c7d028645acdb28362598e1ce9f0c9e3928818eae0",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/multi-agent-orchestration/SKILL.md": {
+      "installedHash": "sha256:95de66280782b45552e3709b7892db822b3d6a23e0eb343bd8fc1e8289dc543d",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/multi-agent-orchestration/examples/framework_implementations.py": {
+      "installedHash": "sha256:fb9dd46d037c0900384a69f3edf3f9b13fe12f7eb76a17e21d63375af8074108",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/multi-agent-orchestration/examples/orchestration_patterns.py": {
+      "installedHash": "sha256:40ce94929b83e53665d6d489216b81f3a1b7a4a7901c625c5c6e47b19a194bab",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/multi-agent-orchestration/scripts/agent_communication.py": {
+      "installedHash": "sha256:71c7bb33a97823a42b6790310f7bdbc3dddf6d8c0b824e4a631fbd831ff8aa02",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/multi-agent-orchestration/scripts/benchmarking.py": {
+      "installedHash": "sha256:2324fa946781f81e8793aba0aad2b8ade8cbaf17a78edb33fc3daccbad2ffcda",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/multi-agent-orchestration/scripts/workflow_management.py": {
+      "installedHash": "sha256:e0d6aa9eb61f07c0d4f12a8da4d04a6fd7c87f31eab6ce94e196cf729f5312e9",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/nextjs-typescript/SKILL.md": {
+      "installedHash": "sha256:10632ec891e63e736edc915367dce1a1c78fe52af1493b7827905cd6afbfd394",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/openspec/SKILL.md": {
+      "installedHash": "sha256:6f5b14ff1ee2e896c7682edcc265cfab8a922c8b7c39f3e0bbc995bce22a33f6",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/pagespeed-insights/SKILL.md": {
+      "installedHash": "sha256:6a7bba6e5e59d1278ed5f515842ae6683ef0f9245c9a10e87c95d10310af3119",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/pagespeed-insights/reference.md": {
+      "installedHash": "sha256:afa03220b772ea8d6393f7366bbd6d90200c0b56585ccb2bb714e622af07345f",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/pagespeed-perf/SKILL.md": {
+      "installedHash": "sha256:8231d72ca2772ccddcf703a488b88233cbae242b7d613f4bf8c7805e43da66da",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/php-pro/SKILL.md": {
+      "installedHash": "sha256:6aa71a7bd4129ab0bf1921a9402bcb441cd31513ffa10406f539b8959a525d10",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/php-pro/references/async-patterns.md": {
+      "installedHash": "sha256:3d75c066c70ba0fe18c7e3ccb1063953fc910ee71952a85e04d3ef62492c67a6",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/php-pro/references/laravel-patterns.md": {
+      "installedHash": "sha256:39c4e9e9e564a0fcbc1d6bf34dce0fd2e3568f5fca75d40921e7f2eacf6f3a39",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/php-pro/references/modern-php-features.md": {
+      "installedHash": "sha256:04a6a64dad160622eb1f8465e842681aad8c97261f39383195566aac59fae159",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/php-pro/references/symfony-patterns.md": {
+      "installedHash": "sha256:fa9f01da37e3f0d1981e5ec3af3ea51edf20d4f1ea6e3f85f436ca73ee5a2ba2",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/php-pro/references/testing-quality.md": {
+      "installedHash": "sha256:922245444396b5f2aebf1eda3825d616de1f879cd6413d86e9eb30f06c041de0",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/python-django-stack/SKILL.md": {
+      "installedHash": "sha256:22f0260715f8ebdfbbc31b6b4df5f4f96247399bd54dd4d0c8051feb86130ddb",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/python-fastapi-stack/SKILL.md": {
+      "installedHash": "sha256:d76ee7654fe74541b52c18b5055207bb4a9497ebcb75a35d9fe6e8a5dbb2a05e",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/python/SKILL.md": {
+      "installedHash": "sha256:f480e6ca5c050bc438875fc451bae6b4382f85d5a31c9e49156fd095dbc11e16",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-ai-llm/SKILL.md": {
+      "installedHash": "sha256:5265a85843e9c6fd75ed698f9b7300e9d3c7321bf9df293d68e4252698099782",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-blue-team/SKILL.md": {
+      "installedHash": "sha256:2ec5a37566451d7bfba7a7f2b8020b93acfc188d3280efcb1fda3ca712c8cc71",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-cloud/SKILL.md": {
+      "installedHash": "sha256:e323d30648ab2983e8a6bd6a2c04763a4877448a1047ae8e62fde725e08b5a1d",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-crypto/SKILL.md": {
+      "installedHash": "sha256:681b33d7c973abdddbf4935448ab5d8321d980b12a6ea69209f6b411ae11f8e9",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-exploit-dev/SKILL.md": {
+      "installedHash": "sha256:04cf5854faf852fd26b785624a7e9008e01a4d708ae27b615f66e85428554594",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-grc/SKILL.md": {
+      "installedHash": "sha256:b581f54f09c2695dc103bbfd00ca2f55e33b4c2cd0455cb32b0ca8ecb217cc09",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-incident-response/SKILL.md": {
+      "installedHash": "sha256:b7768e63c4a583e18da98c38d0bc86f460f8a12dcf36968035f7bf478bb092cb",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-log-analysis/SKILL.md": {
+      "installedHash": "sha256:a7e89999e4b389eb40f136acbbd5a57403fcd3ea1f463eb3c1d64ed84a551459",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-malware-analysis/SKILL.md": {
+      "installedHash": "sha256:f5d7b4ac66e1dd73721230a1c27b83ab58ecf40f3da2e2de06232448eed5871c",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-mobile/SKILL.md": {
+      "installedHash": "sha256:2cbda01fffbe628fac27a0426d1dbc71fddad7f8fb52ec8d88b6c49ec7848f77",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-network/SKILL.md": {
+      "installedHash": "sha256:f0dd1e7cb84310a0a55ac7dbef6defa4fffd621a89f2e8a671685189cce9583c",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-ot-ics/SKILL.md": {
+      "installedHash": "sha256:b77c64a31fb0af79034fe4ad3194831749833f3a3f6a35b30808db13478edede",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-recon/SKILL.md": {
+      "installedHash": "sha256:07617fba79641e566ab5ee7bcb1f68145f91ac3da3e234b9bcc3ea8b9a2b9f17",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-red-team/SKILL.md": {
+      "installedHash": "sha256:36bc9bec67f34eba4e576271b25625f640a1879de508837fed3cbe59cf5069da",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-reverse-engineering/SKILL.md": {
+      "installedHash": "sha256:8cb11a8b42a957d9121fc6d89905b12ea883ae531ee1a50ed9a6697b677e7d6b",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-soc-automation/SKILL.md": {
+      "installedHash": "sha256:d3191afe648a2e575f65e696d414191e378ff09f3603ff8fc0f007d20a7fe6fc",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-threat-hunting/SKILL.md": {
+      "installedHash": "sha256:c518ff01e3af9ad6d8bce96efd240ff9eeb2fe44a209b272f6fa8c9a4d6b288a",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-vuln-assessment/SKILL.md": {
+      "installedHash": "sha256:0354a0a8648520c8a472085f33e3dd57355a4d42b9a35ecf40da57102ad61be9",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security-web/SKILL.md": {
+      "installedHash": "sha256:8b5fb269d8cb7c66d84b06adef97b7d3cf32ad958bd2f93500d3bc6fd7837664",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/security/SKILL.md": {
+      "installedHash": "sha256:849a5c022eee607e291d524c676f9d0a488f195bd0455dbf04b956a97cafdf6f",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/seo-analytics-injector/SKILL.md": {
+      "installedHash": "sha256:d635e11fb7af7b634cdd73be44872607c82f39eb3212469b554907a227e085f6",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/spring-auth-auditor/SKILL.md": {
+      "installedHash": "sha256:5173fcee8d19061d9c95ff309eeefd27ec45bf5826ed4915040830d7ea0d79f3",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/spring-boot-feature/SKILL.md": {
+      "installedHash": "sha256:9b930e1fa0f4449ae113b8d4603a5b59372558c1b290149a0219ece87256a248",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/spring-boot-kotlin/SKILL.md": {
+      "installedHash": "sha256:3b3de548748b53a8faad2253b49746cc6418bd7b31a63486e01a7c7b4630023b",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/spring-boot-testing-strategy/SKILL.md": {
+      "installedHash": "sha256:447d3f98ee2f2f19a0ff3b91ed7d3ccd42528fbaa2ce52c55d546aa7d2700dd3",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/sqlalchemy/SKILL.md": {
+      "installedHash": "sha256:01b72ec47cd8f00dcdd48cfa38b021095f6f39b416196e2cf16b4dcb233ecfb2",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/tailwind-responsive-auditor/SKILL.md": {
+      "installedHash": "sha256:8d65072dc138b92680b506f339dcd5d6890c98bef6a7cba26c40464b7f938562",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/tdd-mutation-tester/SKILL.md": {
+      "installedHash": "sha256:41ec0304509df921b7e5622d6407a8e3ef818303f8073d41ab3ea8e28befa111",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/testing-strategy/SKILL.md": {
+      "installedHash": "sha256:4f624e550c13482b59ff29d386cce48b8f5f23e23389c65553d70e1776ee9c05",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/testing-tdd/SKILL.md": {
+      "installedHash": "sha256:ad5e835d48f7efbdb6c3e1e84ddec2c790cf3aba01b39b6022a830f6cd9893f2",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/using-cc-skills/SKILL.md": {
+      "installedHash": "sha256:a7364e48b357137032a6ea4157d889f93101b2edddda0e3bcbdc030fe83f1058",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/web-design-engineering/SKILL.md": {
+      "installedHash": "sha256:e54a060ec7107b386beaeb381d26e2c3aa455ea2a96d35eeefff853d50e1a731",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/workflow-orchestration-patterns/SKILL.md": {
+      "installedHash": "sha256:f4418f98189bd89d7b801ec65df48b53caa1c555a23f1d9684799415818f1024",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/skills/workflow-orchestration-patterns/references/details.md": {
+      "installedHash": "sha256:f904309ab60916d3e6943a2c35ffeadc48ddfa6a3defdd8da5472926ba8887cb",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/architect.md": {
+      "installedHash": "sha256:384899230debfded109bb8e7fa5b9d3081c4d3632167ec442f42ce5b58ae866c",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/complexity-auditor.md": {
+      "installedHash": "sha256:8ce920050323cf0d4c33a8db4762d24d7a535cc3b1f5f1241f6cdeb9643f65f7",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/contract-builder.md": {
+      "installedHash": "sha256:e12d4d0ad189ad720d539344e34c42846d638711d130576d5b13af1d1cc3f169",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/devil.md": {
+      "installedHash": "sha256:25adf1013f8ca89d9c4b3eb8a4bf04b92b0a7661aa6ee52ab4332069b738efdf",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/docs.md": {
+      "installedHash": "sha256:78af56bcb183554d199cac59284051da33e26afc9aa43359ecedb705976efe03",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/goal-planner.md": {
+      "installedHash": "sha256:f7ccfb942be52bd644bf99f64ec467da3a35ac2df439b82189dae3004afa938b",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/implementer.md": {
+      "installedHash": "sha256:f328798fc58d11c2e4e4dad4a5ce9130880d858eba7b0ea8071db0f07a85b556",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/orchestrator.md": {
+      "installedHash": "sha256:8c071b045b537ec08827815276ba62b7f2bab05783d3d3078c48af359c85e36f",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/planner.md": {
+      "installedHash": "sha256:a16042c9b708def21be89597160a87fc5913c6ed64f57378a4f8ed437455d812",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/repo-explorer.md": {
+      "installedHash": "sha256:199cf64f506070ca56cbee84ab6b49b71b780bcc934ba20e61e6df78f4543515",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/reviewer.md": {
+      "installedHash": "sha256:bf64a99f568048ee7daedd1c0b9dc081720dec14c4f2b82d3382e2b0bac67236",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/security-reviewer.md": {
+      "installedHash": "sha256:7b88fbd4e6420c3d25b956f1c782ff1b81e12e866b821f69f96c68f5809a11ee",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/task-coach.md": {
+      "installedHash": "sha256:f49b1225f6ad83055954c8735d6baac2e4dde1945f16e97c285b933f07f4dbe4",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/agents/tester.md": {
+      "installedHash": "sha256:7f0c96cb68c55a8bc1889b915480243c6e4744cdf0b5d573180b447176130cc0",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/README.md": {
+      "installedHash": "sha256:451bee30dc10afdb4b361c266f5245bfbb32a09117088f62cd6dc10fe2b6e388",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/architect.md": {
+      "installedHash": "sha256:9da0e67b5910515b8557e49cda8353749b80f4ef4f84af216b7cdf1ba4a875b2",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/complexity-auditor.md": {
+      "installedHash": "sha256:37238f91790d8fbac8c0b546e5da541b9de44c21f39a8aff0f4fc4fa8fa5658f",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/contract-builder.md": {
+      "installedHash": "sha256:d92084712853003c1b424e5356184b6734b7756b3a20eab6aff66e4c9e5171ec",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/devil.md": {
+      "installedHash": "sha256:491a8015431559965c0ae10e1ba7755860dd1afb30e3ebfeee71b048befe9f24",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/docs.md": {
+      "installedHash": "sha256:97afff24995fd66c173e5c62cdd7948935e796a74a314acb37f94efee6300261",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/goal-planner.md": {
+      "installedHash": "sha256:901a3a4544c443aec5cfeeebe4ce3eb67cb3839889ada2cc52a109363ae4099d",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/implementer.md": {
+      "installedHash": "sha256:2d89676faacf62ab448ed32b34da7472a377488dd4063a5ef7e01a8a11ef8f47",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/orchestrator.md": {
+      "installedHash": "sha256:bff04f89e1cf898840add6d10caaf0cc03a500e3907a7b5d4d49f92daeb11db4",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/planner.md": {
+      "installedHash": "sha256:db03be410fcde17599428ccab31329c9834e9652d85af83da4d134a382fe03e6",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/repo-explorer.md": {
+      "installedHash": "sha256:9ecdf44fcbac5bc52ed9d94353eade5a6004537f11ab869e05a5c2c8fe2c940f",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/reviewer.md": {
+      "installedHash": "sha256:07eb7b7e819b13a10b22ab5db0ca50fa67e65710b0aff6ceed4b516d9a444550",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/security-reviewer.md": {
+      "installedHash": "sha256:2061116c86db68a367d145293d81303ce1d9d9077d5ef2bc8d556d4e20ed85bf",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/task-coach.md": {
+      "installedHash": "sha256:a1ba38af4cfd77914e301a6f30b3c7ba5c5c4a075005d22f225e3a1d538f01a8",
+      "sourceVersion": "1.6.0"
+    },
+    ".claude/prompts/v1.0.0/tester.md": {
+      "installedHash": "sha256:7d10b0fde7fce5831b3dbead1ead6b4746d6d519e6b7b23b1ed42ae1cfc913c4",
+      "sourceVersion": "1.6.0"
+    }
+  }
+}

@@ -12,11 +12,11 @@ Agregar un contador de uso y métricas locales para mostrar un panel/dashboard. 
 
 ## Capabilities
 
-- **New Capabilities:** (to be refined in design phase)
-- **Modified Capabilities:** (to be refined in design phase)
+- **New Capabilities:** contadores de uso persistentes; resumen narrativo en Inicio.
+- **Modified Capabilities:** `StorageService` (clave `usage`); `HomeModule` (conteo y render del resumen).
 
 ## Impact
 
-See design.md for technical impact.
+Ver design.md. Archivos adicionales al Scope original: `index.html`, `assets/locales/*.json`, `home/summary.js`.
 
 **Out of scope:** Guardado en servidores remotos o analíticas de terceros.

@@ -1,0 +1,1766 @@
+{
+  "id": "ev-rdd-BC-006-1791010780992",
+  "source": "cc rdd",
+  "type": "rdd",
+  "timestamp": "2026-10-03T06:59:40.992Z",
+  "relatedTask": "BC-006",
+  "confidence": 0.9,
+  "summary": "RDD review receipt captured",
+  "data": {
+    "rddReceipt": {
+      "version": 1,
+      "taskId": "BC-006",
+      "phase": "review",
+      "paths": [
+        {
+          "path": ".agents/AGENTS.md",
+          "hash": "e65d65786b5c10b65163d79f8b2c0c01f8a4db42d023f488f0ca6f1ea5b94b11"
+        },
+        {
+          "path": ".agents/agents/architect.md",
+          "hash": "0b8c845ded269dd0544ff72e2032c270e10fa4c36f13497ed3511241d16c8bd6"
+        },
+        {
+          "path": ".agents/agents/complexity-auditor.md",
+          "hash": "53c8cccfb60d5fa1931a35c4dbbf82f3afe91213889562566488b59a703052d8"
+        },
+        {
+          "path": ".agents/agents/contract-builder.md",
+          "hash": "4bc4a4b4c527946e39b3902e3db4bbe67cd7c4de63e08b27b874b29088007dab"
+        },
+        {
+          "path": ".agents/agents/council-architect.md",
+          "hash": "d807649aa65ceae74b467fa9e1f0c34e80eeb1b6c3ba3530668e40ec1993c26f"
+        },
+        {
+          "path": ".agents/agents/council-data-ops.md",
+          "hash": "7f22c600657fe8c9c654b538ca5f463f2f06dd5eed1ca643daac5fa6df5279fc"
+        },
+        {
+          "path": ".agents/agents/council-delivery.md",
+          "hash": "278c0ecb67a1a81b096f26652ff9e9a27b263b295161d9cb7e2756722be05386"
+        },
+        {
+          "path": ".agents/agents/council-devil.md",
+          "hash": "c333d8db4012ff325d81effd1e7e78dfc0b53f585f5f8041e045b9be0415480d"
+        },
+        {
+          "path": ".agents/agents/council-product.md",
+          "hash": "efdf8868fbbbfe8dab2ad0ebe7fcad0daf8ef4c8468c770e450318ee94729fed"
+        },
+        {
+          "path": ".agents/agents/council-security-reviewer.md",
+          "hash": "664ee68be69d5bcc46f903deadb34fa2fd7c4d9f9e184afef6e69d719da94403"
+        },
+        {
+          "path": ".agents/agents/devil.md",
+          "hash": "ca3912dbf3790cd5dfb901bab4df6206f73ce221592688c59b3f49dade25e49b"
+        },
+        {
+          "path": ".agents/agents/docs.md",
+          "hash": "dc3dcfb7f815bd064821391df727b43a5537d357c16e23edc7e0470f7de5cca0"
+        },
+        {
+          "path": ".agents/agents/goal-planner.md",
+          "hash": "135603d7c48b71aed58360142752bd9f3d163c121a0c8b79bc394b8b4bb816de"
+        },
+        {
+          "path": ".agents/agents/implementer.md",
+          "hash": "56ce12deecfdb103e0c0a83f651dc2f78365cc2eef99dfcf775a9d100fd72fc0"
+        },
+        {
+          "path": ".agents/agents/orchestrator.md",
+          "hash": "7fe6cad9d3f646721463716f2bf9e66da638ac9ab241b5b56bd0b853f84d8b2c"
+        },
+        {
+          "path": ".agents/agents/planner.md",
+          "hash": "67c69409645461a916d4f98b82d63108687ce0da1d8afab3f06a07207ec2c54e"
+        },
+        {
+          "path": ".agents/agents/repo-explorer.md",
+          "hash": "ecc9b0ff1f0d89cbf49867a706b86df84da5de694ff1abba83d7d92ff94802b4"
+        },
+        {
+          "path": ".agents/agents/reviewer.md",
+          "hash": "f4b7be3dc3414f0c8ae3961d600d15cd761f92a092d0a5474fe09f118092cefd"
+        },
+        {
+          "path": ".agents/agents/security-reviewer.md",
+          "hash": "0ee179517a123bcc436ad8f201c776231683cda38a07004a9b96f2cc96491ba3"
+        },
+        {
+          "path": ".agents/agents/task-coach.md",
+          "hash": "f8885cd4cedfdb416d72280144dabec48635129ed78f52193bff46ffebcdc758"
+        },
+        {
+          "path": ".agents/agents/tester.md",
+          "hash": "f7f16613366c0d54be91f7d77206c0dc8c64a24bd2fbdd4c4c52b4da507d724e"
+        },
+        {
+          "path": ".agents/hooks.json",
+          "hash": "310d8441ae112f45ed25e63c9733313a5c9086c127fed06e8c686cbcf49e98b1"
+        },
+        {
+          "path": ".agents/mcp_config.json",
+          "hash": "d8e397af03b5b032f21d0aa967086f0c78b33c87b76f2e9898ae0a144df7de02"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/architect.md",
+          "hash": "724481ed15e1fc2dd23825183b68c84bf2a80d2c1f090d7fac52282b9234ee51"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/complexity-auditor.md",
+          "hash": "e08dde4015729b21552069b6ca3bcb03c10285eff5f8c0bfa75a8eb7fa556465"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/contract-builder.md",
+          "hash": "82a06cc6cdea95402ef009675507e6adc5b9598fb45b2423bc856b4803deaa12"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/devil.md",
+          "hash": "15425ebb44b6c220d1d3b72b127583ffb4cb9027f0081f778a1a8273cd855999"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/docs.md",
+          "hash": "5160902006c6045d479561b62f30fa643f8d11136a85e0886d90064be50284ae"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/goal-planner.md",
+          "hash": "838374cca725fc42474611f028d1cbbaaa8b633d8eee0b839b4bdaf961d99655"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/implementer.md",
+          "hash": "fc92f8d29f6ee4b96e2b0579602439cf074ed33f461e703ce587709d38813d88"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/orchestrator.md",
+          "hash": "1b5c39a0de4d07bb6c8b5695d82bc52542efdc3e4d9b761a8aa137255ec36bbe"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/planner.md",
+          "hash": "ae4202dc80a5d8ce73d47471f9bd93e875d07e8c114b6c5eacca2277bdfadb17"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/README.md",
+          "hash": "451bee30dc10afdb4b361c266f5245bfbb32a09117088f62cd6dc10fe2b6e388"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/repo-explorer.md",
+          "hash": "bcf4c0a9bdf28dcc2c074ab6b3a82c30b0cd20355d81f7365ae630bf6468569f"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/reviewer.md",
+          "hash": "1561035cac0681e13d9e203be1abd99f750287426763c2b52c24286694185a3b"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/security-reviewer.md",
+          "hash": "5e04e036f592e2275e169356ff91e28132939d5d474e093d6ce4427c489a61c9"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/task-coach.md",
+          "hash": "393956c0e5dc76700b472e183813e90c89d0ae80dbc3f2104f17ca4897cd5177"
+        },
+        {
+          "path": ".agents/prompts/v1.0.0/tester.md",
+          "hash": "93c88d82bb31a57d42d7a8feea544f6a8025434edd99481123090de2a896e291"
+        },
+        {
+          "path": ".agents/rules/commit-style.md",
+          "hash": "71ae82cbf70381590ee809620c2cbfae663ee1f0923ccfbde157dd3b14ae7c8a"
+        },
+        {
+          "path": ".agents/rules/graphify.md",
+          "hash": "ff9bc8ed934cb37218cdec5bf079d5a19a764ecd42a71bbd8dbf9ca232f412ae"
+        },
+        {
+          "path": ".agents/scripts/invoke-hook.cjs",
+          "hash": "a69b6733d778c35289c5dcaf61eb9f8135221fda296ee03ed928771e2e88acdf"
+        },
+        {
+          "path": ".agents/skills/android/SKILL.md",
+          "hash": "1a75b94796562173a8b5d3c6dcc8585a62c60ccc3a6d87f38eb9cf3a6fb40fa1"
+        },
+        {
+          "path": ".agents/skills/api-versioning/SKILL.md",
+          "hash": "7d264343e027c360df7ec3efc165796452589132057a72874b2b4aabdec08017"
+        },
+        {
+          "path": ".agents/skills/astro/SKILL.md",
+          "hash": "c3ea91bc56a6b9e3374dd606de319515658aba66213caed0613641d62a681f19"
+        },
+        {
+          "path": ".agents/skills/auth-token-inspector/SKILL.md",
+          "hash": "b83c5a8485d7042380134e312a00222bfad9861eecdc607dab62c45ad6a85ef0"
+        },
+        {
+          "path": ".agents/skills/backlog/SKILL.md",
+          "hash": "a4e7d968f3e6f0c5a0d2d58a56c3544a1f0a5a4b0aa45005de44587c005ced33"
+        },
+        {
+          "path": ".agents/skills/cc-api-contract/SKILL.md",
+          "hash": "d7a7dc4fa99e3c8639377fe78b5818b9329cb66514b015bde74a6d94d80149f1"
+        },
+        {
+          "path": ".agents/skills/cc-db-migration/SKILL.md",
+          "hash": "c1c4e9b324af7aab54f54c6cc983b88ad387a9af308745127b1a4474501f09ec"
+        },
+        {
+          "path": ".agents/skills/cc-feature/SKILL.md",
+          "hash": "68d117fdf76da4fb057c9bc04faa93e2e975747546a1efcbe9565d8e4d2d7b22"
+        },
+        {
+          "path": ".agents/skills/cc-fix/SKILL.md",
+          "hash": "8cd3e0cffda17022a0d8d767256fad79c59b52bd65b5bd367b37035013d37fa7"
+        },
+        {
+          "path": ".agents/skills/cc-pagespeed/SKILL.md",
+          "hash": "6c3d1f39262aae8fa29257a22c6fa1fcae1658438c010e2b16d27cf94917d011"
+        },
+        {
+          "path": ".agents/skills/cc-refactor/SKILL.md",
+          "hash": "f128a11a9361569212093337ff17be1e5b9f67508f28f8ad879258ea8e0ffff9"
+        },
+        {
+          "path": ".agents/skills/cc-review/SKILL.md",
+          "hash": "2870c0437757dba52acf669e21937e97b348032f84e8e3d6a90c74931ee570c9"
+        },
+        {
+          "path": ".agents/skills/cc-spec-mutation/SKILL.md",
+          "hash": "3bb31f093d669fff0390196d2df850d231008575055ca0ea24330d178629f860"
+        },
+        {
+          "path": ".agents/skills/cc-tdd-cycle/SKILL.md",
+          "hash": "67004d6bf1568cee23f5b0bc46a3c0c1495fdd3284bbe22def17f152ec3100a1"
+        },
+        {
+          "path": ".agents/skills/cc-test-plan/SKILL.md",
+          "hash": "93c1d69220e251d409010b06bee36e29319424ec0cd50941ed1805bdb3f635c8"
+        },
+        {
+          "path": ".agents/skills/code-review/SKILL.md",
+          "hash": "8be129c7c75ee8e076bb9a36c7ab9cc5905dd1963d8c7ec2c7315fabde1e76ac"
+        },
+        {
+          "path": ".agents/skills/commit/SKILL.md",
+          "hash": "cc16ec76f6f6e804d3f49d995a4233a59d85315f526c1137015ba362434f4b2e"
+        },
+        {
+          "path": ".agents/skills/conductor-setup/SKILL.md",
+          "hash": "dc97289668f4333ad3ad762672719867be411caf7abd74670f33efe8c6a7fc2e"
+        },
+        {
+          "path": ".agents/skills/council/SKILL.md",
+          "hash": "619d2e60d5b1ce3a815b3de42e7ec4141ada7f3e12ca016460bc04431efffc1b"
+        },
+        {
+          "path": ".agents/skills/django-orm/SKILL.md",
+          "hash": "d99a539d075ea32ff0685b33f25a3425add2d525f39bbd53e11b9870862f55c6"
+        },
+        {
+          "path": ".agents/skills/django-testing/SKILL.md",
+          "hash": "62a25366fbb00e059eafc0fe7a3685af35d14204dae94b1f51a330a0659acc2f"
+        },
+        {
+          "path": ".agents/skills/django-uv/SKILL.md",
+          "hash": "c5763ce17e877ae6b3438091dedd1fdb95a5d5ac3ed8ef19f79d16a5f07461af"
+        },
+        {
+          "path": ".agents/skills/drizzle-schema-architect/SKILL.md",
+          "hash": "786f237a4c879e18a78d9287f44795c8d0791f92ecc8cca9baf6a7ab6ebd5124"
+        },
+        {
+          "path": ".agents/skills/evaluation/SKILL.md",
+          "hash": "d252a6c4f11d4de587fe0b00d0be4235bc634ad4f8f5f744f289c23e8f5b72e6"
+        },
+        {
+          "path": ".agents/skills/fastapi-pydantic-strict/SKILL.md",
+          "hash": "4108067c44589c106d24cc0702e0991abc71a38294b49d9a40dd58842b75747d"
+        },
+        {
+          "path": ".agents/skills/find-skills/SKILL.md",
+          "hash": "1e85f6f9686e145aca4a124e3b704b9bbea9aa87e08515c1e352eee70f6e6e7a"
+        },
+        {
+          "path": ".agents/skills/jpa-nplusone-detector/SKILL.md",
+          "hash": "be86e4abf5bf9b801ac0d08c43f74523c0359cedb57b95e105ac1ce386bd746b"
+        },
+        {
+          "path": ".agents/skills/jpa-postgres/SKILL.md",
+          "hash": "178ec6b4e9758b49c86cbe6020eb90bbebba482024fc6066e68579e7d9c83249"
+        },
+        {
+          "path": ".agents/skills/laravel-specialist/references/eloquent.md",
+          "hash": "2b38872ceacd35e607d577dc26d58a7b8f5c740c4488c68c70b7e71e0be60b2b"
+        },
+        {
+          "path": ".agents/skills/laravel-specialist/references/livewire.md",
+          "hash": "940d3fff5da545ed9f27027c80e1ec03109d6956dd85421d7d7b6ca50563b10c"
+        },
+        {
+          "path": ".agents/skills/laravel-specialist/references/queues.md",
+          "hash": "2d949cc5d3a37a8ce8582186c7defc6afa1c9288ab96eb150dc77db720cfd134"
+        },
+        {
+          "path": ".agents/skills/laravel-specialist/references/routing.md",
+          "hash": "108ebc7524de46262914bbfe3a754252858d5029dcc0b91be980fc15329986e1"
+        },
+        {
+          "path": ".agents/skills/laravel-specialist/references/testing.md",
+          "hash": "ae6bb2b11e4a44146dbaaea437eeb91a3aa28e304139ad0308d5bfcc424d32da"
+        },
+        {
+          "path": ".agents/skills/laravel-specialist/SKILL.md",
+          "hash": "eb3c286d02b4a314a1ffd73b796fb433e94d7628783820e9fb6a5eb2f92eda2d"
+        },
+        {
+          "path": ".agents/skills/livewire-alpine-bridge/SKILL.md",
+          "hash": "e14082dc439a7ebba6f2bc86c84cad174c639b102be8dba7cef8969ea542814e"
+        },
+        {
+          "path": ".agents/skills/multi-agent-orchestration/examples/framework_implementations.py",
+          "hash": "fb9dd46d037c0900384a69f3edf3f9b13fe12f7eb76a17e21d63375af8074108"
+        },
+        {
+          "path": ".agents/skills/multi-agent-orchestration/examples/orchestration_patterns.py",
+          "hash": "40ce94929b83e53665d6d489216b81f3a1b7a4a7901c625c5c6e47b19a194bab"
+        },
+        {
+          "path": ".agents/skills/multi-agent-orchestration/README.md",
+          "hash": "290844aeeefdd38673d145c7d028645acdb28362598e1ce9f0c9e3928818eae0"
+        },
+        {
+          "path": ".agents/skills/multi-agent-orchestration/scripts/agent_communication.py",
+          "hash": "71c7bb33a97823a42b6790310f7bdbc3dddf6d8c0b824e4a631fbd831ff8aa02"
+        },
+        {
+          "path": ".agents/skills/multi-agent-orchestration/scripts/benchmarking.py",
+          "hash": "2324fa946781f81e8793aba0aad2b8ade8cbaf17a78edb33fc3daccbad2ffcda"
+        },
+        {
+          "path": ".agents/skills/multi-agent-orchestration/scripts/workflow_management.py",
+          "hash": "e0d6aa9eb61f07c0d4f12a8da4d04a6fd7c87f31eab6ce94e196cf729f5312e9"
+        },
+        {
+          "path": ".agents/skills/multi-agent-orchestration/SKILL.md",
+          "hash": "95de66280782b45552e3709b7892db822b3d6a23e0eb343bd8fc1e8289dc543d"
+        },
+        {
+          "path": ".agents/skills/nextjs-typescript/SKILL.md",
+          "hash": "6bd70df35c64e30dcdad55bd9b000146cf0415900a23af3daf740723df5d3a67"
+        },
+        {
+          "path": ".agents/skills/openspec/SKILL.md",
+          "hash": "98bfa97aa290acd39ee869b1835df3bf0a61a7ebf1f8d5624beaad73d3d1ce00"
+        },
+        {
+          "path": ".agents/skills/pagespeed-insights/reference.md",
+          "hash": "afa03220b772ea8d6393f7366bbd6d90200c0b56585ccb2bb714e622af07345f"
+        },
+        {
+          "path": ".agents/skills/pagespeed-insights/SKILL.md",
+          "hash": "6a7bba6e5e59d1278ed5f515842ae6683ef0f9245c9a10e87c95d10310af3119"
+        },
+        {
+          "path": ".agents/skills/pagespeed-perf/SKILL.md",
+          "hash": "bf697824c5c166c728619512002154de92718231bbce86fc9e4c4e55aad15bcd"
+        },
+        {
+          "path": ".agents/skills/php-pro/references/async-patterns.md",
+          "hash": "3d75c066c70ba0fe18c7e3ccb1063953fc910ee71952a85e04d3ef62492c67a6"
+        },
+        {
+          "path": ".agents/skills/php-pro/references/laravel-patterns.md",
+          "hash": "39c4e9e9e564a0fcbc1d6bf34dce0fd2e3568f5fca75d40921e7f2eacf6f3a39"
+        },
+        {
+          "path": ".agents/skills/php-pro/references/modern-php-features.md",
+          "hash": "04a6a64dad160622eb1f8465e842681aad8c97261f39383195566aac59fae159"
+        },
+        {
+          "path": ".agents/skills/php-pro/references/symfony-patterns.md",
+          "hash": "fa9f01da37e3f0d1981e5ec3af3ea51edf20d4f1ea6e3f85f436ca73ee5a2ba2"
+        },
+        {
+          "path": ".agents/skills/php-pro/references/testing-quality.md",
+          "hash": "922245444396b5f2aebf1eda3825d616de1f879cd6413d86e9eb30f06c041de0"
+        },
+        {
+          "path": ".agents/skills/php-pro/SKILL.md",
+          "hash": "6aa71a7bd4129ab0bf1921a9402bcb441cd31513ffa10406f539b8959a525d10"
+        },
+        {
+          "path": ".agents/skills/python-django-stack/SKILL.md",
+          "hash": "ea13b6adaceb9178258a8b8330d912aa78ed3f040904a6fda8865e692163021f"
+        },
+        {
+          "path": ".agents/skills/python-fastapi-stack/SKILL.md",
+          "hash": "ca40ca614bb4727c60d39f90a7037dac6a8f255f97d6f3691a4ed41fac4395dd"
+        },
+        {
+          "path": ".agents/skills/python/SKILL.md",
+          "hash": "109f5158949eef22448397a72baee22c0eb83477e989981993cee898e9d8f432"
+        },
+        {
+          "path": ".agents/skills/security-ai-llm/SKILL.md",
+          "hash": "5265a85843e9c6fd75ed698f9b7300e9d3c7321bf9df293d68e4252698099782"
+        },
+        {
+          "path": ".agents/skills/security-blue-team/SKILL.md",
+          "hash": "2ec5a37566451d7bfba7a7f2b8020b93acfc188d3280efcb1fda3ca712c8cc71"
+        },
+        {
+          "path": ".agents/skills/security-cloud/SKILL.md",
+          "hash": "e323d30648ab2983e8a6bd6a2c04763a4877448a1047ae8e62fde725e08b5a1d"
+        },
+        {
+          "path": ".agents/skills/security-crypto/SKILL.md",
+          "hash": "681b33d7c973abdddbf4935448ab5d8321d980b12a6ea69209f6b411ae11f8e9"
+        },
+        {
+          "path": ".agents/skills/security-exploit-dev/SKILL.md",
+          "hash": "04cf5854faf852fd26b785624a7e9008e01a4d708ae27b615f66e85428554594"
+        },
+        {
+          "path": ".agents/skills/security-grc/SKILL.md",
+          "hash": "b581f54f09c2695dc103bbfd00ca2f55e33b4c2cd0455cb32b0ca8ecb217cc09"
+        },
+        {
+          "path": ".agents/skills/security-incident-response/SKILL.md",
+          "hash": "b7768e63c4a583e18da98c38d0bc86f460f8a12dcf36968035f7bf478bb092cb"
+        },
+        {
+          "path": ".agents/skills/security-log-analysis/SKILL.md",
+          "hash": "a7e89999e4b389eb40f136acbbd5a57403fcd3ea1f463eb3c1d64ed84a551459"
+        },
+        {
+          "path": ".agents/skills/security-malware-analysis/SKILL.md",
+          "hash": "f5d7b4ac66e1dd73721230a1c27b83ab58ecf40f3da2e2de06232448eed5871c"
+        },
+        {
+          "path": ".agents/skills/security-mobile/SKILL.md",
+          "hash": "2cbda01fffbe628fac27a0426d1dbc71fddad7f8fb52ec8d88b6c49ec7848f77"
+        },
+        {
+          "path": ".agents/skills/security-network/SKILL.md",
+          "hash": "f0dd1e7cb84310a0a55ac7dbef6defa4fffd621a89f2e8a671685189cce9583c"
+        },
+        {
+          "path": ".agents/skills/security-ot-ics/SKILL.md",
+          "hash": "b77c64a31fb0af79034fe4ad3194831749833f3a3f6a35b30808db13478edede"
+        },
+        {
+          "path": ".agents/skills/security-recon/SKILL.md",
+          "hash": "07617fba79641e566ab5ee7bcb1f68145f91ac3da3e234b9bcc3ea8b9a2b9f17"
+        },
+        {
+          "path": ".agents/skills/security-red-team/SKILL.md",
+          "hash": "36bc9bec67f34eba4e576271b25625f640a1879de508837fed3cbe59cf5069da"
+        },
+        {
+          "path": ".agents/skills/security-reverse-engineering/SKILL.md",
+          "hash": "8cb11a8b42a957d9121fc6d89905b12ea883ae531ee1a50ed9a6697b677e7d6b"
+        },
+        {
+          "path": ".agents/skills/security-soc-automation/SKILL.md",
+          "hash": "d3191afe648a2e575f65e696d414191e378ff09f3603ff8fc0f007d20a7fe6fc"
+        },
+        {
+          "path": ".agents/skills/security-threat-hunting/SKILL.md",
+          "hash": "c518ff01e3af9ad6d8bce96efd240ff9eeb2fe44a209b272f6fa8c9a4d6b288a"
+        },
+        {
+          "path": ".agents/skills/security-vuln-assessment/SKILL.md",
+          "hash": "0354a0a8648520c8a472085f33e3dd57355a4d42b9a35ecf40da57102ad61be9"
+        },
+        {
+          "path": ".agents/skills/security-web/SKILL.md",
+          "hash": "8b5fb269d8cb7c66d84b06adef97b7d3cf32ad958bd2f93500d3bc6fd7837664"
+        },
+        {
+          "path": ".agents/skills/security/SKILL.md",
+          "hash": "7f7d4985868c37bced853e9d15feadd4f170530536f596506b77b356d8060a2d"
+        },
+        {
+          "path": ".agents/skills/seo-analytics-injector/SKILL.md",
+          "hash": "245fa998b62169c99fda6d2c84a5cd90dcc2970a8c61c5020b79dfbccebaf228"
+        },
+        {
+          "path": ".agents/skills/spring-auth-auditor/SKILL.md",
+          "hash": "db0299b560d71744522fc5afa643dcb0d641bb1b46fc39bea5e01008979e8331"
+        },
+        {
+          "path": ".agents/skills/spring-boot-feature/SKILL.md",
+          "hash": "58339968e9d0738ff507c7ad5983969a94e4ee21470cf6e104b3fed9e0d3d110"
+        },
+        {
+          "path": ".agents/skills/spring-boot-kotlin/SKILL.md",
+          "hash": "f8e5eae90a057e8c75486fe8b07e8899b21aaa65d27016488d13154682775fee"
+        },
+        {
+          "path": ".agents/skills/spring-boot-testing-strategy/SKILL.md",
+          "hash": "e098c0082fca6101dbc637438955fe0adc2bc00dae919b464d0534ffd37e38b9"
+        },
+        {
+          "path": ".agents/skills/sqlalchemy/SKILL.md",
+          "hash": "bd8557ccffb129f25ae452eeb3697a75804497e3285b94904922294e18bc1ee7"
+        },
+        {
+          "path": ".agents/skills/tailwind-responsive-auditor/SKILL.md",
+          "hash": "3cc00fd7cdcc50cb4198029e31c7009f1a0af1e15e847b2e4698c0601ff8ad8a"
+        },
+        {
+          "path": ".agents/skills/tdd-mutation-tester/SKILL.md",
+          "hash": "f055f0ca977169e406ec2baa6d9d7f400b007deb9ee24f9db1bb02aaab6a1e06"
+        },
+        {
+          "path": ".agents/skills/testing-tdd/SKILL.md",
+          "hash": "ad5e835d48f7efbdb6c3e1e84ddec2c790cf3aba01b39b6022a830f6cd9893f2"
+        },
+        {
+          "path": ".agents/skills/using-cc-skills/SKILL.md",
+          "hash": "b8c40062c653384287f57462b29ca1589706b9a7ba679227b7b2633874725951"
+        },
+        {
+          "path": ".agents/skills/workflow-orchestration-patterns/references/details.md",
+          "hash": "f904309ab60916d3e6943a2c35ffeadc48ddfa6a3defdd8da5472926ba8887cb"
+        },
+        {
+          "path": ".agents/skills/workflow-orchestration-patterns/SKILL.md",
+          "hash": "f4418f98189bd89d7b801ec65df48b53caa1c555a23f1d9684799415818f1024"
+        },
+        {
+          "path": ".agents/workflows/cc-api-contract.md",
+          "hash": "54f7ac5d3b9b88467228231e5a271292bef3464ed1abfb417c5fce2bd0609ea5"
+        },
+        {
+          "path": ".agents/workflows/cc-ask.md",
+          "hash": "000abf6ece96a4c8a2d2f11a4283cd7d850f23b67004f0b747309dfeacb3d423"
+        },
+        {
+          "path": ".agents/workflows/cc-backlog.md",
+          "hash": "69892f051e10faeaab23d57ec10c4c4701df408ccdd791cb467c993b62f50154"
+        },
+        {
+          "path": ".agents/workflows/cc-clarify.md",
+          "hash": "191d38a6dc82937e28c8b9c2dfbfba0c4196c506e8895774ad2b6db5d5f45382"
+        },
+        {
+          "path": ".agents/workflows/cc-council.md",
+          "hash": "0160f5d2c68be05e8fdc1ebfa452ce9c7e6a1bb6d845719eb82ac761da797664"
+        },
+        {
+          "path": ".agents/workflows/cc-db-migration.md",
+          "hash": "e424a09203f3ebd65400a95674c0b94778ead207fbd5c4c7bea72248b976cb6e"
+        },
+        {
+          "path": ".agents/workflows/cc-explore.md",
+          "hash": "527ac1d6f4c1b7e1f329c4b2c1beb2e593fadc29fe78cdd8ce75ab83bf7eb65e"
+        },
+        {
+          "path": ".agents/workflows/cc-feature.md",
+          "hash": "646b696303741018de365bcbea475b80e808d5252b74ce0603f70386d505ec7a"
+        },
+        {
+          "path": ".agents/workflows/cc-fix.md",
+          "hash": "6b42e118d31e2cc5bdeb9d12a501c0c7dc897138ca5085e69bb279239575d6f0"
+        },
+        {
+          "path": ".agents/workflows/cc-handoff.md",
+          "hash": "13313f7d9b5e890dd91282ab602da680b71f83c415b3e34dfcb1f488adbb0613"
+        },
+        {
+          "path": ".agents/workflows/cc-iterative.md",
+          "hash": "26c9e7c60fda2eed4a25324a0bcaebb10dec37faaa02803c6b9d240338f92706"
+        },
+        {
+          "path": ".agents/workflows/cc-openspec.md",
+          "hash": "0e523bf9b320e66cef996d326eb1ead92a19d7e35e434ff01f96fceb80c14d82"
+        },
+        {
+          "path": ".agents/workflows/cc-pagespeed.md",
+          "hash": "b3597d04ec86aefeaebbe5405b0ae937889d531bf4809f2a521e5698258bfed7"
+        },
+        {
+          "path": ".agents/workflows/cc-pipeline.md",
+          "hash": "877e84b29aa46791702c7dddda2cc5f0223c1f6a94248fe7e2665544aa8e86f3"
+        },
+        {
+          "path": ".agents/workflows/cc-prototype.md",
+          "hash": "ed906fcbf3ca840a1b1386b1ff96a31cc3a9c27b99242d258b4c57c695f9f9aa"
+        },
+        {
+          "path": ".agents/workflows/cc-refactor.md",
+          "hash": "a8340034d3e1ec332f6f4ce8ef08918a8c4e1e80d0b5ee4dd7542a0aa95d5243"
+        },
+        {
+          "path": ".agents/workflows/cc-review.md",
+          "hash": "5231dbad3eaeb1b3bd9b438a82b1ca3fad215fffcfbc9d22b350a2dc97b1df6e"
+        },
+        {
+          "path": ".agents/workflows/cc-scorecard.md",
+          "hash": "b4ad5680a0082132adcbe476226731ffcecb29c3798674b1ccb4d0e167115c8b"
+        },
+        {
+          "path": ".agents/workflows/cc-security.md",
+          "hash": "0bb620626628e1aad3f1fb51d849d8442b03d393c8d481858ed909c9b40baff6"
+        },
+        {
+          "path": ".agents/workflows/cc-spec-mutation.md",
+          "hash": "931bf93df0e193e8aef3ece5727dfbb39b65376b908d682262dec266c708b3c0"
+        },
+        {
+          "path": ".agents/workflows/cc-tdd-cycle.md",
+          "hash": "4e9db5664da484378cb980ffc39863bd9b9e9222dc33d98c3f407a86523ce725"
+        },
+        {
+          "path": ".agents/workflows/cc-test-plan.md",
+          "hash": "ff1194ee1e3e3baa6d0619b142b2248c040e682a8a2b8eafbdc1a4cf29ea84e9"
+        },
+        {
+          "path": ".agents/workflows/cc-triage.md",
+          "hash": "04e2a8870b865d5adf0732f1ccd1623723ea2e6b8ffd3bbed6baf3140fd764aa"
+        },
+        {
+          "path": ".agents/workflows/commit.md",
+          "hash": "c9bd74416a7bbeb9b0bcb097b22e9e984966b2da86a9939dd74e4c1f93ad4981"
+        },
+        {
+          "path": ".claude.json",
+          "hash": "5788997b2f5746fca0563105eca9ecc24b83d4f364c5707e3fa85ea260238c9f"
+        },
+        {
+          "path": ".claude/agents/architect.md",
+          "hash": "384899230debfded109bb8e7fa5b9d3081c4d3632167ec442f42ce5b58ae866c"
+        },
+        {
+          "path": ".claude/agents/complexity-auditor.md",
+          "hash": "8ce920050323cf0d4c33a8db4762d24d7a535cc3b1f5f1241f6cdeb9643f65f7"
+        },
+        {
+          "path": ".claude/agents/contract-builder.md",
+          "hash": "e12d4d0ad189ad720d539344e34c42846d638711d130576d5b13af1d1cc3f169"
+        },
+        {
+          "path": ".claude/agents/devil.md",
+          "hash": "25adf1013f8ca89d9c4b3eb8a4bf04b92b0a7661aa6ee52ab4332069b738efdf"
+        },
+        {
+          "path": ".claude/agents/docs.md",
+          "hash": "78af56bcb183554d199cac59284051da33e26afc9aa43359ecedb705976efe03"
+        },
+        {
+          "path": ".claude/agents/goal-planner.md",
+          "hash": "f7ccfb942be52bd644bf99f64ec467da3a35ac2df439b82189dae3004afa938b"
+        },
+        {
+          "path": ".claude/agents/implementer.md",
+          "hash": "f328798fc58d11c2e4e4dad4a5ce9130880d858eba7b0ea8071db0f07a85b556"
+        },
+        {
+          "path": ".claude/agents/orchestrator.md",
+          "hash": "8c071b045b537ec08827815276ba62b7f2bab05783d3d3078c48af359c85e36f"
+        },
+        {
+          "path": ".claude/agents/planner.md",
+          "hash": "a16042c9b708def21be89597160a87fc5913c6ed64f57378a4f8ed437455d812"
+        },
+        {
+          "path": ".claude/agents/repo-explorer.md",
+          "hash": "199cf64f506070ca56cbee84ab6b49b71b780bcc934ba20e61e6df78f4543515"
+        },
+        {
+          "path": ".claude/agents/reviewer.md",
+          "hash": "bf64a99f568048ee7daedd1c0b9dc081720dec14c4f2b82d3382e2b0bac67236"
+        },
+        {
+          "path": ".claude/agents/security-reviewer.md",
+          "hash": "7b88fbd4e6420c3d25b956f1c782ff1b81e12e866b821f69f96c68f5809a11ee"
+        },
+        {
+          "path": ".claude/agents/task-coach.md",
+          "hash": "f49b1225f6ad83055954c8735d6baac2e4dde1945f16e97c285b933f07f4dbe4"
+        },
+        {
+          "path": ".claude/agents/tester.md",
+          "hash": "7f0c96cb68c55a8bc1889b915480243c6e4744cdf0b5d573180b447176130cc0"
+        },
+        {
+          "path": ".claude/CLAUDE.md",
+          "hash": "5fdb05628ac1674d0b449f64802fb7c6f20555a95aa26b98ae574b8832cbc6da"
+        },
+        {
+          "path": ".claude/commands/cc/api-contract.md",
+          "hash": "a739ba709a1a2b13a6dbfe0ddfa33610725ae4280c4cd61cd80090bc2cc6a9eb"
+        },
+        {
+          "path": ".claude/commands/cc/ask.md",
+          "hash": "758e4da48fc8e8bfe7f926937e120e9953df1390e207cf7f6b1580e7495a2f7b"
+        },
+        {
+          "path": ".claude/commands/cc/backlog.md",
+          "hash": "ba8386b6fa17750bb5393133bbcfc1a65190f4929d5b1b67b0a92c8ecc5e0c3e"
+        },
+        {
+          "path": ".claude/commands/cc/clarify.md",
+          "hash": "7d8ba79984d2cfab5370d48f1ea3f5c3153517237326eb4bc61ea762cf9ceb52"
+        },
+        {
+          "path": ".claude/commands/cc/council.md",
+          "hash": "a2192ac8f30bbba54927e0a55e02482f0ec9acadb6e7f45c3de72cebf7024dfd"
+        },
+        {
+          "path": ".claude/commands/cc/db-migration.md",
+          "hash": "1d4d26f36350a1c58361de0ac4686cf97389b42b294f31365ca5044ba91dc4c1"
+        },
+        {
+          "path": ".claude/commands/cc/explore.md",
+          "hash": "7e569687c17e46f79be737bd7cb9b5a6368aae5b2b1bc69662d6ecef7130c1a7"
+        },
+        {
+          "path": ".claude/commands/cc/feature.md",
+          "hash": "d98dd2280629b7a81d4b5b8d66ed619a155416fea67868bdc87ca740a81b6e5f"
+        },
+        {
+          "path": ".claude/commands/cc/fix.md",
+          "hash": "e663763ab39389033224b968b76df8fb80c0eb22141d4716a3c6ba3a05482c37"
+        },
+        {
+          "path": ".claude/commands/cc/handoff.md",
+          "hash": "578cc8ce66eb0ea9670a347357d330884481b60fdafea1f1a471c9d8fe41508d"
+        },
+        {
+          "path": ".claude/commands/cc/iterative.md",
+          "hash": "95fc1463dd8cb61486390033fd0c2dc25b9708cdf86a45dc20f875382a076c5c"
+        },
+        {
+          "path": ".claude/commands/cc/odd.md",
+          "hash": "9b877902ecdd87b650519bd8c334a3b31ee920c552ef0ae6c12750ae6e125129"
+        },
+        {
+          "path": ".claude/commands/cc/openspec.md",
+          "hash": "f0acc57bac9299f069c43b04cf168c3b9a660b8f6da4cc2de5d24e642460546f"
+        },
+        {
+          "path": ".claude/commands/cc/pagespeed.md",
+          "hash": "32423a5a91cda49d6cc452962322732328848f401e2e918ff4539967a0afc103"
+        },
+        {
+          "path": ".claude/commands/cc/prototype.md",
+          "hash": "35800cb8b1dd050c91ce98dfafc63cd12f43e3c046ae5742811d903bbd10ba68"
+        },
+        {
+          "path": ".claude/commands/cc/refactor.md",
+          "hash": "97838fdfa84fd3e7888bc3a94b61e7fc530270a04215f80aef878eecc7266343"
+        },
+        {
+          "path": ".claude/commands/cc/review.md",
+          "hash": "4cab53c11d7a185678affe07739a11b0887f1bef11f961d8c89061643b929f74"
+        },
+        {
+          "path": ".claude/commands/cc/scorecard.md",
+          "hash": "406d8f87869ff111510992ef2c92f0795d5da81a08131aeac71ae3cad92e700c"
+        },
+        {
+          "path": ".claude/commands/cc/security.md",
+          "hash": "4ace04df46119c8e63869c31629c04d00d69de15c627f2970be243a720f6d1f8"
+        },
+        {
+          "path": ".claude/commands/cc/spec-mutation.md",
+          "hash": "4fb0a96dee836f0f3d64cb00de881e2d2cc112e4ba97518766eafa7bfd797eba"
+        },
+        {
+          "path": ".claude/commands/cc/tdd-cycle.md",
+          "hash": "7f28d3bdb13088706a2636f78f94bda4f77dae1e99164b7fa5630d4d5887b4f5"
+        },
+        {
+          "path": ".claude/commands/cc/test-plan.md",
+          "hash": "33138802f0f077700a09424af3dd35d594e1d4ef3da347496283be579ea950e1"
+        },
+        {
+          "path": ".claude/commands/cc/triage.md",
+          "hash": "bd521fd000cb22db78c924c06ecc3f7b6c51abd8f77f3fcd27b1781ad0d76745"
+        },
+        {
+          "path": ".claude/hooks/invoke-hook.cjs",
+          "hash": "bfddcc68fa94b1b8edc2b8d586a4494e7e2d40c71908614ccc85ae72a05a79b4"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/architect.md",
+          "hash": "9da0e67b5910515b8557e49cda8353749b80f4ef4f84af216b7cdf1ba4a875b2"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/complexity-auditor.md",
+          "hash": "37238f91790d8fbac8c0b546e5da541b9de44c21f39a8aff0f4fc4fa8fa5658f"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/contract-builder.md",
+          "hash": "d92084712853003c1b424e5356184b6734b7756b3a20eab6aff66e4c9e5171ec"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/devil.md",
+          "hash": "491a8015431559965c0ae10e1ba7755860dd1afb30e3ebfeee71b048befe9f24"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/docs.md",
+          "hash": "97afff24995fd66c173e5c62cdd7948935e796a74a314acb37f94efee6300261"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/goal-planner.md",
+          "hash": "901a3a4544c443aec5cfeeebe4ce3eb67cb3839889ada2cc52a109363ae4099d"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/implementer.md",
+          "hash": "2d89676faacf62ab448ed32b34da7472a377488dd4063a5ef7e01a8a11ef8f47"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/orchestrator.md",
+          "hash": "bff04f89e1cf898840add6d10caaf0cc03a500e3907a7b5d4d49f92daeb11db4"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/planner.md",
+          "hash": "db03be410fcde17599428ccab31329c9834e9652d85af83da4d134a382fe03e6"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/README.md",
+          "hash": "451bee30dc10afdb4b361c266f5245bfbb32a09117088f62cd6dc10fe2b6e388"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/repo-explorer.md",
+          "hash": "9ecdf44fcbac5bc52ed9d94353eade5a6004537f11ab869e05a5c2c8fe2c940f"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/reviewer.md",
+          "hash": "07eb7b7e819b13a10b22ab5db0ca50fa67e65710b0aff6ceed4b516d9a444550"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/security-reviewer.md",
+          "hash": "2061116c86db68a367d145293d81303ce1d9d9077d5ef2bc8d556d4e20ed85bf"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/task-coach.md",
+          "hash": "a1ba38af4cfd77914e301a6f30b3c7ba5c5c4a075005d22f225e3a1d538f01a8"
+        },
+        {
+          "path": ".claude/prompts/v1.0.0/tester.md",
+          "hash": "7d10b0fde7fce5831b3dbead1ead6b4746d6d519e6b7b23b1ed42ae1cfc913c4"
+        },
+        {
+          "path": ".claude/settings.json",
+          "hash": "a9aab42eaa4d1fc1612cd3d9b719f2893117afe53c5e59b5466066811c27099b"
+        },
+        {
+          "path": ".claude/skills/android-ui-design/SKILL.md",
+          "hash": "da2efe1df634e6aaa7456e7c254ab315d5d9dee9e71596c5c739d6e2c4283c3b"
+        },
+        {
+          "path": ".claude/skills/android/SKILL.md",
+          "hash": "7d018d45381f0637e1ba125718f4707f7604ae98347c731bb4425b4027121932"
+        },
+        {
+          "path": ".claude/skills/api-versioning/SKILL.md",
+          "hash": "a67e0d7c5984de9edf0bdb234b048a89748477de386407a1e4f9951477632528"
+        },
+        {
+          "path": ".claude/skills/astro/SKILL.md",
+          "hash": "352f5d735d4ff1658f23ccc1af82771d366e878a54dfdde72adda1bb054e5919"
+        },
+        {
+          "path": ".claude/skills/auth-token-inspector/SKILL.md",
+          "hash": "afcfebffe6ec27c6a97daf502b2ed7d702b88805a22aa966491c4063325058b5"
+        },
+        {
+          "path": ".claude/skills/backlog/SKILL.md",
+          "hash": "a4e7d968f3e6f0c5a0d2d58a56c3544a1f0a5a4b0aa45005de44587c005ced33"
+        },
+        {
+          "path": ".claude/skills/code-review/SKILL.md",
+          "hash": "ff32123a9bee5802b4f2d4d4dacfbbb7c79ffb24231d3505defed1d4e3234766"
+        },
+        {
+          "path": ".claude/skills/conductor-setup/SKILL.md",
+          "hash": "dc97289668f4333ad3ad762672719867be411caf7abd74670f33efe8c6a7fc2e"
+        },
+        {
+          "path": ".claude/skills/django-orm/SKILL.md",
+          "hash": "e9569d688eade008919692ee2ee1341eb5da85c646d4f4b2d5b2e35a789fe10a"
+        },
+        {
+          "path": ".claude/skills/django-testing/SKILL.md",
+          "hash": "9712fdf72ef0f4a2a4582ff7551c8cd67994ff39e8cb547cd4fa7e64bd226904"
+        },
+        {
+          "path": ".claude/skills/django-uv/SKILL.md",
+          "hash": "a3946cad42d4d21b528a3d3b5f236037665e414e3164ce1a6fbd756c43d05133"
+        },
+        {
+          "path": ".claude/skills/drizzle-schema-architect/SKILL.md",
+          "hash": "73bc335e4e8d118e51600397215563b3e4d9ff771a1e472042b396f121d16a60"
+        },
+        {
+          "path": ".claude/skills/evaluation/SKILL.md",
+          "hash": "d252a6c4f11d4de587fe0b00d0be4235bc634ad4f8f5f744f289c23e8f5b72e6"
+        },
+        {
+          "path": ".claude/skills/fastapi-pydantic-strict/SKILL.md",
+          "hash": "44eec426c91212bf42fa3066a411a23330fc0a6b6391580450fc9c787b6aedf3"
+        },
+        {
+          "path": ".claude/skills/find-skills/SKILL.md",
+          "hash": "1e85f6f9686e145aca4a124e3b704b9bbea9aa87e08515c1e352eee70f6e6e7a"
+        },
+        {
+          "path": ".claude/skills/jpa-nplusone-detector/SKILL.md",
+          "hash": "19ce67c4f9116f1734f0af4428bdb22d70d4d1668a00337609865766e45bd3da"
+        },
+        {
+          "path": ".claude/skills/jpa-postgres/SKILL.md",
+          "hash": "a77c94e1c852452522b91ada9b8372e39006803aa021c433b7b2cd47c97d5127"
+        },
+        {
+          "path": ".claude/skills/laravel-specialist/references/eloquent.md",
+          "hash": "2b38872ceacd35e607d577dc26d58a7b8f5c740c4488c68c70b7e71e0be60b2b"
+        },
+        {
+          "path": ".claude/skills/laravel-specialist/references/livewire.md",
+          "hash": "940d3fff5da545ed9f27027c80e1ec03109d6956dd85421d7d7b6ca50563b10c"
+        },
+        {
+          "path": ".claude/skills/laravel-specialist/references/queues.md",
+          "hash": "2d949cc5d3a37a8ce8582186c7defc6afa1c9288ab96eb150dc77db720cfd134"
+        },
+        {
+          "path": ".claude/skills/laravel-specialist/references/routing.md",
+          "hash": "108ebc7524de46262914bbfe3a754252858d5029dcc0b91be980fc15329986e1"
+        },
+        {
+          "path": ".claude/skills/laravel-specialist/references/testing.md",
+          "hash": "ae6bb2b11e4a44146dbaaea437eeb91a3aa28e304139ad0308d5bfcc424d32da"
+        },
+        {
+          "path": ".claude/skills/laravel-specialist/SKILL.md",
+          "hash": "eb3c286d02b4a314a1ffd73b796fb433e94d7628783820e9fb6a5eb2f92eda2d"
+        },
+        {
+          "path": ".claude/skills/livewire-alpine-bridge/SKILL.md",
+          "hash": "00ca48d60e84ecffaf0df3a83004297999799f52294687419f94ac363a07eab1"
+        },
+        {
+          "path": ".claude/skills/multi-agent-orchestration/examples/framework_implementations.py",
+          "hash": "fb9dd46d037c0900384a69f3edf3f9b13fe12f7eb76a17e21d63375af8074108"
+        },
+        {
+          "path": ".claude/skills/multi-agent-orchestration/examples/orchestration_patterns.py",
+          "hash": "40ce94929b83e53665d6d489216b81f3a1b7a4a7901c625c5c6e47b19a194bab"
+        },
+        {
+          "path": ".claude/skills/multi-agent-orchestration/README.md",
+          "hash": "290844aeeefdd38673d145c7d028645acdb28362598e1ce9f0c9e3928818eae0"
+        },
+        {
+          "path": ".claude/skills/multi-agent-orchestration/scripts/agent_communication.py",
+          "hash": "71c7bb33a97823a42b6790310f7bdbc3dddf6d8c0b824e4a631fbd831ff8aa02"
+        },
+        {
+          "path": ".claude/skills/multi-agent-orchestration/scripts/benchmarking.py",
+          "hash": "2324fa946781f81e8793aba0aad2b8ade8cbaf17a78edb33fc3daccbad2ffcda"
+        },
+        {
+          "path": ".claude/skills/multi-agent-orchestration/scripts/workflow_management.py",
+          "hash": "e0d6aa9eb61f07c0d4f12a8da4d04a6fd7c87f31eab6ce94e196cf729f5312e9"
+        },
+        {
+          "path": ".claude/skills/multi-agent-orchestration/SKILL.md",
+          "hash": "95de66280782b45552e3709b7892db822b3d6a23e0eb343bd8fc1e8289dc543d"
+        },
+        {
+          "path": ".claude/skills/nextjs-typescript/SKILL.md",
+          "hash": "10632ec891e63e736edc915367dce1a1c78fe52af1493b7827905cd6afbfd394"
+        },
+        {
+          "path": ".claude/skills/openspec/SKILL.md",
+          "hash": "6f5b14ff1ee2e896c7682edcc265cfab8a922c8b7c39f3e0bbc995bce22a33f6"
+        },
+        {
+          "path": ".claude/skills/pagespeed-insights/reference.md",
+          "hash": "afa03220b772ea8d6393f7366bbd6d90200c0b56585ccb2bb714e622af07345f"
+        },
+        {
+          "path": ".claude/skills/pagespeed-insights/SKILL.md",
+          "hash": "6a7bba6e5e59d1278ed5f515842ae6683ef0f9245c9a10e87c95d10310af3119"
+        },
+        {
+          "path": ".claude/skills/pagespeed-perf/SKILL.md",
+          "hash": "8231d72ca2772ccddcf703a488b88233cbae242b7d613f4bf8c7805e43da66da"
+        },
+        {
+          "path": ".claude/skills/php-pro/references/async-patterns.md",
+          "hash": "3d75c066c70ba0fe18c7e3ccb1063953fc910ee71952a85e04d3ef62492c67a6"
+        },
+        {
+          "path": ".claude/skills/php-pro/references/laravel-patterns.md",
+          "hash": "39c4e9e9e564a0fcbc1d6bf34dce0fd2e3568f5fca75d40921e7f2eacf6f3a39"
+        },
+        {
+          "path": ".claude/skills/php-pro/references/modern-php-features.md",
+          "hash": "04a6a64dad160622eb1f8465e842681aad8c97261f39383195566aac59fae159"
+        },
+        {
+          "path": ".claude/skills/php-pro/references/symfony-patterns.md",
+          "hash": "fa9f01da37e3f0d1981e5ec3af3ea51edf20d4f1ea6e3f85f436ca73ee5a2ba2"
+        },
+        {
+          "path": ".claude/skills/php-pro/references/testing-quality.md",
+          "hash": "922245444396b5f2aebf1eda3825d616de1f879cd6413d86e9eb30f06c041de0"
+        },
+        {
+          "path": ".claude/skills/php-pro/SKILL.md",
+          "hash": "6aa71a7bd4129ab0bf1921a9402bcb441cd31513ffa10406f539b8959a525d10"
+        },
+        {
+          "path": ".claude/skills/python-django-stack/SKILL.md",
+          "hash": "22f0260715f8ebdfbbc31b6b4df5f4f96247399bd54dd4d0c8051feb86130ddb"
+        },
+        {
+          "path": ".claude/skills/python-fastapi-stack/SKILL.md",
+          "hash": "d76ee7654fe74541b52c18b5055207bb4a9497ebcb75a35d9fe6e8a5dbb2a05e"
+        },
+        {
+          "path": ".claude/skills/python/SKILL.md",
+          "hash": "f480e6ca5c050bc438875fc451bae6b4382f85d5a31c9e49156fd095dbc11e16"
+        },
+        {
+          "path": ".claude/skills/security-ai-llm/SKILL.md",
+          "hash": "5265a85843e9c6fd75ed698f9b7300e9d3c7321bf9df293d68e4252698099782"
+        },
+        {
+          "path": ".claude/skills/security-blue-team/SKILL.md",
+          "hash": "2ec5a37566451d7bfba7a7f2b8020b93acfc188d3280efcb1fda3ca712c8cc71"
+        },
+        {
+          "path": ".claude/skills/security-cloud/SKILL.md",
+          "hash": "e323d30648ab2983e8a6bd6a2c04763a4877448a1047ae8e62fde725e08b5a1d"
+        },
+        {
+          "path": ".claude/skills/security-crypto/SKILL.md",
+          "hash": "681b33d7c973abdddbf4935448ab5d8321d980b12a6ea69209f6b411ae11f8e9"
+        },
+        {
+          "path": ".claude/skills/security-exploit-dev/SKILL.md",
+          "hash": "04cf5854faf852fd26b785624a7e9008e01a4d708ae27b615f66e85428554594"
+        },
+        {
+          "path": ".claude/skills/security-grc/SKILL.md",
+          "hash": "b581f54f09c2695dc103bbfd00ca2f55e33b4c2cd0455cb32b0ca8ecb217cc09"
+        },
+        {
+          "path": ".claude/skills/security-incident-response/SKILL.md",
+          "hash": "b7768e63c4a583e18da98c38d0bc86f460f8a12dcf36968035f7bf478bb092cb"
+        },
+        {
+          "path": ".claude/skills/security-log-analysis/SKILL.md",
+          "hash": "a7e89999e4b389eb40f136acbbd5a57403fcd3ea1f463eb3c1d64ed84a551459"
+        },
+        {
+          "path": ".claude/skills/security-malware-analysis/SKILL.md",
+          "hash": "f5d7b4ac66e1dd73721230a1c27b83ab58ecf40f3da2e2de06232448eed5871c"
+        },
+        {
+          "path": ".claude/skills/security-mobile/SKILL.md",
+          "hash": "2cbda01fffbe628fac27a0426d1dbc71fddad7f8fb52ec8d88b6c49ec7848f77"
+        },
+        {
+          "path": ".claude/skills/security-network/SKILL.md",
+          "hash": "f0dd1e7cb84310a0a55ac7dbef6defa4fffd621a89f2e8a671685189cce9583c"
+        },
+        {
+          "path": ".claude/skills/security-ot-ics/SKILL.md",
+          "hash": "b77c64a31fb0af79034fe4ad3194831749833f3a3f6a35b30808db13478edede"
+        },
+        {
+          "path": ".claude/skills/security-recon/SKILL.md",
+          "hash": "07617fba79641e566ab5ee7bcb1f68145f91ac3da3e234b9bcc3ea8b9a2b9f17"
+        },
+        {
+          "path": ".claude/skills/security-red-team/SKILL.md",
+          "hash": "36bc9bec67f34eba4e576271b25625f640a1879de508837fed3cbe59cf5069da"
+        },
+        {
+          "path": ".claude/skills/security-reverse-engineering/SKILL.md",
+          "hash": "8cb11a8b42a957d9121fc6d89905b12ea883ae531ee1a50ed9a6697b677e7d6b"
+        },
+        {
+          "path": ".claude/skills/security-soc-automation/SKILL.md",
+          "hash": "d3191afe648a2e575f65e696d414191e378ff09f3603ff8fc0f007d20a7fe6fc"
+        },
+        {
+          "path": ".claude/skills/security-threat-hunting/SKILL.md",
+          "hash": "c518ff01e3af9ad6d8bce96efd240ff9eeb2fe44a209b272f6fa8c9a4d6b288a"
+        },
+        {
+          "path": ".claude/skills/security-vuln-assessment/SKILL.md",
+          "hash": "0354a0a8648520c8a472085f33e3dd57355a4d42b9a35ecf40da57102ad61be9"
+        },
+        {
+          "path": ".claude/skills/security-web/SKILL.md",
+          "hash": "8b5fb269d8cb7c66d84b06adef97b7d3cf32ad958bd2f93500d3bc6fd7837664"
+        },
+        {
+          "path": ".claude/skills/security/SKILL.md",
+          "hash": "849a5c022eee607e291d524c676f9d0a488f195bd0455dbf04b956a97cafdf6f"
+        },
+        {
+          "path": ".claude/skills/seo-analytics-injector/SKILL.md",
+          "hash": "d635e11fb7af7b634cdd73be44872607c82f39eb3212469b554907a227e085f6"
+        },
+        {
+          "path": ".claude/skills/spring-auth-auditor/SKILL.md",
+          "hash": "5173fcee8d19061d9c95ff309eeefd27ec45bf5826ed4915040830d7ea0d79f3"
+        },
+        {
+          "path": ".claude/skills/spring-boot-feature/SKILL.md",
+          "hash": "9b930e1fa0f4449ae113b8d4603a5b59372558c1b290149a0219ece87256a248"
+        },
+        {
+          "path": ".claude/skills/spring-boot-kotlin/SKILL.md",
+          "hash": "3b3de548748b53a8faad2253b49746cc6418bd7b31a63486e01a7c7b4630023b"
+        },
+        {
+          "path": ".claude/skills/spring-boot-testing-strategy/SKILL.md",
+          "hash": "447d3f98ee2f2f19a0ff3b91ed7d3ccd42528fbaa2ce52c55d546aa7d2700dd3"
+        },
+        {
+          "path": ".claude/skills/sqlalchemy/SKILL.md",
+          "hash": "01b72ec47cd8f00dcdd48cfa38b021095f6f39b416196e2cf16b4dcb233ecfb2"
+        },
+        {
+          "path": ".claude/skills/tailwind-responsive-auditor/SKILL.md",
+          "hash": "8d65072dc138b92680b506f339dcd5d6890c98bef6a7cba26c40464b7f938562"
+        },
+        {
+          "path": ".claude/skills/tdd-mutation-tester/SKILL.md",
+          "hash": "41ec0304509df921b7e5622d6407a8e3ef818303f8073d41ab3ea8e28befa111"
+        },
+        {
+          "path": ".claude/skills/testing-strategy/SKILL.md",
+          "hash": "4f624e550c13482b59ff29d386cce48b8f5f23e23389c65553d70e1776ee9c05"
+        },
+        {
+          "path": ".claude/skills/testing-tdd/SKILL.md",
+          "hash": "ad5e835d48f7efbdb6c3e1e84ddec2c790cf3aba01b39b6022a830f6cd9893f2"
+        },
+        {
+          "path": ".claude/skills/using-cc-skills/SKILL.md",
+          "hash": "a7364e48b357137032a6ea4157d889f93101b2edddda0e3bcbdc030fe83f1058"
+        },
+        {
+          "path": ".claude/skills/web-design-engineering/SKILL.md",
+          "hash": "e54a060ec7107b386beaeb381d26e2c3aa455ea2a96d35eeefff853d50e1a731"
+        },
+        {
+          "path": ".claude/skills/workflow-orchestration-patterns/references/details.md",
+          "hash": "f904309ab60916d3e6943a2c35ffeadc48ddfa6a3defdd8da5472926ba8887cb"
+        },
+        {
+          "path": ".claude/skills/workflow-orchestration-patterns/SKILL.md",
+          "hash": "f4418f98189bd89d7b801ec65df48b53caa1c555a23f1d9684799415818f1024"
+        },
+        {
+          "path": ".editorconfig",
+          "hash": "3c08c64dfe610cf0a3cabc90ca12f79cb391d117761b67cebb24dd7ff36cbfe0"
+        },
+        {
+          "path": ".eslintrc.json",
+          "hash": "92a27ecdd9e48335e9bdb128731cf6b6cd17070d7a9baaa5ad5adfa9a284ad69"
+        },
+        {
+          "path": ".gitignore",
+          "hash": "0e89ae98f274bc31e8dd30758cc94b5fbbf1c21ecff8560c2447815a1dbb3bea"
+        },
+        {
+          "path": ".prettierrc",
+          "hash": "e364e424dbd208c78be30b441cdbfeeaf40d6bbefdee220b5e931df1237d243f"
+        },
+        {
+          "path": ".vscode/settings.json",
+          "hash": "33c7e31137cbe7d9c718d5db15a3af26be9d300f259eb0d9179aa6c71a8e5526"
+        },
+        {
+          "path": "AGENTS.md",
+          "hash": "5c017ccfee31315909420d3517b81f776d93f05647fadec355793c291dff2973"
+        },
+        {
+          "path": "assets/css/styles.css",
+          "hash": "75c87cd1c491a32af08d2c0ee0d048c91ae5cb2a91ecd96fd7c86e62e53d1c24"
+        },
+        {
+          "path": "assets/css/tailwind.input.css",
+          "hash": "cc1a7ad0d019ddb1d32d0ecb588ba0ac26ce41d8625dd6c366348b25f83a28ec"
+        },
+        {
+          "path": "assets/css/tailwind.min.css",
+          "hash": "685b3a96dc9d6c84e3b7485dbbf9dab93ee626d07b16cff8e16dfada50d49be3"
+        },
+        {
+          "path": "assets/images/favicon/about.txt",
+          "hash": "4db76a5d70585615af45bc2b978b8b298029ae94e0e350e4714ff5d1a9a9842c"
+        },
+        {
+          "path": "assets/images/favicon/android-chrome-192x192.png",
+          "hash": "ef5ecb32e75b5b5d620db02f0cf854b5d967dd7d2d1c731157d172c589124772"
+        },
+        {
+          "path": "assets/images/favicon/android-chrome-512x512.png",
+          "hash": "43828f2dbf46ed05fd2693efd6d4dab78797d2f08fe84d717d5172ed21bcfd3f"
+        },
+        {
+          "path": "assets/images/favicon/apple-touch-icon.png",
+          "hash": "23afc25ac71cbf731f23c16fef3d475d6a9f8de76027fb10d21634087759931e"
+        },
+        {
+          "path": "assets/images/favicon/favicon-16x16.png",
+          "hash": "ceaa91253db3a01b66e653d6b0cbc6cc731ff71a7bef9e3e62a2c85583386621"
+        },
+        {
+          "path": "assets/images/favicon/favicon-32x32.png",
+          "hash": "aa13d5328e6e7f81a66734d2639d5002278cecafce8fe2e4fb9e256cefc81cb5"
+        },
+        {
+          "path": "assets/images/favicon/favicon.ico",
+          "hash": "09385cf69c23a0e3953fe8e795152da9a14924db62e3df8e27aad079eaae33c0"
+        },
+        {
+          "path": "assets/images/favicon/site.webmanifest",
+          "hash": "43e9d6b3d36b0aae28ad19a02685982e1c60cefbf4bfdbfc31e32539976165c7"
+        },
+        {
+          "path": "assets/images/og-daily-os.jpg",
+          "hash": "6abf75ddecf179dea719bdf6a52c11b6c38f3fb71ab4ba64181ea97ede633a16"
+        },
+        {
+          "path": "assets/images/web-works-with-html-css-javascript-mobile.avif",
+          "hash": "c18918716a6773d9d5a24d91b618b37b429ed4dda44b3c5a92fbb3197dbbbc7c"
+        },
+        {
+          "path": "assets/images/web-works-with-html-css-javascript-mobile.webp",
+          "hash": "efd66427a654b7083f5c97493969602997ed5953f0ca7043ddb14a30b85c830a"
+        },
+        {
+          "path": "assets/images/web-works-with-html-css-javascript-tablet.avif",
+          "hash": "62cbf10b770f52ccda32d8e8766b558bec8ef5e0c440a143ef72024fbe5cf2e4"
+        },
+        {
+          "path": "assets/images/web-works-with-html-css-javascript-tablet.webp",
+          "hash": "2ade67677e30df0e5f45db7cd60cd23e1231a52c62aa321bfd881f77c64b433a"
+        },
+        {
+          "path": "assets/images/web-works-with-html-css-javascript.avif",
+          "hash": "f72c6028d2ff327bdb07739b6f3c1331cd51acf4dc58ab34b72e830050a608a1"
+        },
+        {
+          "path": "assets/images/web-works-with-html-css-javascript.webp",
+          "hash": "5677430e5985caf8d92b40ce66427d93921fa03866346152d1651921a8da8691"
+        },
+        {
+          "path": "assets/js/analytics.js",
+          "hash": "e1d274c7d9a387014b82cf60c8d45bf79178088de973f93f69607ecc89960f18"
+        },
+        {
+          "path": "assets/js/components/dueDatePicker.js",
+          "hash": "fc95e9ac2bdf2b7aea93c353cf91bde5c30cb7a9247f60f30f9b871cbcb8300a"
+        },
+        {
+          "path": "assets/js/components/shareModal.js",
+          "hash": "a09599420049477c375c3af2652d9cba34b813bee818640fcdbb6f0a056fdf32"
+        },
+        {
+          "path": "assets/js/components/tagInput.js",
+          "hash": "9156789bdaf05c8144743f979bcc4a107aa6e88d9979bcbdd4f34d5e9a624152"
+        },
+        {
+          "path": "assets/js/core/app.js",
+          "hash": "8fe9769ca7181c629424a5f09964c24468e769fecc43c4bd0a81a4188e977825"
+        },
+        {
+          "path": "assets/js/core/eventBus.js",
+          "hash": "d37ac271d4715aba57a937cffb13e90ffa1e111587d3e9ac65343c62e3fdfe1d"
+        },
+        {
+          "path": "assets/js/data/demoData.js",
+          "hash": "e7f51fb434c369c00d3fe1404da172f505696da1efac633956001a8236b1ce31"
+        },
+        {
+          "path": "assets/js/main.js",
+          "hash": "f6862a4db009a1c8ccb191eac01d5c9d99402173a414ef5d0395a3f605c9945f"
+        },
+        {
+          "path": "assets/js/modules/budgets/index.js",
+          "hash": "a6dbab0529a993bca1afdc0b990597eca53cc84cb33648c90adef6f80f0ef2fb"
+        },
+        {
+          "path": "assets/js/modules/budgets/models.js",
+          "hash": "9d6234e4ad8141e2c38664cadbeb11f013488fe575c1ea6cbde7e4bf0be37ad5"
+        },
+        {
+          "path": "assets/js/modules/budgets/templates.js",
+          "hash": "41dc6c2908a112b1ecc86e08de7eb29d651d9a70a88dd98ca9a5b9ad7f7e6a87"
+        },
+        {
+          "path": "assets/js/modules/habits/index.js",
+          "hash": "758a22285eac459b349bb3de4352c5442eda346bce42f287e06d4a6a6e78b759"
+        },
+        {
+          "path": "assets/js/modules/habits/models.js",
+          "hash": "2a94565696fb7af78d43aa07e29bb91d3ed12c2e5772fab7d9ccebd000edd9b7"
+        },
+        {
+          "path": "assets/js/modules/habits/templates.js",
+          "hash": "975e5778307089eaab90a7ee7aa0a3dd6c626ced488d640cb83c489362593b4b"
+        },
+        {
+          "path": "assets/js/modules/home/index.js",
+          "hash": "c70b6f8a3e9a79548f5ae18e93bebda83fc30145d42b1e47e7b4bb2cf5084a24"
+        },
+        {
+          "path": "assets/js/modules/home/summary.js",
+          "hash": "38833e0eeca67117fa3802efe8fbaf59391bb4e9cc00d6ed25bec207c3d74aae"
+        },
+        {
+          "path": "assets/js/modules/home/templates.js",
+          "hash": "79f4e02b5cef9767cb4a791e4e9a997dc2e58546fe3c13c06a1fd979d11812ed"
+        },
+        {
+          "path": "assets/js/modules/notes/index.js",
+          "hash": "90ffa599890ef9708c94b0f37aeb79c4a0f389f8664b92295a7fd0408e64e2ec"
+        },
+        {
+          "path": "assets/js/modules/notes/models.js",
+          "hash": "d921de8e463ce750bdab16533a3411ae0947d0e26a00d949f348b3b512723cd1"
+        },
+        {
+          "path": "assets/js/modules/notes/templates.js",
+          "hash": "c9ee622f9646320be267606ef7437226b3076fee44fad60067871265e439f466"
+        },
+        {
+          "path": "assets/js/modules/tasks/index.js",
+          "hash": "b4f1fffb025fda2895f19e41d41ca37406e692adbcd027f4304c5d6f7882663d"
+        },
+        {
+          "path": "assets/js/modules/tasks/models.js",
+          "hash": "2d693f29ad6b3b2d19941255f9d605303ac5f6818dc695bc6f464d57d0a1f777"
+        },
+        {
+          "path": "assets/js/modules/tasks/templates.js",
+          "hash": "7bb8ea9696bc17b77c3610a4158f39773cdf458537ba5d96c9562c9757924ef1"
+        },
+        {
+          "path": "assets/js/services/i18n.js",
+          "hash": "4d736fbc01d490297c85ed3faf7ae35b2c51b261d10d9b22263004231690d9a1"
+        },
+        {
+          "path": "assets/js/services/storage.js",
+          "hash": "6cac926c9df766e5139295b15923fee989dd8ce222f0340fa547a4d7330719dd"
+        },
+        {
+          "path": "assets/js/services/visitTracker.js",
+          "hash": "61c3a64d4e946a3173039c6fc52287c4a5f98565321cf9409fb58e9d50cffd91"
+        },
+        {
+          "path": "assets/js/tailwindcss.js",
+          "hash": "61b624110f63c5897901b3b1363de8b517382647664f46414391394bf261d2cf"
+        },
+        {
+          "path": "assets/js/theme.js",
+          "hash": "ef398f576413e39b65b5329bb8147ecf466538cab9afa27fac97c7bb86125384"
+        },
+        {
+          "path": "assets/js/utils/confetti.js",
+          "hash": "103161fa7878f53517b2acb45c91dd6dfd42ff0d27ad739797f7ea664e5a752d"
+        },
+        {
+          "path": "assets/js/utils/date.js",
+          "hash": "b134970a7a2193510e262f4b0c3746db926f3e5f3649888ec9fffd6e3482f5f6"
+        },
+        {
+          "path": "assets/js/utils/html.js",
+          "hash": "408b04b209e36913bb8abf27c72693308436ebd2a19019da179417f83a436139"
+        },
+        {
+          "path": "assets/js/utils/id.js",
+          "hash": "a0cddcd9375ede4fe66e166feee64476021001bd246616c02fbb69aa867ae4b3"
+        },
+        {
+          "path": "assets/js/utils/sound.js",
+          "hash": "6e3b5a3376a00a1010b8dcf9210638386ef23d21b5efac0810a626bf912481d4"
+        },
+        {
+          "path": "assets/js/utils/subtasksStorage.js",
+          "hash": "b6a31b9fda7b69b8145541615579a6edf38e0f174525381fda2fc960447e5773"
+        },
+        {
+          "path": "assets/locales/en.json",
+          "hash": "8eb735aaf7fab860b910f3295591e5dde90535b2414b9fb9c45455aa474f3f8c"
+        },
+        {
+          "path": "assets/locales/es.json",
+          "hash": "aa5e4a6ed90c05f221abd27ca1c23c467b5ccbe4dea2ed42d2ed3a7b5bcfa8dd"
+        },
+        {
+          "path": "assets/sounds/celebration.mp3",
+          "hash": "bb47af8de86cb4f8ede67f4382c5f542af40def99347f73d6ccdb6bb5228b4c1"
+        },
+        {
+          "path": "BACKLOG.md",
+          "hash": "1fe862a91581807e4afcd7f92b4822d92ac2e03889011b6732103bc72041069f"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "hash": "cad24f186e687b07a92e9f1c266abc38482264faf8b3deb92c9b8f91669c1129"
+        },
+        {
+          "path": "CLAUDE.md",
+          "hash": "1f1d94f08e74442bd98b312da8de31393b9f4f905409e2dca8b245e685389233"
+        },
+        {
+          "path": "components/.gitkeep",
+          "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "DESIGN.md",
+          "hash": "d1627778bd20fb026d8469945bd218b271a56091fedf5fbae3ea20a0d202ec5d"
+        },
+        {
+          "path": "docs/.gitkeep",
+          "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "docs/caracteristicas-productivity-xp.md",
+          "hash": "3c2a4ba932a8471477aea4e059d769c22a252982fdab5191b980827a1b4cb3eb"
+        },
+        {
+          "path": "docs/codigo-app_js.md",
+          "hash": "07a11cddbee2c8c6caa87d0a07085dd4adcae2bfb3f29be0a33dfb627c7d7cf4"
+        },
+        {
+          "path": "docs/estimacion-plan-desarrollo.md",
+          "hash": "6ee0575c319a4dfef2b71a618f85c79e9cb18bd0477d429298777e24e191bf8b"
+        },
+        {
+          "path": "docs/fundamentos-javascript.md",
+          "hash": "1ce7b5b4c791c8b13e2094d3ae33001cd8e586b89df93f64be99aa7efe6de5ba"
+        },
+        {
+          "path": "docs/guia-fullstack-javascript.md",
+          "hash": "28bab0e8b2c83e0d9f453ec87793d99e21a9279db54169d810bd587832ae8fcb"
+        },
+        {
+          "path": "docs/i18n-terminando-traducciones.md",
+          "hash": "e5e39094c0bafff2556868599b2da28f4505610cc416be5a2707646233998f1b"
+        },
+        {
+          "path": "docs/i18n-theme.md",
+          "hash": "3471f26f51318dd3d5be910ad6c5d9bdd3ed27da35ff9ba902b2f5d843113c42"
+        },
+        {
+          "path": "docs/ideas.md",
+          "hash": "e2cede473efe64cf951c3041a0759612528a7648be338c1266686412dda30a58"
+        },
+        {
+          "path": "docs/index-documentacion.md",
+          "hash": "2583efea1c977566997a01054769ec8ffdf7fe249ce726e7517cecd86a0590df"
+        },
+        {
+          "path": "docs/javascript-actions-app.md",
+          "hash": "be50cb75da55d99595edb294f168e39b02bad5410aab662b4256c41f51772b62"
+        },
+        {
+          "path": "docs/mejoras-por-implementar.md",
+          "hash": "a2bb76765eed586842a1c77f5fbbc19dacdbd64a482e0466dabb64289dc4d344"
+        },
+        {
+          "path": "docs/MODULAR_ARCHITECTURE.md",
+          "hash": "ea94dce14b48bf9d864e07ac9d611ed6e814886a33f48f34515ae8355bd747e9"
+        },
+        {
+          "path": "docs/optimizacion-lighthouse.md",
+          "hash": "ccd5285806b5eb50586fb562d889755511b425f91423731fa05bc03755513f87"
+        },
+        {
+          "path": "docs/performance.md",
+          "hash": "0a4e06ab6be895ca35a4c05c299bdf740995eaee51c0b48778e66a3b89d4d31d"
+        },
+        {
+          "path": "docs/seo-best-practices.md",
+          "hash": "e037e8560e94dd60b80e0ea9a691548cc46a37821bd1aeac4347ba619bfdb94c"
+        },
+        {
+          "path": "docs/standardjs-best-practices.md",
+          "hash": "6e670e05f9f16a5e3436a4bbb1f58dd4d042476d5543a9a884afb13ffb450b61"
+        },
+        {
+          "path": "docs/tag-manager.md",
+          "hash": "81c1743368769211d8deb86cf9e0e2beaf5d5fde7f6dda7011fb30d274262c1a"
+        },
+        {
+          "path": "docs/tailwind-css.md",
+          "hash": "6546fa79c40bba4a9eef9ca7f5ae0068fe8df79c2a6e19892e5b07b4add39476"
+        },
+        {
+          "path": "docs/templates-dinamicos-i18n.md",
+          "hash": "f86ba5224fd56bf920c12af62a03cd6f577bc39b0965c3b1bd96ee039e3a3a87"
+        },
+        {
+          "path": "en/index.html",
+          "hash": "5b81309d86aaf92e68de69d3a3063f582e65f465c8e1d849faa5ec31b7e8831b"
+        },
+        {
+          "path": "index.html",
+          "hash": "aad564eb05aaf802bd7b398b14b09cf07a34a64111836d7350995e288e008cab"
+        },
+        {
+          "path": "LICENSE",
+          "hash": "235e27157e66cb4485668b2816ff47e0a6b279fcda4fa9228c60c4d78cdc6705"
+        },
+        {
+          "path": "Makefile",
+          "hash": "606bdba96796ad4f4430ba40011e96a0303165ac8efe1630793f6872aef70f9d"
+        },
+        {
+          "path": "openspec/changes/bc-001-migrar-m-dulo-tasks/design.md",
+          "hash": "85801beddade810dec8b70b6c6436a735d30b8965b9552a35117af679cc9454b"
+        },
+        {
+          "path": "openspec/changes/bc-001-migrar-m-dulo-tasks/proposal.md",
+          "hash": "8a3e19da27a39b36e3343b407aeb1efb493453d43f6df20536957f06a523be93"
+        },
+        {
+          "path": "openspec/changes/bc-001-migrar-m-dulo-tasks/specs/delta.md",
+          "hash": "8e21d9be0eeaad54def624e22f1f87ce3ba3d528c7fb5426e9b285fd63e29174"
+        },
+        {
+          "path": "openspec/changes/bc-001-migrar-m-dulo-tasks/tasks.md",
+          "hash": "8c0330b9230d07bf4c478b27bdaead0cbf935579157c69d6e469abc6b7d8f6c2"
+        },
+        {
+          "path": "openspec/changes/bc-002-migrar-m-dulo-habits/design.md",
+          "hash": "347d6207711b37384c0350558cdb494eabcd99a8decc76526ea811cf98d888c3"
+        },
+        {
+          "path": "openspec/changes/bc-002-migrar-m-dulo-habits/proposal.md",
+          "hash": "771d13d518ba0685af6ea128d6f8a05bb47e4cdecefa11181d8c2066777d72a9"
+        },
+        {
+          "path": "openspec/changes/bc-002-migrar-m-dulo-habits/specs/delta.md",
+          "hash": "41ef7d1c3bd294e7a279cad61d94468531b691d302eb476088848de73370f516"
+        },
+        {
+          "path": "openspec/changes/bc-002-migrar-m-dulo-habits/tasks.md",
+          "hash": "f4dd7a6ad5515e5ffb014f07cd926166e59070369526e6a035a3ca677239dbff"
+        },
+        {
+          "path": "openspec/changes/bc-003-migrar-m-dulo-notes/design.md",
+          "hash": "49a9c0e38069d398407a801647d5b76c33c10cda4ce3c2faddf2a724bf4c10c6"
+        },
+        {
+          "path": "openspec/changes/bc-003-migrar-m-dulo-notes/proposal.md",
+          "hash": "c51aa6e7dfa5f66a55830c4231c40f69d65974ac7dfc1e079e77a6871924a5fe"
+        },
+        {
+          "path": "openspec/changes/bc-003-migrar-m-dulo-notes/specs/delta.md",
+          "hash": "c1ee4bf551f37aee3ca3adad967619a212e6c5e97eec9383334a286993237a02"
+        },
+        {
+          "path": "openspec/changes/bc-003-migrar-m-dulo-notes/tasks.md",
+          "hash": "c60b8cd1006c0f84208a27f4a2040449988628c40b2a93b6d4c671cdf75141b5"
+        },
+        {
+          "path": "openspec/changes/bc-006-dashboard-de-telemetr-a-y-resumen-de-uso/design.md",
+          "hash": "f41116caf4f5bc12473060091d5b37180857fa76129dc5cc8efaa8a14502f616"
+        },
+        {
+          "path": "openspec/changes/bc-006-dashboard-de-telemetr-a-y-resumen-de-uso/proposal.md",
+          "hash": "0bba545bea11fe8be82290900fc22ebcf6a3bf43fbc3e3f8d5d7082fc8217614"
+        },
+        {
+          "path": "openspec/changes/bc-006-dashboard-de-telemetr-a-y-resumen-de-uso/specs/delta.md",
+          "hash": "a32b93cddfedc267fcd6208b5bcc21720d55e427c27241447201f431beb2e56f"
+        },
+        {
+          "path": "openspec/changes/bc-006-dashboard-de-telemetr-a-y-resumen-de-uso/tasks.md",
+          "hash": "70b9c22e2627fdbe8be5e0d61e579a6134232397b6edea741a08f4f2ae6c604a"
+        },
+        {
+          "path": "openspec/config.yaml",
+          "hash": "44c0cf2baadaee781dbd8d89d3f845f6224f7c200a7b05e97d5e7d5000f630a1"
+        },
+        {
+          "path": "package-lock.json",
+          "hash": "1cd5926abdf62cca0e995ac6fe29e7f0647058ef23bc7b85ef83cae4285ef95b"
+        },
+        {
+          "path": "package.json",
+          "hash": "98a9b844ded5f0099c799cd991691ec3c2c969979a3602c170a182e38074a4f9"
+        },
+        {
+          "path": "plans/01-plan-javascript-to-modules-es6.md",
+          "hash": "9345660abb20dce9b66b9d4baacda48e38d73dc7ad7bae249865c60a8bd144a9"
+        },
+        {
+          "path": "plans/02_lighthouse-performance.md",
+          "hash": "eb519a9730db4eb21b3ad2d374d391ced16e2763769d8ed15fcc8de358c27437"
+        },
+        {
+          "path": "plans/03_correct_habits.md",
+          "hash": "7426f3da4bfd7503b649311db0107dfb00999c567104a8c824144abeb2fcd7c6"
+        },
+        {
+          "path": "plans/04_correct_budgets.md",
+          "hash": "fd117b43c9674a227f6745dc96f5f726bc8d0855b779ef2791e03c2ff40ed6b5"
+        },
+        {
+          "path": "plans/05_app_modules.md",
+          "hash": "2c3f4b3af1a563ab134ff014db2b06afa76833db38f02e12d38c48a1cee2cd3b"
+        },
+        {
+          "path": "pruebas/compartir.png",
+          "hash": "880f85a77061a3b587d373f1a2159b0e0a37a49bb87a77f982df7a0decb88af9"
+        },
+        {
+          "path": "pruebas/editar-nota.png",
+          "hash": "beb6d3818f0c9b061002e2924a1bc21b20e2b7a23c139b53b8a82a994f004295"
+        },
+        {
+          "path": "pruebas/mobile-menu.png",
+          "hash": "1857c1edd65786e5e0a83e1ba132141d4d537d1fc433b9e73609322bee049870"
+        },
+        {
+          "path": "pruebas/prioridad-notas.png",
+          "hash": "0a21d799dc682571af0c6839227e52c6cd0a4dd673bcb6b579ed1f28de540a54"
+        },
+        {
+          "path": "pruebas/subtareas-dashboard.png",
+          "hash": "2dba12f4b181d73e5f46f42a64a34d658d184936832a1b9c0c2a756305993ad1"
+        },
+        {
+          "path": "pruebas/subtareas.png",
+          "hash": "bd1e7d14739eb42d3ac21968ee6dc1b425f42e930b8ea2029b90bf68bfa47b53"
+        },
+        {
+          "path": "pruebas/ver-nota.png",
+          "hash": "4d1853ae4644b8970a41e1b835e8b0c0198e60d1cce595045ac2c84570eaf4be"
+        },
+        {
+          "path": "README.md",
+          "hash": "0320b9078853885e905f0cdd9b4b6aca6061c74853e4fc79cc3532b18b75b184"
+        },
+        {
+          "path": "roadmap/.gitkeep",
+          "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "roadmap/fundaments-html-css-javascript.md",
+          "hash": "196bba2bc5468d99b5ba5c1a4457fc5b82cef1a3027ccd16534a050c09daefcc"
+        },
+        {
+          "path": "scripts/version-sync.js",
+          "hash": "e1b2bfe01c41af7364287306d4e38363d25ed57917e351146ef0d0fa177e5d22"
+        },
+        {
+          "path": "STATUS.md",
+          "hash": "461f50cbdebd06789eb862c55f8f8364cab19cea7263b76599ba0dd9da757f5b"
+        },
+        {
+          "path": "sw.js",
+          "hash": "26078b819ada4a8aafae05b1ed4273025eaa07a9805b5197725eb4b62db19a21"
+        },
+        {
+          "path": "tailwind.config.cjs",
+          "hash": "cd1d99a860a6081fe2a8a844773ae708d9de890fba47eb735d2130ab6299c7a9"
+        },
+        {
+          "path": "tests/analytics.test.js",
+          "hash": "f7eaa05652db8c2b85faa35ba35008ac0b6f3927a98dc5b35a061cd1e4478ab5"
+        },
+        {
+          "path": "tests/app-core.test.js",
+          "hash": "1dd2000d37d40487112c78b00eb083531e50c59252c5a0298d5dbcb8fd25abe7"
+        },
+        {
+          "path": "tests/budgets.test.js",
+          "hash": "8cbc9de1ce719c74c8a2f417393e7727e9a46caa292f9cf9cad8414003b89bf5"
+        },
+        {
+          "path": "tests/dueDatePicker.test.js",
+          "hash": "b8716608ed81cda58067331768eb7eb5ee3b92ea9945d4e3efaad78106bf01c4"
+        },
+        {
+          "path": "tests/eventBus.test.js",
+          "hash": "b8513791f4c6395c64b17f4c5f4920a0edc6ae16dfd3ff8f490e4269d3002e71"
+        },
+        {
+          "path": "tests/habits.test.js",
+          "hash": "e6e25248bee97512a69c258c47e4ee85e49801e84ab3a4edc8c53372a5279bf2"
+        },
+        {
+          "path": "tests/home-summary.test.js",
+          "hash": "26b1de4c2714cdf87fb388188b159c0c54f564a5c01c231ae0cab1c9a6d3faca"
+        },
+        {
+          "path": "tests/notes.test.js",
+          "hash": "29d8fb5f6ae78690b90cf47727cbcf9842a0cbb8681910b50b1a17261a21c507"
+        },
+        {
+          "path": "tests/seo-schemas.test.js",
+          "hash": "29259febf14be1c9944017813a2a0d93ee37e3e7fcad0e9dc1dc7febf283a172"
+        },
+        {
+          "path": "tests/shareModal.test.js",
+          "hash": "79061fe475000b55cf5f80b8e463e7470e4b164b160bb044d60cc049e7b17d1d"
+        },
+        {
+          "path": "tests/sound.test.js",
+          "hash": "a01696fbce3f1483892fea760506db31ef854b802b11a1ea214bbdfbc36de9fe"
+        },
+        {
+          "path": "tests/storage.test.js",
+          "hash": "1c32247bda0420228ef2e9c22e52146a8fa137c0e8e20cf3bb679ef5c8184d64"
+        },
+        {
+          "path": "tests/subtasks-ui.test.js",
+          "hash": "a16448e7b27f2fc5d0be9114f6bb16e8b8c56e30888b363ee9815df7af908253"
+        },
+        {
+          "path": "tests/tagInput.test.js",
+          "hash": "32051837680f2d9251766d99576125e3d808e345acec0c6e1d76903c9d5ca4d1"
+        },
+        {
+          "path": "tests/tasks.test.js",
+          "hash": "a4468f271dbfee9f3583151d67ec0609c73a35e436680cdec59e82ab59e13888"
+        },
+        {
+          "path": "tests/templates.test.js",
+          "hash": "a1963214e62bfdf535e7dd1614ab9f9050516ac6b75f782e391044cebd314f1e"
+        },
+        {
+          "path": "tests/utils.test.js",
+          "hash": "0a9818599f3e236a299bb2c0bb1b93557cc1e08319b92f3e75d890a6d39ec633"
+        },
+        {
+          "path": "tests/visitTracker.test.js",
+          "hash": "3d946fca606bb4ed128dc6d49c4d02f2404af80048cf1f22b14dfee34bedc461"
+        },
+        {
+          "path": "utils/.gitkeep",
+          "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "vitest.config.js",
+          "hash": "dd88efeb649efa71210a307daa1a768fe7abd4051063e672f437f6a06c6ea865"
+        }
+      ],
+      "coverage": "project",
+      "manifestHash": "33ed9f9cd77a236e69fa26fc02c72407bc0d150ce4d357308e20693e3450b4cc",
+      "outcome": "passed",
+      "capturedAt": "2026-10-03T06:59:40.991Z"
+    }
+  }
+}

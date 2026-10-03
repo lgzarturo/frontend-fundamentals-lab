@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "id": "tests_pass",
+      "required": false,
+      "passed": false,
+      "message": "Command failed: npm test — spawnSync npm ETIMEDOUT"
+    },
+    {
+      "id": "doctor_config",
+      "required": false,
+      "passed": false,
+      "message": "Command failed: npx cc-codeconductor doctor — Command failed: npx cc-codeconductor doctor\nnpm notice run frontend-fundamentals-lab@1.0.1 npx\nnpm notice run 'codeconductor' doctor\n"
+    },
+    {
+      "id": "no_scope_creep",
+      "required": false,
+      "passed": true,
+      "message": "diff_scope check requires task context; skipped in CLI (manual in workflow)"
+    }
+  ],
+  "timestamp": "2026-10-03T06:48:06.720Z"
+}
