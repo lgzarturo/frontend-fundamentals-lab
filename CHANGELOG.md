@@ -2,6 +2,12 @@
 
 ## Historial de cambios
 
+### v1.1.0
+
+- feat: add telemetry dashboard and usage summary feature (BC-006)
+- Merge bc-006-telemetry: contadores de uso y resumen narrativo
+- feat(home): contadores de uso y resumen narrativo en inicio (BC-006)
+
 ### v1.0.1
 
 - feat: remove analytics.js script from index.html and add related test case
