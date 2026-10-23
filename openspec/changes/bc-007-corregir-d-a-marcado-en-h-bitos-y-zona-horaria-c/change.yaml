@@ -1,0 +1,5 @@
+version: 1
+backlogId: BC-007
+profile: standard
+capabilities:
+  - corregir-d-a-marcado-en-h-bitos-y-zona-horaria-c

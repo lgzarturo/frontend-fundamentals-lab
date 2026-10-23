@@ -1,0 +1,5 @@
+version: 1
+backlogId: BC-008
+profile: standard
+capabilities:
+  - editor-de-notas-wysiwyg-por-l-nea-estilo-notion
