@@ -183,7 +183,7 @@ export function blockEditorShellTemplate({
       data-block-cmd="${cmd}"
       title="${label}"
       aria-label="${label}"
-      class="note-tab-btn btn-compact px-3 py-1.5 rounded-md text-gray-600 dark:text-gray-400 hover:text-xp-primary transition-all"
+      class="note-tab-btn btn-compact shrink-0 px-3 py-1.5 rounded-md text-gray-600 dark:text-gray-400 hover:text-xp-primary transition-all"
     >
       ${raw(glyph)}
     </button>`
@@ -191,13 +191,13 @@ export function blockEditorShellTemplate({
 
   return html`
     <div
-      class="be-toolbar flex items-center gap-1 flex-wrap bg-gray-100 dark:bg-xp-darker p-0.5 rounded-lg border border-gray-200 dark:border-xp-primary/20 text-xs font-semibold mb-2"
+      class="be-toolbar sticky top-0 z-40 flex items-center gap-1 overflow-x-auto bg-gray-100 dark:bg-xp-darker p-0.5 rounded-lg border border-gray-200 dark:border-xp-primary/20 text-xs font-semibold mb-2"
     >
       ${raw(buttons)}
     </div>
     <div
       id="${id}"
-      class="be-editor w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 focus:outline-none focus:border-xp-primary text-sm min-h-[190px] max-h-[350px] overflow-y-auto leading-relaxed"
+      class="be-editor w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 focus:outline-none focus:border-xp-primary text-sm min-h-[190px] leading-relaxed"
     ></div>
     <input type="hidden" name="${name}" value="${initialMarkdown}" />
   `

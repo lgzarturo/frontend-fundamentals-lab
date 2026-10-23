@@ -285,6 +285,128 @@ describe("BlockEditor", () => {
     })
   })
 
+  describe("selección multilínea", () => {
+    it("Shift+Abajo debería extender la selección a la siguiente línea", () => {
+      const editor = setup("uno\ndos\ntres")
+      clickView(0)
+      editEl(0).dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowDown",
+          shiftKey: true,
+          bubbles: true
+        })
+      )
+      expect(editor.selectedRange).toEqual({ anchor: 0, focus: 1 })
+      expect(lineEl(0).dataset.selected).toBe("true")
+      expect(lineEl(1).dataset.selected).toBe("true")
+      expect(lineEl(2).dataset.selected).toBeUndefined()
+    })
+
+    it("Shift+Arriba debería extender hacia arriba y respetar bordes", () => {
+      const editor = setup("uno\ndos\ntres")
+      clickView(1)
+      editEl(1).dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowUp",
+          shiftKey: true,
+          bubbles: true
+        })
+      )
+      expect(editor.selectedRange).toEqual({ anchor: 1, focus: 0 })
+      editEl(0).dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowUp",
+          shiftKey: true,
+          bubbles: true
+        })
+      )
+      expect(editor.selectedRange).toEqual({ anchor: 1, focus: 0 })
+    })
+
+    it("Shift+Click debería extender el rango y click simple colapsar", () => {
+      const editor = setup("uno\ndos\ntres")
+      clickView(0)
+      lineEl(2)
+        .querySelector(".be-view")
+        .dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }))
+      expect(editor.selectedRange).toEqual({ anchor: 0, focus: 2 })
+      expect(lineEl(1).dataset.selected).toBe("true")
+      lineEl(2)
+        .querySelector(".be-view")
+        .dispatchEvent(new MouseEvent("click", { bubbles: true }))
+      expect(editor.selectedRange).toBeNull()
+      expect(lineEl(0).dataset.selected).toBeUndefined()
+    })
+
+    it("Escape y tipear deberían colapsar el rango", () => {
+      const editor = setup("uno\ndos")
+      clickView(0)
+      editEl(0).dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowDown",
+          shiftKey: true,
+          bubbles: true
+        })
+      )
+      editEl(1).dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Escape", bubbles: true })
+      )
+      expect(editor.selectedRange).toBeNull()
+
+      editEl(0).dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowDown",
+          shiftKey: true,
+          bubbles: true
+        })
+      )
+      typeIn(1, "dos!")
+      expect(editor.selectedRange).toBeNull()
+      expect(editor.getMarkdown()).toBe("uno\ndos!")
+    })
+
+    it("comando de bloque debería aplicar a todo el rango", () => {
+      const editor = setup("uno\ndos\ntres")
+      clickView(0)
+      editEl(0).dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowDown",
+          shiftKey: true,
+          bubbles: true
+        })
+      )
+      editor.runCommand("h2")
+      expect(editor.getMarkdown()).toBe("## uno\n## dos\ntres")
+    })
+
+    it("comando inline debería aplicar solo a la línea con foco", () => {
+      const editor = setup("uno\ndos")
+      clickView(0)
+      editEl(0).dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowDown",
+          shiftKey: true,
+          bubbles: true
+        })
+      )
+      setSelection(1, 0, 3)
+      editor.runCommand("bold")
+      expect(editor.getMarkdown()).toBe("uno\n**dos**")
+    })
+  })
+
+  describe("scroll y toolbar", () => {
+    it("el editor no debería tener scroll propio y la toolbar sticky en una fila", () => {
+      const shell = blockEditorShellTemplate({ i18n: i18nStub })
+      expect(shell).toContain("sticky top-0 z-40")
+      expect(shell).toContain("overflow-x-auto")
+      expect(shell).toContain("shrink-0")
+      expect(shell).not.toContain("flex-wrap")
+      expect(shell).not.toContain("max-h-[350px]")
+      expect(shell).not.toContain("overflow-y-auto")
+    })
+  })
+
   describe("shell del editor", () => {
     it("debería incluir toolbar, contenedor e input oculto", () => {
       const shell = blockEditorShellTemplate({

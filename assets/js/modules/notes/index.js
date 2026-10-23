@@ -121,6 +121,7 @@ export class NotesModule {
     this.eventBus.emit("modal:open", {
       contentHtml: createNoteModalTemplate(this.i18n)
     })
+    this._setWideModal(true)
 
     const form = document.getElementById("create-note-form")
     const tagsContainer = document.getElementById("note-tags-input-container")
@@ -167,6 +168,7 @@ export class NotesModule {
     this.eventBus.emit("modal:open", {
       contentHtml: editNoteModalTemplate(note, this.i18n)
     })
+    this._setWideModal(true)
 
     const form = document.getElementById("edit-note-form")
     const tagsContainer = document.getElementById("note-tags-input-container")
@@ -219,6 +221,20 @@ export class NotesModule {
       i18n: this.i18n,
       hiddenInput
     })
+  }
+
+  _setWideModal(wide) {
+    if (!this.modalContainer) return
+    this.modalContainer.classList.toggle("max-w-4xl", wide)
+    this.modalContainer.classList.toggle("max-w-2xl", !wide)
+  }
+
+  _cleanupModal() {
+    this._setWideModal(false)
+    this.activeBlockEditor?.destroy()
+    this.activeBlockEditor = null
+    this.activeTagInput?.destroy()
+    this.activeTagInput = null
   }
 
   showPreviewModal(noteId) {
@@ -292,6 +308,7 @@ export class NotesModule {
     this.eventBus.on("note:create", () => this.showCreateModal())
     this.eventBus.on("note:update", noteId => this.showEditModal(noteId))
     this.eventBus.on("note:delete", noteId => this.deleteNote(noteId))
+    this.eventBus.on("modal:closed", () => this._cleanupModal())
     this.eventBus.on("note:search", query => {
       if (!this.container) return
       const results = this.searchNotes(query)

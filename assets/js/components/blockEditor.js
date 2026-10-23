@@ -112,6 +112,7 @@ export class BlockEditor {
     this.i18n = i18n
     this.lines = String(initialMarkdown ?? "").split("\n")
     this.focusedIndex = -1
+    this.selectedRange = null
     this.plaintext = supportsPlaintextOnly()
 
     this._onFocusIn = e => {
@@ -126,6 +127,7 @@ export class BlockEditor {
       const edit = e.target.closest?.(".be-edit")
       if (!edit) return
       const index = Number(edit.dataset.index)
+      this._clearRange()
       this.lines[index] = edit.textContent
       this._refreshLineType(index)
       this._applyLiveStyle(index)
@@ -139,12 +141,33 @@ export class BlockEditor {
         this._splitLine(index)
       } else if (e.key === "Backspace") {
         this._handleBackspace(e, index)
+      } else if (
+        e.shiftKey &&
+        (e.key === "ArrowDown" || e.key === "ArrowUp")
+      ) {
+        e.preventDefault()
+        this._extendRange(index, e.key === "ArrowDown" ? 1 : -1)
+      } else if (e.key === "Escape") {
+        this._clearRange()
       }
     }
     this._onClick = e => {
       const lineEl = e.target.closest?.(".be-line")
       if (!lineEl || !this.container.contains(lineEl)) return
       const index = Number(lineEl.dataset.index)
+      if (e.shiftKey && (this.selectedRange || this.focusedIndex >= 0)) {
+        const anchor = this.selectedRange
+          ? this.selectedRange.anchor
+          : this.focusedIndex
+        if (this.focusedIndex >= 0 && this.focusedIndex !== index) {
+          this._showView(this.focusedIndex)
+        }
+        this.selectedRange = { anchor, focus: index }
+        this._showEdit(index)
+        this._paintRange()
+        return
+      }
+      this._clearRange()
       const edit = lineEl.querySelector(".be-edit")
       if (edit && edit.style.display === "none") this._showEdit(index)
     }
@@ -192,6 +215,7 @@ export class BlockEditor {
   setMarkdown(markdown) {
     this.lines = String(markdown ?? "").split("\n")
     this.focusedIndex = -1
+    this.selectedRange = null
     this._renderAll()
   }
 
@@ -209,14 +233,69 @@ export class BlockEditor {
     this.toolbar?.removeEventListener("mousedown", this._onToolbarMouseDown)
     this.toolbar?.removeEventListener("click", this._onToolbarClick)
     this.focusedIndex = -1
+    this.selectedRange = null
   }
 
   runCommand(cmd) {
     const index = this.focusedIndex >= 0 ? this.focusedIndex : 0
-    if (INLINE_MARKERS[cmd]) this._wrapInline(index, INLINE_MARKERS[cmd])
-    else if (cmd === "link") this._insertLink(index)
-    else this._toggleBlock(index, cmd)
-    this._showEdit(index)
+    if (INLINE_MARKERS[cmd]) {
+      this._wrapInline(index, INLINE_MARKERS[cmd])
+    } else if (cmd === "link") {
+      this._insertLink(index)
+    } else {
+      for (const i of this._rangeIndices(index)) this._toggleBlock(i, cmd)
+    }
+    this._showEdit(this.selectedRange ? this.selectedRange.focus : index)
+    this._paintRange()
+  }
+
+  _rangeIndices(fallback) {
+    if (!this.selectedRange) return [fallback]
+    const [from, to] = [
+      Math.min(this.selectedRange.anchor, this.selectedRange.focus),
+      Math.max(this.selectedRange.anchor, this.selectedRange.focus)
+    ]
+    const indices = []
+    for (let i = from; i <= to; i++) indices.push(i)
+    return indices
+  }
+
+  _extendRange(index, dir) {
+    this._commit(index)
+    const anchor = this.selectedRange ? this.selectedRange.anchor : index
+    const focus = this.selectedRange ? this.selectedRange.focus : index
+    const next = Math.max(0, Math.min(this.lines.length - 1, focus + dir))
+    this.selectedRange = { anchor, focus: next }
+    if (next !== index) this._showView(index)
+    this._showEdit(next, dir > 0 ? this.lines[next].length : 0)
+    this._paintRange()
+  }
+
+  _clearRange() {
+    if (!this.selectedRange) return
+    this.selectedRange = null
+    this.container
+      .querySelectorAll(".be-line[data-selected]")
+      .forEach(lineEl => {
+        delete lineEl.dataset.selected
+        lineEl.style.backgroundColor = ""
+      })
+  }
+
+  _paintRange() {
+    this.container
+      .querySelectorAll(".be-line[data-selected]")
+      .forEach(lineEl => {
+        delete lineEl.dataset.selected
+        lineEl.style.backgroundColor = ""
+      })
+    if (!this.selectedRange) return
+    for (const i of this._rangeIndices(this.focusedIndex)) {
+      const lineEl = this._lineEl(i)
+      if (!lineEl) continue
+      lineEl.dataset.selected = "true"
+      lineEl.style.backgroundColor = "rgba(10, 204, 113, 0.15)"
+    }
   }
 
   _bind() {
@@ -350,6 +429,7 @@ export class BlockEditor {
   }
 
   _splitLine(index) {
+    this._clearRange()
     const edit = this._editEl(index)
     const text = this.lines[index]
     const offset = edit ? getSelectionOffsets(edit).start : text.length
@@ -364,6 +444,7 @@ export class BlockEditor {
     if (!edit) return
     const text = edit.textContent
     this.lines[index] = text
+    this._clearRange()
     if (LONE_MARKER_RE.test(text)) {
       e.preventDefault()
       this.lines[index] = ""

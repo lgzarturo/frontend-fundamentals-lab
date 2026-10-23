@@ -335,6 +335,7 @@ export class DOSApp {
     if (backdrop) {
       backdrop.classList.add("hidden")
     }
+    this.eventBus.emit("modal:closed")
   }
 
   /**

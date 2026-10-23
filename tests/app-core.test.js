@@ -488,5 +488,16 @@ describe("DOSApp gestión de datos", () => {
 
       expect(app.storage.get("settings").timezone).toBeNull()
     })
+
+    it("closeModal debería emitir modal:closed", async () => {
+      const app = createApp()
+      await app.init()
+      const spy = vi.fn()
+      app.eventBus.on("modal:closed", spy)
+
+      app.closeModal()
+
+      expect(spy).toHaveBeenCalled()
+    })
   })
 })

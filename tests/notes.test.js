@@ -546,6 +546,18 @@ describe("NotesModule", () => {
       expect(modalRoot.querySelector("h2")).not.toBeNull()
       expect(modalRoot.textContent).toContain("Subtítulo")
     })
+
+    it("el modal de edición debería ensanchar el panel y restaurarlo al cerrar", () => {
+      module._bindEvents()
+      module.showCreateModal()
+      expect(modalRoot.classList.contains("max-w-4xl")).toBe(true)
+
+      eventBus.emit("modal:closed")
+
+      expect(modalRoot.classList.contains("max-w-4xl")).toBe(false)
+      expect(modalRoot.classList.contains("max-w-2xl")).toBe(true)
+      expect(module.activeBlockEditor).toBeNull()
+    })
   })
 
   describe("Eventos de tarjeta de notas en container", () => {
