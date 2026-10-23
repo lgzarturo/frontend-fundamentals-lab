@@ -4,6 +4,10 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { DOSApp } from "../assets/js/core/app.js"
+import {
+  getAppTimezone,
+  setAppTimezone
+} from "../assets/js/utils/date.js"
 
 const FIXTURE = `
   <div id="home-screen" class="screen">
@@ -428,5 +432,61 @@ describe("DOSApp gestión de datos", () => {
 
     expect(document.getElementById("import-file-input")).not.toBeNull()
     expect(document.getElementById("import-confirm-btn")).not.toBeNull()
+  })
+
+  describe("zona horaria (BC-007 FR-003)", () => {
+    afterEach(() => {
+      setAppTimezone(null)
+    })
+
+    it("debería persistir la zona en settings.timezone y aplicarla", async () => {
+      const app = createApp()
+      await app.init()
+
+      app.setTimezone("America/Mexico_City")
+
+      expect(app.storage.get("settings").timezone).toBe(
+        "America/Mexico_City"
+      )
+      expect(getAppTimezone()).toBe("America/Mexico_City")
+    })
+
+    it("debería recuperar la zona guardada al iniciar (sobrevive recarga)", async () => {
+      const first = createApp()
+      await first.init()
+      first.setTimezone("Europe/Madrid")
+      setAppTimezone(null)
+
+      const second = createApp()
+      await second.init()
+
+      expect(getAppTimezone()).toBe("Europe/Madrid")
+    })
+
+    it("debería poblar el selector y persistir al cambiar", async () => {
+      document.body.innerHTML = FIXTURE + '<select id="timezone-select"></select>'
+      const app = createApp()
+      await app.init()
+
+      const selector = document.getElementById("timezone-select")
+      expect(selector.options.length).toBeGreaterThan(10)
+
+      app.setTimezone("America/Bogota")
+      app.syncTimezoneSelector()
+      expect(selector.value).toBe("America/Bogota")
+
+      selector.value = "Europe/Madrid"
+      selector.dispatchEvent(new Event("change"))
+      expect(app.storage.get("settings").timezone).toBe("Europe/Madrid")
+    })
+
+    it("debería ignorar zonas vacías", async () => {
+      const app = createApp()
+      await app.init()
+
+      app.setTimezone("")
+
+      expect(app.storage.get("settings").timezone).toBeNull()
+    })
   })
 })

@@ -10,6 +10,11 @@ import { HomeModule } from "../modules/home/index.js"
 import { StorageService } from "../services/storage.js"
 import { EventBus } from "./eventBus.js"
 import { launchConfetti } from "../utils/confetti.js"
+import {
+  getAppTimezone,
+  listTimeZones,
+  setAppTimezone
+} from "../utils/date.js"
 import { demoData } from "../data/demoData.js"
 import { VisitTracker } from "../services/visitTracker.js"
 import { analytics } from "../analytics.js"
@@ -36,6 +41,9 @@ export class DOSApp {
     // Inicializa el almacenamiento y migra datos antiguos
     this.storage.init()
 
+    // Aplica la zona horaria guardada antes de inicializar módulos
+    this._applyStoredTimezone()
+
     // Conecta el servicio de analíticas y eventos de uso
     analytics.connectEventBus(this.eventBus)
 
@@ -47,6 +55,9 @@ export class DOSApp {
 
     // Enlaza eventos globales
     this._bindGlobalEvents()
+
+    // Prepara el selector de zona horaria de settings
+    this._bindTimezoneSelector()
 
     // Navega a la pantalla inicial
     this.navigateTo(this._getInitialScreen())
@@ -253,6 +264,7 @@ export class DOSApp {
         break
       case "settings":
         this.loadTheme()
+        this.syncTimezoneSelector()
         break
     }
   }
@@ -574,6 +586,66 @@ export class DOSApp {
     const newTheme = currentTheme === "dark" ? "light" : "dark"
     document.documentElement.classList.toggle("dark")
     localStorage.setItem("theme", newTheme)
+  }
+
+  /**
+   * Aplica la zona horaria guardada en settings (o la del navegador)
+   * @private
+   * @returns {void}
+   */
+  _applyStoredTimezone() {
+    const settings = this.storage.get("settings") || {}
+    setAppTimezone(settings.timezone || null)
+  }
+
+  /**
+   * Guarda la zona horaria elegida y re-renderiza la pantalla actual
+   * @param {string} timeZone - Nombre de zona IANA
+   * @returns {void}
+   */
+  setTimezone(timeZone) {
+    if (!timeZone || typeof timeZone !== "string") return
+    const settings = this.storage.get("settings") || {}
+    this.storage.set("settings", { ...settings, timezone: timeZone })
+    setAppTimezone(timeZone)
+    this._renderScreen(this.currentScreen)
+  }
+
+  /**
+   * Puebla el selector de zona horaria y enlaza su evento change
+   * @private
+   * @returns {void}
+   */
+  _bindTimezoneSelector() {
+    const selector = document.getElementById("timezone-select")
+    if (!selector || selector.options.length) return
+    for (const zone of listTimeZones()) {
+      const option = document.createElement("option")
+      option.value = zone
+      option.textContent = zone.replace(/_/g, " ")
+      selector.appendChild(option)
+    }
+    selector.addEventListener("change", () => {
+      this.setTimezone(selector.value)
+    })
+  }
+
+  /**
+   * Sincroniza el selector de settings con la zona efectiva
+   * @returns {void}
+   */
+  syncTimezoneSelector() {
+    const selector = document.getElementById("timezone-select")
+    if (!selector) return
+    const zone = getAppTimezone()
+    const hasOption = Array.from(selector.options).some(o => o.value === zone)
+    if (!hasOption) {
+      const option = document.createElement("option")
+      option.value = zone
+      option.textContent = zone
+      selector.appendChild(option)
+    }
+    selector.value = zone
   }
 
   // ============================================

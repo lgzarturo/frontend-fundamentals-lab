@@ -1,4 +1,4 @@
-import { formatDate, getLastNDays, getTodayString } from "../../utils/date.js"
+import { getLastNDays, getTodayString } from "../../utils/date.js"
 import { generateId } from "../../utils/id.js"
 
 export class Habit {
@@ -29,12 +29,9 @@ export class Habit {
 
   _recalculateStreak() {
     let streak = 0
-    const today = new Date()
-    for (let i = 0; i < 365; i++) {
-      const date = new Date(today)
-      date.setDate(date.getDate() - i)
-      const dateStr = formatDate(date)
-      if (this.dailyRecords[dateStr]) streak++
+    const days = getLastNDays(365)
+    for (let i = days.length - 1; i >= 0; i--) {
+      if (this.dailyRecords[days[i]]) streak++
       else break
     }
     this.streak = streak

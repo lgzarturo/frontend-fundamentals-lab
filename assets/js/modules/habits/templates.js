@@ -1,4 +1,5 @@
 import { escapeHtml, html, raw } from "../../utils/html.js"
+import { parseDateStringLocal } from "../../utils/date.js"
 
 export { html, raw }
 
@@ -65,10 +66,12 @@ export function habitCardTemplate(habit, i18n) {
     : i18n?.getMessage("app.screens.habits.markComplete") || "Completar"
 
   const weekDots = weekRecords
-    .map(
-      (record, idx) => html`
+    .map(record => {
+      const weekday = parseDateStringLocal(record.date).getDay()
+      const label = DAY_LABELS[(weekday + 6) % 7]
+      return html`
         <div class="flex flex-col items-center gap-1">
-          <span class="text-xs text-gray-400">${DAY_LABELS[idx % 7]}</span>
+          <span class="text-xs text-gray-400">${label}</span>
           <div
             class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${
               record.completed
@@ -85,7 +88,7 @@ export function habitCardTemplate(habit, i18n) {
           </div>
         </div>
       `
-    )
+    })
     .join("")
 
   return html`

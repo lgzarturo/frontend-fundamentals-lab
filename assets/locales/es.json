@@ -373,6 +373,11 @@
           "english": "Inglés",
           "spanish": "Español"
         },
+        "timezone": {
+          "title": "Zona horaria",
+          "selectLabel": "Selecciona tu zona horaria",
+          "description": "Las fechas de la app usan esta zona horaria."
+        },
         "data": {
           "title": "Gestión de Datos",
           "export": {

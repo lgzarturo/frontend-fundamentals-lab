@@ -1,14 +1,18 @@
 /**
  * Pruebas para funciones de utilidad
  */
-import { describe, expect, it } from "vitest"
+import { afterEach, describe, expect, it, vi } from "vitest"
 import {
   formatDate,
+  formatDateInTimezone,
+  getAppTimezone,
   getCurrentWeekDates,
   getLastNDays,
   getRelativeTime,
   getTodayString,
-  parseDateStringLocal
+  listTimeZones,
+  parseDateStringLocal,
+  setAppTimezone
 } from "../assets/js/utils/date.js"
 import { escapeHtml, html, raw } from "../assets/js/utils/html.js"
 import { generateId, isValidId } from "../assets/js/utils/id.js"
@@ -138,5 +142,98 @@ describe("Utils", () => {
       const rawList = raw(["<div>A</div>", "<div>B</div>"])
       expect(rawList.__html).toBe("<div>A</div><div>B</div>")
     })
+  })
+})
+
+describe("Date Utils - zona horaria (BC-007)", () => {
+  afterEach(() => {
+    setAppTimezone(null)
+    vi.useRealTimers()
+  })
+
+  it("debería usar la zona del navegador por defecto", () => {
+    expect(getAppTimezone()).toBe(
+      Intl.DateTimeFormat().resolvedOptions().timeZone
+    )
+  })
+
+  it("debería fijar y restaurar la zona configurada", () => {
+    setAppTimezone("America/Mexico_City")
+    expect(getAppTimezone()).toBe("America/Mexico_City")
+    setAppTimezone(null)
+    expect(getAppTimezone()).toBe(
+      Intl.DateTimeFormat().resolvedOptions().timeZone
+    )
+  })
+
+  it("debería formatear un instante fijo según la zona", () => {
+    const instant = Date.UTC(2026, 4, 8, 1, 30)
+    expect(formatDateInTimezone(instant, "America/Mexico_City")).toBe(
+      "2026-05-07"
+    )
+    expect(formatDateInTimezone(instant, "UTC")).toBe("2026-05-08")
+    expect(formatDateInTimezone(instant, "Pacific/Kiritimati")).toBe(
+      "2026-05-08"
+    )
+  })
+
+  it("debería resolver hoy en la zona configurada", () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(Date.UTC(2026, 4, 8, 0, 30)))
+    setAppTimezone("America/Mexico_City")
+    expect(getTodayString()).toBe("2026-05-07")
+    setAppTimezone("Pacific/Kiritimati")
+    expect(getTodayString()).toBe("2026-05-08")
+  })
+
+  it("debería aceptar zona explícita sin cambiar la configurada", () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(Date.UTC(2026, 4, 8, 0, 30)))
+    expect(getTodayString("America/Mexico_City")).toBe("2026-05-07")
+    expect(getTodayString("Pacific/Kiritimati")).toBe("2026-05-08")
+  })
+
+  it("debería devolver los últimos N días terminando hoy", () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(Date.UTC(2026, 4, 8, 12, 0)))
+    setAppTimezone("UTC")
+    expect(getLastNDays(7)).toEqual([
+      "2026-05-02",
+      "2026-05-03",
+      "2026-05-04",
+      "2026-05-05",
+      "2026-05-06",
+      "2026-05-07",
+      "2026-05-08"
+    ])
+  })
+
+  it("debería calcular la semana lun-dom desde una referencia", () => {
+    expect(getCurrentWeekDates("2026-05-08")).toEqual([
+      "2026-05-04",
+      "2026-05-05",
+      "2026-05-06",
+      "2026-05-07",
+      "2026-05-08",
+      "2026-05-09",
+      "2026-05-10"
+    ])
+  })
+
+  it("debería listar zonas IANA incluyendo UTC", () => {
+    const zones = listTimeZones()
+    expect(zones.length).toBeGreaterThan(10)
+    expect(zones).toContain("UTC")
+    expect(zones).toContain("America/Mexico_City")
+  })
+
+  it("debería aplicar la zona en el fallback de tiempo relativo", () => {
+    const ts = Date.UTC(2026, 0, 5, 0, 30)
+    setAppTimezone("America/Mexico_City")
+    expect(getRelativeTime(ts)).toBe(
+      new Date(ts).toLocaleDateString(undefined, {
+        timeZone: "America/Mexico_City"
+      })
+    )
   })
 })

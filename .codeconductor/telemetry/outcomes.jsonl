@@ -1,0 +1,2 @@
+{"id":"out-mvlai8sn-n5lx","taskId":"BC-007","source":"manual","agent":"reviewer","model":"unknown","contractVersion":"1.8.0","timestamp":"2026-10-23T18:14:59.591Z","status":"pass","verdict":"PASS","weightedScore":2.6,"backlogId":"BC-007"}
+{"id":"out-mvlaiye6-6u02","taskId":"BC-007","source":"manual","agent":"reviewer","model":"muse-spark","contractVersion":"1.8.0","timestamp":"2026-10-23T18:15:32.766Z","status":"pass","verdict":"PASS","weightedScore":2.6,"backlogId":"BC-007"}

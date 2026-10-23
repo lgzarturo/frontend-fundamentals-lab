@@ -126,7 +126,8 @@ export const demoData = {
     theme: "dark",
     currency: "MXN",
     firstDayOfWeek: 1,
-    notificationsEnabled: false
+    notificationsEnabled: false,
+    timezone: null
   },
   version: "2.0.0"
 }

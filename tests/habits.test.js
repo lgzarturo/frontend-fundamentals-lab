@@ -1,7 +1,8 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Habit } from '../assets/js/modules/habits/models.js'
 import { HabitsModule } from '../assets/js/modules/habits/index.js'
-import { formatDate, getTodayString } from '../assets/js/utils/date.js'
+import { habitCardTemplate } from '../assets/js/modules/habits/templates.js'
+import { formatDate, getTodayString, setAppTimezone } from '../assets/js/utils/date.js'
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
@@ -344,5 +345,64 @@ describe('HabitsModule', () => {
     module.createHabit({ title: 'B' })
     module.toggleHabit(h1.id)
     expect(module.getTodayCompletionRate()).toBe(50)
+  })
+})
+
+// ─── BC-007: día marcado y zona horaria ───────────────────────────────────────
+
+describe('BC-007 día marcado y zona horaria', () => {
+  const i18nStub = { getMessage: (key, fallback) => fallback || key }
+
+  afterEach(() => {
+    setAppTimezone(null)
+    vi.useRealTimers()
+  })
+
+  it('FR-001: en viernes guarda el registro en la fecha del viernes', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 4, 8, 12, 0, 0))
+    const h = new Habit({ title: 'Leer' })
+    h.toggle()
+    expect(h.dailyRecords['2026-05-08']).toBe(true)
+    expect(h.isCompletedToday()).toBe(true)
+  })
+
+  it('FR-001/FR-002: la tarjeta muestra la marca bajo la etiqueta del viernes', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 4, 8, 12, 0, 0))
+    const h = new Habit({ title: 'Leer' })
+    h.toggle()
+    const out = habitCardTemplate(h, i18nStub)
+    const labels = [...out.matchAll(/text-gray-400">([A-Z])</g)].map(m => m[1])
+    expect(labels).toEqual(['S', 'D', 'L', 'M', 'X', 'J', 'V'])
+    expect(out.match(/✓/g)?.length).toBe(1)
+    expect(out.lastIndexOf('✓')).toBeGreaterThan(out.lastIndexOf('>V</span>'))
+  })
+
+  it('FR-004: el toggle usa la zona configurada', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(Date.UTC(2026, 4, 8, 10, 0, 0)))
+    setAppTimezone('Pacific/Kiritimati')
+    const h = new Habit({ title: 'Leer' })
+    h.toggle()
+    expect(h.dailyRecords['2026-05-09']).toBe(true)
+    expect(h.isCompletedToday()).toBe(true)
+  })
+
+  it('FR-005: la racha respeta registros existentes', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 4, 8, 12, 0, 0))
+    const h = Habit.fromJSON({
+      title: 'Leer',
+      dailyRecords: {
+        '2026-05-06': true,
+        '2026-05-07': true,
+        '2026-05-08': true
+      }
+    })
+    h.toggle('2026-05-08')
+    h.toggle('2026-05-08')
+    expect(h.streak).toBe(3)
+    expect(h.getCompletionRate(7)).toBeCloseTo((3 / 7) * 100)
   })
 })

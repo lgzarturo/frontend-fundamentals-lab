@@ -10,21 +10,6 @@
 
 ## Items
 
-### BC-007 | Corregir día marcado en hábitos y zona horaria configurable
-- Priority: P1
-- Status: PLANNED
-- Type: bug
-- Depends on: None
-- Description: Corregir el desfase entre el día marcado y el día mostrado en hábitos (p. ej. en viernes se marca/muestra domingo) alineando date utils, registros diarios y etiquetas de semana; agregar ajuste de zona horaria del usuario en settings que persista en storage y controle todos los formateos de fecha del sistema.
-- Scope: assets/js/utils/date.js, assets/js/modules/habits/*, assets/js/core/app.js, assets/js/services/storage.js, assets/js/data/demoData.js, assets/locales/*.json, index.html, tests/habits.test.js, tests/utils.test.js
-- Out of scope: Hábitos semanales o con horarios múltiples; recordatorios/notificaciones.
-- Acceptance:
-  - [ ] Reproducción fijada: con fecha simulada en viernes, completar un hábito guarda el registro en la fecha de ese viernes y la tarjeta muestra la marca bajo la etiqueta del viernes (no domingo).
-  - [ ] Las 7 etiquetas del historial semanal corresponden al weekday real de cada fecha (mapeo verificado por test contra calendario conocido).
-  - [ ] Settings expone un selector de zona horaria (lista IANA); la selección persiste en `settings.timezone` y sobrevive recarga.
-  - [ ] Con zona distinta a la del navegador, `getTodayString`, rachas y fechas mostradas usan la zona configurada (verificado por test con zona fija).
-  - [ ] Racha y tasa de completado no regresan con datos existentes (compatibilidad de `dailyRecords` actuales).
-
 ### BC-008 | Editor de notas WYSIWYG por línea estilo Notion
 - Priority: P2
 - Status: PLANNED
@@ -71,6 +56,21 @@
   - [ ] CRUD, toggles y filtros de tareas actuales siguen funcionando (tests en verde).
 
 ## Archive
+### BC-007 | Corregir día marcado en hábitos y zona horaria configurable
+- Priority: P1
+- Status: DONE
+- Type: bug
+- Depends on: None
+- Description: Corregir el desfase entre el día marcado y el día mostrado en hábitos (p. ej. en viernes se marca/muestra domingo) alineando date utils, registros diarios y etiquetas de semana; agregar ajuste de zona horaria del usuario en settings que persista en storage y controle todos los formateos de fecha del sistema.
+- Scope: assets/js/utils/date.js, assets/js/modules/habits/*, assets/js/core/app.js, assets/js/services/storage.js, assets/js/data/demoData.js, assets/locales/*.json, index.html, tests/habits.test.js, tests/utils.test.js
+- Out of scope: Hábitos semanales o con horarios múltiples; recordatorios/notificaciones.
+- Acceptance:
+  - [x] Reproducción fijada: con fecha simulada en viernes, completar un hábito guarda el registro en la fecha de ese viernes y la tarjeta muestra la marca bajo la etiqueta del viernes (no domingo).
+  - [x] Las 7 etiquetas del historial semanal corresponden al weekday real de cada fecha (mapeo verificado por test contra calendario conocido).
+  - [x] Settings expone un selector de zona horaria (lista IANA); la selección persiste en `settings.timezone` y sobrevive recarga.
+  - [x] Con zona distinta a la del navegador, `getTodayString`, rachas y fechas mostradas usan la zona configurada (verificado por test con zona fija).
+  - [x] Racha y tasa de completado no regresan con datos existentes (compatibilidad de `dailyRecords` actuales).
+
 ### BC-006 | Dashboard de telemetría y resumen de uso
 - Priority: P2
 - Status: DONE

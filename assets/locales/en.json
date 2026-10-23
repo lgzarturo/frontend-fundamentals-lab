@@ -373,6 +373,11 @@
           "english": "English",
           "spanish": "Spanish"
         },
+        "timezone": {
+          "title": "Time Zone",
+          "selectLabel": "Select your time zone",
+          "description": "Dates across the app use this time zone."
+        },
         "data": {
           "title": "Data Management",
           "export": {
