@@ -5,9 +5,9 @@ description:
   actually implemented — reads the diff first, writes only what changed.
 effort: low
 mode: subagent
-model: "gemini-3.8-flash"
+model: "claude-haiku-4-5-20251001"
 temperature: 0.1
-tools: view_file, write_to_file, replace_file_content / multi_replace_file_content, list_dir, grep_search
+tools: Read, Write, Edit, Glob, Grep
 permission:
   read: allow
   edit:
@@ -31,10 +31,10 @@ permission:
 # Model Selection
 | Provider | Model | Use Case |
 |----------|-------|----------|
-| Claude | claude-haiku-4-5-20251001 | Fast — documentation |
-| OpenCode Go | opencode-go/hy3 | Best — efficient docs |
+| Claude | claude-sonnet-5-5 | Fast — documentation |
+| OpenCode Go | opencode-go/muse-spark-1.3-contributor | Best — efficient docs |
 | Gemini | gemini-3.7-flash | Alternative |
-| Codex | gpt-5.6-luna | Alternative |
+| Codex | gpt-6.1-sol | Alternative |
 | Cursor | claude-4.5-haiku-thinking | Primary |
 | Fallback (Grok) | cursor-grok-4.6-high-fast | When primary model unavailable |
 

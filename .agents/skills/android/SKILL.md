@@ -1,6 +1,6 @@
 ---
 id: android
-name: Android + Kotlin (Jetpack Compose & Media3)
+name: android
 description: >
   Provides expert knowledge for building modern native Android apps using Kotlin, Jetpack Compose, Material Design 3, MVI architecture, Hilt dependency injection, and Media3/ExoPlayer.
 
@@ -34,6 +34,10 @@ quality:
 # Android + Kotlin (Jetpack Compose & Media3)
 
 This playbook defines the architecture, UI design system, performance guidelines, and testing strategy for native Android applications.
+
+`android-ui-design` owns specialized Jetpack Compose phone UI/UX design,
+implementation, review, and audit guidance. This skill remains the general guide
+for architecture, Hilt dependency injection, Media3, performance, and testing.
 
 ---
 

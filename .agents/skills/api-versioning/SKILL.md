@@ -1,6 +1,6 @@
 ---
 id: api-versioning
-name: API Versioning
+name: api-versioning
 description: >
   Provides expert knowledge for designing, implementing, and managing REST API
   versioning strategies with deprecation workflows.
@@ -39,6 +39,7 @@ quality:
   reviewed_by: codeconductor-core
   version: 0.1.0
 ---
+
 # API Versioning
 
 ## Versioning Strategies

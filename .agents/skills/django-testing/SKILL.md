@@ -1,6 +1,6 @@
 ---
 id: django-testing
-name: Django Testing
+name: django-testing
 description: >
   Testing patterns for multi-tenant Django POS projects using pytest-django,
   RequestFactory, and mocks. No factories, no complex conftest.
@@ -41,6 +41,7 @@ quality:
   reviewed_by: codeconductor-core
   version: 0.1.0
 ---
+
 ## When to Use
 
 - Writing any test in `apps/*/tests/` or `apps/*/tests.py`

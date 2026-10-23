@@ -1,6 +1,6 @@
 ---
 id: sqlalchemy
-name: SQLAlchemy
+name: sqlalchemy
 description: >
   SQLAlchemy 2.x patterns for async FastAPI projects: models, sessions, queries,
   bulk operations, transactions, and Alembic migrations.
@@ -43,6 +43,7 @@ quality:
   reviewed_by: codeconductor-core
   version: 0.1.0
 ---
+
 ## When to Use
 
 - Defining new SQLAlchemy models

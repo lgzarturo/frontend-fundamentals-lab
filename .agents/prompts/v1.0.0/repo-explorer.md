@@ -6,9 +6,9 @@ description:
   modifies anything.
 effort: low
 mode: subagent
-model: "gemini-3.8-flash"
+model: "claude-haiku-4-5-20251001"
 temperature: 0.1
-tools: view_file, list_dir, grep_search, run_command
+tools: Read, Glob, Grep, Bash
 permission:
   read: allow
   edit: deny
@@ -31,9 +31,9 @@ permission:
 | Provider | Model | Use Case |
 |----------|-------|----------|
 | Claude | claude-haiku-4-5-20251001 | Fast — exploration |
-| OpenCode Go | opencode-go/longcat-2.0 | Primary |
+| OpenCode Go | opencode-go/glm-5.3-flash | Primary |
 | Gemini | gemini-3.7-flash | Alternative |
-| Codex | gpt-5.6-luna | Alternative |
+| Codex | gpt-6.1-sol | Alternative |
 | Cursor | composer-2.5-fast | Primary |
 | Fallback (Grok) | cursor-grok-4.6-high-fast | When primary model unavailable |
 

@@ -6,9 +6,9 @@ description:
   without writing a single line of code.
 effort: medium
 mode: primary
-model: "claude-sonnet-4.6-thinking"
+model: "claude-sonnet-5"
 temperature: 0.1
-tools: view_file, list_dir, grep_search, run_command
+tools: Read, Glob, Grep, Bash
 permission:
   read: allow
   edit: deny
@@ -29,10 +29,10 @@ permission:
 # Model Selection
 | Provider | Model | Use Case |
 |----------|-------|----------|
-| Claude | claude-sonnet-5 | Default — coordination, routing |
-| OpenCode Go | opencode-go/qwen3.7-plus | Complex routing, delegation |
+| Claude | claude-sonnet-5-5 | Default — coordination, routing |
+| OpenCode Go | opencode-go/deepseek-v4.1-flash | Complex routing, delegation |
 | Gemini | gemini-3.7-flash | Alternative |
-| Codex | gpt-5.6-terra | Alternative |
+| Codex | gpt-6.1-sol | Alternative |
 | Cursor | composer-2.5 | Primary |
 | Fallback (Grok) | cursor-grok-4.6-high-fast | When primary model unavailable |
 

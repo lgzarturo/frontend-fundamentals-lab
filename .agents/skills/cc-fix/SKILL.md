@@ -19,6 +19,21 @@ Provide the following information in $ARGUMENTS:
 
 ---
 
+## Web interface scope
+
+Same web scope as `cc-feature`: when the fix concerns web layout, component
+states, feedback, motion, or a requested UI audit, apply skill
+`web-design-engineering` during test/implementation and review; keep this
+workflow's gates and TDD order. See `cc-feature` for the full scope rule.
+
+## Android phone interface scope
+
+Same Android scope as `cc-feature`: when the fix concerns concrete Jetpack
+Compose phone UI or a requested UI audit, apply skill `android-ui-design`
+during test/implementation and review; keep this workflow's gates and TDD
+order. See `cc-feature` for the full scope rule.
+
+
 ## Step 1 — Task Card validation (task-coach)
 
 Invoke `task-coach` with the bug description above.
@@ -49,7 +64,7 @@ the affected code, and no public API or shared state is involved.
 
 Route: `task-coach` → `tester` → `implementer`
 
-Proceed directly to Step 3a.
+Proceed directly to Step 3.
 
 ### Medium or high-risk route
 
@@ -70,31 +85,7 @@ before continuing.**
 
 ---
 
-## Step 3a — Implementation, low-risk (implementer)
-
-Invoke `implementer` with the Task Card.
-Implementer creates a Git Worktree before touching any file; all edits happen inside it.
-
-implementer must:
-
-1. Locate the defect using the reproduction steps
-2. Apply the minimal fix — no unrelated changes
-3. Run the test suite
-4. Produce an Implementation Summary: root cause, fix applied, files changed
-
----
-
-## Step 3b — Implementation, medium/high-risk (implementer)
-
-Invoke `implementer` with the approved Technical Plan and the Task Card.
-Implementer creates a Git Worktree before touching any file; all edits happen inside it.
-
-implementer must follow the plan exactly. Any deviation requires a new Technical
-Plan approval. After implementation, run the full test suite.
-
----
-
-## Step 4 — Regression tests (tester)
+## Step 3 — Regression tests (tester)
 
 Invoke `tester` for all risk levels.
 
@@ -104,6 +95,31 @@ tester must:
    fix, passes after)
 2. Verify that existing tests still pass
 3. Produce a Coverage Summary: test added, case covered
+
+---
+
+## Step 4a — Implementation, low-risk (implementer)
+
+Invoke `implementer` with the Task Card and the failing regression test from Step 3.
+Implementer creates a Git Worktree before touching any file; all edits happen inside it.
+
+implementer must:
+
+1. Locate the defect using the reproduction steps
+2. Apply the minimal fix to make the regression test pass — no unrelated changes
+3. Run the test suite
+4. Produce an Implementation Summary: root cause, fix applied, files changed
+
+---
+
+## Step 4b — Implementation, medium/high-risk (implementer)
+
+Invoke `implementer` with the approved Technical Plan, the Task Card, and the
+failing regression test from Step 3.
+Implementer creates a Git Worktree before touching any file; all edits happen inside it.
+
+implementer must follow the plan exactly. Any deviation requires a new Technical
+Plan approval. After implementation, run the full test suite.
 
 ---
 

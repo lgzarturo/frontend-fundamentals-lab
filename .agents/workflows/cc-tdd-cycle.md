@@ -22,11 +22,10 @@ Describe what behavior you want to implement. Include:
 
 Command: `tdd-cycle` (fixed for this workflow — do not infer from user text)
 
-1. Run: `npx cc-codeconductor ccep parse --command tdd-cycle "$ARGUMENTS" --output json`
-2. Run: `npx cc-codeconductor ccep resolve --command tdd-cycle "$ARGUMENTS" --output json`
-3. Run: `npx cc-codeconductor ccep profile tdd-cycle --output json`
-4. After planner/intake JSON is available, run: `npx cc-codeconductor ccep evaluate --command tdd-cycle --input <planner.json> --output json`. If `stop` is true, show questions or risks and wait for human input.
-5. Delegate to subagents using compiled CCEP prompts — never forward raw `$ARGUMENTS` to planners.
+1. Run: `npx cc-codeconductor ccep profile tdd-cycle --output json` to get the phases and their roles.
+2. For each delegated phase, run: `npx cc-codeconductor ccep compile --command tdd-cycle --phase <phase-id> "$ARGUMENTS" --view prompt --output json`
+3. After planner/intake JSON is available, run: `npx cc-codeconductor ccep evaluate --command tdd-cycle --input <planner.json> --output json`. If `stop` is true, show questions or risks and wait for human input.
+4. Pass each subagent only the compiled `prompt` for its phase — never forward raw `$ARGUMENTS` to planners.
    Canonical delivery order is test-before-implement whenever both phases apply.
 
 ---
@@ -40,7 +39,7 @@ If `openspec status` reports an active change folder:
 3. If analyze `stop` is true or any finding is CRITICAL, stop. Do not delegate to implementer.
 4. Next command spelling on this runner: `/cc-tdd-cycle`
 
-Local development: `bun run dev <same argv>`. Published package: `npx cc-codeconductor`.
+Run the CLI as `npx cc-codeconductor <same argv>`.
 
 ---
 
@@ -60,7 +59,7 @@ Mixing phases invalidates the cycle.
 ## Verifiable phase gates
 
 RED → GREEN and GREEN → REFACTOR are enforced by `tddCycleStateMachine` in
-`domain/loop`. Evidence must be captured with `captureTddSuiteEvidence` (verification
+`domain/loop`. Evidence must be captured with `npx cc-codeconductor tdd capture` (verification
 runner) — do not hand-edit JSON under `.codeconductor/evidence/`.
 
 - RED→GREEN requires runner evidence that the suite **failed**.

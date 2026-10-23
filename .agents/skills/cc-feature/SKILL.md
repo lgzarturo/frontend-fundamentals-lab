@@ -9,6 +9,28 @@ description:
 
 Feature request: $ARGUMENTS
 
+## Web interface scope
+
+When the task concerns web layout, component states, feedback, motion, or a
+requested UI audit, apply skill `web-design-engineering` from the installed skill
+library. Use it during intake/discovery, design, test/implement, and review as
+applicable; keep this workflow’s gates and TDD order. Framework presence alone
+does not activate it; backend-only and native mobile work are excluded. Record
+required visual checks as pending when unavailable. Keep findings in the existing
+Review Report: contract failures in Spec Axis, technical issues in existing
+subchecks, and aesthetic preferences as suggestions; do not add an axis.
+
+## Android phone interface scope
+
+When the task concerns concrete Jetpack Compose phone layout, component states,
+interaction, accessibility, visual behavior, or a requested UI audit, apply skill
+`android-ui-design`. Use it during design, test/implementation, and review as
+applicable while keeping this workflow's gates and TDD order. Kotlin, Compose,
+framework, or dependency presence alone does not activate it; non-UI Android work
+stays with the general `android` skill. Audit-only requests remain read-only, and
+unavailable visual or emulator checks remain pending rather than claimed complete.
+
+
 ## Step 1 — Task Card validation (task-coach)
 
 Invoke `task-coach` with the feature description above.
@@ -44,31 +66,32 @@ not invoke implementer until the plan is approved.**
 
 ---
 
-## Step 3 — Implementation (implementer)
+## Step 3 — Test coverage (tester)
 
-Invoke `implementer` with the approved Technical Plan and the Task Card.
+Invoke `tester` with the approved Technical Plan and the Task Card.
+
+tester must:
+
+1. Write failing tests to cover the new behavior (RED)
+2. Ensure all acceptance criteria from the Task Card have at least one test
+3. Confirm the new tests fail for the right reason before implementation
+4. Produce a Coverage Summary: test files added or modified, cases covered
+
+---
+
+## Step 4 — Implementation (implementer)
+
+Invoke `implementer` with the approved Technical Plan, the Task Card, and the
+failing tests from Step 3.
 Implementer creates a Git Worktree before touching any file; all edits happen inside it.
 
 implementer must:
 
 1. Read the Technical Plan before touching any file
-2. Apply the minimal diff — only what the plan specifies
+2. Apply the minimal diff to make the failing tests pass — only what the plan specifies
 3. Run the project test suite after implementation
 4. Produce an Implementation Summary: what changed, which files, how to verify
    locally
-
----
-
-## Step 4 — Test coverage (tester)
-
-Invoke `tester` with the Implementation Summary and the Task Card.
-
-tester must:
-
-1. Write or extend tests to cover the new behavior
-2. Ensure all acceptance criteria from the Task Card have at least one test
-3. Run the full test suite and confirm it passes
-4. Produce a Coverage Summary: test files added or modified, cases covered
 
 ---
 

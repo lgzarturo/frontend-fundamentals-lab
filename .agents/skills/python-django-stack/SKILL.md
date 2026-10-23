@@ -1,6 +1,6 @@
 ---
 id: python-django-stack
-name: Python Django Stack
+name: python-django-stack
 description: >
   Python and Django conventions for multi-tenant SaaS POS projects:
   views, services, naming, JSON APIs, PDFs, and cart patterns.
@@ -45,6 +45,7 @@ quality:
   reviewed_by: codeconductor-core
   version: 0.1.0
 ---
+
 ## When to Use
 
 - Writing any new view, service method, or API endpoint

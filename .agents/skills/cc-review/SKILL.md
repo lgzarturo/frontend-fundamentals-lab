@@ -18,6 +18,28 @@ Specify what to review. Accepted formats:
 
 ---
 
+## Web interface scope
+
+When the task concerns web layout, component states, feedback, motion, or a
+requested UI audit, apply skill `web-design-engineering` from the installed skill
+library. Use it during intake/discovery, design, test/implement, and review as
+applicable; keep this workflow’s gates and TDD order. Framework presence alone
+does not activate it; backend-only and native mobile work are excluded. Record
+required visual checks as pending when unavailable. Keep findings in the existing
+Review Report: contract failures in Spec Axis, technical issues in existing
+subchecks, and aesthetic preferences as suggestions; do not add an axis.
+
+## Android phone interface scope
+
+When the task concerns concrete Jetpack Compose phone layout, component states,
+interaction, accessibility, visual behavior, or a requested UI audit, apply skill
+`android-ui-design`. Use it during design, test/implementation, and review as
+applicable while keeping this workflow's gates and TDD order. Kotlin, Compose,
+framework, or dependency presence alone does not activate it; non-UI Android work
+stays with the general `android` skill. Audit-only requests remain read-only, and
+unavailable visual or emulator checks remain pending rather than claimed complete.
+
+
 ## Step 1 — Diff collection
 
 Before invoking `reviewer`, collect the diff for the specified target.

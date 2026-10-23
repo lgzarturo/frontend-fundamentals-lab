@@ -5,9 +5,9 @@ description:
   invented architecture — and runs tests before declaring done.
 effort: medium
 mode: subagent
-model: "claude-sonnet-4.6-thinking"
+model: "claude-sonnet-5"
 temperature: 0.1
-tools: view_file, write_to_file, replace_file_content / multi_replace_file_content, run_command, list_dir, grep_search
+tools: Read, Write, Edit, Bash, Glob, Grep
 permission:
   read: allow
   edit: allow
@@ -36,10 +36,10 @@ permission:
 # Model Selection
 | Provider | Model | Use Case |
 |----------|-------|----------|
-| Claude | claude-sonnet-5 | Default — code implementation |
-| OpenCode Go | opencode-go/mimo-v2.5 | Best — reasoning for code |
+| Claude | claude-sonnet-5-5 | Default — code implementation |
+| OpenCode Go | opencode-go/mimo-v2.6-flash | Best — reasoning for code |
 | Gemini | gemini-3.7-flash | Alternative |
-| Codex | gpt-5.6-terra | Alternative |
+| Codex | gpt-6.1-sol | Alternative |
 | Cursor | composer-2.5-fast | Primary |
 | Fallback (Grok) | cursor-grok-4.6-high-fast | When primary model unavailable |
 
@@ -232,4 +232,4 @@ tests. On **REJECT**, stop and escalate to the orchestrator.
 Invoke via `/cc-feature`, `/cc-fix`, `/cc-tdd-cycle`, or the orchestrator.
 Do not invoke other agents. Invoke skill `testing-tdd`.
 Deliverable is incomplete without a passing suite and runner TDD evidence when
-TDD is required. Scorecard: `bun run dev scorecard create --from-diff`.
+TDD is required. Scorecard: `npx cc-codeconductor scorecard create --from-diff`.

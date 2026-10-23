@@ -6,9 +6,9 @@ description:
   code.
 effort: high
 mode: subagent
-model: "gemini-3.1-pro"
+model: "claude-opus-5"
 temperature: 0.1
-tools: view_file, list_dir, grep_search
+tools: Read, Glob, Grep
 permission:
   read: allow
   edit:
@@ -26,10 +26,10 @@ permission:
 # Model Selection
 | Provider | Model | Use Case |
 |----------|-------|----------|
-| Claude | claude-opus-5 | Complex architecture, design |
-| OpenCode Go | opencode-go/deepseek-v4-pro | Best — reasoning, technical design |
+| Claude | claude-sonnet-5-5 | Complex architecture, design |
+| OpenCode Go | opencode-go/deepseek-v4.1-flash | Best — reasoning, technical design |
 | Gemini | gemini-3.1-pro-preview | Alternative |
-| Codex | gpt-5.6-sol | Alternative |
+| Codex | gpt-6.1-sol | Alternative |
 | Cursor | claude-opus-5-thinking-high | Primary |
 | Fallback (Grok) | cursor-grok-4.6-high-fast | When primary model unavailable |
 

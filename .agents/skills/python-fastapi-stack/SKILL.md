@@ -1,6 +1,6 @@
 ---
 id: python-fastapi-stack
-name: Python FastAPI Stack
+name: python-fastapi-stack
 description: >
   FastAPI conventions for REST APIs: routers, Pydantic v2 schemas, dependency
   injection, error handling, pagination, and project structure.
@@ -44,6 +44,7 @@ quality:
   reviewed_by: codeconductor-core
   version: 0.1.0
 ---
+
 ## When to Use
 
 - Writing any new endpoint, router, or schema

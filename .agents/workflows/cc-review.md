@@ -18,15 +18,36 @@ Specify what to review. Accepted formats:
 
 ---
 
+## Web interface scope
+
+When the task concerns web layout, component states, feedback, motion, or a
+requested UI audit, apply skill `web-design-engineering` from the installed skill
+library. Use it during intake/discovery, design, test/implement, and review as
+applicable; keep this workflow’s gates and TDD order. Framework presence alone
+does not activate it; backend-only and native mobile work are excluded. Record
+required visual checks as pending when unavailable. Keep findings in the existing
+Review Report: contract failures in Spec Axis, technical issues in existing
+subchecks, and aesthetic preferences as suggestions; do not add an axis.
+
+## Android phone interface scope
+
+When the task concerns concrete Jetpack Compose phone layout, component states,
+interaction, accessibility, visual behavior, or a requested UI audit, apply skill
+`android-ui-design`. Use it during design, test/implementation, and review as
+applicable while keeping this workflow's gates and TDD order. Kotlin, Compose,
+framework, or dependency presence alone does not activate it; non-UI Android work
+stays with the general `android` skill. Audit-only requests remain read-only, and
+unavailable visual or emulator checks remain pending rather than claimed complete.
+
+
 ## Step 0 — CCEP Bootstrap
 
 Command: `review` (fixed for this workflow — do not infer from user text)
 
-1. Run: `npx cc-codeconductor ccep parse --command review "$ARGUMENTS" --output json`
-2. Run: `npx cc-codeconductor ccep resolve --command review "$ARGUMENTS" --output json`
-3. Run: `npx cc-codeconductor ccep profile review --output json`
-4. After planner/intake JSON is available, run: `npx cc-codeconductor ccep evaluate --command review --input <planner.json> --output json`. If `stop` is true, show questions or risks and wait for human input.
-5. Delegate to subagents using compiled CCEP prompts — never forward raw `$ARGUMENTS` to planners.
+1. Run: `npx cc-codeconductor ccep profile review --output json` to get the phases and their roles.
+2. For each delegated phase, run: `npx cc-codeconductor ccep compile --command review --phase <phase-id> "$ARGUMENTS" --view prompt --output json`
+3. After planner/intake JSON is available, run: `npx cc-codeconductor ccep evaluate --command review --input <planner.json> --output json`. If `stop` is true, show questions or risks and wait for human input.
+4. Pass each subagent only the compiled `prompt` for its phase — never forward raw `$ARGUMENTS` to planners.
 
 ---
 
@@ -94,6 +115,37 @@ reviewer must evaluate the diff against the following checklist:
 
 - Are public interfaces documented?
 - Is CHANGELOG updated if behavior changed?
+
+---
+
+## Severity Rubric
+
+Classify every finding using these concrete anchors — not general judgment —
+so the same finding gets the same category on any run.
+
+**CRITICAL** (always):
+
+- Unauthenticated access to a protected resource
+- Injection (SQL, command, XSS) reachable from untrusted input
+- A secret or credential present in the diff
+- A destructive operation with no confirmation
+- The build or test suite is broken
+- A direct contradiction of an explicit acceptance criterion
+
+**WARNING**:
+
+- Missing test for a new branch or edge case
+- An error is silently swallowed — no log, no propagation
+- A change outside the declared scope
+- Inconsistent with an established pattern already in the module
+- Missing input validation in an internal function (not exposed at a trust boundary)
+
+**SUGGESTION**:
+
+- Style or naming
+- Minor readability
+- Speculative refactor that wasn't requested
+- Non-blocking micro-optimization
 
 ---
 

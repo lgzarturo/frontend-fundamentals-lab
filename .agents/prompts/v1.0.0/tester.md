@@ -6,9 +6,9 @@ description:
   implementation.
 effort: medium
 mode: subagent
-model: "claude-sonnet-4.6-thinking"
+model: "claude-sonnet-5"
 temperature: 0.1
-tools: view_file, write_to_file, replace_file_content / multi_replace_file_content, run_command, list_dir, grep_search
+tools: Read, Write, Edit, Bash, Glob, Grep
 permission:
   read: allow
   edit:
@@ -39,10 +39,10 @@ permission:
 # Model Selection
 | Provider | Model | Use Case |
 |----------|-------|----------|
-| Claude | claude-sonnet-5 | Default — test generation |
-| OpenCode Go | opencode-go/minimax-m3 | Best — balanced reasoning |
+| Claude | claude-sonnet-5-5 | Default — test generation |
+| OpenCode Go | opencode-go/mimo-v2.6-flash | Best — balanced reasoning |
 | Gemini | gemini-3.7-flash | Alternative |
-| Codex | gpt-5.6-terra | Alternative |
+| Codex | gpt-6.1-sol | Alternative |
 | Cursor | composer-2.5-fast | Primary |
 | Fallback (Grok) | cursor-grok-4.6-high-fast | When primary model unavailable |
 
@@ -301,4 +301,4 @@ and confirmed failing; list the failing test paths in `artifacts` so the
 
 Invoke via `/cc-tdd-cycle`, `/cc-feature`, or the orchestrator (test before
 implement). Do not invoke other agents. Invoke skill `testing-tdd`.
-Deliverable is incomplete without `captureTddSuiteEvidence` when TDD is required.
+Deliverable is incomplete without `npx cc-codeconductor tdd capture` when TDD is required.

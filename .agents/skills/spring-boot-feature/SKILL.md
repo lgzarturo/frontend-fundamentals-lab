@@ -1,6 +1,6 @@
 ---
 id: spring-boot-feature
-name: Spring Boot Feature Creation
+name: spring-boot-feature
 description: >
   Guides the creation of complete Spring Boot features following a structured,
   layer-by-layer workflow: entity, repository, service, controller, and tests.
@@ -44,6 +44,7 @@ quality:
   reviewed_by: codeconductor-core
   version: 0.1.0
 ---
+
 # Spring Boot Feature Creation
 
 When asked to create a feature, follow these steps **in order**. Do not skip

@@ -5,9 +5,9 @@ description:
   invented architecture — and runs tests before declaring done.
 effort: medium
 mode: subagent
-model: "claude-sonnet-4.6-thinking"
+model: "claude-sonnet-5"
 temperature: 0.1
-tools: view_file, write_to_file, replace_file_content / multi_replace_file_content, run_command, list_dir, grep_search
+tools: Read, Write, Edit, Bash, Glob, Grep
 permission:
   read: allow
   edit: allow
@@ -221,4 +221,6 @@ tests. On **REJECT**, stop and escalate to the orchestrator.
 Invoke via `/cc-feature`, `/cc-fix`, `/cc-tdd-cycle`, or the orchestrator.
 Do not invoke other agents. Invoke skill `testing-tdd`.
 Deliverable is incomplete without a passing suite and runner TDD evidence when
-TDD is required. Scorecard: `bun run dev scorecard create --from-diff`.
+TDD is required. Scorecard: `npx cc-codeconductor scorecard create --from-diff`.
+Before handing work to review or delivery, verify the current RDD receipt. Do
+not rely on a test result if its candidate has changed.
