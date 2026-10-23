@@ -340,6 +340,20 @@
           "created": "Creada",
           "updated": "Actualizada"
         },
+        "editor": {
+          "h1": "Encabezado 1",
+          "h2": "Encabezado 2",
+          "h3": "Encabezado 3",
+          "bold": "Negrita",
+          "italic": "Cursiva",
+          "code": "Código",
+          "link": "Enlace",
+          "ul": "Lista",
+          "ol": "Lista numerada",
+          "task": "Casilla",
+          "quote": "Cita",
+          "linkPrompt": "URL del enlace:"
+        },
         "modal": {
           "create": {
             "title": "Crear Nueva Nota",

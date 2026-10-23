@@ -470,25 +470,81 @@ describe("NotesModule", () => {
       expect(module.notes).toHaveLength(0)
     })
 
-    it("alternar pestañas en el editor debería cambiar entre textarea y vista previa", () => {
+    it("el modal de crear debería montar el editor por líneas sin pestañas", () => {
       module.showCreateModal()
 
       const form = modalRoot.querySelector("#create-note-form")
-      const textarea = form.querySelector('[name="bodyMarkdown"]')
-      const previewArea = form.querySelector("#note-preview-area")
-      const previewBtn = form.querySelector('[data-note-tab="preview"]')
-      const writeBtn = form.querySelector('[data-note-tab="write"]')
+      expect(form.querySelector("#note-blocks-editor")).not.toBeNull()
+      expect(
+        form.querySelectorAll(".be-toolbar [data-block-cmd]").length
+      ).toBeGreaterThanOrEqual(11)
+      expect(
+        form.querySelector('input[type="hidden"][name="bodyMarkdown"]')
+      ).not.toBeNull()
+      expect(form.querySelector("textarea")).toBeNull()
+      expect(form.querySelector("[data-note-tab]")).toBeNull()
+    })
 
-      textarea.value = "# Título Markdown"
+    it("escribir en el editor y guardar debería persistir el markdown", () => {
+      module.showCreateModal()
 
-      previewBtn.click()
-      expect(textarea.classList.contains("hidden")).toBe(true)
-      expect(previewArea.classList.contains("hidden")).toBe(false)
-      expect(previewArea.innerHTML).toContain("<h1")
+      const form = modalRoot.querySelector("#create-note-form")
+      form.querySelector('input[name="title"]').value = "Nota editor"
+      form.querySelector(".be-view").click()
+      const edit = form.querySelector(".be-edit")
+      edit.textContent = "# Título Markdown"
+      edit.dispatchEvent(new Event("input", { bubbles: true }))
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      )
 
-      writeBtn.click()
-      expect(textarea.classList.contains("hidden")).toBe(false)
-      expect(previewArea.classList.contains("hidden")).toBe(true)
+      expect(module.notes).toHaveLength(1)
+      expect(module.notes[0].title).toBe("Nota editor")
+      expect(module.notes[0].bodyMarkdown).toBe("# Título Markdown")
+    })
+
+    it("el modal de editar debería cargar el markdown existente en líneas", () => {
+      const note = module.createNote({
+        title: "Existente",
+        bodyMarkdown: "# Título\n- [ ] pendiente\nTexto"
+      })
+
+      module.showEditModal(note.id)
+
+      const form = modalRoot.querySelector("#edit-note-form")
+      expect(form.querySelectorAll(".be-line")).toHaveLength(3)
+      expect(module.activeBlockEditor.getMarkdown()).toBe(
+        "# Título\n- [ ] pendiente\nTexto"
+      )
+
+      const edits = form.querySelectorAll(".be-edit")
+      edits[2].textContent = "Texto editado"
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      )
+
+      expect(module.notes[0].bodyMarkdown).toBe(
+        "# Título\n- [ ] pendiente\nTexto editado"
+      )
+    })
+
+    it("lo guardado desde el editor debería verse igual en la vista previa", () => {
+      module.showCreateModal()
+
+      const form = modalRoot.querySelector("#create-note-form")
+      form.querySelector('input[name="title"]').value = "Vista igual"
+      form.querySelector(".be-view").click()
+      const edit = form.querySelector(".be-edit")
+      edit.textContent = "## Subtítulo"
+      edit.dispatchEvent(new Event("input", { bubbles: true }))
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true })
+      )
+
+      const saved = module.notes[0]
+      module.showPreviewModal(saved.id)
+      expect(modalRoot.querySelector("h2")).not.toBeNull()
+      expect(modalRoot.textContent).toContain("Subtítulo")
     })
   })
 

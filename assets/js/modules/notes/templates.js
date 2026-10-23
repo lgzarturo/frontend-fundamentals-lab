@@ -110,6 +110,99 @@ export function parseMarkdown(markdown) {
     .join("")
 }
 
+const FENCE_LINE_CLASS =
+  "bg-gray-100 dark:bg-xp-darker text-xp-primary px-1.5 py-0.5 rounded text-xs font-mono border border-gray-200 dark:border-xp-primary/20 block my-0.5 overflow-x-auto"
+
+/**
+ * Detecta el tipo de bloque de una línea markdown.
+ * @param {string} line - Línea markdown cruda
+ * @returns {string} h1|h2|h3|h4|ul|ol|task|quote|hr|fence|p
+ */
+export function detectNoteBlockType(line) {
+  if (/^```/.test(line)) return "fence"
+  const heading = line.match(/^(#{1,4}) (.*)$/)
+  if (heading) return `h${heading[1].length}`
+  if (/^>\s?/.test(line)) return "quote"
+  if (/^(---|\*\*\*|___)\s*$/.test(line)) return "hr"
+  if (/^-\s*\[[ xX]\]\s*/.test(line)) return "task"
+  if (/^[-*]\s+/.test(line)) return "ul"
+  if (/^\d+\.\s+/.test(line)) return "ol"
+  return "p"
+}
+
+/**
+ * Renderiza una línea markdown reutilizando `parseMarkdown`, de modo que la
+ * vista de edición y la vista guardada producen HTML idéntico.
+ * @param {string} line - Línea markdown cruda
+ * @param {boolean} inFence - La línea está dentro de un bloque de código
+ * @returns {string} Fragmento HTML
+ */
+export function renderNoteLine(line, inFence = false) {
+  if (inFence || line.startsWith("```")) {
+    const code = inFence ? line : line.replace(/^```/, "")
+    return `<div class="${FENCE_LINE_CLASS}">${escapeHtml(code) || "&nbsp;"}</div>`
+  }
+  if (!line.trim()) return "<div>&nbsp;</div>"
+  return parseMarkdown(line)
+}
+
+const BLOCK_COMMANDS = [
+  ["h1", "H1"],
+  ["h2", "H2"],
+  ["h3", "H3"],
+  ["bold", "<strong>B</strong>"],
+  ["italic", "<em>I</em>"],
+  ["code", "<code>&lt;/&gt;</code>"],
+  ["link", "🔗"],
+  ["ul", "•"],
+  ["ol", "1."],
+  ["task", "☐"],
+  ["quote", "“"]
+]
+
+/**
+ * Shell del editor por líneas: barra de formato + contenedor + input oculto.
+ * @param {Object} options
+ * @param {string} [options.id] - Id del contenedor del editor
+ * @param {string} [options.name] - Nombre del input oculto con el markdown
+ * @param {string} [options.initialMarkdown] - Contenido inicial
+ * @param {Object} [options.i18n] - Servicio i18n
+ * @returns {string} Fragmento HTML
+ */
+export function blockEditorShellTemplate({
+  id = "note-blocks-editor",
+  name = "bodyMarkdown",
+  initialMarkdown = "",
+  i18n = null
+} = {}) {
+  const buttons = BLOCK_COMMANDS.map(([cmd, glyph]) => {
+    const label =
+      i18n?.getMessage(`app.screens.notes.editor.${cmd}`) || cmd
+    return html`<button
+      type="button"
+      data-block-cmd="${cmd}"
+      title="${label}"
+      aria-label="${label}"
+      class="note-tab-btn btn-compact px-3 py-1.5 rounded-md text-gray-600 dark:text-gray-400 hover:text-xp-primary transition-all"
+    >
+      ${raw(glyph)}
+    </button>`
+  }).join("")
+
+  return html`
+    <div
+      class="be-toolbar flex items-center gap-1 flex-wrap bg-gray-100 dark:bg-xp-darker p-0.5 rounded-lg border border-gray-200 dark:border-xp-primary/20 text-xs font-semibold mb-2"
+    >
+      ${raw(buttons)}
+    </div>
+    <div
+      id="${id}"
+      class="be-editor w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 focus:outline-none focus:border-xp-primary text-sm min-h-[190px] max-h-[350px] overflow-y-auto leading-relaxed"
+    ></div>
+    <input type="hidden" name="${name}" value="${initialMarkdown}" />
+  `
+}
+
 export function noteCardTemplate(note, i18n) {
   const preview = note.getPreview(120)
   const tagsHtml = note.tags.length
@@ -236,10 +329,6 @@ export function noteListTemplate(notes, i18n, query = "") {
 }
 
 export function createNoteModalTemplate(i18n) {
-  const writeLabel =
-    i18n?.getMessage("app.screens.notes.preview.tabWrite") || "Escribir"
-  const previewLabel =
-    i18n?.getMessage("app.screens.notes.preview.tabPreview") || "Vista Previa"
   const cancelLabel = i18n?.getMessage("ui.common.cancel") || "Cancelar"
   const createLabel =
     i18n?.getMessage("app.screens.notes.modal.create.create") || "Crear"
@@ -283,43 +372,12 @@ export function createNoteModalTemplate(i18n) {
           </div>
 
           <div>
-            <div class="flex items-center justify-between mb-2">
-              <label
-                class="block text-sm font-semibold text-gray-800 dark:text-gray-200"
-              >
-                ${i18n?.getMessage("app.screens.notes.modal.create.content") || "Contenido (Markdown)"}
-              </label>
-              <div
-                class="flex items-center gap-1 bg-gray-100 dark:bg-xp-darker p-0.5 rounded-lg border border-gray-200 dark:border-xp-primary/20 text-xs font-semibold"
-              >
-                <button
-                  type="button"
-                  data-note-tab="write"
-                  class="note-tab-btn btn-compact active px-3 py-1.5 rounded-md bg-white dark:bg-xp-card text-xp-primary shadow-sm transition-all"
-                >
-                  ✏️ ${writeLabel}
-                </button>
-                <button
-                  type="button"
-                  data-note-tab="preview"
-                  data-action="preview-note"
-                  class="note-tab-btn btn-compact px-3 py-1.5 rounded-md text-gray-600 dark:text-gray-400 hover:text-xp-primary transition-all"
-                >
-                  👁️ ${previewLabel}
-                </button>
-              </div>
-            </div>
-            <textarea
-              name="bodyMarkdown"
-              id="note-body-markdown-input"
-              rows="8"
-              class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 focus:outline-none focus:border-xp-primary font-mono text-sm resize-y"
-              placeholder="# Mi nota&#10;&#10;Escribe en **Markdown**..."
-            ></textarea>
-            <div
-              id="note-preview-area"
-              class="hidden prose prose-sm dark:prose-invert max-w-none p-4 bg-gray-50 dark:bg-xp-darker rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 min-h-[190px] max-h-[350px] overflow-y-auto leading-relaxed"
-            ></div>
+            <label
+              class="block text-sm font-semibold mb-2 text-gray-800 dark:text-gray-200"
+            >
+              ${i18n?.getMessage("app.screens.notes.modal.create.content") || "Contenido (Markdown)"}
+            </label>
+            ${raw(blockEditorShellTemplate({ initialMarkdown: "", i18n }))}
           </div>
 
           <div>
@@ -364,10 +422,6 @@ export function createNoteModalTemplate(i18n) {
 }
 
 export function editNoteModalTemplate(note, i18n) {
-  const writeLabel =
-    i18n?.getMessage("app.screens.notes.preview.tabWrite") || "Escribir"
-  const previewLabel =
-    i18n?.getMessage("app.screens.notes.preview.tabPreview") || "Vista Previa"
   const cancelLabel = i18n?.getMessage("ui.common.cancel") || "Cancelar"
   const saveLabel =
     i18n?.getMessage("app.screens.notes.modal.edit.update") ||
@@ -417,43 +471,17 @@ export function editNoteModalTemplate(note, i18n) {
           </div>
 
           <div>
-            <div class="flex items-center justify-between mb-2">
-              <label
-                class="block text-sm font-semibold text-gray-800 dark:text-gray-200"
-              >
-                ${i18n?.getMessage("app.screens.notes.modal.create.content") || "Contenido (Markdown)"}
-              </label>
-              <div
-                class="flex items-center gap-1 bg-gray-100 dark:bg-xp-darker p-0.5 rounded-lg border border-gray-200 dark:border-xp-primary/20 text-xs font-semibold"
-              >
-                <button
-                  type="button"
-                  data-note-tab="write"
-                  class="note-tab-btn btn-compact active px-3 py-1.5 rounded-md bg-white dark:bg-xp-card text-xp-primary shadow-sm transition-all"
-                >
-                  ✏️ ${writeLabel}
-                </button>
-                <button
-                  type="button"
-                  data-note-tab="preview"
-                  data-action="preview-note"
-                  class="note-tab-btn btn-compact px-3 py-1.5 rounded-md text-gray-600 dark:text-gray-400 hover:text-xp-primary transition-all"
-                >
-                  👁️ ${previewLabel}
-                </button>
-              </div>
-            </div>
-            <textarea
-              name="bodyMarkdown"
-              id="note-body-markdown-input"
-              rows="8"
-              class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker text-gray-900 dark:text-gray-100 focus:outline-none focus:border-xp-primary font-mono text-sm resize-y"
+            <label
+              class="block text-sm font-semibold mb-2 text-gray-800 dark:text-gray-200"
             >
-${note.bodyMarkdown}</textarea>
-            <div
-              id="note-preview-area"
-              class="hidden prose prose-sm dark:prose-invert max-w-none p-4 bg-gray-50 dark:bg-xp-darker rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 min-h-[190px] max-h-[350px] overflow-y-auto leading-relaxed"
-            ></div>
+              ${i18n?.getMessage("app.screens.notes.modal.create.content") || "Contenido (Markdown)"}
+            </label>
+            ${raw(
+              blockEditorShellTemplate({
+                initialMarkdown: note.bodyMarkdown,
+                i18n
+              })
+            )}
           </div>
 
           <div>

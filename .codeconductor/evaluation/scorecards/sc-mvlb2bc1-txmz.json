@@ -1,0 +1,75 @@
+{
+  "id": "sc-mvlb2bc1-txmz",
+  "taskId": "BC-008",
+  "agent": "reviewer",
+  "model": "opencode-go/deepseek-v4.1-flash",
+  "contractVersion": "1.8.0",
+  "criteria": [
+    {
+      "id": "acceptance",
+      "label": "Acceptance criteria met",
+      "weight": 0.3,
+      "score": 3,
+      "notes": "All FR/SC mapped to tasks",
+      "autoSuggested": true
+    },
+    {
+      "id": "minimal_diff",
+      "label": "Minimal diff (no scope creep)",
+      "weight": 0.2,
+      "score": 0,
+      "notes": "Files outside scope: .codeconductor/evaluation/index.json, .codeconductor/evaluation/scorecards/sc-mvlaglrm-r3m1.json, .codeconductor/evaluation/scorecards/sc-mvlai0s1-txqq.json, .codeconductor/evaluation/scorecards/sc-mvlairqs-6lp3.json, .codeconductor/events.jsonl",
+      "autoSuggested": true
+    },
+    {
+      "id": "tests",
+      "label": "Tests present and passing",
+      "weight": 0.15,
+      "score": null,
+      "unmeasured": true,
+      "notes": "Unmeasured: no verification-runner evidence supplied",
+      "autoSuggested": true
+    },
+    {
+      "id": "regressions",
+      "label": "No regressions introduced",
+      "weight": 0.15,
+      "score": 2
+    },
+    {
+      "id": "conventions",
+      "label": "Code follows project conventions",
+      "weight": 0.05,
+      "score": 2
+    },
+    {
+      "id": "documentation",
+      "label": "Documentation updated if required",
+      "weight": 0.05,
+      "score": 2
+    },
+    {
+      "id": "context_discipline",
+      "label": "Context discipline",
+      "weight": 0.05,
+      "score": 2
+    },
+    {
+      "id": "cc_gain",
+      "label": "Complexity diffusion (cc-gain)",
+      "weight": 0.05,
+      "score": 3,
+      "notes": "cc-gain raw=91.20000000000002, verdict=positive",
+      "autoSuggested": true
+    }
+  ],
+  "weightedScore": 1.65,
+  "verdict": "REJECT",
+  "findings": [
+    "Scope creep detected in 28 file(s).",
+    "Unmeasured criteria requiring manual scores with notes: tests"
+  ],
+  "createdAt": "2026-10-23T18:30:36.013Z",
+  "backlogId": "BC-008",
+  "source": "manual"
+}

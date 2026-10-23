@@ -4,10 +4,10 @@ import {
   editNoteModalTemplate,
   emptyNotesTemplate,
   noteListTemplate,
-  notePreviewTemplate,
-  parseMarkdown
+  notePreviewTemplate
 } from "./templates.js"
 import { TagInput } from "../../components/tagInput.js"
+import { BlockEditor } from "../../components/blockEditor.js"
 
 export class NotesModule {
   constructor(storage, eventBus, i18n) {
@@ -18,6 +18,7 @@ export class NotesModule {
     this.container = null
     this.modalContainer = null
     this.activeTagInput = null
+    this.activeBlockEditor = null
   }
 
   init() {
@@ -136,10 +137,11 @@ export class NotesModule {
       this.activeTagInput = tagInputInstance
     }
 
-    this._bindEditorTabs(form)
+    this.activeBlockEditor = this._bindBlockEditor(form, "")
 
     form.addEventListener("submit", e => {
       e.preventDefault()
+      this.activeBlockEditor?.syncHiddenInput()
       const formData = new FormData(form)
       const tags = tagInputInstance
         ? tagInputInstance.getTags()
@@ -152,6 +154,8 @@ export class NotesModule {
       })
       tagInputInstance?.destroy()
       this.activeTagInput = null
+      this.activeBlockEditor?.destroy()
+      this.activeBlockEditor = null
       this.eventBus.emit("modal:close")
     })
   }
@@ -179,10 +183,11 @@ export class NotesModule {
       this.activeTagInput = tagInputInstance
     }
 
-    this._bindEditorTabs(form)
+    this.activeBlockEditor = this._bindBlockEditor(form, note.bodyMarkdown)
 
     form.addEventListener("submit", e => {
       e.preventDefault()
+      this.activeBlockEditor?.syncHiddenInput()
       const formData = new FormData(form)
       const tags = tagInputInstance
         ? tagInputInstance.getTags()
@@ -195,84 +200,24 @@ export class NotesModule {
       })
       tagInputInstance?.destroy()
       this.activeTagInput = null
+      this.activeBlockEditor?.destroy()
+      this.activeBlockEditor = null
       this.eventBus.emit("modal:close")
     })
   }
 
-  _bindEditorTabs(form) {
-    if (!form) return
-    const writeBtn = form.querySelector('[data-note-tab="write"]')
-    const previewBtn = form.querySelector('[data-note-tab="preview"]')
-    const textarea = form.querySelector('[name="bodyMarkdown"]')
-    const previewArea = form.querySelector("#note-preview-area")
-
-    if (!previewBtn || !textarea || !previewArea) return
-
-    const switchToWrite = () => {
-      if (writeBtn) {
-        writeBtn.classList.add(
-          "active",
-          "bg-white",
-          "dark:bg-xp-card",
-          "text-xp-primary",
-          "shadow-sm"
-        )
-        writeBtn.classList.remove("text-gray-600", "dark:text-gray-400")
-      }
-      previewBtn.classList.remove(
-        "active",
-        "bg-white",
-        "dark:bg-xp-card",
-        "text-xp-primary",
-        "shadow-sm"
-      )
-      previewBtn.classList.add("text-gray-600", "dark:text-gray-400")
-
-      textarea.classList.remove("hidden")
-      previewArea.classList.add("hidden")
-    }
-
-    const switchToPreview = () => {
-      previewBtn.classList.add(
-        "active",
-        "bg-white",
-        "dark:bg-xp-card",
-        "text-xp-primary",
-        "shadow-sm"
-      )
-      previewBtn.classList.remove("text-gray-600", "dark:text-gray-400")
-      if (writeBtn) {
-        writeBtn.classList.remove(
-          "active",
-          "bg-white",
-          "dark:bg-xp-card",
-          "text-xp-primary",
-          "shadow-sm"
-        )
-        writeBtn.classList.add("text-gray-600", "dark:text-gray-400")
-      }
-
-      const parsed = parseMarkdown(textarea.value)
-      const emptyMsg =
-        this.i18n?.getMessage("app.screens.notes.preview.emptyContent") ||
-        "Esta nota no tiene contenido aún."
-      previewArea.innerHTML =
-        parsed ||
-        `<p class="italic text-gray-400 text-center py-4">${emptyMsg}</p>`
-
-      textarea.classList.add("hidden")
-      previewArea.classList.remove("hidden")
-    }
-
-    if (writeBtn) {
-      writeBtn.addEventListener("click", switchToWrite)
-    }
-    previewBtn.addEventListener("click", () => {
-      if (previewArea.classList.contains("hidden")) {
-        switchToPreview()
-      } else {
-        switchToWrite()
-      }
+  _bindBlockEditor(form, initialMarkdown) {
+    if (!form) return null
+    const container = form.querySelector("#note-blocks-editor")
+    const toolbar = form.querySelector(".be-toolbar")
+    const hiddenInput = form.querySelector('input[name="bodyMarkdown"]')
+    if (!container) return null
+    return new BlockEditor({
+      container,
+      toolbar,
+      initialMarkdown,
+      i18n: this.i18n,
+      hiddenInput
     })
   }
 

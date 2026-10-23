@@ -10,21 +10,6 @@
 
 ## Items
 
-### BC-008 | Editor de notas WYSIWYG por línea estilo Notion
-- Priority: P2
-- Status: PLANNED
-- Type: feature
-- Depends on: None
-- Description: Reemplazar el flujo textarea + vista previa por un editor donde cada línea se formatea en vivo mientras se escribe (estilo Notion), con barra de formato por línea; mantener almacenamiento en markdown para compatibilidad con notas existentes.
-- Scope: assets/js/modules/notes/*, assets/js/components/*, index.html, assets/locales/*.json, tests/notes.test.js
-- Out of scope: Bases de datos/tablas Notion, colaboración en tiempo real, arrastrar bloques entre notas, librerías externas de edición.
-- Acceptance:
-  - [ ] Escribir `# `, `## `, `- `, `1. `, `- [ ] `, `> ` o bloque de código al inicio de línea la convierte al formato correspondiente sin recargar ni abrir vista previa.
-  - [ ] Barra de formato aplica H1-H3, negrita, cursiva, listas, checklist, cita, código y enlace sobre la línea/selección actual.
-  - [ ] Lo que se ve al editar es lo que se guarda: el render guardado es idéntico al render en edición para los formatos soportados.
-  - [ ] Notas markdown existentes abren y se editan sin pérdida de contenido ni formato.
-  - [ ] Crear, editar, buscar y borrar notas sigue funcionando (tests actuales en verde + nuevos tests del editor).
-
 ### BC-009 | Presupuesto de inversión con simulador de interés compuesto
 - Priority: P2
 - Status: PLANNED
@@ -56,6 +41,21 @@
   - [ ] CRUD, toggles y filtros de tareas actuales siguen funcionando (tests en verde).
 
 ## Archive
+### BC-008 | Editor de notas WYSIWYG por línea estilo Notion
+- Priority: P2
+- Status: DONE
+- Type: feature
+- Depends on: None
+- Description: Reemplazar el flujo textarea + vista previa por un editor donde cada línea se formatea en vivo mientras se escribe (estilo Notion), con barra de formato por línea; mantener almacenamiento en markdown para compatibilidad con notas existentes.
+- Scope: assets/js/modules/notes/*, assets/js/components/*, index.html, assets/locales/*.json, tests/notes.test.js
+- Out of scope: Bases de datos/tablas Notion, colaboración en tiempo real, arrastrar bloques entre notas, librerías externas de edición.
+- Acceptance:
+  - [x] Escribir `# `, `## `, `- `, `1. `, `- [ ] `, `> ` o bloque de código al inicio de línea la convierte al formato correspondiente sin recargar ni abrir vista previa.
+  - [x] Barra de formato aplica H1-H3, negrita, cursiva, listas, checklist, cita, código y enlace sobre la línea/selección actual.
+  - [x] Lo que se ve al editar es lo que se guarda: el render guardado es idéntico al render en edición para los formatos soportados.
+  - [x] Notas markdown existentes abren y se editan sin pérdida de contenido ni formato.
+  - [x] Crear, editar, buscar y borrar notas sigue funcionando (tests actuales en verde + nuevos tests del editor).
+
 ### BC-007 | Corregir día marcado en hábitos y zona horaria configurable
 - Priority: P1
 - Status: DONE
