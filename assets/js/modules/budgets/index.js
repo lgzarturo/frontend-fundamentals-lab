@@ -1,11 +1,13 @@
-import { Budget, Transaction } from "./models.js"
+import { Budget, Transaction, investmentToCsv } from "./models.js"
 import {
   addTransactionModalTemplate,
   budgetCardTemplate,
   budgetDetailsModalTemplate,
   budgetOverviewTemplate,
   createBudgetModalTemplate,
-  emptyBudgetsTemplate
+  emptyBudgetsTemplate,
+  investmentDetailsModalTemplate,
+  investmentPrintTemplate
 } from "./templates.js"
 
 export class BudgetsModule {
@@ -56,7 +58,11 @@ export class BudgetsModule {
       currency: data.currency,
       type: data.type,
       goalAmount: data.type === "savings" ? data.goalAmount : 0,
-      initialAmount: data.type === "spending" ? data.initialAmount : 0
+      initialAmount: data.type === "spending" ? data.initialAmount : 0,
+      initialPrincipal: data.type === "investing" ? data.initialPrincipal : 0,
+      monthlyContribution:
+        data.type === "investing" ? data.monthlyContribution : 0,
+      annualRate: data.type === "investing" ? data.annualRate : 0
     })
 
     this.budgets.push(budget)
@@ -116,7 +122,7 @@ export class BudgetsModule {
         if (budget.type === "savings") {
           acc.saved += budget.getBalance()
           acc.savingsGoal += budget.goalAmount
-        } else {
+        } else if (budget.type === "spending") {
           acc.available += budget.getBalance()
           acc.initialTotal += budget.initialAmount
         }
@@ -124,6 +130,47 @@ export class BudgetsModule {
       },
       { saved: 0, savingsGoal: 0, available: 0, initialTotal: 0 }
     )
+  }
+
+  downloadCsv(budgetId) {
+    const budget = this.budgets.find(b => b.id === budgetId)
+    if (!budget || budget.type !== "investing") {
+      throw new Error(`Investment budget not found: ${budgetId}`)
+    }
+    const csv = investmentToCsv(budget.getSimulation())
+    const blob = new Blob([csv], { type: "text/csv" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `inversion-${budget.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  downloadPdf(budgetId) {
+    const budget = this.budgets.find(b => b.id === budgetId)
+    if (!budget || budget.type !== "investing") {
+      throw new Error(`Investment budget not found: ${budgetId}`)
+    }
+    const doc = investmentPrintTemplate(
+      budget,
+      budget.getSimulation(),
+      this.i18n
+    )
+    const iframe = document.createElement("iframe")
+    iframe.style.display = "none"
+    iframe.setAttribute("title", "investment-print")
+    document.body.appendChild(iframe)
+    iframe.contentDocument.open()
+    iframe.contentDocument.write(doc)
+    iframe.contentDocument.close()
+    iframe.contentWindow.focus()
+    iframe.contentWindow.print?.()
+    iframe.contentWindow.onafterprint = () => iframe.remove()
+    setTimeout(() => iframe.remove(), 60000)
   }
 
   showCreateModal() {
@@ -136,15 +183,18 @@ export class BudgetsModule {
     const typeInputs = form.querySelectorAll('input[name="type"]')
     const syncTypeFields = type => {
       const isSavings = type === "savings"
+      const isInvesting = type === "investing"
       const goalGroup = document.getElementById("goal-amount-group")
       const initialGroup = document.getElementById("initial-amount-group")
+      const investingGroup = document.getElementById("investing-fields-group")
       const goalInput = goalGroup?.querySelector("input")
       const initialInput = initialGroup?.querySelector("input")
 
       goalGroup?.classList.toggle("hidden", !isSavings)
-      initialGroup?.classList.toggle("hidden", isSavings)
+      initialGroup?.classList.toggle("hidden", isSavings || isInvesting)
+      investingGroup?.classList.toggle("hidden", !isInvesting)
       if (goalInput) goalInput.required = isSavings
-      if (initialInput) initialInput.required = !isSavings
+      if (initialInput) initialInput.required = !isSavings && !isInvesting
     }
 
     typeInputs.forEach(input => {
@@ -163,7 +213,12 @@ export class BudgetsModule {
         currency: formData.get("currency"),
         type,
         goalAmount: type === "savings" ? formData.get("goalAmount") : 0,
-        initialAmount: type === "spending" ? formData.get("initialAmount") : 0
+        initialAmount: type === "spending" ? formData.get("initialAmount") : 0,
+        initialPrincipal:
+          type === "investing" ? formData.get("initialPrincipal") : 0,
+        monthlyContribution:
+          type === "investing" ? formData.get("monthlyContribution") : 0,
+        annualRate: type === "investing" ? formData.get("annualRate") : 0
       })
       this.eventBus.emit("modal:close")
     })
@@ -174,13 +229,17 @@ export class BudgetsModule {
     if (!budget || !this.modalContainer) return
 
     this.eventBus.emit("modal:open", {
-      contentHtml: budgetDetailsModalTemplate(budget, this.i18n)
+      contentHtml:
+        budget.type === "investing"
+          ? investmentDetailsModalTemplate(budget, this.i18n)
+          : budgetDetailsModalTemplate(budget, this.i18n)
     })
   }
 
   showAddTransactionModal(budgetId) {
     const budget = this.budgets.find(b => b.id === budgetId)
     if (!budget || !this.modalContainer) return
+    if (budget.type === "investing") return
 
     this.eventBus.emit("modal:open", {
       contentHtml: addTransactionModalTemplate(budget, this.i18n)
@@ -265,12 +324,28 @@ export class BudgetsModule {
           case "add-transaction":
             this.showAddTransactionModal(budgetId)
             break
+          case "download-csv":
+            this.downloadCsv(budgetId)
+            break
         }
       })
     }
 
     if (this.modalContainer) {
       this.modalContainer.addEventListener("click", e => {
+        const downloadTarget =
+          e.target.closest('[data-action="download-csv"]') ||
+          e.target.closest('[data-action="download-pdf"]')
+        if (downloadTarget) {
+          const budgetId = downloadTarget.dataset.budgetId
+          if (downloadTarget.dataset.action === "download-csv") {
+            this.downloadCsv(budgetId)
+          } else {
+            this.downloadPdf(budgetId)
+          }
+          return
+        }
+
         const target = e.target.closest('[data-action="delete-budget"]')
         if (!target) return
 

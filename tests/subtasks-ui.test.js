@@ -127,4 +127,21 @@ describe("Jerarquía y visualización de Subtareas", () => {
     })
     expect(mockEventBus.emit).toHaveBeenCalledWith("task:updated", task)
   })
+
+  it("toggleSubtask() estampa createdAt/completedAt de ciclo (BC-010)", () => {
+    const module = new TasksModule(mockStorage, mockEventBus, null)
+    module.tasks = [task]
+
+    const sub = task.addSubtask("Nueva")
+    expect(sub.createdAt).toBeTypeOf("number")
+    expect(sub.completedAt).toBeNull()
+
+    module.toggleSubtask("task-100", sub.id)
+    expect(sub.done).toBe(true)
+    expect(sub.completedAt).toBeTypeOf("number")
+
+    module.toggleSubtask("task-100", sub.id)
+    expect(sub.done).toBe(false)
+    expect(sub.completedAt).toBeNull()
+  })
 })

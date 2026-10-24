@@ -2,11 +2,13 @@ import { Task } from "./models.js"
 import {
   taskListTemplate,
   createTaskModalTemplate,
-  editTaskModalTemplate
+  editTaskModalTemplate,
+  tasksReportPrintTemplate
 } from "./templates.js"
 import { TagInput } from "../../components/tagInput.js"
 import { DueDatePicker } from "../../components/dueDatePicker.js"
 import { playCelebrationSound } from "../../utils/sound.js"
+import { formatDateInTimezone } from "../../utils/date.js"
 import {
   getExpandedSubtaskIds,
   toggleSubtaskExpanded
@@ -101,6 +103,7 @@ export class TasksModule {
     const task = this.tasks.find(t => t.id === taskId)
     if (!task) throw new Error(`Task not found: ${taskId}`)
 
+    const prevCompletedAt = task.completedAt
     task.toggle()
     this._saveTasks()
     this.render()
@@ -113,6 +116,7 @@ export class TasksModule {
       message: actionMsg,
       undoCallback: () => {
         task.toggle()
+        if (task.done) task.completedAt = prevCompletedAt
         this._saveTasks()
         this.render()
         this.eventBus.emit("task:toggled", task)
@@ -177,6 +181,54 @@ export class TasksModule {
       .filter(t => t.isMIT())
       .sort((a, b) => a.order - b.order)
       .slice(0, limit)
+  }
+
+  getCompletedReport() {
+    const rows = this.tasks
+      .filter(t => t.done && t.completedAt)
+      .map(t => ({
+        id: t.id,
+        title: t.title,
+        createdDay: formatDateInTimezone(t.createdAt),
+        completedDay: formatDateInTimezone(t.completedAt),
+        effectiveDays: t.getEffectiveDays(),
+        effectiveHours: t.getEffectiveHours()
+      }))
+      .sort((a, b) => (a.completedDay < b.completedDay ? -1 : 1))
+    const perDayMap = new Map()
+    for (const row of rows) {
+      perDayMap.set(row.completedDay, (perDayMap.get(row.completedDay) || 0) + 1)
+    }
+    const perDay = [...perDayMap.entries()]
+      .map(([day, count]) => ({ day, count }))
+      .sort((a, b) => (a.day < b.day ? -1 : 1))
+    const totalHours = rows.reduce((sum, r) => sum + r.effectiveHours, 0)
+    return { rows, perDay, totalHours }
+  }
+
+  downloadReport() {
+    const { rows, perDay } = this.getCompletedReport()
+    if (rows.length === 0) {
+      this.eventBus.emit("toast:show", {
+        message:
+          this.i18n?.getMessage("app.screens.tasks.report.empty") ||
+          "No hay tareas completadas para reportar.",
+        type: "info"
+      })
+      return
+    }
+    const doc = tasksReportPrintTemplate(rows, perDay, this.i18n)
+    const iframe = document.createElement("iframe")
+    iframe.style.display = "none"
+    iframe.setAttribute("title", "tasks-report-print")
+    document.body.appendChild(iframe)
+    iframe.contentDocument.open()
+    iframe.contentDocument.write(doc)
+    iframe.contentDocument.close()
+    iframe.contentWindow.focus()
+    iframe.contentWindow.print?.()
+    iframe.contentWindow.onafterprint = () => iframe.remove()
+    setTimeout(() => iframe.remove(), 60000)
   }
 
   getAllTags() {
@@ -465,6 +517,15 @@ export class TasksModule {
     this.eventBus.on("task:reorder", orderedIds =>
       this.reorderTasks(orderedIds)
     )
+
+    const reportBtn =
+      typeof document !== "undefined"
+        ? document.getElementById("tasks-report-btn")
+        : null
+    if (reportBtn && !reportBtn.dataset.bound) {
+      reportBtn.dataset.bound = "1"
+      reportBtn.addEventListener("click", () => this.downloadReport())
+    }
 
     if (this.container) {
       this._bindDragEvents()

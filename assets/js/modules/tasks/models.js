@@ -1,4 +1,8 @@
-import { getTodayString } from "../../utils/date.js"
+import {
+  countWeekdaysInclusive,
+  formatDateInTimezone,
+  getTodayString
+} from "../../utils/date.js"
 import { generateId } from "../../utils/id.js"
 
 export class Subtask {
@@ -6,13 +10,17 @@ export class Subtask {
     this.id = data.id || generateId()
     this.text = data.text || ""
     this.done = data.done ?? false
+    this.createdAt = data.createdAt || Date.now()
+    this.completedAt = data.completedAt ?? null
   }
 
   toJSON() {
     return {
       id: this.id,
       text: this.text,
-      done: this.done
+      done: this.done,
+      createdAt: this.createdAt,
+      completedAt: this.completedAt
     }
   }
 
@@ -35,6 +43,7 @@ export class Task {
     this.done = data.done ?? false
     this.order = data.order ?? 0
     this.createdAt = data.createdAt || Date.now()
+    this.completedAt = data.completedAt ?? null
     this.updatedAt = data.updatedAt || Date.now()
   }
 
@@ -54,13 +63,27 @@ export class Task {
 
   toggle() {
     this.done = !this.done
+    this.completedAt = this.done ? Date.now() : null
     this.updatedAt = Date.now()
+  }
+
+  getEffectiveDays() {
+    if (!this.done || !this.completedAt || !this.createdAt) return 0
+    return countWeekdaysInclusive(
+      formatDateInTimezone(this.createdAt),
+      formatDateInTimezone(this.completedAt)
+    )
+  }
+
+  getEffectiveHours() {
+    return this.getEffectiveDays() * 8
   }
 
   toggleSubtask(subtaskId) {
     const subtask = this.subtasks.find(s => s.id === subtaskId)
     if (subtask) {
       subtask.done = !subtask.done
+      subtask.completedAt = subtask.done ? Date.now() : null
       this.updatedAt = Date.now()
     }
   }
@@ -94,6 +117,7 @@ export class Task {
       done: this.done,
       order: this.order,
       createdAt: this.createdAt,
+      completedAt: this.completedAt,
       updatedAt: this.updatedAt
     }
   }

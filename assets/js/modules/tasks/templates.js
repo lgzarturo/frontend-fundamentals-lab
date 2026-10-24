@@ -612,3 +612,75 @@ ${task.description}</textarea>
     </div>
   `
 }
+
+export function tasksReportChartTemplate(perDay) {
+  if (!perDay || perDay.length === 0) return ""
+  const height = 220
+  const padLeft = 36
+  const padRight = 16
+  const padTop = 20
+  const padBottom = 44
+  const slot = Math.min(64, 560 / perDay.length)
+  const width = Math.ceil(padLeft + padRight + slot * perDay.length)
+  const maxCount = Math.max(1, ...perDay.map(d => d.count))
+  const baseY = height - padBottom
+  const barH = count => ((height - padTop - padBottom) * count) / maxCount
+
+  const bars = perDay
+    .map((d, i) => {
+      const h = barH(d.count)
+      const w = Math.max(8, slot - 16)
+      const x = padLeft + slot * i + (slot - w) / 2
+      const y = baseY - h
+      const fill = d.count === maxCount ? "#b57800" : "#0acc71"
+      return (
+        `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${fill}" />` +
+        `<text x="${(x + w / 2).toFixed(1)}" y="${(y - 6).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="bold" fill="#111">${d.count}</text>` +
+        `<text x="${(x + w / 2).toFixed(1)}" y="${height - 26}" text-anchor="end" font-size="10" fill="#6b7280" transform="rotate(-30 ${(x + w / 2).toFixed(1)} ${height - 26})">${d.day.slice(5)}</text>`
+      )
+    })
+    .join("")
+
+  return (
+    `<svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block" role="img">` +
+    `<title>Completadas por día</title>` +
+    `<line x1="${padLeft}" y1="${baseY}" x2="${width - padRight}" y2="${baseY}" stroke="#9ca3af" />` +
+    bars +
+    `</svg>`
+  )
+}
+
+export function tasksReportPrintTemplate(rows, perDay, i18n) {
+  const t = (key, fallback) => i18n?.getMessage(key) || fallback
+  const tableRows = rows
+    .map(
+      r =>
+        `<tr><td>${escapeHtml(r.title)}</td><td>${r.createdDay}</td>` +
+        `<td>${r.completedDay}</td><td>${r.effectiveDays}</td><td>${r.effectiveHours}h</td></tr>`
+    )
+    .join("")
+  const totalHours = rows.reduce((sum, r) => sum + r.effectiveHours, 0)
+
+  return (
+    `<!DOCTYPE html><html><head><meta charset="utf-8">` +
+    `<title>${escapeHtml(t("app.screens.tasks.report.title", "Reporte de tareas"))}</title>` +
+    `<style>body{font-family:sans-serif;color:#111;max-width:800px;margin:0 auto;padding:24px}` +
+    `h1{font-size:22px}h2{font-size:16px;margin-top:24px}` +
+    `table{width:100%;border-collapse:collapse;font-size:12px}` +
+    `th,td{border:1px solid #ccc;padding:4px 8px;text-align:left}` +
+    `th{background:#f0f0f0}.total{margin-top:12px;font-size:14px}</style></head><body>` +
+    `<h1>${escapeHtml(t("app.screens.tasks.report.title", "Reporte de tareas"))}</h1>` +
+    `<p>${escapeHtml(t("app.screens.tasks.report.summary", "Tareas completadas"))}: ${rows.length}</p>` +
+    `<h2>${escapeHtml(t("app.screens.tasks.report.chartTitle", "Completadas por día"))}</h2>` +
+    tasksReportChartTemplate(perDay) +
+    `<h2>${escapeHtml(t("app.screens.tasks.report.tableTitle", "Detalle"))}</h2>` +
+    `<table><thead><tr><th>${escapeHtml(t("app.screens.tasks.report.task", "Tarea"))}</th>` +
+    `<th>${escapeHtml(t("app.screens.tasks.report.created", "Creada"))}</th>` +
+    `<th>${escapeHtml(t("app.screens.tasks.report.completed", "Completada"))}</th>` +
+    `<th>${escapeHtml(t("app.screens.tasks.report.days", "Días"))}</th>` +
+    `<th>${escapeHtml(t("app.screens.tasks.report.hours", "Horas"))}</th>` +
+    `</tr></thead><tbody>${tableRows}</tbody></table>` +
+    `<p class="total">${escapeHtml(t("app.screens.tasks.report.total", "Total"))}: ${totalHours}h</p>` +
+    `</body></html>`
+  )
+}

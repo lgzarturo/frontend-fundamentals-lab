@@ -3,6 +3,7 @@
  */
 
 import { escapeHtml, html, raw } from "../../utils/html.js"
+import { INVESTMENT_MILESTONES } from "./models.js"
 
 export { html, raw }
 
@@ -22,6 +23,7 @@ function getMessage(i18n, key, fallback) {
 }
 
 export function budgetCardTemplate(budget, i18n) {
+  if (budget.type === "investing") return investingCardTemplate(budget, i18n)
   const pct = budget.getProgress()
   const status = budget.getStatus()
   const isSavings = budget.type === "savings"
@@ -147,6 +149,102 @@ export function budgetCardTemplate(budget, i18n) {
           class="flex-1 px-4 py-2 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30 transition-colors"
         >
           ${actionLabel}
+        </button>
+      </div>
+    </div>
+  `
+}
+
+export function investingCardTemplate(budget, i18n) {
+  const rows = budget.getSimulation()
+  const projected = rows.length ? rows[rows.length - 1].balance : 0
+
+  return html`
+    <div
+      class="bg-white dark:bg-xp-card rounded-xl p-6 border-2 border-gray-200 dark:border-xp-primary/20"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold">📈 ${budget.name}</h3>
+        <button
+          data-action="delete-budget"
+          data-budget-id="${budget.id}"
+          class="px-3 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors"
+        >
+          ${getMessage(i18n, "ui.common.delete", "Eliminar")}
+        </button>
+      </div>
+
+      <div class="space-y-3 mb-4">
+        <div class="flex justify-between">
+          <span class="text-gray-600 dark:text-gray-400"
+            >${getMessage(
+              i18n,
+              "app.screens.budgets.card.initial",
+              "Inicial"
+            )}</span
+          >
+          <span class="font-semibold"
+            >${money(budget.initialPrincipal, budget.currency)}</span
+          >
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600 dark:text-gray-400"
+            >${getMessage(
+              i18n,
+              "app.screens.budgets.simulation.monthly",
+              "Aporte mensual"
+            )}</span
+          >
+          <span class="font-semibold"
+            >${money(budget.monthlyContribution, budget.currency)}</span
+          >
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600 dark:text-gray-400"
+            >${getMessage(
+              i18n,
+              "app.screens.budgets.simulation.rate",
+              "Tasa anual"
+            )}</span
+          >
+          <span class="font-semibold">${budget.annualRate}%</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600 dark:text-gray-400"
+            >${getMessage(
+              i18n,
+              "app.screens.budgets.simulation.projected20",
+              "Proyectado 20 años"
+            )}</span
+          >
+          <span class="font-semibold text-xp-primary"
+            >${money(projected, budget.currency)}</span
+          >
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button
+          data-action="view-details"
+          data-budget-id="${budget.id}"
+          class="flex-1 px-4 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30 transition-colors"
+        >
+          ${getMessage(
+            i18n,
+            "app.screens.budgets.overview.viewDetails",
+            "Ver Detalles"
+          )}
+        </button>
+        <button
+          data-action="download-csv"
+          data-budget-id="${budget.id}"
+          class="flex-1 px-4 py-2 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30 transition-colors"
+        >
+          ${getMessage(
+            i18n,
+            "app.screens.budgets.simulation.downloadCsv",
+            "Descargar CSV"
+          )}
         </button>
       </div>
     </div>
@@ -306,6 +404,31 @@ export function createBudgetModalTemplate(i18n) {
                   )}</span
                 >
               </label>
+              <label
+                class="flex flex-col items-center p-4 border-2 border-gray-200 dark:border-xp-primary/20 rounded-xl cursor-pointer hover:border-xp-primary transition-colors has-[:checked]:border-xp-primary has-[:checked]:bg-xp-primary/10"
+              >
+                <input
+                  type="radio"
+                  name="type"
+                  value="investing"
+                  class="sr-only"
+                />
+                <span class="text-2xl mb-1">📈</span>
+                <span class="font-semibold text-sm"
+                  >${getMessage(
+                    i18n,
+                    "app.screens.budgets.types.investing",
+                    "Inversión"
+                  )}</span
+                >
+                <span class="text-xs text-gray-500 text-center"
+                  >${getMessage(
+                    i18n,
+                    "app.screens.budgets.types.investingHint",
+                    "Simular interés compuesto"
+                  )}</span
+                >
+              </label>
             </div>
           </div>
 
@@ -382,6 +505,61 @@ export function createBudgetModalTemplate(i18n) {
               class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
               placeholder="5000"
             />
+          </div>
+
+          <div id="investing-fields-group" class="hidden space-y-4">
+            <div>
+              <label class="block text-sm font-semibold mb-2">
+                ${getMessage(
+                  i18n,
+                  "app.screens.budgets.modals.create.investingPrincipalLabel",
+                  "Monto Inicial"
+                )}
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                name="initialPrincipal"
+                class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                placeholder="10000"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2">
+                ${getMessage(
+                  i18n,
+                  "app.screens.budgets.modals.create.investingMonthlyLabel",
+                  "Aportación Mensual Fija"
+                )}
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                name="monthlyContribution"
+                class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                placeholder="1000"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2">
+                ${getMessage(
+                  i18n,
+                  "app.screens.budgets.modals.create.investingRateLabel",
+                  "Tasa Anual Fija % (3 - 10)"
+                )}
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                min="3"
+                max="10"
+                name="annualRate"
+                class="w-full px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-xp-primary/20 bg-white dark:bg-xp-darker focus:outline-none focus:border-xp-primary"
+                placeholder="8"
+              />
+            </div>
           </div>
         </div>
 
@@ -653,4 +831,271 @@ export function addTransactionModalTemplate(budget, i18n) {
       </form>
     </div>
   `
+}
+
+function compactMoney(value) {
+  const abs = Math.abs(value)
+  if (abs >= 1000) {
+    const k = value / 1000
+    return `$${k >= 100 ? k.toFixed(0) : k.toFixed(1)}k`
+  }
+  return `$${value.toFixed(0)}`
+}
+
+export function investmentChartTemplate(rows, i18n) {
+  const width = 600
+  const height = 260
+  const padLeft = 64
+  const padRight = 16
+  const padTop = 16
+  const padBottom = 32
+  const maxValue = Math.max(1, ...rows.map(r => r.balance))
+  const x = i =>
+    padLeft + (i * (width - padLeft - padRight)) / Math.max(1, rows.length - 1)
+  const y = v =>
+    padTop + (height - padTop - padBottom) * (1 - v / maxValue)
+
+  const balancePoints = rows.map((r, i) => `${x(i).toFixed(1)},${y(r.balance).toFixed(1)}`).join(" ")
+  const contributedPoints = rows.map((r, i) => `${x(i).toFixed(1)},${y(r.contributed).toFixed(1)}`).join(" ")
+  const lastX = x(rows.length - 1).toFixed(1)
+  const baseY = y(0).toFixed(1)
+  const areaPoints = `${x(0).toFixed(1)},${baseY} ${balancePoints} ${lastX},${baseY}`
+
+  const gridlines = [0.25, 0.5, 0.75, 1]
+    .map(frac => {
+      const gy = y(maxValue * frac).toFixed(1)
+      return (
+        `<line x1="${padLeft}" y1="${gy}" x2="${width - padRight}" y2="${gy}" stroke="#9ca3af" stroke-opacity="0.25" />` +
+        `<text x="${padLeft - 8}" y="${Number(gy) + 4}" text-anchor="end" font-size="11" fill="#9ca3af">${compactMoney(maxValue * frac)}</text>`
+      )
+    })
+    .join("")
+
+  const xLabels = rows
+    .filter(r => INVESTMENT_MILESTONES.includes(r.year))
+    .map(r => {
+      const i = rows.indexOf(r)
+      return `<text x="${x(i).toFixed(1)}" y="${height - 10}" text-anchor="middle" font-size="11" fill="#9ca3af">${r.year}a</text>`
+    })
+    .join("")
+
+  const balanceLabel = getMessage(
+    i18n,
+    "app.screens.budgets.simulation.legendBalance",
+    "Balance"
+  )
+  const contributedLabel = getMessage(
+    i18n,
+    "app.screens.budgets.simulation.legendContributed",
+    "Aportado"
+  )
+
+  return (
+    `<svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block" role="img">` +
+    `<title>${balanceLabel} vs ${contributedLabel}</title>` +
+    gridlines +
+    `<polygon points="${areaPoints}" fill="#0acc71" fill-opacity="0.15" />` +
+    `<polyline points="${contributedPoints}" fill="none" stroke="#007acc" stroke-width="2" />` +
+    `<polyline points="${balancePoints}" fill="none" stroke="#0acc71" stroke-width="2.5" />` +
+    xLabels +
+    `<g font-size="12">` +
+    `<rect x="${padLeft}" y="0" width="12" height="12" rx="2" fill="#0acc71" />` +
+    `<text x="${padLeft + 18}" y="11" fill="#9ca3af">${balanceLabel}</text>` +
+    `<rect x="${padLeft + 130}" y="0" width="12" height="12" rx="2" fill="#007acc" />` +
+    `<text x="${padLeft + 148}" y="11" fill="#9ca3af">${contributedLabel}</text>` +
+    `</g></svg>`
+  )
+}
+
+export function investmentDetailsModalTemplate(budget, i18n) {
+  const rows = budget.getSimulation()
+  const milestones = rows.filter(r => INVESTMENT_MILESTONES.includes(r.year))
+
+  const tableRows = rows
+    .map(
+      r => `<tr>
+        <td class="py-1.5">${r.year}</td>
+        <td class="py-1.5">${money(r.contributed, budget.currency)}</td>
+        <td class="py-1.5 text-xp-primary">${money(r.interest, budget.currency)}</td>
+        <td class="py-1.5 font-semibold">${money(r.balance, budget.currency)}</td>
+      </tr>`
+    )
+    .join("")
+
+  const milestoneChips = milestones
+    .map(
+      r => `<div class="px-3 py-2 bg-xp-primary/10 rounded-lg text-sm">
+        <span class="text-gray-600 dark:text-gray-400">${getMessage(
+          i18n,
+          "app.screens.budgets.simulation.year",
+          "Año"
+        )} ${r.year}:</span>
+        <span class="font-bold text-xp-primary">${money(r.balance, budget.currency)}</span>
+      </div>`
+    )
+    .join("")
+
+  return html`
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-2xl font-bold">📈 ${budget.name}</h3>
+        <button
+          data-action="delete-budget"
+          data-budget-id="${budget.id}"
+          class="px-4 py-2 bg-xp-danger/20 hover:bg-xp-danger/30 text-xp-danger rounded-lg transition-colors"
+        >
+          ${getMessage(i18n, "ui.common.delete", "Eliminar")}
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+          <div class="text-xs text-gray-500">
+            ${getMessage(i18n, "app.screens.budgets.card.initial", "Inicial")}
+          </div>
+          <div class="font-bold">
+            ${money(budget.initialPrincipal, budget.currency)}
+          </div>
+        </div>
+        <div class="p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+          <div class="text-xs text-gray-500">
+            ${getMessage(
+              i18n,
+              "app.screens.budgets.simulation.monthly",
+              "Aporte mensual"
+            )}
+          </div>
+          <div class="font-bold">
+            ${money(budget.monthlyContribution, budget.currency)}
+          </div>
+        </div>
+        <div class="p-3 bg-gray-50 dark:bg-xp-darker rounded-lg">
+          <div class="text-xs text-gray-500">
+            ${getMessage(
+              i18n,
+              "app.screens.budgets.simulation.rate",
+              "Tasa anual"
+            )}
+          </div>
+          <div class="font-bold">${budget.annualRate}%</div>
+        </div>
+      </div>
+
+      <h4 class="font-bold mb-3">
+        ${getMessage(
+          i18n,
+          "app.screens.budgets.simulation.milestones",
+          "Hitos"
+        )}
+      </h4>
+      <div class="flex flex-wrap gap-2 mb-6">${raw(milestoneChips)}</div>
+
+      <div class="mb-6 p-4 bg-gray-50 dark:bg-xp-darker rounded-xl border border-gray-200 dark:border-xp-primary/20">
+        ${raw(investmentChartTemplate(rows, i18n))}
+      </div>
+
+      <h4 class="font-bold mb-3">
+        ${getMessage(
+          i18n,
+          "app.screens.budgets.simulation.tableTitle",
+          "Amortización anual"
+        )}
+      </h4>
+      <div class="mb-6 max-h-64 overflow-y-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left">
+              <th class="font-semibold text-gray-600 dark:text-gray-400 pb-2">
+                ${getMessage(
+                  i18n,
+                  "app.screens.budgets.simulation.year",
+                  "Año"
+                )}
+              </th>
+              <th class="font-semibold text-gray-600 dark:text-gray-400 pb-2">
+                ${getMessage(
+                  i18n,
+                  "app.screens.budgets.simulation.contributed",
+                  "Aportado"
+                )}
+              </th>
+              <th class="font-semibold text-gray-600 dark:text-gray-400 pb-2">
+                ${getMessage(
+                  i18n,
+                  "app.screens.budgets.simulation.interest",
+                  "Interés"
+                )}
+              </th>
+              <th class="font-semibold text-gray-600 dark:text-gray-400 pb-2">
+                ${getMessage(
+                  i18n,
+                  "app.screens.budgets.simulation.balance",
+                  "Balance"
+                )}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            ${raw(tableRows)}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex gap-2">
+        <button
+          data-action="download-csv"
+          data-budget-id="${budget.id}"
+          class="flex-1 px-4 py-2 bg-xp-secondary/20 text-xp-secondary rounded-lg hover:bg-xp-secondary/30 transition-colors"
+        >
+          ${getMessage(
+            i18n,
+            "app.screens.budgets.simulation.downloadCsv",
+            "Descargar CSV"
+          )}
+        </button>
+        <button
+          data-action="download-pdf"
+          data-budget-id="${budget.id}"
+          class="flex-1 px-4 py-2 bg-xp-primary/20 text-xp-primary rounded-lg hover:bg-xp-primary/30 transition-colors"
+        >
+          ${getMessage(
+            i18n,
+            "app.screens.budgets.simulation.downloadPdf",
+            "Descargar PDF"
+          )}
+        </button>
+      </div>
+    </div>
+  `
+}
+
+export function investmentPrintTemplate(budget, rows, i18n) {
+  const tableRows = rows
+    .map(
+      r =>
+        `<tr><td>${r.year}</td><td>${money(r.contributed, budget.currency)}</td>` +
+        `<td>${money(r.interest, budget.currency)}</td><td>${money(r.balance, budget.currency)}</td></tr>`
+    )
+    .join("")
+  const title = getMessage(
+    i18n,
+    "app.screens.budgets.simulation.title",
+    "Simulación de inversión"
+  )
+
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${escapeHtml(budget.name)}</title>` +
+    `<style>body{font-family:sans-serif;color:#111;max-width:800px;margin:0 auto;padding:24px}` +
+    `h1{font-size:22px}table{width:100%;border-collapse:collapse;font-size:12px}` +
+    `th,td{border:1px solid #ccc;padding:4px 8px;text-align:right}` +
+    `th:first-child,td:first-child{text-align:left}` +
+    `th{background:#f0f0f0}.params{margin:12px 0;font-size:14px}</style></head><body>` +
+    `<h1>${escapeHtml(title)}: ${escapeHtml(budget.name)}</h1>` +
+    `<p class="params">${money(budget.initialPrincipal, budget.currency)} inicial · ` +
+    `${money(budget.monthlyContribution, budget.currency)}/mes · ${budget.annualRate}% anual</p>` +
+    investmentChartTemplate(rows, i18n) +
+    `<table><thead><tr><th>${getMessage(i18n, "app.screens.budgets.simulation.year", "Año")}</th>` +
+    `<th>${getMessage(i18n, "app.screens.budgets.simulation.contributed", "Aportado")}</th>` +
+    `<th>${getMessage(i18n, "app.screens.budgets.simulation.interest", "Interés")}</th>` +
+    `<th>${getMessage(i18n, "app.screens.budgets.simulation.balance", "Balance")}</th>` +
+    `</tr></thead><tbody>${tableRows}</tbody></table></body></html>`
 }

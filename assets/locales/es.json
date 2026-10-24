@@ -75,7 +75,25 @@
           "savings": "Ahorro",
           "savingsHint": "Quiero llegar a una meta",
           "spending": "Gasto",
-          "spendingHint": "Tengo dinero disponible"
+          "spendingHint": "Tengo dinero disponible",
+          "investing": "Inversión",
+          "investingHint": "Simular interés compuesto"
+        },
+        "simulation": {
+          "title": "Simulación de inversión",
+          "monthly": "Aporte mensual",
+          "rate": "Tasa anual",
+          "projected20": "Proyectado 20 años",
+          "milestones": "Hitos",
+          "tableTitle": "Amortización anual",
+          "year": "Año",
+          "contributed": "Aportado",
+          "interest": "Interés",
+          "balance": "Balance",
+          "legendBalance": "Balance",
+          "legendContributed": "Aportado",
+          "downloadCsv": "Descargar CSV",
+          "downloadPdf": "Descargar PDF"
         },
         "card": {
           "goal": "Meta",
@@ -141,6 +159,9 @@
             "currency": "Moneda",
             "goalAmountLabel": "Monto Objetivo (meta)",
             "initialAmountLabel": "Monto Inicial Disponible",
+            "investingPrincipalLabel": "Monto Inicial",
+            "investingMonthlyLabel": "Aportación Mensual Fija",
+            "investingRateLabel": "Tasa Anual Fija % (3 - 10)",
             "cancel": "Cancelar",
             "create": "Crear"
           },
@@ -196,6 +217,20 @@
           "today": "Hoy",
           "high": "Urgentes",
           "completed": "Acabadas"
+        },
+        "report": {
+          "button": "Reporte PDF",
+          "title": "Reporte de tareas completadas",
+          "summary": "Tareas completadas",
+          "chartTitle": "Completadas por día",
+          "tableTitle": "Detalle",
+          "task": "Tarea",
+          "created": "Creada",
+          "completed": "Completada",
+          "days": "Días",
+          "hours": "Horas",
+          "total": "Total",
+          "empty": "No hay tareas completadas para reportar."
         },
         "modal": {
           "create": {

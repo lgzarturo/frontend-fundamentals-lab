@@ -10,37 +10,37 @@
 
 ## Items
 
-### BC-009 | Presupuesto de inversión con simulador de interés compuesto
-- Priority: P2
-- Status: PLANNED
-- Type: feature
-- Depends on: None
-- Description: Agregar tipo de presupuesto `investing` con simulador: monto inicial + aportación mensual fija + tasa anual fija (3%-10%), capitalización mensual, cortes a 0/5/10/15/20 años, gráfica de crecimiento, tabla de amortización anual y descarga CSV/PDF (PDF incluye gráfica).
-- Scope: assets/js/modules/budgets/*, index.html, assets/locales/*.json, tests/budgets.test.js
-- Out of scope: Conexión con instituciones reales, tasas variables por año, impuestos/comisiones, otros horizontes configurables.
-- Acceptance:
-  - [ ] Crear presupuesto tipo inversión exige monto inicial >= 0, aportación mensual >= 0 y tasa anual entre 3% y 10%; fuera de rango se rechaza con mensaje.
-  - [ ] Los saldos a 0/5/10/15/20 años coinciden con capitalización mensual compuesta con tolerancia ±0.01 (casos fijos en test).
-  - [ ] La vista muestra gráfica de crecimiento (balance vs aportaciones acumuladas) y tabla anual con aportado, interés y balance.
-  - [ ] Descarga CSV con las mismas filas de la tabla anual; descarga PDF con gráfica + tabla.
-  - [ ] Presupuestos `savings`/`spending` existentes no cambian comportamiento (tests actuales en verde).
-
+## Archive
 ### BC-010 | Fechas de ciclo en tareas y reporte PDF de completadas
 - Priority: P2
-- Status: PLANNED
+- Status: DONE
 - Type: feature
 - Depends on: None
 - Description: Guardar fecha de creación al crear tareas/subtareas y fecha de completado al completarlas (se borra al desmarcar); generar reporte PDF de tareas completadas con duración en días efectivos (días lun-vie x 8h) y gráfica de barras de completadas por día.
 - Scope: assets/js/modules/tasks/*, assets/js/utils/date.js, index.html, assets/locales/*.json, tests/tasks.test.js, tests/subtasks-ui.test.js
 - Out of scope: Filtros por rango de fechas en el reporte, exportar pendientes, time-tracking manual por horas.
 - Acceptance:
-  - [ ] Crear tarea/subtarea guarda `createdAt`; completar guarda `completedAt`; desmarcar borra `completedAt` (tareas y subtareas, verificado por test).
-  - [ ] Duración efectiva = días calendario lun-vie en [creación, completado] x 8h (mismo día hábil = 8h; fin de semana intermedio no suma; verificado con casos fijos).
-  - [ ] El reporte PDF lista solo completadas con título, fechas y duración efectiva, e incluye gráfica de barras de completadas por día.
-  - [ ] Datos existentes sin `completedAt` no se rompen: se migran o se excluyen del reporte sin errores.
-  - [ ] CRUD, toggles y filtros de tareas actuales siguen funcionando (tests en verde).
+  - [x] Crear tarea/subtarea guarda `createdAt`; completar guarda `completedAt`; desmarcar borra `completedAt` (tareas y subtareas, verificado por test).
+  - [x] Duración efectiva = días calendario lun-vie en [creación, completado] x 8h (mismo día hábil = 8h; fin de semana intermedio no suma; verificado con casos fijos).
+  - [x] El reporte PDF lista solo completadas con título, fechas y duración efectiva, e incluye gráfica de barras de completadas por día.
+  - [x] Datos existentes sin `completedAt` no se rompen: se migran o se excluyen del reporte sin errores.
+  - [x] CRUD, toggles y filtros de tareas actuales siguen funcionando (tests en verde).
 
-## Archive
+### BC-009 | Presupuesto de inversión con simulador de interés compuesto
+- Priority: P2
+- Status: DONE
+- Type: feature
+- Depends on: None
+- Description: Agregar tipo de presupuesto `investing` con simulador: monto inicial + aportación mensual fija + tasa anual fija (3%-10%), capitalización mensual, cortes a 0/5/10/15/20 años, gráfica de crecimiento, tabla de amortización anual y descarga CSV/PDF (PDF incluye gráfica).
+- Scope: assets/js/modules/budgets/*, index.html, assets/locales/*.json, tests/budgets.test.js
+- Out of scope: Conexión con instituciones reales, tasas variables por año, impuestos/comisiones, otros horizontes configurables.
+- Acceptance:
+  - [x] Crear presupuesto tipo inversión exige monto inicial >= 0, aportación mensual >= 0 y tasa anual entre 3% y 10%; fuera de rango se rechaza con mensaje.
+  - [x] Los saldos a 0/5/10/15/20 años coinciden con capitalización mensual compuesta con tolerancia ±0.01 (casos fijos en test).
+  - [x] La vista muestra gráfica de crecimiento (balance vs aportaciones acumuladas) y tabla anual con aportado, interés y balance.
+  - [x] Descarga CSV con las mismas filas de la tabla anual; descarga PDF con gráfica + tabla.
+  - [x] Presupuestos `savings`/`spending` existentes no cambian comportamiento (tests actuales en verde).
+
 ### BC-008 | Editor de notas WYSIWYG por línea estilo Notion
 - Priority: P2
 - Status: DONE

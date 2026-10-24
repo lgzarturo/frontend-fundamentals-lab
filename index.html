@@ -701,12 +701,20 @@
               <span>✓</span>
               <span data-i18n="app.screens.tasks.title">Tasks & Checklist</span>
             </h2>
-            <button
-              onclick="app.showCreateTaskModal()"
-              class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
-            >
-              <span data-i18n="app.screens.tasks.newButton">+ New Task</span>
-            </button>
+            <div class="flex gap-2">
+              <button
+                id="tasks-report-btn"
+                class="bg-gray-200 dark:bg-xp-card hover:bg-gray-300 dark:hover:bg-xp-darker/80 text-gray-700 dark:text-gray-200 font-bold px-6 py-3 rounded-lg transition-all"
+              >
+                <span data-i18n="app.screens.tasks.report.button">Report</span>
+              </button>
+              <button
+                onclick="app.showCreateTaskModal()"
+                class="bg-xp-primary hover:bg-xp-primary/80 text-xp-darker font-bold px-6 py-3 rounded-lg transition-all"
+              >
+                <span data-i18n="app.screens.tasks.newButton">+ New Task</span>
+              </button>
+            </div>
           </div>
 
           <!-- Filter Tabs -->

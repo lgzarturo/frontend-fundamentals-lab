@@ -209,6 +209,25 @@ export function getRelativeTime(timestamp, i18n) {
  * @param {number} successRate - Tasa de éxito (0-1)
  * @returns {Object} Objeto de registros con claves de fecha
  */
+/**
+ * Cuenta días lun-vie en el rango inclusivo de fechas calendario.
+ * @param {string} startYmd - Fecha inicial YYYY-MM-DD
+ * @param {string} endYmd - Fecha final YYYY-MM-DD
+ * @returns {number} Días hábiles (0 si el rango es inválido)
+ */
+export function countWeekdaysInclusive(startYmd, endYmd) {
+  if (!startYmd || !endYmd || endYmd < startYmd) return 0
+  let count = 0
+  const current = parseDateStringLocal(startYmd)
+  const end = parseDateStringLocal(endYmd)
+  while (current <= end) {
+    const day = current.getDay()
+    if (day !== 0 && day !== 6) count++
+    current.setDate(current.getDate() + 1)
+  }
+  return count
+}
+
 export function generatePastRecords(days, successRate) {
   const records = {}
   for (const dateStr of getLastNDays(days)) {
