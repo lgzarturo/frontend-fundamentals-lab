@@ -2,6 +2,17 @@
 
 ## Historial de cambios
 
+### v1.2.0
+
+- feat(budgets,tasks): presupuesto de inversión y ciclo de vida de tareas
+- feat(notes): soporte para selección multilínea y barra fija en editor
+- feat(notes): implementar editor de notas por bloques estilo Notion (BC-008)
+- fix(habits): corregir día marcado y agregar zona horaria (BC-007)
+- docs(backlog): agregar especificaciones para BC-007 a BC-010
+- chore: actualizar arnés 1.8.0
+- feat: add telemetry dashboard and usage summary feature (BC-006)
+- feat(home): contadores de uso y resumen narrativo en inicio (BC-006)
+
 ### v1.1.0
 
 - feat: add telemetry dashboard and usage summary feature (BC-006)
